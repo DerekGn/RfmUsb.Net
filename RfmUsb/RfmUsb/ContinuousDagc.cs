@@ -24,7 +24,10 @@
 
 namespace RfmUsb
 {
-    public enum ListenResolutionIdle
+    public enum ContinuousDagc
     {
+        Normal,
+        ImprovedLowBeta1,
+        ImprovedLowBeta0
     }
 }

@@ -26,5 +26,13 @@ namespace RfmUsb
 {
     public enum OokThresholdStep
     {
+        Step0_5db, // "0.5db
+        Step1_0db, // 1db
+        Step1_5db, // 1.5db
+        Step2_0db, // 2db
+        Step3_0db, // 3db
+        Step4_0db, // 4db
+        Step5_0db, // 5db
+        Step6_0db, // 6db
     }
 }

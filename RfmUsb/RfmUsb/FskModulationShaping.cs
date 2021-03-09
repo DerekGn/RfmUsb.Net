@@ -26,5 +26,9 @@ namespace RfmUsb
 {
     public enum FskModulationShaping
     {
+        None,
+        GaussianBt1_0,
+        GaussianBt0_5,
+        GaussianBt0_3
     }
 }

@@ -26,5 +26,9 @@ namespace RfmUsb
 {
     public enum DcFree
     {
+        None,
+        Manchester,
+        Whitening,
+        Reserved
     }
 }

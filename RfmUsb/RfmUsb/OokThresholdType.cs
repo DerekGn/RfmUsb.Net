@@ -26,5 +26,9 @@ namespace RfmUsb
 {
     public enum OokThresholdType
     {
+        Fixed,
+        Peak,
+        Average,
+        Reserved
     }
 }

@@ -79,11 +79,11 @@ namespace RfmUsb
         /// <summary>
         /// The resolution of Listen mode Idle time 
         /// </summary>
-        ListenResolutionIdle ListenResolutionIdle { get; set; }
+        ListenResolution ListenResolutionIdle { get; set; }
         /// <summary>
         /// The resolution of Listen mode Rx time 
         /// </summary>
-        ListenResolutionRx ListenResolutionRx { get; set; }
+        ListenResolution ListenResolutionRx { get; set; }
         /// <summary>
         /// Criteria for packet acceptance in Listen mode:
         /// false → signal strength is above RssiThreshold
@@ -93,15 +93,15 @@ namespace RfmUsb
         /// <summary>
         /// Action taken after acceptance of a packet in Listen mode
         /// </summary>
-        ListenEnd ListenEnd { get; set; }
+        Mode ListenEnd { get; set; }
         /// <summary>
         /// Duration of the Idle phase in Listen mode
         /// </summary>
-        int ListenCoefficentIdle { get; set; }
+        byte ListenCoefficentIdle { get; set; }
         /// <summary>
         /// Duration of the Idle phase in Rx phase
         /// </summary>
-        int ListenCoefficentRx { get; set; }
+        byte ListenCoefficentRx { get; set; }
         /// <summary>
         /// Get the FrmUsb version
         /// </summary>
@@ -109,7 +109,7 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the output power in dbm
         /// </summary>
-        int OutputPower { get; set; }
+        byte OutputPower { get; set; }
         /// <summary>
         /// Rise/Fall time of ramp up/down in FSK
         /// </summary>
@@ -127,7 +127,7 @@ namespace RfmUsb
         /// false → 50 ohms
         /// true → 200 ohms
         /// </summary>
-        bool Impedance { get; set;}
+        bool Impedance { get; set; }
         /// <summary>
         /// Current LNA gain, set either manually, or by the AGC
         /// </summary>
@@ -143,11 +143,15 @@ namespace RfmUsb
         /// <summary>
         /// Gets the Rx channel filter bandwidth
         /// </summary>
-        RxBw RxBw { get; set; }
+        byte RxBw { get; set; }
+        /// <summary>
+        /// Cut-off frequency of the DC offset canceller (DCC)
+        /// </summary>
+        DccFreq DccFreqAfc { get; set; }
         /// <summary>
         /// Gets the Rx channel filter bandwidth for Afc
         /// </summary>
-        RxBw RxBwAfc { get; set; }
+        byte RxBwAfc { get; set; }
         /// <summary>
         /// Selects type of threshold in the OOK data slicer
         /// </summary>
@@ -166,9 +170,9 @@ namespace RfmUsb
         OokAverageThresholdFilter OokAverageThresholdFilter { get; set; }
         /// <summary>
         /// Fixed threshold value (in dB) in the OOK demodulator.
-        /// Used when OokThresholdType is 
+        /// Used when OokThresholdType is <see cref="OokThresholdType.Fixed"/>
         /// </summary>
-        int OokFixedThreshold { get; set; }
+        byte OokFixedThreshold { get; set; }
         /// <summary>
         /// Only valid if AfcAutoOn is set 
         /// false → AFC register is not cleared before a new AFC phase
@@ -199,7 +203,7 @@ namespace RfmUsb
         /// <summary>
         /// RSSI trigger level for Rssi interrupt
         /// </summary>
-        byte RssiThreshold { get; }
+        byte RssiThreshold { get; set; }
         /// <summary>
         /// Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
         /// if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
@@ -229,7 +233,7 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the number of tolerated bit errors in Sync word
         /// </summary>
-        int SyncBitErrors { get; set; }
+        byte SyncBitErrors { get; set; }
         /// <summary>
         /// The radio sync bytes
         /// </summary>
@@ -277,11 +281,59 @@ namespace RfmUsb
         /// Interrupt condition for entering the intermediate mode
         /// </summary>
         EnterCondition EnterCondition { get; set; }
-
         /// <summary>
-        /// The fifo transmit threshold
+        /// Interrupt condition for exiting the intermediate mode
+        /// </summary>
+        ExitCondition ExitCondition { get; set; }
+        /// <summary>
+        /// Intermediate mode
+        /// </summary>
+        Mode IntermediateMode { get; set; }
+        /// <summary>
+        /// Defines the condition to start packet transmission : 
+        /// false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
+        /// true → FifoNotEmpty (i.e. at least one byte in the FIFO)
+        /// </remarks>
+        bool TxStartCondition { get; set; }
+        /// <summary>
+        /// Used to trigger FifoLevel interrupt.
         /// </summary>
         byte FifoThreshold { get; set; }
+        /// <summary>
+        /// After PayloadReady occurred, defines the delay between FIFO empty and the 
+        /// start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
+        /// - Tdelay = 0 if InterpacketRxDelay >= 12 
+        /// - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
+        /// </summary>
+        byte InterPacketRxDelay { get; set; }
+        /// <summary>
+        /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO: 
+        /// false → Off. RestartRx can be used. 
+        /// true→ On. Rx automatically restarted after InterPacketRxDelay.
+        /// </summary>
+        bool AutoRxRestartOn { get; set; }
+        /// <summary>
+        /// Enable the AES encryption/decryption: 
+        /// false → Off
+        /// true → On (payload limited to 66 bytes maximum)
+        /// </summary>
+        bool AesOn { get; set; }
+        /// <summary>
+        /// Measured temperature value
+        /// </summary>
+        byte TemperatureValue { get; }
+        /// <summary>
+        /// High sensitivity or normal sensitivity mode
+        /// </summary>
+        bool SensitivityBoost { get; set; }
+        /// <summary>
+        /// Fading Margin Improvement
+        /// </summary>
+        ContinuousDagc ContinuousDagc {get;set;}
+        /// <summary>
+        /// AFC offset set for low modulation index systems, used if AfcLowBetaOn = true.
+        /// </summary>
+        bool LowBetaAfcOffset { get; set; }
         /// <summary>
         /// The Dio interrupt mask
         /// </summary>
@@ -290,38 +342,14 @@ namespace RfmUsb
         /// Get or set the serial port timeout
         /// </summary>
         int Timeout { get; set; }
-
         /// <summary>
         /// Wait for a configured Irq to be signaled
         /// </summary>
         void WaitForIrq();
         /// <summary>
-        /// The transmission start condition.
-        /// </summary>
-        /// <remarks>
-        /// True fifo not empty, false number of bytes exceeds <see cref="FifoThreshold"/> 
-        /// </remarks>
-        bool TransmissionStartCondition { get; set; }
-        /// <summary>
         /// Sets the radio configuration to one of the preset configuration sets.
         /// </summary>
         byte RadioConfig { get; set; }
-
-        /// <summary>
-        /// Gets or set the radio frequency
-        /// </summary>
-        int ReceiveBandwidth { get; set; }
-
-
-
-        /// <summary>
-        /// Enable DC free encoding
-        /// </summary>
-        bool DcFreeEncoding { get; set; }
-
-
-        
-        
         /// <summary>
         /// Reset the radio
         /// </summary>
@@ -361,12 +389,29 @@ namespace RfmUsb
         /// </summary>
         void StartRssi();
         /// <summary>
+        /// Get a list of the pre-configured radio configurations
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetRadioConfiurations();
+        /// <summary>
         /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/> configuration</param>
         /// <param name="mapping">The <see cref="DioMapping"/></param>
         void SetDioMapping(Dio dio, DioMapping mapping);
-
+        /// <summary>
+        /// Forces the Receiver in WAIT mode, in Continuous Rx mode.
+        /// </summary>
+        void RestartRx();
+        /// <summary>
+        /// Execute a temperature measurement
+        /// </summary>
+        void MeaseureTemperature();
+        /// <summary>
+        /// Set the AES encryption key
+        /// </summary>
+        /// <param name="key"></param>
+        void SetAesKey(IEnumerable<byte> key);
         /// <summary>
         /// Transmit a packet of data bytes and wait for a response
         /// </summary>
@@ -378,7 +423,6 @@ namespace RfmUsb
         /// Transmit a packet of data bytes
         /// </summary>
         /// <param name="data">The data to transmit</param>
-        /// <param name="timeout">The timeout in milliseconds to wait for a response</param>
         void Transmit(IList<byte> data);
     }
 }

@@ -26,5 +26,13 @@ namespace RfmUsb
 {
     public enum EnterCondition
     {
+        Off,
+        FifoNotEmpty,
+        FifoLevel,
+        CrcOk,
+        PayloadReady,
+        SyncAddressMatch,
+        PacketSent,
+        FifoEmpty
     }
 }

@@ -26,5 +26,12 @@ namespace RfmUsb
 {
     public enum LnaGain
     {
+        Auto,// Auto
+        Max, // Max
+        MaxMinus6db, // Max - 6db
+        MaxMinus12db, // Max - 12db
+        MaxMinus24db, // Max - 24db
+        MaxMinus36db, // Max - 36db
+        MaxMinus48db, // Max - 48db
     }
 }

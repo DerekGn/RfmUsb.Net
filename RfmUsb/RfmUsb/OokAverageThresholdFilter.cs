@@ -26,5 +26,9 @@ namespace RfmUsb
 {
     public enum OokAverageThresholdFilter
     {
+        ChipRate32, // chip rate/32
+        ChipRate8, // chip rate/8
+        ChipRate4, // chip rate/4
+        ChipRate2, // chip rate/2
     }
 }

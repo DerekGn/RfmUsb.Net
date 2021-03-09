@@ -26,5 +26,21 @@ namespace RfmUsb
 {
     public enum PaRamp
     {
+        PowerAmpRamp3400, //3.4ms
+        PowerAmpRamp2000, //2ms"
+        PowerAmpRamp1000, //1ms"
+        PowerAmpRamp500, //500us"
+        PowerAmpRamp250, //250us"
+        PowerAmpRamp125, //125us"
+        PowerAmpRamp100, //100us"
+        PowerAmpRamp62, //62us"
+        PowerAmpRamp50, //50us"
+        PowerAmpRamp40, //40us",
+        PowerAmpRamp31, //31us"
+        PowerAmpRamp25, //25us"
+        PowerAmpRamp20, //20us"
+        PowerAmpRamp15, //15us"
+        PowerAmpRamp12, //12us"
+        PowerAmpRamp10 //10us"
     }
 }

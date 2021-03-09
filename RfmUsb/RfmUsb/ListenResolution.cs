@@ -24,7 +24,11 @@
 
 namespace RfmUsb
 {
-    public enum RxBw
+    public enum ListenResolution
     {
-    }
+        Reserved,
+        Idle64us,
+        Idle4_1ms,
+        Idle262ms
+    };
 }

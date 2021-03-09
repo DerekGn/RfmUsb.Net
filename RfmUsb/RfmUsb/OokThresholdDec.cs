@@ -26,5 +26,13 @@ namespace RfmUsb
 {
     public enum OokThresholdDec
     {
+        OncePerChip, // Once per chip
+        OnceEvery2Chips, // Once every 2 chip
+        OnceEvery4Chips, // Once every 4 chip
+        OnceEvery8Chips, // Once every 8 chip
+        TwiceInEachChip, // Once twice in each chip
+        FourTimesInEachChip, // 4 times in each chip
+        EightTimesInEachChip, // 8 times in each chip
+        SixteeenTimesInEachChip // 16 times in each chip
     }
 }

@@ -24,7 +24,15 @@
 
 namespace RfmUsb
 {
-    public enum ListenResolutionRx
+    public enum ExitCondition
     {
+        Off,
+        FifoEmpty,
+        FifoLevel,
+        CrcOk,
+        PayloadReady,
+        SyncAddressMatch,
+        PacketSent,
+        RxTimeout
     }
 }

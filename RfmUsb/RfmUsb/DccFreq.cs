@@ -26,5 +26,19 @@ namespace RfmUsb
 {
     public enum DccFreq
     {
+        /// <summary>
+        /// 16%
+        /// </summary>
+        FreqPercent16,
+        /// <summary>
+        /// 8%
+        /// </summary>
+        FreqPercent8,
+        FreqPercent4, // 4%
+        FreqPercent2, // 2%
+        FreqPercent1, // 1%
+        FreqPercent0_5, // 0.5%
+        FreqPercent0_25, // 0.25%
+        FreqPercent0_125 // 0.125%
     }
 }
