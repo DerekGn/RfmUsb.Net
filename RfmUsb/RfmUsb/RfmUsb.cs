@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 
 namespace RfmUsb
 {
@@ -58,12 +59,12 @@ namespace RfmUsb
         public bool Sequencer
         {
             get => SendCommand("g-so").ToBytes().First() == 1;
-            set => SendCommandWithCheck($"s-so 0x0{(value ? 0x01 : 0x00):X}", ResponseOk);
+            set => SendCommand($"s-so {(value ? "1" : "0")}");
         }
         public bool ListenerOn
         {
             get => SendCommand("g-lo").ToBytes().First() == 1;
-            set => SendCommandWithCheck($"s-lo 0x0{(value ? 0x01 : 0x00):X}", ResponseOk);
+            set => SendCommand($"s-lo {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public Mode Mode
@@ -89,9 +90,9 @@ namespace RfmUsb
             get => (OokModulationShaping)int.Parse(SendCommand("g-os"));
             set => SendCommand($"s-os 0x{(int)value:X}");
         }
-        public int BitRate
+        public ushort BitRate
         {
-            get => int.Parse(SendCommand("g-br"));
+            get => Convert.ToUInt16(SendCommand("g-br"), 16);
             set => SendCommand($"s-br 0x{(int)value:X}");
         }
         ///<inheritdoc/>
@@ -109,8 +110,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool AfcLowBetaOn
         {
-            get => bool.Parse(SendCommand($"g-ab"));
-            set => SendCommand($"s-ab 0x{value:X}");
+            get => SendCommand($"g-ab").StartsWith("1");
+            set => SendCommand($"s-ab {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public ListenResolution ListenResolutionIdle
@@ -127,8 +128,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool ListenCriteria
         {
-            get => bool.Parse(SendCommand($"g-lc"));
-            set => SendCommand($"s-lc 0x{value:X}");
+            get => SendCommand($"g-lc").StartsWith("1");
+            set => SendCommand($"s-lc {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public Mode ListenEnd
@@ -139,13 +140,13 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte ListenCoefficentIdle
         {
-            get => byte.Parse(SendCommand($"g-lic"));
+            get => Convert.ToByte(SendCommand($"g-lic"), 16);
             set => SendCommand($"s-lic 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte ListenCoefficentRx
         {
-            get => byte.Parse(SendCommand($"g-lrc"));
+            get => Convert.ToByte(SendCommand($"g-lrc"), 16);
             set => SendCommand($"s-lrc 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -153,7 +154,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte OutputPower
         {
-            get => byte.Parse(SendCommand($"g-op"));
+            get => Convert.ToByte(SendCommand($"g-op"), 16);
             set => SendCommandWithCheck($"s-op {value}", ResponseOk);
         }
         ///<inheritdoc/>
@@ -165,8 +166,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool OcpEnable
         {
-            get => bool.Parse(SendCommand($"g-ocp"));
-            set => SendCommand($"s-ocp 0x{value:X}");
+            get => SendCommand($"g-ocp").StartsWith("1");
+            set => SendCommand($"s-ocp {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public OcpTrim OcpTrim
@@ -177,8 +178,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool Impedance
         {
-            get => bool.Parse(SendCommand($"g-lnaz"));
-            set => SendCommand($"s-lnaz 0x{value:X}");
+            get => SendCommand($"g-lnaz").StartsWith("1");
+            set => SendCommand($"s-lnaz {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public LnaGain CurrentLnaGain => (LnaGain)int.Parse(SendCommand($"g-lnag"));
@@ -197,7 +198,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte RxBw
         {
-            get => byte.Parse(SendCommand($"g-rxbwa"));
+            get => Convert.ToByte(SendCommand($"g-rxbwa"), 16);
             set => SendCommand($"s-rxbwa 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -209,7 +210,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte RxBwAfc
         {
-            get => byte.Parse(SendCommand($"g-rxbwa"));
+            get => Convert.ToByte(SendCommand($"g-rxbwa"), 16);
             set => SendCommand($"s-rxbwa 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -239,56 +240,56 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte OokFixedThreshold
         {
-            get => byte.Parse(SendCommand($"g-oft"));
+            get => Convert.ToByte(SendCommand($"g-oft"), 16);
             set => SendCommand($"s-oft 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool AfcAutoClear
         {
-            get => bool.Parse(SendCommand($"g-aac"));
-            set => SendCommand($"s-aac 0x{value:X}");
+            get => SendCommand($"g-aac").StartsWith("1");
+            set => SendCommand($"s-aac {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public bool AfcAutoOn
         {
-            get => bool.Parse(SendCommand($"g-aao"));
-            set => SendCommand($"s-aao 0x{value:X}");
+            get => SendCommand($"g-aao").StartsWith("1");
+            set => SendCommand($"s-aao {(value ? "1" : "0")}");
         }
-        public short Afc => byte.Parse(SendCommand($"g-a"));
+        public short Afc => Convert.ToByte(SendCommand($"g-a"), 16);
         ///<inheritdoc/>
-        public short Fei => byte.Parse(SendCommand($"g-a"));
+        public short Fei => Convert.ToByte(SendCommand($"g-a"), 16);
         ///<inheritdoc/>
-        public byte Rssi => byte.Parse(SendCommand($"g-rssi"));
+        public byte Rssi => Convert.ToByte(SendCommand($"g-rssi"), 16);
         ///<inheritdoc/>
         public Irq Irq => GetIrqInternal();
         ///<inheritdoc/>
         public byte RssiThreshold
         {
-            get => byte.Parse(SendCommand($"g-rt"));
+            get => Convert.ToByte(SendCommand($"g-rt"), 16);
             set => SendCommand($"s-rt 0x{value:X}");
         }
         ///<inheritdoc/>
-        public byte TimeoutRxStart => byte.Parse(SendCommand($"g-trs"));
+        public byte TimeoutRxStart => Convert.ToByte(SendCommand($"g-trs"), 16);
         ///<inheritdoc/>
-        public byte TimeoutRssiThreshold => byte.Parse(SendCommand($"g-trt"));
+        public byte TimeoutRssiThreshold => Convert.ToByte(SendCommand($"g-trt"), 16);
         ///<inheritdoc/>
-        public short PreambleSize => short.Parse(SendCommand($"g-ps"));
+        public ushort PreambleSize => Convert.ToUInt16(SendCommand($"g-ps"), 16);
         ///<inheritdoc/>
         public bool SyncEnable
         {
-            get => bool.Parse(SendCommand($"g-se"));
-            set => SendCommand($"s-se 0x{value:X}");
+            get => SendCommand($"g-se").StartsWith("1");
+            set => SendCommand($"s-se {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public bool FifoFill
         {
-            get => bool.Parse(SendCommand($"g-ffc"));
-            set => SendCommand($"s-ffc 0x{value:X}");
+            get => SendCommand($"g-ffc").StartsWith("1");
+            set => SendCommand($"s-ffc {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public byte SyncBitErrors
         {
-            get => byte.Parse(SendCommand($"g-sbe"));
+            get => Convert.ToByte(SendCommand($"g-sbe"), 16);
             set => SendCommand($"s-sbe 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -304,8 +305,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool PacketFormat
         {
-            get => bool.Parse(SendCommand($"g-pf"));
-            set => SendCommand($"s-pf 0x{value:X}");
+            get => SendCommand($"g-pf").StartsWith("1");
+            set => SendCommand($"s-pf {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public DcFree DcFree
@@ -316,14 +317,14 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool CrcOn
         {
-            get => bool.Parse(SendCommand($"g-cc"));
-            set => SendCommand($"s-cc 0x{value:X}");
+            get => SendCommand($"g-cc").StartsWith("1");
+            set => SendCommand($"s-cc {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public bool CrcAutoClear
         {
-            get => bool.Parse(SendCommand($"g-caco"));
-            set => SendCommand($"s-caco 0x{value:X}");
+            get => SendCommand($"g-caco").StartsWith("1");
+            set => SendCommand($"s-caco {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public AddressFilter AddressFiltering
@@ -334,19 +335,19 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte PayloadLength
         {
-            get => byte.Parse(SendCommand($"g-pl"));
+            get => Convert.ToByte(SendCommand($"g-pl"), 16);
             set => SendCommand($"s-pl 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte NodeAddress
         {
-            get => byte.Parse(SendCommand($"g-na"));
+            get => Convert.ToByte(SendCommand($"g-na"), 16);
             set => SendCommand($"s-na 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte BroadcastAddress
         {
-            get => byte.Parse(SendCommand($"g-ba"));
+            get => Convert.ToByte(SendCommand($"g-ba").Trim('[', ']'), 16);
             set => SendCommand($"s-ba 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -370,8 +371,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool TxStartCondition
         {
-            get => bool.Parse(SendCommand($"g-tsc"));
-            set => SendCommand($"s-tsc 0x{value:X}");
+            get => SendCommand($"g-tsc").StartsWith("1");
+            set => SendCommand($"s-tsc {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public byte FifoThreshold
@@ -382,40 +383,40 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte InterPacketRxDelay
         {
-            get => byte.Parse(SendCommand($"g-iprd"));
+            get => Convert.ToByte(SendCommand($"g-iprd"), 16);
             set => SendCommand($"s-iprd 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool AutoRxRestartOn
         {
-            get => bool.Parse(SendCommand($"g-arre"));
-            set => SendCommand($"s-arre 0x{value:X}");
+            get => SendCommand($"g-arre").StartsWith("1");
+            set => SendCommand($"s-arre {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public bool AesOn
         {
-            get => bool.Parse(SendCommand($"g-ae"));
-            set => SendCommand($"s-ae 0x{value:X}");
+            get => SendCommand($"g-ae").Substring(0, 1) == "1";
+            set => SendCommand($"s-ae {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
-        public byte TemperatureValue => byte.Parse(SendCommand($"g-t"));
+        public byte TemperatureValue => Convert.ToByte(SendCommand($"g-t"), 16);
         ///<inheritdoc/>
         public bool SensitivityBoost
         {
-            get => bool.Parse(SendCommand($"g-sb"));
-            set => SendCommand($"s-sb 0x{value:X}");
+            get => SendCommand($"g-sb").StartsWith("1");
+            set => SendCommand($"s-sb {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public ContinuousDagc ContinuousDagc
         {
-            get => (ContinuousDagc)int.Parse(SendCommand($"g-cd"));
+            get => (ContinuousDagc)Convert.ToInt32(SendCommand($"g-cd").Substring(0, 6).Trim('[',']'), 16);
             set => SendCommand($"s-cd 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool LowBetaAfcOffset
         {
-            get => bool.Parse(SendCommand($"g-lbao"));
-            set => SendCommand($"s-lbao 0x{value:X}");
+            get => SendCommand($"g-lbao").StartsWith("1");
+            set => SendCommand($"s-lbao {(value ? "1" : "0")}");
         }
         ///<inheritdoc/>
         public byte DioInterruptMask
@@ -436,7 +437,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte RadioConfig
         {
-            get => byte.Parse(SendCommand($"g-rc"));
+            get => Convert.ToByte(SendCommand($"g-rc"), 16);
             set => SendCommand($"s-rc 0x{value:X}");
         }
         ///<inheritdoc/>
@@ -532,7 +533,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public IList<string> GetRadioConfiurations()
         {
-            lock(_serialPort)
+            lock (_serialPort)
             {
                 List<string> configs = new List<string>();
 
@@ -743,11 +744,6 @@ namespace RfmUsb
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             System.GC.SuppressFinalize(this);
-        }
-
-        public void LeistenAbort()
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

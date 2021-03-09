@@ -37,5 +37,16 @@ namespace RfmUsb.UnitTests
 
             _mockSerialPort.Verify(_ => _.Open(), Times.Once);
         }
+
+        [Fact]
+        public void TestAddressFilter()
+        {
+            // Arrange
+
+            // Act
+            _rfmUsb.AddressFiltering = AddressFilter.Node;
+
+            // Assert
+        }
     }
 }

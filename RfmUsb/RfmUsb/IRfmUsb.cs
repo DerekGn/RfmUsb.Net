@@ -63,7 +63,7 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the radio Tx/Rx bit rate
         /// </summary>
-        int BitRate { get; set; }
+        ushort BitRate { get; set; }
         /// <summary>
         /// Get or set the frequency deviation
         /// </summary>
@@ -219,7 +219,7 @@ namespace RfmUsb
         /// <summary>
         /// Size of the preamble to be sent (from TxStartConditionfulfilled)
         /// </summary>
-        short PreambleSize { get; }
+        ushort PreambleSize { get; }
         /// <summary>
         /// Enable sync word generation and detection
         /// </summary>
