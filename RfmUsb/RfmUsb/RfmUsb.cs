@@ -23,13 +23,13 @@
 */
 
 using Microsoft.Extensions.Logging;
-using RfmUsb.Ports;
 using RfmUsb.Exceptions;
+using RfmUsb.Extensions;
+using RfmUsb.Ports;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Globalization;
 
 namespace RfmUsb
 {
@@ -50,7 +50,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public IEnumerable<byte> Fifo
         {
-            get => SendCommand($"g-fifo").ToBytes();
+            get => SendCommand("g-fifo").ToBytes();
             set
             {
                 SendCommandWithCheck($"s-fifo {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
@@ -58,244 +58,257 @@ namespace RfmUsb
         }
         public bool Sequencer
         {
-            get => SendCommand("g-so").ToBytes().First() == 1;
-            set => SendCommand($"s-so {(value ? "1" : "0")}");
+            get => SendCommand("g-so").StartsWith("1");
+            set => SendCommandWithCheck($"s-so {(value ? "1" : "0")}", ResponseOk);
         }
         public bool ListenerOn
         {
-            get => SendCommand("g-lo").ToBytes().First() == 1;
-            set => SendCommand($"s-lo {(value ? "1" : "0")}");
+            get => SendCommand("g-lo").StartsWith("1");
+            set => SendCommandWithCheck($"s-lo {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public Mode Mode
         {
-            get => (Mode)int.Parse(SendCommand("g-om"));
+            get => (Mode)SendCommand("g-om").ConvertToInt32();
             set => SendCommand($"s-om 0x{(int)value:X}");
         }
         ///<inheritdoc/>
         public Modulation Modulation
         {
-            get => (Modulation)int.Parse(SendCommand("g-mt"));
+            get => (Modulation)SendCommand("g-mt").ConvertToInt32();
             set => SendCommand($"s-mt 0x{(int)value:X}");
         }
         ///<inheritdoc/>
         public FskModulationShaping FskModulationShaping
         {
-            get => (FskModulationShaping)int.Parse(SendCommand("g-fs"));
+            get => (FskModulationShaping)SendCommand("g-fs").ConvertToInt32();
             set => SendCommand($"s-fs 0x{(int)value:X}");
         }
         ///<inheritdoc/>
         public OokModulationShaping OokModulationShaping
         {
-            get => (OokModulationShaping)int.Parse(SendCommand("g-os"));
+            get => (OokModulationShaping)SendCommand("g-os").ConvertToInt32();
             set => SendCommand($"s-os 0x{(int)value:X}");
         }
+        ///<inheritdoc/>
         public ushort BitRate
         {
             get => Convert.ToUInt16(SendCommand("g-br"), 16);
-            set => SendCommand($"s-br 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-br 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
-        public int FreqencyDeviation
+        public ushort FreqencyDeviation
         {
-            get => int.Parse(SendCommand($"g-fd"));
-            set => SendCommand($"s-fd {value}");
+            get => SendCommand("g-fd").ConvertToUInt16();
+            set => SendCommandWithCheck($"s-fd {value}", ResponseOk);
         }
         ///<inheritdoc/>
-        public int Frequency
+        public uint Frequency
         {
-            get => int.Parse(SendCommand($"g-f"));
-            set => SendCommand($"s-f 0x{value:X}");
+            get => Convert.ToUInt32(SendCommand("g-f").Trim('[',']'), 16);
+            set => SendCommandWithCheck($"s-f 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool AfcLowBetaOn
         {
-            get => SendCommand($"g-ab").StartsWith("1");
-            set => SendCommand($"s-ab {(value ? "1" : "0")}");
+            get => SendCommand("g-ab").StartsWith("1");
+            set => SendCommandWithCheck($"s-ab {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public ListenResolution ListenResolutionIdle
         {
-            get => (ListenResolution)int.Parse(SendCommand("g-ir"));
+            get => (ListenResolution)SendCommand("g-ir").ConvertToInt32();
             set => SendCommand($"s-ir 0x{value:X}");
         }
         ///<inheritdoc/>
         public ListenResolution ListenResolutionRx
         {
-            get => (ListenResolution)int.Parse(SendCommand("g-rr"));
+            get => (ListenResolution)SendCommand("g-rr").ConvertToInt32();
             set => SendCommand($"s-rr 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool ListenCriteria
         {
-            get => SendCommand($"g-lc").StartsWith("1");
-            set => SendCommand($"s-lc {(value ? "1" : "0")}");
+            get => SendCommand("g-lc").StartsWith("1");
+            set => SendCommandWithCheck($"s-lc {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
-        public Mode ListenEnd
+        public ListenEnd ListenEnd
         {
-            get => (Mode)int.Parse(SendCommand($"g-lem"));
+            get => (ListenEnd)SendCommand("g-lem").ConvertToInt32();
             set => SendCommand($"s-lem 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte ListenCoefficentIdle
         {
-            get => Convert.ToByte(SendCommand($"g-lic"), 16);
-            set => SendCommand($"s-lic 0x{value:X}");
+            get => SendCommand("g-lic").ConvertToByte();
+            set => SendCommandWithCheck($"s-lic 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte ListenCoefficentRx
         {
-            get => Convert.ToByte(SendCommand($"g-lrc"), 16);
-            set => SendCommand($"s-lrc 0x{value:X}");
+            get => SendCommand("g-lrc").ConvertToByte();
+            set => SendCommandWithCheck($"s-lrc 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public string Version => SendCommand("g-fv");
         ///<inheritdoc/>
         public byte OutputPower
         {
-            get => Convert.ToByte(SendCommand($"g-op"), 16);
-            set => SendCommandWithCheck($"s-op {value}", ResponseOk);
+            get => SendCommand("g-op").ConvertToByte();
+            set => SendCommand($"s-op 0x{value:X}");
         }
         ///<inheritdoc/>
         public PaRamp PaRamp
         {
-            get => (PaRamp)int.Parse(SendCommand($"g-par"));
+            get => (PaRamp)SendCommand("g-par").ConvertToInt32();
             set => SendCommand($"s-par 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool OcpEnable
         {
-            get => SendCommand($"g-ocp").StartsWith("1");
-            set => SendCommand($"s-ocp {(value ? "1" : "0")}");
+            get => SendCommand("g-ocp").StartsWith("1");
+            set => SendCommandWithCheck($"s-ocp {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public OcpTrim OcpTrim
         {
-            get => (OcpTrim)int.Parse(SendCommand($"g-ocpt"));
+            get => (OcpTrim)SendCommand("g-ocpt").ConvertToInt32();
             set => SendCommand($"s-ocpt 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool Impedance
         {
-            get => SendCommand($"g-lnaz").StartsWith("1");
-            set => SendCommand($"s-lnaz {(value ? "1" : "0")}");
+            get => SendCommand("g-lnaz").StartsWith("1");
+            set => SendCommandWithCheck($"s-lnaz {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
-        public LnaGain CurrentLnaGain => (LnaGain)int.Parse(SendCommand($"g-lnag"));
+        public LnaGain CurrentLnaGain => (LnaGain)SendCommand("g-lnag").ConvertToInt32();
         ///<inheritdoc/>
         public LnaGain LnaGainSelect
         {
-            get => (LnaGain)int.Parse(SendCommand($"g-lnags"));
-            set => SendCommand($"s-lnazs 0x{value:X}");
+            get => (LnaGain)SendCommand("g-lnags").ConvertToInt32();
+            set => SendCommand($"s-lnags 0x{value:X}");
         }
         ///<inheritdoc/>
         public DccFreq DccFreq
         {
-            get => (DccFreq)int.Parse(SendCommand($"g-df"));
+            get => (DccFreq)SendCommand("g-df").ConvertToInt32();
             set => SendCommand($"s-df 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte RxBw
         {
-            get => Convert.ToByte(SendCommand($"g-rxbwa"), 16);
-            set => SendCommand($"s-rxbwa 0x{value:X}");
+            get => Convert.ToByte(SendCommand("g-rxbw").Substring(0, 4), 16);
+            set => SendCommand($"s-rxbw 0x{value:X}");
         }
         ///<inheritdoc/>
         public DccFreq DccFreqAfc
         {
-            get => (DccFreq)int.Parse(SendCommand($"g-dfa"));
+            get => (DccFreq)SendCommand("g-dfa").ConvertToInt32();
             set => SendCommand($"s-dfa 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte RxBwAfc
         {
-            get => Convert.ToByte(SendCommand($"g-rxbwa"), 16);
+            get => Convert.ToByte(SendCommand("g-rxbwa").Substring(0, 4), 16);
             set => SendCommand($"s-rxbwa 0x{value:X}");
         }
         ///<inheritdoc/>
         public OokThresholdType OokThresholdType
         {
-            get => (OokThresholdType)int.Parse(SendCommand($"g-ott"));
+            get => (OokThresholdType)SendCommand("g-ott").ConvertToInt32();
             set => SendCommand($"s-ott 0x{value:X}");
         }
         ///<inheritdoc/>
         public OokThresholdStep OokPeakThresholdStep
         {
-            get => (OokThresholdStep)int.Parse(SendCommand($"g-ots"));
+            get => (OokThresholdStep)SendCommand("g-ots").ConvertToInt32();
             set => SendCommand($"s-ots 0x{value:X}");
         }
         ///<inheritdoc/>
         public OokThresholdDec OokPeakThresholdDec
         {
-            get => (OokThresholdDec)int.Parse(SendCommand($"g-optd"));
-            set => SendCommand($"s-optd 0x{value:X}");
+            get => (OokThresholdDec)SendCommand("g-optd").ConvertToInt32();
+            set => SendCommand($"s-optd 0x{(int)value:X}");
         }
         ///<inheritdoc/>
         public OokAverageThresholdFilter OokAverageThresholdFilter
         {
-            get => (OokAverageThresholdFilter)int.Parse(SendCommand($"g-oatf"));
+            get => (OokAverageThresholdFilter)SendCommand("g-oatf").ConvertToInt32();
             set => SendCommand($"s-oatf 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte OokFixedThreshold
         {
-            get => Convert.ToByte(SendCommand($"g-oft"), 16);
-            set => SendCommand($"s-oft 0x{value:X}");
+            get => SendCommand("g-oft").ConvertToByte();
+            set => SendCommandWithCheck($"s-oft 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool AfcAutoClear
         {
-            get => SendCommand($"g-aac").StartsWith("1");
-            set => SendCommand($"s-aac {(value ? "1" : "0")}");
+            get => SendCommand("g-aac").StartsWith("1");
+            set => SendCommandWithCheck($"s-aac {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool AfcAutoOn
         {
-            get => SendCommand($"g-aao").StartsWith("1");
-            set => SendCommand($"s-aao {(value ? "1" : "0")}");
+            get => SendCommand("g-aao").StartsWith("1");
+            set => SendCommandWithCheck($"s-aao {(value ? "1" : "0")}", ResponseOk);
         }
-        public short Afc => Convert.ToByte(SendCommand($"g-a"), 16);
+        public ushort Afc => SendCommand("g-a").ConvertToUInt16();
         ///<inheritdoc/>
-        public short Fei => Convert.ToByte(SendCommand($"g-a"), 16);
+        public ushort Fei => SendCommand("g-a").ConvertToUInt16();
         ///<inheritdoc/>
-        public byte Rssi => Convert.ToByte(SendCommand($"g-rssi"), 16);
+        public byte Rssi => SendCommand("g-rssi").ConvertToByte();
         ///<inheritdoc/>
         public Irq Irq => GetIrqInternal();
         ///<inheritdoc/>
         public byte RssiThreshold
         {
-            get => Convert.ToByte(SendCommand($"g-rt"), 16);
-            set => SendCommand($"s-rt 0x{value:X}");
+            get => SendCommand("g-rt").ConvertToByte();
+            set => SendCommandWithCheck($"s-rt 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
-        public byte TimeoutRxStart => Convert.ToByte(SendCommand($"g-trs"), 16);
+        public byte TimeoutRxStart
+        {
+            get => SendCommand("g-trs").ConvertToByte();
+            set => SendCommandWithCheck($"s-trs 0x{value:X}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public byte TimeoutRssiThreshold => Convert.ToByte(SendCommand($"g-trt"), 16);
+        public byte TimeoutRssiThreshold
+        {
+            get => SendCommand("g-trt").ConvertToByte();
+            set => SendCommandWithCheck($"s-trt 0x{value:X}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public ushort PreambleSize => Convert.ToUInt16(SendCommand($"g-ps"), 16);
+        public ushort PreambleSize
+        {
+            get => SendCommand("g-ps").ConvertToUInt16();
+            set => SendCommandWithCheck($"s-ps 0x{value:X}", ResponseOk);
+        }
         ///<inheritdoc/>
         public bool SyncEnable
         {
-            get => SendCommand($"g-se").StartsWith("1");
-            set => SendCommand($"s-se {(value ? "1" : "0")}");
+            get => SendCommand("g-se").StartsWith("1");
+            set => SendCommandWithCheck($"s-se {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool FifoFill
         {
-            get => SendCommand($"g-ffc").StartsWith("1");
-            set => SendCommand($"s-ffc {(value ? "1" : "0")}");
+            get => SendCommand("g-ffc").StartsWith("1");
+            set => SendCommandWithCheck($"s-ffc {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte SyncBitErrors
         {
-            get => Convert.ToByte(SendCommand($"g-sbe"), 16);
-            set => SendCommand($"s-sbe 0x{value:X}");
+            get => SendCommand("g-sbe").ConvertToByte();
+            set => SendCommandWithCheck($"s-sbe 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public IEnumerable<byte> Sync
         {
-            get => SendCommand($"g-sync").ToBytes();
+            get => SendCommand("g-sync").ToBytes();
             set
             {
                 SendCommandWithCheck($"s-sync {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
@@ -305,123 +318,123 @@ namespace RfmUsb
         ///<inheritdoc/>
         public bool PacketFormat
         {
-            get => SendCommand($"g-pf").StartsWith("1");
-            set => SendCommand($"s-pf {(value ? "1" : "0")}");
+            get => SendCommand("g-pf").StartsWith("1");
+            set => SendCommandWithCheck($"s-pf {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public DcFree DcFree
         {
-            get => (DcFree)int.Parse(SendCommand($"g-dfe"));
+            get => (DcFree)SendCommand("g-dfe").ConvertToInt32();
             set => SendCommand($"s-dfe 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool CrcOn
         {
-            get => SendCommand($"g-cc").StartsWith("1");
-            set => SendCommand($"s-cc {(value ? "1" : "0")}");
+            get => SendCommand("g-cc").StartsWith("1");
+            set => SendCommandWithCheck($"s-cc {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool CrcAutoClear
         {
-            get => SendCommand($"g-caco").StartsWith("1");
-            set => SendCommand($"s-caco {(value ? "1" : "0")}");
+            get => SendCommand("g-caco").StartsWith("1");
+            set => SendCommandWithCheck($"s-caco {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public AddressFilter AddressFiltering
         {
-            get => (AddressFilter)int.Parse(SendCommand($"g-af"));
+            get => (AddressFilter)SendCommand("g-af").ConvertToInt32();
             set => SendCommand($"s-af 0x{value:X}");
         }
         ///<inheritdoc/>
         public byte PayloadLength
         {
-            get => Convert.ToByte(SendCommand($"g-pl"), 16);
-            set => SendCommand($"s-pl 0x{value:X}");
+            get => SendCommand("g-pl").ConvertToByte();
+            set => SendCommandWithCheck($"s-pl 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte NodeAddress
         {
-            get => Convert.ToByte(SendCommand($"g-na"), 16);
-            set => SendCommand($"s-na 0x{value:X}");
+            get => SendCommand("g-na").ConvertToByte();
+            set => SendCommandWithCheck($"s-na 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte BroadcastAddress
         {
-            get => Convert.ToByte(SendCommand($"g-ba").Trim('[', ']'), 16);
-            set => SendCommand($"s-ba 0x{value:X}");
+            get => SendCommand("g-ba").ConvertToByte();
+            set => SendCommandWithCheck($"s-ba 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public EnterCondition EnterCondition
         {
-            get => (EnterCondition)int.Parse(SendCommand($"g-amec"));
+            get => (EnterCondition)SendCommand("g-amec").ConvertToInt32();
             set => SendCommand($"s-amec 0x{value:X}");
         }
         ///<inheritdoc/>
         public ExitCondition ExitCondition
         {
-            get => (ExitCondition)int.Parse(SendCommand($"g-amexc"));
+            get => (ExitCondition)SendCommand("g-amexc").ConvertToInt32();
             set => SendCommand($"s-amexc 0x{value:X}");
         }
         ///<inheritdoc/>
-        public Mode IntermediateMode
+        public IntermediateMode IntermediateMode
         {
-            get => (Mode)int.Parse(SendCommand($"g-im"));
+            get => (IntermediateMode)SendCommand("g-im").ConvertToInt32();
             set => SendCommand($"s-im 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool TxStartCondition
         {
-            get => SendCommand($"g-tsc").StartsWith("1");
-            set => SendCommand($"s-tsc {(value ? "1" : "0")}");
+            get => SendCommand("g-tsc").StartsWith("1");
+            set => SendCommandWithCheck($"s-tsc {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte FifoThreshold
         {
-            get => SendCommand("g-ft").ToBytes().First();
+            get => SendCommand("g-ft").ConvertToByte();
             set => SendCommandWithCheck($"s-ft 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte InterPacketRxDelay
         {
-            get => Convert.ToByte(SendCommand($"g-iprd"), 16);
-            set => SendCommand($"s-iprd 0x{value:X}");
+            get => SendCommand("g-iprd").ConvertToByte();
+            set => SendCommandWithCheck($"s-iprd 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool AutoRxRestartOn
         {
-            get => SendCommand($"g-arre").StartsWith("1");
-            set => SendCommand($"s-arre {(value ? "1" : "0")}");
+            get => SendCommand("g-arre").StartsWith("1");
+            set => SendCommandWithCheck($"s-arre {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool AesOn
         {
-            get => SendCommand($"g-ae").Substring(0, 1) == "1";
-            set => SendCommand($"s-ae {(value ? "1" : "0")}");
+            get => SendCommand("g-ae").Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"s-ae {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
-        public byte TemperatureValue => Convert.ToByte(SendCommand($"g-t"), 16);
+        public byte TemperatureValue => SendCommand("g-t").ConvertToByte();
         ///<inheritdoc/>
         public bool SensitivityBoost
         {
-            get => SendCommand($"g-sb").StartsWith("1");
-            set => SendCommand($"s-sb {(value ? "1" : "0")}");
+            get => SendCommand("g-sb").StartsWith("1");
+            set => SendCommandWithCheck($"s-sb {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public ContinuousDagc ContinuousDagc
         {
-            get => (ContinuousDagc)Convert.ToInt32(SendCommand($"g-cd").Substring(0, 6).Trim('[',']'), 16);
+            get => (ContinuousDagc)SendCommand("g-cd").ConvertToInt32();
             set => SendCommand($"s-cd 0x{value:X}");
         }
         ///<inheritdoc/>
         public bool LowBetaAfcOffset
         {
-            get => SendCommand($"g-lbao").StartsWith("1");
-            set => SendCommand($"s-lbao {(value ? "1" : "0")}");
+            get => SendCommand("g-lbao").StartsWith("1");
+            set => SendCommandWithCheck($"s-lbao {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte DioInterruptMask
         {
-            get => SendCommand("g-di").ToBytes().First();
+            get => SendCommand("g-di").ConvertToByte();
             set => SendCommandWithCheck($"s-di 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
@@ -437,8 +450,8 @@ namespace RfmUsb
         ///<inheritdoc/>
         public byte RadioConfig
         {
-            get => Convert.ToByte(SendCommand($"g-rc"), 16);
-            set => SendCommand($"s-rc 0x{value:X}");
+            get => SendCommand("g-rc").ConvertToByte();
+            set => SendCommandWithCheck($"s-rc 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public void AfcClear()
@@ -469,9 +482,9 @@ namespace RfmUsb
             SendCommandWithCheck("e-lma", ResponseOk);
         }
         ///<inheritdoc/>
-        public void MeaseureTemperature()
+        public void MeasureTemperature()
         {
-            SendCommandWithCheck("e-t", ResponseOk);
+            SendCommandWithCheck("e-tm", ResponseOk);
         }
         ///<inheritdoc/>
         public void Open(string serialPort, int baudRate)
@@ -525,6 +538,15 @@ namespace RfmUsb
         {
             SendCommandWithCheck($"s-dio {(int)dio} {(int)mapping}", $"[0x{(int)mapping:X4}]-Map {(int)mapping:D2}");
         }
+        ///<inheritdoc/>
+        public void GetDioMapping(out Dio dio, out DioMapping mapping)
+        {
+            SendCommand("g-dio");
+
+            dio = Dio.Dio0;
+            mapping = DioMapping.DioMapping3;
+        }
+
         ///<inheritdoc/>
         public void StartRssi()
         {

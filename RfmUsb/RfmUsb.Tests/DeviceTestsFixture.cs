@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RfmUsb.Ports;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RfmUsb.Tests
 {
@@ -20,6 +18,8 @@ namespace RfmUsb.Tests
             RfmUsbDevice = _serviceProvider.GetService<IRfmUsb>();
 
             RfmUsbDevice.Open(ComPort, 115200);
+
+            RfmUsbDevice.Timeout = 1000;
         }
 
         public void Dispose()

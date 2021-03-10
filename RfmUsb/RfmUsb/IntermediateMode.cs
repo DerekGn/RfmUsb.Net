@@ -24,11 +24,11 @@
 
 namespace RfmUsb
 {
-    public enum OokModulationShaping
+    public enum IntermediateMode
     {
-        None,
-        FilteringBr,
-        Filtering2Br,
-        Reserved
+        Sleep,
+        Standby,
+        Rx,
+        Tx
     }
 }

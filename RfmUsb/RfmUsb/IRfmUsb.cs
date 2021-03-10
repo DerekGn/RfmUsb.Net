@@ -67,11 +67,11 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the frequency deviation
         /// </summary>
-        int FreqencyDeviation { get; set; }
+        ushort FreqencyDeviation { get; set; }
         /// <summary>
         /// Get or set the frequency
         /// </summary>
-        int Frequency { get; set; }
+        uint Frequency { get; set; }
         /// <summary>
         /// Improved AFC routine for signals with modulation index lower than 2.
         /// </summary>
@@ -93,7 +93,7 @@ namespace RfmUsb
         /// <summary>
         /// Action taken after acceptance of a packet in Listen mode
         /// </summary>
-        Mode ListenEnd { get; set; }
+        ListenEnd ListenEnd { get; set; }
         /// <summary>
         /// Duration of the Idle phase in Listen mode
         /// </summary>
@@ -187,11 +187,11 @@ namespace RfmUsb
         /// <summary>
         /// The Afc value
         /// </summary>
-        short Afc { get; }
+        ushort Afc { get; }
         /// <summary>
         /// The Fei value
         /// </summary>
-        short Fei { get; }
+        ushort Fei { get; }
         /// <summary>
         /// Absolute value of the RSSI in dBm, 0.5dB steps. RSSI = -RssiValue/2 [dBm
         /// </summary>
@@ -209,17 +209,17 @@ namespace RfmUsb
         /// if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
         /// 0x00: TimeoutRxStart is disabled
         /// </summary>
-        byte TimeoutRxStart { get; }
+        byte TimeoutRxStart { get; set; }
         /// <summary>
         /// Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
         /// if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
         /// 0x00: TimeoutRxStart is disabled
         /// </summary>
-        byte TimeoutRssiThreshold { get; }
+        byte TimeoutRssiThreshold { get; set; }
         /// <summary>
         /// Size of the preamble to be sent (from TxStartConditionfulfilled)
         /// </summary>
-        ushort PreambleSize { get; }
+        ushort PreambleSize { get; set; }
         /// <summary>
         /// Enable sync word generation and detection
         /// </summary>
@@ -288,7 +288,7 @@ namespace RfmUsb
         /// <summary>
         /// Intermediate mode
         /// </summary>
-        Mode IntermediateMode { get; set; }
+        IntermediateMode IntermediateMode { get; set; }
         /// <summary>
         /// Defines the condition to start packet transmission : 
         /// false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
@@ -400,13 +400,19 @@ namespace RfmUsb
         /// <param name="mapping">The <see cref="DioMapping"/></param>
         void SetDioMapping(Dio dio, DioMapping mapping);
         /// <summary>
+        /// Get the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
+        /// </summary>
+        /// <param name="dio">The <see cref="Dio"/></param>
+        /// <param name="mapping">The <see cref="DioMapping"/></param>
+        void GetDioMapping(out Dio dio, out DioMapping mapping);
+        /// <summary>
         /// Forces the Receiver in WAIT mode, in Continuous Rx mode.
         /// </summary>
         void RestartRx();
         /// <summary>
         /// Execute a temperature measurement
         /// </summary>
-        void MeaseureTemperature();
+        void MeasureTemperature();
         /// <summary>
         /// Set the AES encryption key
         /// </summary>
