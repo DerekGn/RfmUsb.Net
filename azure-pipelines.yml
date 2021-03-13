@@ -15,6 +15,7 @@ steps:
     inputs:
       command: 'build'
       projects: $(BuildParameters.solution)
+      configuration: $(BuildConfiguration)
   - task: DotNetCoreCLI@2
     inputs:
       command: 'pack'
