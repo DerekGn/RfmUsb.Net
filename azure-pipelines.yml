@@ -22,7 +22,7 @@ steps:
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
-      versioningScheme: 'off'
+      versioningScheme: 'byBuildNumber'
   - task: GitHubRelease@1
     name: "Publish_Release_To_GitHub"
     inputs:
