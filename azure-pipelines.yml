@@ -1,12 +1,8 @@
 variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
-- name: SemVer
-  value: '1.0.0'
-- name: Tag
-  value: $(semVer)$(rev:.r)
 
-name: $(SemVer)
+name: $(PackageVersion)
 
 trigger:
 - main
@@ -26,7 +22,8 @@ steps:
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
-      versioningScheme: byBuildNumber
+      versioningScheme: byEnvVar
+      versionEnvVar: PackageVersion
   - task: GitHubRelease@1
     displayName: "Publish Relase To GitHub"
     inputs:
