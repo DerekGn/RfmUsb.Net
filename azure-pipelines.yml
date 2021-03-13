@@ -1,14 +1,10 @@
 variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
-- name: Major
-  value: 1
-- name: Minor
-  value: 0
-- name: Patch
-  value: 0
+- name: SemVer
+  value: '1.0.0'
 
-name: v$(Major).$(Minor).$(Patch)$(rev:.r)
+name: $(SemVer)
 
 trigger:
 - main
@@ -28,10 +24,7 @@ steps:
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
-      versioningScheme: byPrereleaseNumber
-      majorVersion: $(Major)
-      minorVersion: $(Minor)
-      patchVersion: $(Patch)
+      versioningScheme: byBuildNumber
   - task: GitHubRelease@1
     name: "Publish_Release_To_GitHub"
     inputs:
@@ -40,7 +33,7 @@ steps:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
-      tag: '$(Build.BuildNumber)'
-      title: '$(Build.BuildNumber) - $(BuildConfiguration) - $(Build.SourceBranchName)'
+      tag: 'v$(Build.BuildNumber)$(rev:.r)'
+      title: 'v$(Build.BuildNumber)$(rev:.r) - $(BuildConfiguration) - $(Build.SourceBranchName)'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
