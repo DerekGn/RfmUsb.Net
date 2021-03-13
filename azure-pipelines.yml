@@ -17,12 +17,14 @@ steps:
       command: 'build'
       projects: $(BuildParameters.solution)
       configuration: $(BuildConfiguration)
+      arguments: '--configuration $(BuildConfiguration) --no-restore /p:Version=$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     name: "Pack_Project"
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
       versioningScheme: 'byBuildNumber'
+      buildProperties: '--configuration $(BuildConfiguration) --no-build'
   - task: GitHubRelease@1
     name: "Publish_Release_To_GitHub"
     inputs:
