@@ -24,7 +24,6 @@ steps:
       command: 'pack'
       packagesToPack: '**/*.csproj'
       versioningScheme: 'byBuildNumber'
-      buildProperties: '--configuration $(BuildConfiguration) --no-build'
   - task: GitHubRelease@1
     name: "Publish_Release_To_GitHub"
     inputs:
