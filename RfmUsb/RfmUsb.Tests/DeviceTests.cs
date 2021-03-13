@@ -597,16 +597,15 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.OokThresholdType.Should().Be(value);
         }
 
-        //timesout
-        //[Theory]
-        //[InlineData(20)]
-        //[InlineData(byte.MinValue)]
-        //public void TestOutputPower(byte value)
-        //{
-        //    _fixture.RfmUsbDevice.OutputPower = value;
+        [Theory]
+        [InlineData(20)]
+        [InlineData(byte.MinValue)]
+        public void TestOutputPower(byte value)
+        {
+            _fixture.RfmUsbDevice.OutputPower = value;
 
-        //    _fixture.RfmUsbDevice.OutputPower.Should().Be(value);
-        //}
+            _fixture.RfmUsbDevice.OutputPower.Should().Be(value);
+        }
 
         [Theory]
         [InlineData(true)]
