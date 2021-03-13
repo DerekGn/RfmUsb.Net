@@ -17,7 +17,6 @@ steps:
       command: 'build'
       projects: $(BuildParameters.solution)
       configuration: $(BuildConfiguration)
-      arguments: '--configuration $(BuildConfiguration) /p:Version=$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     name: "Pack_Project"
     inputs:
