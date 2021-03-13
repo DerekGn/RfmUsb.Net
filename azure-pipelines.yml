@@ -3,6 +3,8 @@ variables:
   value: '**\*.sln'
 - name: SemVer
   value: '1.0.0'
+- name: Tag
+  value: $(semVer)$(rev:.r)
 
 name: $(SemVer)
 
@@ -14,26 +16,26 @@ pool:
 
 steps:
   - task: DotNetCoreCLI@2
-    name: "Build_Solution"
+    displayName: "Build Solution"
     inputs:
       command: 'build'
       projects: $(BuildParameters.solution)
       configuration: $(BuildConfiguration)
   - task: DotNetCoreCLI@2
-    name: "Pack_Project"
+    displayName: "Pack Project"
     inputs:
       command: 'pack'
       packagesToPack: '**/*.csproj'
       versioningScheme: byBuildNumber
   - task: GitHubRelease@1
-    name: "Publish_Release_To_GitHub"
+    displayName: "Publish Relase To GitHub"
     inputs:
       gitHubConnection: 'GitHub PAT'
       repositoryName: '$(Build.Repository.Name)'
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
-      tag: 'v$(Build.BuildNumber)$(rev:.r)'
-      title: 'v$(Build.BuildNumber)$(rev:.r) - $(BuildConfiguration) - $(Build.SourceBranchName)'
+      tag: '$(Tag)'
+      title: '$(Tag) - $(BuildConfiguration) - $(Build.SourceBranchName)'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
