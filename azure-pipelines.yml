@@ -2,7 +2,7 @@ variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
 
-name: $(Major).$(Minor).$(Patch)
+name: v'$(Major).$(Minor).$(Patch)'
 
 trigger:
 - main
@@ -32,7 +32,7 @@ steps:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
-      tag: '$(BuildNumber)'
-      title: '$(BuildNumber) - $(BuildConfiguration) - $(Build.SourceBranchName)'
+      tag: '$(Build.BuildNumber)'
+      title: '$(Build.BuildNumber) - $(BuildConfiguration) - $(Build.SourceBranchName)'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
