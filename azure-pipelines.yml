@@ -1,3 +1,9 @@
+variables:
+- name: BuildParameters.solution
+  value: '**\*.sln'
+
+name: v1.0.0$(rev:.r)
+
 trigger:
 - main
 
@@ -8,3 +14,4 @@ steps:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
+      projects: $(BuildParameters.solution)
