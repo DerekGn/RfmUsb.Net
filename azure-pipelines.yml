@@ -15,12 +15,3 @@ steps:
     inputs:
       command: 'build'
       projects: $(BuildParameters.solution)
-  - task: GitHubRelease@1
-    inputs:
-      repositoryName: '$(Build.Repository.Name)'
-      action: 'create'
-      target: '$(Build.SourceVersion)'
-      tagSource: 'gitTag'
-      changeLogCompareToRelease: 'lastFullRelease'
-      changeLogType: 'commitBased'
-      gitHubConnection: 'DerekGn'
