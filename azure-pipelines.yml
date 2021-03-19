@@ -2,7 +2,7 @@ variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
 
-name: v1.0.0$(rev:.r)
+name: v$(Major).$(Minor).$(Patch)
 
 trigger:
 - main
@@ -12,6 +12,27 @@ pool:
 
 steps:
   - task: DotNetCoreCLI@2
+    displayName: "Build Solution"
     inputs:
       command: 'build'
       projects: $(BuildParameters.solution)
+      configuration: $(BuildConfiguration)
+  - task: DotNetCoreCLI@2
+    displayName: "Pack Project"
+    inputs:
+      command: 'pack'
+      packagesToPack: '**/*.csproj'
+      versioningScheme: byEnvVar
+      versionEnvVar: PackageVersion
+  - task: GitHubRelease@1
+    displayName: "Publish Relase To GitHub"
+    inputs:
+      gitHubConnection: 'GitHub PAT'
+      repositoryName: '$(Build.Repository.Name)'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'userSpecifiedTag'
+      tag: '$(Build.BuildNumber)'
+      title: '$(Build.BuildNumber) - $(BuildConfiguration) - $(Build.SourceBranchName)'
+      changeLogCompareToRelease: 'lastFullRelease'
+      changeLogType: 'commitBased'
