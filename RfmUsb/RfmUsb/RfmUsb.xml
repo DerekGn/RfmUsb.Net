@@ -1,0 +1,925 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RfmUsb</name>
+    </assembly>
+    <members>
+        <member name="F:RfmUsb.AddressFilter.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:RfmUsb.AddressFilter.Node">
+            <summary>
+            Node
+            </summary>
+        </member>
+        <member name="F:RfmUsb.AddressFilter.NodeBroaddcast">
+            <summary>
+            Node or Broadcast
+            </summary>
+        </member>
+        <member name="F:RfmUsb.AddressFilter.Reserved">
+            <summary>
+            Reserved
+            </summary>
+        </member>
+        <member name="T:RfmUsb.DcFree">
+            <summary>
+            Defines DC-free encoding/decoding
+            </summary>
+        </member>
+        <member name="F:RfmUsb.DcFree.None">
+            <summary>
+            None Off
+            </summary>
+        </member>
+        <member name="F:RfmUsb.DcFree.Manchester">
+            <summary>
+            Manchester encoding
+            </summary>
+        </member>
+        <member name="F:RfmUsb.DcFree.Whitening">
+            <summary>
+            Data whitening
+            </summary>
+        </member>
+        <member name="F:RfmUsb.DcFree.Reserved">
+            <summary>
+            Reserved
+            </summary>
+        </member>
+        <member name="T:RfmUsb.Dio">
+            <summary>
+            The Rfm69 digital io pins
+            </summary>
+        </member>
+        <member name="T:RfmUsb.DioMapping">
+            <summary>
+            The Rfm69 digital io pin mappings
+            </summary>
+        </member>
+        <member name="T:RfmUsb.IRfmUsb">
+            <summary>
+            An rfm69 Usb device
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Fifo">
+            <summary>
+            Get or set the fifo data
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Sequencer">
+            <summary>
+            Get or set the automatic Sequencer enable
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenerOn">
+            <summary>
+            Enables Listen mode, should be enabled whilst in Standby mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Mode">
+            <summary>
+            Get or set the current mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Modulation">
+            <summary>
+            Get or set the modulation type
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.FskModulationShaping">
+            <summary>
+            The Fsk data shaping
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokModulationShaping">
+            <summary>
+            The Ook data shaping
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.BitRate">
+            <summary>
+            Get or set the radio Tx/Rx bit rate
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.FreqencyDeviation">
+            <summary>
+            Get or set the frequency deviation
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Frequency">
+            <summary>
+            Get or set the frequency
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AfcLowBetaOn">
+            <summary>
+            Improved AFC routine for signals with modulation index lower than 2.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenResolutionIdle">
+            <summary>
+            The resolution of Listen mode Idle time 
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenResolutionRx">
+            <summary>
+            The resolution of Listen mode Rx time 
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenCriteria">
+            <summary>
+            Criteria for packet acceptance in Listen mode:
+            false → signal strength is above RssiThreshold
+            true → signal strength is above RssiThreshold and SyncAddress matched
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenEnd">
+            <summary>
+            Action taken after acceptance of a packet in Listen mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenCoefficentIdle">
+            <summary>
+            Duration of the Idle phase in Listen mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ListenCoefficentRx">
+            <summary>
+            Duration of the Idle phase in Rx phase
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Version">
+            <summary>
+            Get the FrmUsb version
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OutputPower">
+            <summary>
+            Get or set the output power in dbm
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.PaRamp">
+            <summary>
+            Rise/Fall time of ramp up/down in FSK
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OcpEnable">
+            <summary>
+            Enables overload current protection (OCP) for the PA
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OcpTrim">
+            <summary>
+            Trimming of OCP current
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Impedance">
+            <summary>
+            LNA’s input impedance
+            false → 50 ohms
+            true → 200 ohms
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.CurrentLnaGain">
+            <summary>
+            Current LNA gain, set either manually, or by the AGC
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.LnaGainSelect">
+            <summary>
+            LNA gain setting
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.DccFreq">
+            <summary>
+            Cut-off frequency of the DC offset canceller (DCC)
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.RxBw">
+            <summary>
+            Gets the Rx channel filter bandwidth
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.DccFreqAfc">
+            <summary>
+            Cut-off frequency of the DC offset canceller (DCC)
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.RxBwAfc">
+            <summary>
+            Gets the Rx channel filter bandwidth for Afc
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokThresholdType">
+            <summary>
+            Selects type of threshold in the OOK data slicer
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokPeakThresholdStep">
+            <summary>
+            Size of each decrement of the RSSI threshold in the OOKdemodulator
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokPeakThresholdDec">
+            <summary>
+            Period of decrement of the RSSI threshold in the OOK demodulator
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokAverageThresholdFilter">
+            <summary>
+            Filter coefficients in average mode of the OOK demodulator
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.OokFixedThreshold">
+            <summary>
+            Fixed threshold value (in dB) in the OOK demodulator.
+            Used when OokThresholdType is <see cref="F:RfmUsb.OokThresholdType.Fixed"/>
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AfcAutoClear">
+            <summary>
+            Only valid if AfcAutoOn is set 
+            false → AFC register is not cleared before a new AFC phase
+            true → AFC register is cleared before a new AFC phase
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AfcAutoOn">
+            <summary>
+            false → AFC is performed each time AfcStart is set
+            true → AFC is performed each time Rx mode is entered
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Afc">
+            <summary>
+            The Afc value
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Fei">
+            <summary>
+            The Fei value
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Rssi">
+            <summary>
+            Absolute value of the RSSI in dBm, 0.5dB steps. RSSI = -RssiValue/2 [dBm
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Irq">
+            <summary>
+            Get the Irq flags
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.RssiThreshold">
+            <summary>
+            RSSI trigger level for Rssi interrupt
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.TimeoutRxStart">
+            <summary>
+            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
+            if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+            0x00: TimeoutRxStart is disabled
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.TimeoutRssiThreshold">
+            <summary>
+            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
+            if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+            0x00: TimeoutRxStart is disabled
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.PreambleSize">
+            <summary>
+            Size of the preamble to be sent (from TxStartConditionfulfilled)
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.SyncEnable">
+            <summary>
+            Enable sync word generation and detection
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.FifoFill">
+            <summary>
+            FIFO filling condition: 
+            false → if SyncAddress interrupt occurs
+            true → as long as FifoFillCondition is set
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.SyncBitErrors">
+            <summary>
+            Get or set the number of tolerated bit errors in Sync word
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Sync">
+            <summary>
+            The radio sync bytes
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.PacketFormat">
+            <summary>
+            Defines the packet format used:
+            false → Fixed length
+            true → Variable length
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.DcFree">
+            <summary>
+            Defines DC-free encoding/decoding performed
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.CrcOn">
+            <summary>
+            Enables CRC calculation/check (Tx/Rx)
+            false → Off
+            true → On
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.CrcAutoClear">
+            <summary>
+            Defines the behavior of the packet handler when CRC check fails:
+            false → Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
+            true → Do not clear FIFO. PayloadReady interrupt issued.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AddressFiltering">
+            <summary>
+            Defines address based filtering in Rx
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.PayloadLength">
+            <summary>
+            If PacketFormat = false (fixed), payload length.
+            If PacketFormat = true (variable), max length in Rx, not used in Tx.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.NodeAddress">
+            <summary>
+            Node address used in address filtering
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.BroadcastAddress">
+            <summary>
+            Broadcast address used in address filtering
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.EnterCondition">
+            <summary>
+            Interrupt condition for entering the intermediate mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ExitCondition">
+            <summary>
+            Interrupt condition for exiting the intermediate mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.IntermediateMode">
+            <summary>
+            Intermediate mode
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:RfmUsb.IRfmUsb.TxStartCondition" -->
+        <member name="P:RfmUsb.IRfmUsb.FifoThreshold">
+            <summary>
+            Used to trigger FifoLevel interrupt.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.InterPacketRxDelay">
+            <summary>
+            After PayloadReady occurred, defines the delay between FIFO empty and the 
+            start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
+            - Tdelay = 0 if InterpacketRxDelay >= 12 
+            - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AutoRxRestartOn">
+            <summary>
+            Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO: 
+            false → Off. RestartRx can be used. 
+            true→ On. Rx automatically restarted after InterPacketRxDelay.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.AesOn">
+            <summary>
+            Enable the AES encryption/decryption: 
+            false → Off
+            true → On (payload limited to 66 bytes maximum)
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.TemperatureValue">
+            <summary>
+            Measured temperature value
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.SensitivityBoost">
+            <summary>
+            High sensitivity or normal sensitivity mode
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.ContinuousDagc">
+            <summary>
+            Fading Margin Improvement
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.LowBetaAfcOffset">
+            <summary>
+            AFC offset set for low modulation index systems, used if AfcLowBetaOn = true.
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.DioInterruptMask">
+            <summary>
+            The Dio interrupt mask
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.Timeout">
+            <summary>
+            Get or set the serial port timeout
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.WaitForIrq">
+            <summary>
+            Wait for a configured Irq to be signaled
+            </summary>
+        </member>
+        <member name="P:RfmUsb.IRfmUsb.RadioConfig">
+            <summary>
+            Sets the radio configuration to one of the preset configuration sets.
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.Reset">
+            <summary>
+            Reset the radio
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.Close">
+            <summary>
+            Close the connection to the RfmUsb device
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.Open(System.String,System.Int32)">
+            <summary>
+            Open the RfmUsb device
+            </summary>
+            <param name="serialPort">The serial port</param>
+            <param name="baudRate">The baud rate</param>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.ListenAbort">
+            <summary>
+            Abort listen mode
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.RcCalibration">
+            <summary>
+            Triggers the calibration of the RC oscillator
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.FeiStart">
+            <summary>
+            Triggers a FEI measurement
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.AfcClear">
+            <summary>
+            Clears the AfcValue if set in Rx mode
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.AfcStart">
+            <summary>
+            Triggers an AFC
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.StartRssi">
+            <summary>
+            Trigger a RSSI measurement
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.GetRadioConfiurations">
+            <summary>
+            Get a list of the pre-configured radio configurations
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.SetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping)">
+            <summary>
+            Set the <see cref="T:RfmUsb.Dio"/> mapping configuration <see cref="T:RfmUsb.DioMapping"/>
+            </summary>
+            <param name="dio">The <see cref="T:RfmUsb.Dio"/> configuration</param>
+            <param name="mapping">The <see cref="T:RfmUsb.DioMapping"/></param>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.GetDioMapping(RfmUsb.Dio@,RfmUsb.DioMapping@)">
+            <summary>
+            Get the <see cref="T:RfmUsb.Dio"/> mapping configuration <see cref="T:RfmUsb.DioMapping"/>
+            </summary>
+            <param name="dio">The <see cref="T:RfmUsb.Dio"/></param>
+            <param name="mapping">The <see cref="T:RfmUsb.DioMapping"/></param>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.RestartRx">
+            <summary>
+            Forces the Receiver in WAIT mode, in Continuous Rx mode.
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.MeasureTemperature">
+            <summary>
+            Execute a temperature measurement
+            </summary>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.SetAesKey(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            Set the AES encryption key
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32)">
+            <summary>
+            Transmit a packet of data bytes and wait for a response
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="timeout">The timeout in milliseconds to wait for a response</param>
+            <returns>The received packet bytes</returns>
+        </member>
+        <member name="M:RfmUsb.IRfmUsb.Transmit(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Transmit a packet of data bytes
+            </summary>
+            <param name="data">The data to transmit</param>
+        </member>
+        <member name="F:RfmUsb.Irq.CrcOK">
+            <summary>
+            Set in Rx when the CRC of the payload is Ok. Cleared when FIFO is empty.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.PayloadReady">
+            <summary>
+            Set in Rx when the payload is ready (i.e. last byte received and CRC, if enabled and CrcAutoClearOff is cleared,is Ok). Cleared when FIFO is empty.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.PacketSent">
+            <summary>
+            Set in Tx when the complete packet has been sent. Cleared when exiting Tx.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.FifoOverrun">
+            <summary>
+            Set when FIFO overrun occurs. (except in Sleep mode) Flag(s) and FIFO are cleared when this bit is set.
+            The FIFO then becomes immediately available for the next transmission/reception
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.FifoLevel">
+            <summary>
+            Set when the number of bytes in the FIFO strictly exceeds FifoThreshold, else cleared.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.FifoNotEmpty">
+            <summary>
+            Set when FIFO contains at least one byte, else cleared
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.FifoFull">
+            <summary>
+            Set when FIFO is full (i.e. contains 66 bytes), else cleared
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.AddressMatch">
+            <summary>
+            Set when Sync and Address (if enabled) are detected. Cleared when leaving Rx or FIFO is emptied.
+            This bit is read only in Packet mode, rwc in Continuous mode
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.AutoMode">
+            <summary>
+            Set when entering Intermediate mode. Cleared when exiting 
+            Intermediate mode. Please note that in Sleep mode a small
+            delay can be observed between AutoMode interrupt and the
+            corresponding enter/exit condition.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.Timeout">
+            <summary>
+            Set when a timeout occurs (see TimeoutRxStart and TimeoutRssiThresh) Cleared when leaving Rx or FIFO is emptied.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.Rssi">
+            <summary>
+            Set in Rx when the RssiValue exceeds RssiThreshold. Cleared when leaving Rx.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.PllLock">
+            <summary>
+            Set (in FS, Rx or Tx) when the PLL is locked. Cleared when it is not.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.TxReady">
+            <summary>
+            Set in Tx mode, after PA ramp-up. Cleared when leaving Tx.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.RxReady">
+            <summary>
+            Set in Rx mode, after RSSI, AGC and AFC. Cleared when leaving Rx.
+            </summary>
+        </member>
+        <member name="F:RfmUsb.Irq.ModeReady">
+            <summary>
+            Set when the operation mode requested in Mode, is ready 
+            - Sleep: Entering Sleep mode 
+            - Standby: XO is running 
+            - FS: PLL is locked
+            - Rx: RSSI sampling starts
+            - Tx: PA ramp-up completed
+            Cleared when changing operating mode.
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Ports.PortsServiceExtensions.AddSerialPortFactory(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the <see cref="T:RfmUsb.Ports.ISerialPortFactory"/> instance to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+            </summary>
+            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:RfmUsb.Ports.SerialPortFactory.CreateSerialPortInstance(System.String)">
+            <summary>
+            Create an instance of a <see cref="T:RfmUsb.Ports.ISerialPort"/>
+            </summary>
+            <param name="serialPort">The port to use (for example, COM1).</param>
+            <returns>An instance of the <see cref="T:RfmUsb.Ports.ISerialPort"/></returns>
+        </member>
+        <member name="M:RfmUsb.Ports.SerialPortFactory.GetSerialPorts">
+            <summary>
+            Get the list of serial ports from the OD
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Fifo">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Mode">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Modulation">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.FskModulationShaping">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokModulationShaping">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.BitRate">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.FreqencyDeviation">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Frequency">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AfcLowBetaOn">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenResolutionIdle">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenResolutionRx">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenCriteria">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenEnd">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenCoefficentIdle">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenCoefficentRx">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Version">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OutputPower">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.PaRamp">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OcpEnable">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OcpTrim">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Impedance">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.CurrentLnaGain">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.LnaGainSelect">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.DccFreq">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.RxBw">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.DccFreqAfc">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.RxBwAfc">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokThresholdType">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokPeakThresholdStep">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokPeakThresholdDec">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokAverageThresholdFilter">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.OokFixedThreshold">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AfcAutoClear">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AfcAutoOn">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Fei">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Rssi">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Irq">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.RssiThreshold">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.TimeoutRxStart">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.TimeoutRssiThreshold">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.PreambleSize">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.SyncEnable">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.FifoFill">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.SyncBitErrors">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Sync">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.PacketFormat">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.DcFree">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.CrcOn">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.CrcAutoClear">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AddressFiltering">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.PayloadLength">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.NodeAddress">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.BroadcastAddress">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.EnterCondition">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ExitCondition">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.IntermediateMode">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.TxStartCondition">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.FifoThreshold">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.InterPacketRxDelay">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AutoRxRestartOn">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.AesOn">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.TemperatureValue">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.SensitivityBoost">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ContinuousDagc">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.LowBetaAfcOffset">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.DioInterruptMask">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.Timeout">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.RadioConfig">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.AfcClear">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.AfcStart">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.Close">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.FeiStart">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.ListenAbort">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.MeasureTemperature">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.Open(System.String,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.RcCalibration">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.Reset">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.RestartRx">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.SetAesKey(System.Collections.Generic.IEnumerable{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.SetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.GetDioMapping(RfmUsb.Dio@,RfmUsb.DioMapping@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.StartRssi">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.GetRadioConfiurations">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.Transmit(System.Collections.Generic.IList{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.RfmUsb.WaitForIrq">
+            <inheritdoc/>
+        </member>
+        <member name="T:RfmUsb.RfmUsbServiceExtensions">
+            <summary>
+            Extensions for the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to enable configuration of rfmusb dependencies
+            </summary>
+        </member>
+        <member name="M:RfmUsb.RfmUsbServiceExtensions.AddRfmUsb(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add a singleton instance of an <see cref="T:RfmUsb.IRfmUsb"/> implementation
+            </summary>
+            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to add the <see cref="T:RfmUsb.IRfmUsb"/> instance</param>
+            <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+    </members>
+</doc>

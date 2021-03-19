@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RfmUsb.Ports;
+using Serilog;
 using System;
 
 namespace RfmUsb.Tests
@@ -13,6 +14,11 @@ namespace RfmUsb.Tests
 
         public DeviceTestsFixture()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.File(".\\Testlog.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             _serviceProvider = BuildServiceProvider();
 
             RfmUsbDevice = _serviceProvider.GetService<IRfmUsb>();
@@ -35,6 +41,7 @@ namespace RfmUsb.Tests
         private static ServiceProvider BuildServiceProvider()
         {
             var serviceCollection = new ServiceCollection()
+                .AddLogging(builder => builder.AddSerilog())
                 .AddSerialPortFactory()
                 .AddLogging()
                 .AddRfmUsb();

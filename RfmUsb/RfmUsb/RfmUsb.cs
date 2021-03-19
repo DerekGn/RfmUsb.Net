@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace RfmUsb
 {
@@ -194,13 +195,13 @@ namespace RfmUsb
         public DccFreq DccFreq
         {
             get => (DccFreq)SendCommand("g-df").ConvertToInt32();
-            set => SendCommand($"s-df 0x{value:X}");
+            set => SendCommandWithCheck($"s-df 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte RxBw
         {
             get => Convert.ToByte(SendCommand("g-rxbw").Substring(0, 4), 16);
-            set => SendCommand($"s-rxbw 0x{value:X}");
+            set => SendCommandWithCheck($"s-rxbw 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public DccFreq DccFreqAfc
@@ -212,7 +213,7 @@ namespace RfmUsb
         public byte RxBwAfc
         {
             get => Convert.ToByte(SendCommand("g-rxbwa").Substring(0, 4), 16);
-            set => SendCommand($"s-rxbwa 0x{value:X}");
+            set => SendCommandWithCheck($"s-rxbwa 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public OokThresholdType OokThresholdType
@@ -343,7 +344,7 @@ namespace RfmUsb
         public AddressFilter AddressFiltering
         {
             get => (AddressFilter)SendCommand("g-af").ConvertToInt32();
-            set => SendCommand($"s-af 0x{value:X}");
+            set => SendCommandWithCheck($"s-af 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte PayloadLength
@@ -724,7 +725,7 @@ namespace RfmUsb
             lock (_serialPort)
             {
                 _serialPort.Write($"{command}\n");
-
+                
                 var response = _serialPort.ReadLine();
 
                 _logger.LogDebug($"Command: [{command}] Result: [{response}]");

@@ -24,11 +24,26 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Defines DC-free encoding/decoding
+    /// </summary>
     public enum DcFree
     {
+        /// <summary>
+        /// None Off
+        /// </summary>
         None,
+        /// <summary>
+        /// Manchester encoding
+        /// </summary>
         Manchester,
+        /// <summary>
+        /// Data whitening
+        /// </summary>
         Whitening,
+        /// <summary>
+        /// Reserved
+        /// </summary>
         Reserved
     }
 }

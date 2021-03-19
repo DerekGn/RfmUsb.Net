@@ -10,14 +10,9 @@ namespace RfmUsb.Tests
     {
         private readonly DeviceTestsFixture _fixture;
 
-        public DeviceTests(DeviceTestsFixture fixture, ITestOutputHelper output)
+        public DeviceTests(DeviceTestsFixture fixture, ITestOutputHelper outputHelper)
         {
             _fixture = fixture;
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .WriteTo.TestOutput(output, Serilog.Events.LogEventLevel.Verbose)
-                .CreateLogger();
         }
 
         [Theory]
@@ -84,7 +79,6 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.AfcLowBetaOn.Should().Be(value);
         }
 
-        // Timesout
         //[Fact]
         //public void TestAfcStart()
         //{
@@ -693,7 +687,7 @@ namespace RfmUsb.Tests
 
         [Theory]
         [InlineData(byte.MinValue)]
-        [InlineData(byte.MaxValue)]
+        [InlineData(23)]
         public void TestRxBw(byte value)
         {
             _fixture.RfmUsbDevice.RxBw = value;
@@ -703,7 +697,7 @@ namespace RfmUsb.Tests
 
         [Theory]
         [InlineData(byte.MinValue)]
-        [InlineData(byte.MaxValue)]
+        [InlineData(23)]
         public void TestRxBwAfc(byte value)
         {
             _fixture.RfmUsbDevice.RxBwAfc = value;
