@@ -22,18 +22,19 @@
 * SOFTWARE.
 */
 
+using System;
+
 namespace RfmUsb
 {
-    /// <summary>
-    /// The Rfm69 digital io pins
-    /// </summary>
-    public enum Dio
+    [Flags]
+    public enum DioIrq : byte
     {
-        Dio0,
-        Dio1,
-        Dio2,
-        Dio3,
-        Dio4,
-        Dio5
+        None,
+        Dio0 = 2,
+        Dio1 = 4,
+        Dio2 = 8,
+        Dio3 = 16,
+        Dio4 = 32,
+        Dio5 = 64
     }
 }

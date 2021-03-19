@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Serilog;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
@@ -81,11 +80,11 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.AfcLowBetaOn.Should().Be(value);
         }
 
-        //[Fact]
-        //public void TestAfcStart()
-        //{
-        //    _fixture.RfmUsbDevice.AfcStart();
-        //}
+        [Fact]
+        public void TestAfcStart()
+        {
+            _fixture.RfmUsbDevice.AfcStart();
+        }
 
         [Theory]
         [InlineData(true)]
@@ -198,16 +197,15 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.DcFree.Should().Be(value);
         }
 
-        //#warning multiline read
-        //        //[Theory]
-        //        //[InlineData(0)]
-        //        //[InlineData(0x3F)]
-        //        //public void TestDioInterruptMask(byte value)
-        //        //{
-        //        //    _fixture.RfmUsbDevice.DioInterruptMask = value;
+        [Theory]
+        [InlineData(DioIrq.None)]
+        [InlineData(DioIrq.Dio0 | DioIrq.Dio1 | DioIrq.Dio2 | DioIrq.Dio3 | DioIrq.Dio4 | DioIrq.Dio5)]
+        public void TestDioInterruptMask(DioIrq value)
+        {
+            _fixture.RfmUsbDevice.DioInterruptMask = value;
 
-        //        //    _fixture.RfmUsbDevice.DioInterruptMask.Should().Be(value);
-        //        //}
+            _fixture.RfmUsbDevice.DioInterruptMask.Should().Be(value);
+        }
 
         [Theory]
         [InlineData(EnterCondition.CrcOk)]
@@ -344,7 +342,7 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.InterPacketRxDelay.Should().Be(value);
         }
 
-        [Fact(Skip = "multiline")]
+        [Fact()]
         public void TestIrq()
         {
             _fixture.RfmUsbDevice.Irq.Should().Be(0);
@@ -455,12 +453,12 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.LowBetaAfcOffset.Should().Be(value);
         }
 
-        // hangs
-        //[Fact]
-        //public void TestMeasureTemperature()
-        //{
-        //    _fixture.RfmUsbDevice.MeasureTemperature();
-        //}
+
+        [Fact]
+        public void TestMeasureTemperature()
+        {
+            _fixture.RfmUsbDevice.MeasureTemperature();
+        }
 
         [Theory]
         [InlineData(Mode.Rx)]
@@ -733,7 +731,6 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.SetAesKey(new List<byte>() { 0xAA, 0x55 });
         }
 
-        // ERROR
         //[Theory]
         //[InlineData(Dio.Dio0, DioMapping.DioMapping0)]
         //[InlineData(Dio.Dio0, DioMapping.DioMapping1)]
@@ -761,11 +758,11 @@ namespace RfmUsb.Tests
         //    dioMappingValue.Should().Be(dioMapping);
         //}
 
-        //[Fact]
-        //public void TestStartRssi()
-        //{
-        //    _fixture.RfmUsbDevice.StartRssi();
-        //}
+        [Fact]
+        public void TestStartRssi()
+        {
+            _fixture.RfmUsbDevice.StartRssi();
+        }
 
         [Fact]
         public void TestSync()

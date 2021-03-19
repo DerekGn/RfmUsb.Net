@@ -337,7 +337,7 @@ namespace RfmUsb
         /// <summary>
         /// The Dio interrupt mask
         /// </summary>
-        byte DioInterruptMask { get; set; }
+        DioIrq DioInterruptMask { get; set; }
         /// <summary>
         /// Get or set the serial port timeout
         /// </summary>

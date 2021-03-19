@@ -433,11 +433,12 @@ namespace RfmUsb
             set => SendCommandWithCheck($"s-lbao {(value ? "1" : "0")}", ResponseOk);
         }
         ///<inheritdoc/>
-        public byte DioInterruptMask
+        public DioIrq DioInterruptMask
         {
-            get => SendCommand("g-di").ConvertToByte();
-            set => SendCommandWithCheck($"s-di 0x{value:X}", ResponseOk);
+            get => GetDioInterruptMask();
+            set => SetDioInterrupMask(value);
         }
+
         ///<inheritdoc/>
         public int Timeout
         {
@@ -740,6 +741,130 @@ namespace RfmUsb
             if (!result.StartsWith(response))
             {
                 throw new RfmUsbCommandExecutionException($"Command: [{command}] Execution Failed Reason: [{result}]");
+            }
+        }
+
+        private void SetDioInterrupMask(DioIrq value)
+        {
+            lock(_serialPort)
+            {
+                byte mask = (byte)(((byte)value) >> 1);
+
+                SendCommandWithCheck($"s-di 0x{mask:X}", ResponseOk);
+
+                if(_serialPort.BytesToRead != 0)
+                {
+                    _serialPort.ReadLine();
+                }
+            }
+        }
+
+        private DioIrq GetDioInterruptMask()
+        {
+            lock (_serialPort)
+            {
+                DioIrq irqMask = DioIrq.None;
+
+                _serialPort.Write("g-di\n");
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var result = _serialPort.ReadLine();
+
+                    var parts = result.Split('-');
+
+                    switch (parts[1])
+                    {
+                        case "DIO0":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio0;
+                            }
+                            break;
+                        case "DIO1":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio1;
+                            }
+                            break;
+                        case "DIO2":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio2;
+                            }
+                            break;
+                        case "DIO3":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio3;
+                            }
+                            break;
+                        case "DIO4":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio4;
+                            }
+                            break;
+                        case "DIO5":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio5;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                //while (!result.Contains("DIO5"))
+                //{
+                //    var parts = result.Split('-');
+
+                //    switch (parts[1])
+                //    {
+                //        case "DIO0":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio0;
+                //            }
+                //            break;
+                //        case "DIO1":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio1;
+                //            }
+                //            break;
+                //        case "DIO2":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio2;
+                //            }
+                //            break;
+                //        case "DIO3":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio3;
+                //            }
+                //            break;
+                //        case "DIO4":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio4;
+                //            }
+                //            break;
+                //        case "DIO5":
+                //            if (Convert.ToByte(parts[0], 16) == 1)
+                //            {
+                //                irqMask |= DioIrq.Dio5;
+                //            }
+                //            break;
+                //        default:
+                //            break;
+                //    }
+                //    result = _serialPort.ReadLine();
+                //};
+
+                return irqMask;
             }
         }
 
