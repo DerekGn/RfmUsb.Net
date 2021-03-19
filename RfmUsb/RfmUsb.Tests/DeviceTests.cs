@@ -444,9 +444,9 @@ namespace RfmUsb.Tests
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestLowBetaAfcOffset(bool value)
+        [InlineData(byte.MinValue)]
+        [InlineData(byte.MaxValue)]
+        public void TestLowBetaAfcOffset(byte value)
         {
             _fixture.RfmUsbDevice.LowBetaAfcOffset = value;
 

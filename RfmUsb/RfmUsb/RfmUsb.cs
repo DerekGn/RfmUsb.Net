@@ -427,10 +427,10 @@ namespace RfmUsb
             set => SendCommandWithCheck($"s-cd 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
-        public bool LowBetaAfcOffset
+        public byte LowBetaAfcOffset
         {
-            get => SendCommand("g-lbao").StartsWith("1");
-            set => SendCommandWithCheck($"s-lbao {(value ? "1" : "0")}", ResponseOk);
+            get => SendCommand("g-lbao").ConvertToByte();
+            set => SendCommandWithCheck($"s-lbao 0x{value:x}", ResponseOk);
         }
         ///<inheritdoc/>
         public DioIrq DioInterruptMask

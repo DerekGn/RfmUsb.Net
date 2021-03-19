@@ -333,7 +333,7 @@ namespace RfmUsb
         /// <summary>
         /// AFC offset set for low modulation index systems, used if AfcLowBetaOn = true.
         /// </summary>
-        bool LowBetaAfcOffset { get; set; }
+        byte LowBetaAfcOffset { get; set; }
         /// <summary>
         /// The Dio interrupt mask
         /// </summary>
