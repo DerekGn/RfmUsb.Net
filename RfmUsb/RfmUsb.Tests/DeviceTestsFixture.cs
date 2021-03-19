@@ -25,7 +25,7 @@ namespace RfmUsb.Tests
 
             RfmUsbDevice.Open(ComPort, 115200);
 
-            RfmUsbDevice.Timeout = 1000;
+            RfmUsbDevice.Timeout = int.MaxValue;
         }
 
         public void Dispose()

@@ -13,6 +13,8 @@ namespace RfmUsb.Tests
         public DeviceTests(DeviceTestsFixture fixture, ITestOutputHelper outputHelper)
         {
             _fixture = fixture;
+
+            _fixture.RfmUsbDevice.Reset();
         }
 
         [Theory]
@@ -149,7 +151,7 @@ namespace RfmUsb.Tests
         [Fact]
         public void TestCurrentLnaGain()
         {
-            _fixture.RfmUsbDevice.CurrentLnaGain.Should().Be(LnaGain.Auto);
+            _fixture.RfmUsbDevice.CurrentLnaGain.Should().Be(LnaGain.Max);
         }
 
         [Theory]
@@ -657,11 +659,11 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.RcCalibration();
         }
 
-        //[Fact]
-        //public void TestReset()
-        //{
-        //    _fixture.RfmUsbDevice.Reset();
-        //}
+        [Fact]
+        public void TestReset()
+        {
+            _fixture.RfmUsbDevice.Reset();
+        }
 
         [Fact]
         public void TestRestartRx()
@@ -672,7 +674,7 @@ namespace RfmUsb.Tests
         [Fact]
         public void TestRssi()
         {
-            _fixture.RfmUsbDevice.Rssi.Should().Be(0);
+            _fixture.RfmUsbDevice.Rssi.Should().Be(0xFF);
         }
 
         [Theory]

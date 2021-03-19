@@ -71,25 +71,25 @@ namespace RfmUsb
         public Mode Mode
         {
             get => (Mode)SendCommand("g-om").ConvertToInt32();
-            set => SendCommand($"s-om 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-om 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public Modulation Modulation
         {
             get => (Modulation)SendCommand("g-mt").ConvertToInt32();
-            set => SendCommand($"s-mt 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-mt 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public FskModulationShaping FskModulationShaping
         {
             get => (FskModulationShaping)SendCommand("g-fs").ConvertToInt32();
-            set => SendCommand($"s-fs 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-fs 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public OokModulationShaping OokModulationShaping
         {
             get => (OokModulationShaping)SendCommand("g-os").ConvertToInt32();
-            set => SendCommand($"s-os 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-os 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public ushort BitRate
@@ -119,13 +119,13 @@ namespace RfmUsb
         public ListenResolution ListenResolutionIdle
         {
             get => (ListenResolution)SendCommand("g-ir").ConvertToInt32();
-            set => SendCommand($"s-ir 0x{value:X}");
+            set => SendCommandWithCheck($"s-ir 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public ListenResolution ListenResolutionRx
         {
             get => (ListenResolution)SendCommand("g-rr").ConvertToInt32();
-            set => SendCommand($"s-rr 0x{value:X}");
+            set => SendCommandWithCheck($"s-rr 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool ListenCriteria
@@ -137,7 +137,7 @@ namespace RfmUsb
         public ListenEnd ListenEnd
         {
             get => (ListenEnd)SendCommand("g-lem").ConvertToInt32();
-            set => SendCommand($"s-lem 0x{value:X}");
+            set => SendCommandWithCheck($"s-lem 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte ListenCoefficentIdle
@@ -157,13 +157,13 @@ namespace RfmUsb
         public byte OutputPower
         {
             get => SendCommand("g-op").ConvertToByte();
-            set => SendCommand($"s-op 0x{value:X}");
+            set => SendCommandWithCheck($"s-op 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public PaRamp PaRamp
         {
             get => (PaRamp)SendCommand("g-par").ConvertToInt32();
-            set => SendCommand($"s-par 0x{value:X}");
+            set => SendCommandWithCheck($"s-par 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool OcpEnable
@@ -175,7 +175,7 @@ namespace RfmUsb
         public OcpTrim OcpTrim
         {
             get => (OcpTrim)SendCommand("g-ocpt").ConvertToInt32();
-            set => SendCommand($"s-ocpt 0x{value:X}");
+            set => SendCommandWithCheck($"s-ocpt 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool Impedance
@@ -189,7 +189,7 @@ namespace RfmUsb
         public LnaGain LnaGainSelect
         {
             get => (LnaGain)SendCommand("g-lnags").ConvertToInt32();
-            set => SendCommand($"s-lnags 0x{value:X}");
+            set => SendCommandWithCheck($"s-lnags 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public DccFreq DccFreq
@@ -207,7 +207,7 @@ namespace RfmUsb
         public DccFreq DccFreqAfc
         {
             get => (DccFreq)SendCommand("g-dfa").ConvertToInt32();
-            set => SendCommand($"s-dfa 0x{value:X}");
+            set => SendCommandWithCheck($"s-dfa 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte RxBwAfc
@@ -219,25 +219,25 @@ namespace RfmUsb
         public OokThresholdType OokThresholdType
         {
             get => (OokThresholdType)SendCommand("g-ott").ConvertToInt32();
-            set => SendCommand($"s-ott 0x{value:X}");
+            set => SendCommandWithCheck($"s-ott 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public OokThresholdStep OokPeakThresholdStep
         {
             get => (OokThresholdStep)SendCommand("g-ots").ConvertToInt32();
-            set => SendCommand($"s-ots 0x{value:X}");
+            set => SendCommandWithCheck($"s-ots 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public OokThresholdDec OokPeakThresholdDec
         {
             get => (OokThresholdDec)SendCommand("g-optd").ConvertToInt32();
-            set => SendCommand($"s-optd 0x{(int)value:X}");
+            set => SendCommandWithCheck($"s-optd 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public OokAverageThresholdFilter OokAverageThresholdFilter
         {
             get => (OokAverageThresholdFilter)SendCommand("g-oatf").ConvertToInt32();
-            set => SendCommand($"s-oatf 0x{value:X}");
+            set => SendCommandWithCheck($"s-oatf 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public byte OokFixedThreshold
@@ -326,7 +326,7 @@ namespace RfmUsb
         public DcFree DcFree
         {
             get => (DcFree)SendCommand("g-dfe").ConvertToInt32();
-            set => SendCommand($"s-dfe 0x{value:X}");
+            set => SendCommandWithCheck($"s-dfe 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool CrcOn
@@ -368,19 +368,19 @@ namespace RfmUsb
         public EnterCondition EnterCondition
         {
             get => (EnterCondition)SendCommand("g-amec").ConvertToInt32();
-            set => SendCommand($"s-amec 0x{value:X}");
+            set => SendCommandWithCheck($"s-amec 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public ExitCondition ExitCondition
         {
             get => (ExitCondition)SendCommand("g-amexc").ConvertToInt32();
-            set => SendCommand($"s-amexc 0x{value:X}");
+            set => SendCommandWithCheck($"s-amexc 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public IntermediateMode IntermediateMode
         {
             get => (IntermediateMode)SendCommand("g-im").ConvertToInt32();
-            set => SendCommand($"s-im 0x{value:X}");
+            set => SendCommandWithCheck($"s-im 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool TxStartCondition
@@ -424,7 +424,7 @@ namespace RfmUsb
         public ContinuousDagc ContinuousDagc
         {
             get => (ContinuousDagc)SendCommand("g-cd").ConvertToInt32();
-            set => SendCommand($"s-cd 0x{value:X}");
+            set => SendCommandWithCheck($"s-cd 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
         public bool LowBetaAfcOffset
