@@ -404,7 +404,7 @@ namespace RfmUsb
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/></param>
         /// <param name="mapping">The <see cref="DioMapping"/></param>
-        void GetDioMapping(out Dio dio, out DioMapping mapping);
+        void GetDioMapping(Dio dio, out DioMapping mapping);
         /// <summary>
         /// Forces the Receiver in WAIT mode, in Continuous Rx mode.
         /// </summary>

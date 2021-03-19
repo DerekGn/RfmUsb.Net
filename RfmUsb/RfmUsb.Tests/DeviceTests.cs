@@ -731,32 +731,33 @@ namespace RfmUsb.Tests
             _fixture.RfmUsbDevice.SetAesKey(new List<byte>() { 0xAA, 0x55 });
         }
 
-        //[Theory]
-        //[InlineData(Dio.Dio0, DioMapping.DioMapping0)]
-        //[InlineData(Dio.Dio0, DioMapping.DioMapping1)]
-        //[InlineData(Dio.Dio0, DioMapping.DioMapping2)]
-        //[InlineData(Dio.Dio0, DioMapping.DioMapping3)]
-        //[InlineData(Dio.Dio1, DioMapping.DioMapping0)]
-        //[InlineData(Dio.Dio1, DioMapping.DioMapping1)]
-        //[InlineData(Dio.Dio1, DioMapping.DioMapping2)]
-        //[InlineData(Dio.Dio1, DioMapping.DioMapping3)]
-        //[InlineData(Dio.Dio2, DioMapping.DioMapping0)]
-        //[InlineData(Dio.Dio2, DioMapping.DioMapping1)]
-        //[InlineData(Dio.Dio2, DioMapping.DioMapping2)]
-        //[InlineData(Dio.Dio2, DioMapping.DioMapping3)]
-        //[InlineData(Dio.Dio3, DioMapping.DioMapping0)]
-        //[InlineData(Dio.Dio3, DioMapping.DioMapping1)]
-        //[InlineData(Dio.Dio3, DioMapping.DioMapping2)]
-        //[InlineData(Dio.Dio3, DioMapping.DioMapping3)]
-        //public void TestSetDioMapping(Dio dio, DioMapping dioMapping)
-        //{
-        //    _fixture.RfmUsbDevice.SetDioMapping(dio, dioMapping);
+        [Theory]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping1)]
+        public void TestSetDioMapping(Dio dio, DioMapping dioMapping)
+        {
+            _fixture.RfmUsbDevice.SetDioMapping(dio, dioMapping);
 
-        //    _fixture.RfmUsbDevice.GetDioMapping(out var dioValue, out var dioMappingValue);
+            _fixture.RfmUsbDevice.GetDioMapping(dio, out var dioMappingValue);
 
-        //    dioValue.Should().Be(dio);
-        //    dioMappingValue.Should().Be(dioMapping);
-        //}
+            dioMappingValue.Should().Be(dioMapping);
+        }
 
         [Fact]
         public void TestStartRssi()

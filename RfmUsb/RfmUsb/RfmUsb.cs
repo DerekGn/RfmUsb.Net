@@ -538,17 +538,29 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void SetDioMapping(Dio dio, DioMapping mapping)
         {
-            SendCommandWithCheck($"s-dio {(int)dio} {(int)mapping}", $"[0x{(int)mapping:X4}]-Map {(int)mapping:D2}");
+            SendCommandWithCheck($"s-dio {(int)dio} {(int)mapping}", ResponseOk);
         }
         ///<inheritdoc/>
-        public void GetDioMapping(out Dio dio, out DioMapping mapping)
+        public void GetDioMapping(Dio dio, out DioMapping mapping)
         {
-            SendCommand("g-dio");
+            var result = SendCommand($"g-dio 0x{(byte)dio:X}");
 
-            dio = Dio.Dio0;
-            mapping = DioMapping.DioMapping3;
+            var parts = result.Split('-');
+
+            if(parts.Length >= 2)
+            {
+                var subParts = parts[1].Split(' ');
+
+                if(subParts.Length >= 2)
+                {
+                    mapping = (DioMapping) Convert.ToInt32(subParts[1]);
+
+                    return;
+                }
+            }
+            
+            throw new RfmUsbCommandExecutionException($"Invalid response [{result}]");
         }
-
         ///<inheritdoc/>
         public void StartRssi()
         {

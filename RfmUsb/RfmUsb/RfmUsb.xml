@@ -508,7 +508,7 @@
             <param name="dio">The <see cref="T:RfmUsb.Dio"/> configuration</param>
             <param name="mapping">The <see cref="T:RfmUsb.DioMapping"/></param>
         </member>
-        <member name="M:RfmUsb.IRfmUsb.GetDioMapping(RfmUsb.Dio@,RfmUsb.DioMapping@)">
+        <member name="M:RfmUsb.IRfmUsb.GetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping@)">
             <summary>
             Get the <see cref="T:RfmUsb.Dio"/> mapping configuration <see cref="T:RfmUsb.DioMapping"/>
             </summary>
@@ -891,7 +891,7 @@
         <member name="M:RfmUsb.RfmUsb.SetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping)">
             <inheritdoc/>
         </member>
-        <member name="M:RfmUsb.RfmUsb.GetDioMapping(RfmUsb.Dio@,RfmUsb.DioMapping@)">
+        <member name="M:RfmUsb.RfmUsb.GetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping@)">
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.RfmUsb.StartRssi">
