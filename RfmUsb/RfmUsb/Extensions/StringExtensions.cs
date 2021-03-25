@@ -3,7 +3,7 @@ using System;
 
 namespace RfmUsb.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static int ConvertToInt32(this string value)
         {

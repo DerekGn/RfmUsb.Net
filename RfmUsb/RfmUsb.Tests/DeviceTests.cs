@@ -593,8 +593,8 @@ namespace RfmUsb.Tests
 
         [Theory]
         [InlineData(20)]
-        [InlineData(byte.MinValue)]
-        public void TestOutputPower(byte value)
+        [InlineData(-2)]
+        public void TestOutputPower(int value)
         {
             _fixture.RfmUsbDevice.OutputPower = value;
 

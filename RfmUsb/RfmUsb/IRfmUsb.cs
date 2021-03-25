@@ -109,7 +109,7 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the output power in dbm
         /// </summary>
-        byte OutputPower { get; set; }
+        int OutputPower { get; set; }
         /// <summary>
         /// Rise/Fall time of ramp up/down in FSK
         /// </summary>

@@ -155,10 +155,10 @@ namespace RfmUsb
         ///<inheritdoc/>
         public string Version => SendCommand("g-fv");
         ///<inheritdoc/>
-        public byte OutputPower
+        public int OutputPower
         {
-            get => SendCommand("g-op").ConvertToByte();
-            set => SendCommandWithCheck($"s-op 0x{value:X}", ResponseOk);
+            get => SendCommand("g-op").ConvertToInt32();
+            set => SendCommandWithCheck($"s-op {value}", ResponseOk);
         }
         ///<inheritdoc/>
         public PaRamp PaRamp
