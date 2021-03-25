@@ -595,11 +595,18 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void Transmit(IList<byte> data)
         {
-            var response = SendCommand($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-
-            if (response.Contains("TX") || response.Contains("RX"))
+            lock(_serialPort)
             {
-                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+                var response = SendCommand($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                }
+                else if (response.Contains("TX") || response.Contains("RX"))
+                {
+                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+                }
             }
         }
         ///<inheritdoc/>
