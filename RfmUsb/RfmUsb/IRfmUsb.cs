@@ -239,6 +239,10 @@ namespace RfmUsb
         /// </summary>
         IEnumerable<byte> Sync { get; set; }
         /// <summary>
+        /// The radio sync word size
+        /// </summary>
+        byte SyncSize { get; set; }
+        /// <summary>
         /// Defines the packet format used:
         /// false → Fixed length
         /// true → Variable length

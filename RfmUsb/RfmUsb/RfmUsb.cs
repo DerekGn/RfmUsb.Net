@@ -30,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace RfmUsb
 {
@@ -57,11 +56,13 @@ namespace RfmUsb
                 SendCommandWithCheck($"s-fifo {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
             }
         }
+        ///<inheritdoc/>
         public bool Sequencer
         {
             get => SendCommand("g-so").StartsWith("1");
             set => SendCommandWithCheck($"s-so {(value ? "1" : "0")}", ResponseOk);
         }
+        ///<inheritdoc/>
         public bool ListenerOn
         {
             get => SendCommand("g-lo").StartsWith("1");
@@ -313,7 +314,15 @@ namespace RfmUsb
             set
             {
                 SendCommandWithCheck($"s-sync {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-                SendCommandWithCheck($"s-ss {value.Count() - 1}", ResponseOk);
+            }
+        }
+        ///<inheritdoc/>
+        public byte SyncSize
+        {
+            get => SendCommand("g-ss").ConvertToByte();
+            set
+            {
+                SendCommandWithCheck($"s-ss 0x{value:X}", ResponseOk);
             }
         }
         ///<inheritdoc/>
@@ -602,8 +611,9 @@ namespace RfmUsb
                 if (response.StartsWith("DIO"))
                 {
                     response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
                 }
-                else if (response.Contains("TX") || response.Contains("RX"))
+                if (response.Contains("TX") || response.Contains("RX"))
                 {
                     throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
                 }
@@ -612,14 +622,29 @@ namespace RfmUsb
         ///<inheritdoc/>
         public IList<byte> TransmitReceive(IList<byte> data, int timeout)
         {
-            var response = SendCommand($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {timeout}");
-
-            if (response.Contains("TX") || response.Contains("RX"))
+            lock (_serialPort)
             {
-                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-            }
+                var response = SendCommand($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {timeout}");
 
-            return response.ToBytes();
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
+                }
+
+                if (response.Contains("TX") || response.Contains("RX"))
+                {
+                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+                }
+
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
+                }
+
+                return response.ToBytes();
+            }
         }
         ///<inheritdoc/>
         public void WaitForIrq()

@@ -318,6 +318,11 @@
             The radio sync bytes
             </summary>
         </member>
+        <member name="P:RfmUsb.IRfmUsb.SyncSize">
+            <summary>
+            The radio sync word size
+            </summary>
+        </member>
         <member name="P:RfmUsb.IRfmUsb.PacketFormat">
             <summary>
             Defines the packet format used:
@@ -654,6 +659,12 @@
         <member name="P:RfmUsb.RfmUsb.Fifo">
             <inheritdoc/>
         </member>
+        <member name="P:RfmUsb.RfmUsb.Sequencer">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.ListenerOn">
+            <inheritdoc/>
+        </member>
         <member name="P:RfmUsb.RfmUsb.Mode">
             <inheritdoc/>
         </member>
@@ -784,6 +795,9 @@
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.RfmUsb.Sync">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.RfmUsb.SyncSize">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.RfmUsb.PacketFormat">
