@@ -12,7 +12,10 @@
     <RepositoryUrl>https://github.com/DerekGn/RfmUsb</RepositoryUrl>
     <PackageTags>Rfm69 Usb Serial</PackageTags>
     <Description>An API for interacting with an RFMUSB adapter</Description>
-    <PackageReleaseNotes>1.0.0 Initial Version</PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.0 Initial Version
+1.0.6 Bug fixes</PackageReleaseNotes>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
+    <FileVersion>1.0.6.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

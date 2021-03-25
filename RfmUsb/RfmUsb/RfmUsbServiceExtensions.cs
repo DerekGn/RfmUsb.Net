@@ -23,6 +23,7 @@
 */
 
 using Microsoft.Extensions.DependencyInjection;
+using RfmUsb.Ports;
 
 namespace RfmUsb
 {
@@ -39,7 +40,7 @@ namespace RfmUsb
         public static IServiceCollection AddRfmUsb(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IRfmUsb, RfmUsb>();
-
+            serviceCollection.AddSerialPortFactory();
             return serviceCollection;
         }
     }
