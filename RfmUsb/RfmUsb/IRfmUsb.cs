@@ -67,7 +67,7 @@ namespace RfmUsb
         /// <summary>
         /// Get or set the frequency deviation
         /// </summary>
-        ushort FreqencyDeviation { get; set; }
+        ushort FrequencyDeviation { get; set; }
         /// <summary>
         /// Get or set the frequency
         /// </summary>
@@ -297,7 +297,7 @@ namespace RfmUsb
         /// Defines the condition to start packet transmission : 
         /// false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
         /// true → FifoNotEmpty (i.e. at least one byte in the FIFO)
-        /// </remarks>
+        /// </summary>
         bool TxStartCondition { get; set; }
         /// <summary>
         /// Used to trigger FifoLevel interrupt.
@@ -396,7 +396,7 @@ namespace RfmUsb
         /// Get a list of the pre-configured radio configurations
         /// </summary>
         /// <returns></returns>
-        IList<string> GetRadioConfiurations();
+        IList<string> GetRadioConfigurations();
         /// <summary>
         /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
@@ -426,13 +426,31 @@ namespace RfmUsb
         /// Transmit a packet of data bytes and wait for a response
         /// </summary>
         /// <param name="data">The data to transmit</param>
-        /// <param name="timeout">The timeout in milliseconds to wait for a response</param>
+        IList<byte> TransmitReceive(IList<byte> data);
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The timeout in milliseconds </param>
         /// <returns>The received packet bytes</returns>
-        IList<byte> TransmitReceive(IList<byte> data, int timeout);
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
+        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
         /// <summary>
         /// Transmit a packet of data bytes
         /// </summary>
         /// <param name="data">The data to transmit</param>
         void Transmit(IList<byte> data);
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The transmit timeout</param>
+        void Transmit(IList<byte> data, int txTimeout);
     }
 }

@@ -26,6 +26,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RfmUsb.Ports
 {
+    /// <summary>
+    /// An <see cref="IServiceCollection"/> extensions
+    /// </summary>
     public static class PortsServiceExtensions
     {
         /// <summary>

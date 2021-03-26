@@ -24,23 +24,74 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Rise/Fall time of ramp up/down in FSK
+    /// </summary>
     public enum PaRamp
     {
-        PowerAmpRamp3400, //3.4ms
-        PowerAmpRamp2000, //2ms"
-        PowerAmpRamp1000, //1ms"
-        PowerAmpRamp500, //500us"
-        PowerAmpRamp250, //250us"
-        PowerAmpRamp125, //125us"
-        PowerAmpRamp100, //100us"
-        PowerAmpRamp62, //62us"
-        PowerAmpRamp50, //50us"
-        PowerAmpRamp40, //40us",
-        PowerAmpRamp31, //31us"
-        PowerAmpRamp25, //25us"
-        PowerAmpRamp20, //20us"
-        PowerAmpRamp15, //15us"
-        PowerAmpRamp12, //12us"
-        PowerAmpRamp10 //10us"
+        /// <summary>
+        /// 3.4 ms
+        /// </summary>
+        PowerAmpRamp3400,
+        /// <summary>
+        /// 2 ms
+        /// </summary>
+        PowerAmpRamp2000,
+        /// <summary>
+        /// 1 us
+        /// </summary>
+        PowerAmpRamp1000,
+        /// <summary>
+        /// 500 us
+        /// </summary>
+        PowerAmpRamp500,
+        /// <summary>
+        /// 250 us
+        /// </summary>
+        PowerAmpRamp250,
+        /// <summary>
+        /// 125 us
+        /// </summary>
+        PowerAmpRamp125,
+        /// <summary>
+        /// 100 us
+        /// </summary>
+        PowerAmpRamp100,
+        /// <summary>
+        /// 62 us
+        /// </summary>
+        PowerAmpRamp62,
+        /// <summary>
+        /// 50 us
+        /// </summary>
+        PowerAmpRamp50,
+        /// <summary>
+        /// 40 us
+        /// </summary>
+        PowerAmpRamp40,
+        /// <summary>
+        /// 31 us
+        /// </summary>
+        PowerAmpRamp31,
+        /// <summary>
+        /// 25 us
+        /// </summary>
+        PowerAmpRamp25,
+        /// <summary>
+        /// 20 us
+        /// </summary>
+        PowerAmpRamp20,
+        /// <summary>
+        /// 15 us
+        /// </summary>
+        PowerAmpRamp15,
+        /// <summary>
+        /// 12 us
+        /// </summary>
+        PowerAmpRamp12,
+        /// <summary>
+        /// 10 us
+        /// </summary>
+        PowerAmpRamp10
     }
 }

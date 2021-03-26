@@ -33,6 +33,9 @@ using System.Linq;
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// An implementation of the <see cref="IRfmUsb"/> interface
+    /// </summary>
     public class RfmUsb : IRfmUsb
     {
         private const string ResponseOk = "OK";
@@ -42,6 +45,11 @@ namespace RfmUsb
 
         private ISerialPort _serialPort;
 
+        /// <summary>
+        /// Create an instance of a <see cref="RfmUsb"/>
+        /// </summary>
+        /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
+        /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
         public RfmUsb(ILogger<IRfmUsb> logger, ISerialPortFactory serialPortFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -99,7 +107,7 @@ namespace RfmUsb
             set => SendCommandWithCheck($"s-br 0x{(int)value:X}", ResponseOk);
         }
         ///<inheritdoc/>
-        public ushort FreqencyDeviation
+        public ushort FrequencyDeviation
         {
             get => SendCommand("g-fd").ConvertToUInt16();
             set => SendCommandWithCheck($"s-fd {value}", ResponseOk);
@@ -258,6 +266,7 @@ namespace RfmUsb
             get => SendCommand("g-aao").StartsWith("1");
             set => SendCommandWithCheck($"s-aao {(value ? "1" : "0")}", ResponseOk);
         }
+        ///<inheritdoc/>
         public ushort Afc => SendCommand("g-a").ConvertToUInt16();
         ///<inheritdoc/>
         public ushort Fei => SendCommand("g-a").ConvertToUInt16();
@@ -576,7 +585,7 @@ namespace RfmUsb
             SendCommandWithCheck($"e-rssi", ResponseOk);
         }
         ///<inheritdoc/>
-        public IList<string> GetRadioConfiurations()
+        public IList<string> GetRadioConfigurations()
         {
             lock (_serialPort)
             {
@@ -604,47 +613,27 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void Transmit(IList<byte> data)
         {
-            lock(_serialPort)
-            {
-                var response = SendCommand($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
-                }
-                if (response.Contains("TX") || response.Contains("RX"))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
-            }
+            TransmitInternal($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
         }
         ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int timeout)
+        public void Transmit(IList<byte> data, int txTimeout)
         {
-            lock (_serialPort)
-            {
-                var response = SendCommand($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {timeout}");
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
-                }
-
-                if (response.Contains("TX") || response.Contains("RX"))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
-                }
-
-                return response.ToBytes();
-            }
+            TransmitInternal($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+        }
+        ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data)
+        {
+            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+        }
+        ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
+        {
+            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+        }
+        ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
+        {
+            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
         }
         ///<inheritdoc/>
         public void WaitForIrq()
@@ -787,7 +776,6 @@ namespace RfmUsb
                 throw new RfmUsbCommandExecutionException($"Command: [{command}] Execution Failed Reason: [{result}]");
             }
         }
-
         private void SetDioInterrupMask(DioIrq value)
         {
             lock(_serialPort)
@@ -802,7 +790,6 @@ namespace RfmUsb
                 }
             }
         }
-
         private DioIrq GetDioInterruptMask()
         {
             lock (_serialPort)
@@ -860,61 +847,60 @@ namespace RfmUsb
                     }
                 }
 
-                //while (!result.Contains("DIO5"))
-                //{
-                //    var parts = result.Split('-');
-
-                //    switch (parts[1])
-                //    {
-                //        case "DIO0":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio0;
-                //            }
-                //            break;
-                //        case "DIO1":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio1;
-                //            }
-                //            break;
-                //        case "DIO2":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio2;
-                //            }
-                //            break;
-                //        case "DIO3":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio3;
-                //            }
-                //            break;
-                //        case "DIO4":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio4;
-                //            }
-                //            break;
-                //        case "DIO5":
-                //            if (Convert.ToByte(parts[0], 16) == 1)
-                //            {
-                //                irqMask |= DioIrq.Dio5;
-                //            }
-                //            break;
-                //        default:
-                //            break;
-                //    }
-                //    result = _serialPort.ReadLine();
-                //};
-
                 return irqMask;
+            }
+        }
+        private void TransmitInternal(string command)
+        {
+            lock (_serialPort)
+            {
+                var response = SendCommand(command);
+
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
+                }
+                if (response.Contains("TX") || response.Contains("RX"))
+                {
+                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+                }
+            }
+        }
+        private IList<byte> TransmitReceiveInternal(string command)
+        {
+            lock (_serialPort)
+            {
+                var response = SendCommand(command);
+
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
+                }
+
+                if (response.Contains("TX") || response.Contains("RX"))
+                {
+                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+                }
+
+                if (response.StartsWith("DIO"))
+                {
+                    response = _serialPort.ReadLine();
+                    _logger.LogDebug($"Response: [{response}]");
+                }
+
+                return response.ToBytes();
             }
         }
 
         #region IDisposible
         private bool disposedValue;
 
+        /// <summary>
+        /// Dispose the <see cref="IRfmUsb"/> instance
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -931,6 +917,9 @@ namespace RfmUsb
             }
         }
 
+        /// <summary>
+        /// Dispose the <see cref="IRfmUsb"/> instance
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method

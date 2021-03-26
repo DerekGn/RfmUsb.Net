@@ -29,9 +29,21 @@ namespace RfmUsb
     /// </summary>
     public enum DioMapping
     {
+        /// <summary>
+        /// Dio Mapping 0
+        /// </summary>
         DioMapping0,
+        /// <summary>
+        /// Dio Mapping 1
+        /// </summary>
         DioMapping1,
+        /// <summary>
+        /// Dio Mapping 2
+        /// </summary>
         DioMapping2,
+        /// <summary>
+        /// Dio Mapping 3
+        /// </summary>
         DioMapping3
     }
 }

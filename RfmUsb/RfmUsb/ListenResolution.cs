@@ -24,11 +24,26 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Resolution of Listen mode Idle time 
+    /// </summary>
     public enum ListenResolution
     {
+        /// <summary>
+        /// Reserved
+        /// </summary>
         Reserved,
+        /// <summary>
+        /// 64 us
+        /// </summary>
         Idle64us,
+        /// <summary>
+        /// 4.1 ms
+        /// </summary>
         Idle4_1ms,
+        /// <summary>
+        /// 262 ms
+        /// </summary>
         Idle262ms
     };
 }

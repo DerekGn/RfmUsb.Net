@@ -26,9 +26,15 @@ using System;
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// The set of Irq bits
+    /// </summary>
     [Flags]
     public enum Irq
     {
+        /// <summary>
+        /// No Irq bit is sey
+        /// </summary>
         None = 0,
         /// <summary>
         /// Set in Rx when the CRC of the payload is Ok. Cleared when FIFO is empty.

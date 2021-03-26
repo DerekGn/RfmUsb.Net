@@ -24,12 +24,30 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Transceiver’s operating modes
+    /// </summary>
     public enum Mode
     {
+        /// <summary>
+        /// Sleep Mode (SLEEP)
+        /// </summary>
         Sleep,
+        /// <summary>
+        /// Standby Mode (STDBY)
+        /// </summary>
         Standby,
+        /// <summary>
+        /// Frequency Synthesizer mode (FS)
+        /// </summary>
         Synth,
+        /// <summary>
+        /// Transmitter mode (TX)
+        /// </summary>
         Tx,
+        /// <summary>
+        /// Receiver mode (RX)
+        /// </summary>
         Rx
     }
 }

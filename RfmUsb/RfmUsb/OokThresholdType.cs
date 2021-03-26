@@ -24,11 +24,26 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Selects type of threshold in the OOK data slicer
+    /// </summary>
     public enum OokThresholdType
     {
+        /// <summary>
+        /// Fixed
+        /// </summary>
         Fixed,
+        /// <summary>
+        /// Peak
+        /// </summary>
         Peak,
+        /// <summary>
+        /// Average
+        /// </summary>
         Average,
+        /// <summary>
+        /// Reserved
+        /// </summary>
         Reserved
     }
 }

@@ -24,11 +24,26 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// The Ook modulation shapping
+    /// </summary>
     public enum OokModulationShaping
     {
+        /// <summary>
+        /// No Shaping
+        /// </summary>
         None,
+        /// <summary>
+        /// filtering with fcutoff = BR
+        /// </summary>
         FilteringBr,
+        /// <summary>
+        /// filtering with fcutoff = 2*BR
+        /// </summary>
         Filtering2Br,
+        /// <summary>
+        /// Reserved
+        /// </summary>
         Reserved
     }
 }

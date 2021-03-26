@@ -24,6 +24,9 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Defines address based filtering in Rx mode
+    /// </summary>
     public enum AddressFilter
     {
         /// <summary>

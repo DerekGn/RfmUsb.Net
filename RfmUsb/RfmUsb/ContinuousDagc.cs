@@ -24,10 +24,22 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Continuous adjust of the digital gain
+    /// </summary>
     public enum ContinuousDagc
     {
+        /// <summary>
+        /// Normal Mode
+        /// </summary>
         Normal,
+        /// <summary>
+        /// Improved margin, use if AfcLowBetaOn=1
+        /// </summary>
         ImprovedLowBeta1,
+        /// <summary>
+        /// Improved margin, use if AfcLowBetaOn=0
+        /// </summary>
         ImprovedLowBeta0
     }
 }

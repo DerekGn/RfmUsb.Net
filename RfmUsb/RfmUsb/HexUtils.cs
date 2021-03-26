@@ -27,6 +27,9 @@ using System.Collections.Generic;
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Set of hex string extensions
+    /// </summary>
     public static class HexUtil
     {
         private readonly static Dictionary<char, byte> hexmap = new Dictionary<char, byte>()
@@ -38,7 +41,11 @@ namespace RfmUsb
             { '4', 0x4 },{ '5', 0x5 },{ '6', 0x6 },{ '7', 0x7 },
             { '8', 0x8 },{ '9', 0x9 }
         };
-
+        /// <summary>
+        /// Convert a hex string to a sequence of bytes
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
         public static byte[] ToBytes(this string hex)
         {
             if (string.IsNullOrWhiteSpace(hex))

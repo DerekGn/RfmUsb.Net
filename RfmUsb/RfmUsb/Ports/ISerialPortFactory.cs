@@ -26,9 +26,21 @@ using System.Collections.Generic;
 
 namespace RfmUsb.Ports
 {
+    /// <summary>
+    /// Defines the <see cref="ISerialPortFactory"/> interface
+    /// </summary>
     public interface ISerialPortFactory
     {
+        /// <summary>
+        /// Get the list of serial ports in the system
+        /// </summary>
+        /// <returns></returns>
         IList<string> GetSerialPorts();
+        /// <summary>
+        /// Create an <see cref="ISerialPort"/> instance
+        /// </summary>
+        /// <param name="serialPort"></param>
+        /// <returns></returns>
         ISerialPort CreateSerialPortInstance(string serialPort);
     }
 }

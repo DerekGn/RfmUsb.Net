@@ -24,23 +24,74 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Trimming of OCP current
+    /// </summary>
     public enum OcpTrim
     {
-        OcpTrim45,  // 45ma
-        OcpTrim50,  // 50ma
-        OcpTrim55,  // 55ma
-        OcpTrim60,  // 60ma
-        OcpTrim65,  // 65ma
-        OcpTrim70,  // 70ma
-        OcpTrim75,  // 75ma
-        OcpTrim80,  // 80ma
-        OcpTrim85,  // 85ma
-        OcpTrim90,  // 90ma
-        OcpTrim95,  // 95ma
-        OcpTrim100, // 100ma
-        OcpTrim105, // 105ma
-        OcpTrim110, // 110ma
-        OcpTrim115, // 115ma
-        OcpTrim120  // 120ma
+        /// <summary>
+        /// 45ma
+        /// </summary>
+        OcpTrim45,
+        /// <summary>
+        /// 50 ma
+        /// </summary>
+        OcpTrim50,
+        /// <summary>
+        /// 55 ma
+        /// </summary>
+        OcpTrim55,
+        /// <summary>
+        /// 60 ma
+        /// </summary>
+        OcpTrim60,
+        /// <summary>
+        /// 65 ma
+        /// </summary>
+        OcpTrim65,
+        /// <summary>
+        /// 70 ma
+        /// </summary>
+        OcpTrim70,
+        /// <summary>
+        /// 75 ma
+        /// </summary>
+        OcpTrim75,
+        /// <summary>
+        /// 80 ma
+        /// </summary>
+        OcpTrim80,
+        /// <summary>
+        /// 85 ma
+        /// </summary>
+        OcpTrim85,
+        /// <summary>
+        /// 90 ma
+        /// </summary>
+        OcpTrim90,
+        /// <summary>
+        /// 95 ma
+        /// </summary>
+        OcpTrim95,
+        /// <summary>
+        /// 100 ma
+        /// </summary>
+        OcpTrim100,
+        /// <summary>
+        /// 105 ma
+        /// </summary>
+        OcpTrim105,
+        /// <summary>
+        /// 110 ma
+        /// </summary>
+        OcpTrim110,
+        /// <summary>
+        /// 115 ma
+        /// </summary>
+        OcpTrim115,
+        /// <summary>
+        /// 120 ma
+        /// </summary>
+        OcpTrim120
     }
 }

@@ -24,15 +24,42 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Size of each decrement of the RSSI threshold in the OOKdemodulator
+    /// </summary>
     public enum OokThresholdStep
     {
-        Step0_5db, // "0.5db
-        Step1_0db, // 1db
-        Step1_5db, // 1.5db
-        Step2_0db, // 2db
-        Step3_0db, // 3db
-        Step4_0db, // 4db
-        Step5_0db, // 5db
-        Step6_0db, // 6db
+        /// <summary>
+        /// 0.5 db
+        /// </summary>
+        Step0_5db,
+        /// <summary>
+        /// 1 db
+        /// </summary>
+        Step1db,
+        /// <summary>
+        /// 1.5 db
+        /// </summary>
+        Step1_5db,
+        /// <summary>
+        /// 2 db
+        /// </summary>
+        Step2db,
+        /// <summary>
+        /// 3 db
+        /// </summary>
+        Step3db,
+        /// <summary>
+        /// 4 db
+        /// </summary>
+        Step4db,
+        /// <summary>
+        /// 5 db
+        /// </summary>
+        Step5db,
+        /// <summary>
+        /// 6 db
+        /// </summary>
+        Step6db,
     }
 }

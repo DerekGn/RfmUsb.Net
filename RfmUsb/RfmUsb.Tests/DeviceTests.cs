@@ -283,9 +283,9 @@ namespace RfmUsb.Tests
         [InlineData(ushort.MinValue)]
         public void TestFreqencyDeviation(ushort value)
         {
-            _fixture.RfmUsbDevice.FreqencyDeviation = value;
+            _fixture.RfmUsbDevice.FrequencyDeviation = value;
 
-            _fixture.RfmUsbDevice.FreqencyDeviation.Should().Be(value);
+            _fixture.RfmUsbDevice.FrequencyDeviation.Should().Be(value);
         }
 
         [Theory]
@@ -565,13 +565,13 @@ namespace RfmUsb.Tests
 
         [Theory]
         [InlineData(OokThresholdStep.Step0_5db)]
-        [InlineData(OokThresholdStep.Step1_0db)]
+        [InlineData(OokThresholdStep.Step1db)]
         [InlineData(OokThresholdStep.Step1_5db)]
-        [InlineData(OokThresholdStep.Step2_0db)]
-        [InlineData(OokThresholdStep.Step3_0db)]
-        [InlineData(OokThresholdStep.Step4_0db)]
-        [InlineData(OokThresholdStep.Step5_0db)]
-        [InlineData(OokThresholdStep.Step6_0db)]
+        [InlineData(OokThresholdStep.Step2db)]
+        [InlineData(OokThresholdStep.Step3db)]
+        [InlineData(OokThresholdStep.Step4db)]
+        [InlineData(OokThresholdStep.Step5db)]
+        [InlineData(OokThresholdStep.Step6db)]
         public void TestOokPeakThresholdStep(OokThresholdStep value)
         {
             _fixture.RfmUsbDevice.OokPeakThresholdStep = value;
@@ -829,7 +829,7 @@ namespace RfmUsb.Tests
         //[Fact]
         //public void TestTransmitReceive()
         //{
-        //    _fixture.RfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA }, 1000);
+        //    _fixture.RfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA });
         //}
 
         [Theory]

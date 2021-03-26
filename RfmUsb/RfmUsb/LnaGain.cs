@@ -24,14 +24,38 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// LNA gain setting
+    /// </summary>
     public enum LnaGain
     {
-        Auto,// Auto
-        Max, // Max
-        MaxMinus6db, // Max - 6db
-        MaxMinus12db, // Max - 12db
-        MaxMinus24db, // Max - 24db
-        MaxMinus36db, // Max - 36db
-        MaxMinus48db, // Max - 48db
+        /// <summary>
+        /// Auto
+        /// </summary>
+        Auto,
+        /// <summary>
+        /// Max
+        /// </summary>
+        Max,
+        /// <summary>
+        /// Max - 6db
+        /// </summary>
+        MaxMinus6db,
+        /// <summary>
+        /// Max - 12db
+        /// </summary>
+        MaxMinus12db,
+        /// <summary>
+        /// Max - 12db
+        /// </summary>
+        MaxMinus24db,
+        /// <summary>
+        /// Max - 36db
+        /// </summary>
+        MaxMinus36db,
+        /// <summary>
+        /// Max - 48db
+        /// </summary>
+        MaxMinus48db
     }
 }

@@ -24,9 +24,18 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Modulation scheme
+    /// </summary>
     public enum Modulation
     {
+        /// <summary>
+        /// Fsk modulation
+        /// </summary>
         Fsk = 0,
+        /// <summary>
+        /// Ook modulation
+        /// </summary>
         Ook = 1
     }
 }

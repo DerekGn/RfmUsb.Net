@@ -24,11 +24,26 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Intermediate mode
+    /// </summary>
     public enum IntermediateMode
     {
+        /// <summary>
+        /// Sleep mode (SLEEP)
+        /// </summary>
         Sleep,
+        /// <summary>
+        /// Standby mode (STDBY)
+        /// </summary>
         Standby,
+        /// <summary>
+        /// Receiver mode (RX)
+        /// </summary>
         Rx,
+        /// <summary>
+        /// Transmitter mode (TX)
+        /// </summary>
         Tx
     }
 }

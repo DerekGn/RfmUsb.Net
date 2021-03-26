@@ -24,15 +24,42 @@
 
 namespace RfmUsb
 {
+    /// <summary>
+    /// Period of decrement of the RSSI threshold in the OOK demodulator
+    /// </summary>
     public enum OokThresholdDec
     {
-        OncePerChip, // Once per chip
-        OnceEvery2Chips, // Once every 2 chip
-        OnceEvery4Chips, // Once every 4 chip
-        OnceEvery8Chips, // Once every 8 chip
-        TwiceInEachChip, // Once twice in each chip
-        FourTimesInEachChip, // 4 times in each chip
-        EightTimesInEachChip, // 8 times in each chip
-        SixteeenTimesInEachChip // 16 times in each chip
+        /// <summary>
+        /// Once every chip
+        /// </summary>
+        OncePerChip,
+        /// <summary>
+        /// Once every 2 chips
+        /// </summary>
+        OnceEvery2Chips,
+        /// <summary>
+        /// Once every 4 chips
+        /// </summary>
+        OnceEvery4Chips,
+        /// <summary>
+        /// Once every 8 chips
+        /// </summary>
+        OnceEvery8Chips,
+        /// <summary>
+        /// 2 times in each chip
+        /// </summary>
+        TwiceInEachChip,
+        /// <summary>
+        /// 4 times in each chip
+        /// </summary>
+        FourTimesInEachChip,
+        /// <summary>
+        /// 8 times in each chip
+        /// </summary>
+        EightTimesInEachChip,
+        /// <summary>
+        /// 16 times in each chip
+        /// </summary>
+        SixteeenTimesInEachChip
     }
 }

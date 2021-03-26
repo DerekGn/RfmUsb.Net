@@ -42,7 +42,6 @@ namespace RfmUsb.Tests
         {
             var serviceCollection = new ServiceCollection()
                 .AddLogging(builder => builder.AddSerilog())
-                .AddSerialPortFactory()
                 .AddLogging()
                 .AddRfmUsb();
 
