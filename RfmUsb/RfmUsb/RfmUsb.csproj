@@ -13,9 +13,12 @@
     <PackageTags>Rfm69 Usb Serial</PackageTags>
     <Description>An API for interacting with an RFMUSB adapter</Description>
     <PackageReleaseNotes>1.0.0 Initial Version
-1.0.6 Bug fixes</PackageReleaseNotes>
-    <AssemblyVersion>1.0.6.0</AssemblyVersion>
-    <FileVersion>1.0.6.0</FileVersion>
+1.0.6 Bug fixes
+1.0.13 Added strong name key</PackageReleaseNotes>
+    <AssemblyVersion>1.0.13.0</AssemblyVersion>
+    <FileVersion>1.0.13.0</FileVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>RfmUsb.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
