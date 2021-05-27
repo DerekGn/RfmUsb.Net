@@ -756,6 +756,8 @@ namespace RfmUsb
         }
         private string SendCommand(string command)
         {
+            CheckOpen();
+
             lock (_serialPort)
             {
                 _serialPort.Write($"{command}\n");
@@ -769,6 +771,8 @@ namespace RfmUsb
         }
         private void SendCommandWithCheck(string command, string response)
         {
+            CheckOpen();
+
             var result = SendCommand(command);
 
             if (!result.StartsWith(response))
@@ -894,6 +898,13 @@ namespace RfmUsb
             }
         }
 
+        private void CheckOpen()
+        {
+            if(_serialPort == null)
+            {
+                throw new ArgumentNullException("Instance not open");
+            }
+        }
         #region IDisposible
         private bool disposedValue;
 

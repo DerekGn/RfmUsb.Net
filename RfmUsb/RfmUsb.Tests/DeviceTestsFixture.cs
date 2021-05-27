@@ -7,7 +7,7 @@ namespace RfmUsb.Tests
 {
     public class DeviceTestsFixture : IDisposable
     {
-        private readonly string ComPort = "COM4";
+        private readonly string ComPort = "COM3";
 
         private readonly ServiceProvider _serviceProvider;
         public readonly IRfmUsb RfmUsbDevice;
