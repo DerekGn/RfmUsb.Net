@@ -115,7 +115,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public uint Frequency
         {
-            get => Convert.ToUInt32(SendCommand("g-f").Trim('[',']'), 16);
+            get => Convert.ToUInt32(SendCommand("g-f").Trim('[', ']'), 16);
             set => SendCommandWithCheck($"s-f 0x{value:X}", ResponseOk);
         }
         ///<inheritdoc/>
@@ -565,18 +565,18 @@ namespace RfmUsb
 
             var parts = result.Split('-');
 
-            if(parts.Length >= 2)
+            if (parts.Length >= 2)
             {
                 var subParts = parts[1].Split(' ');
 
-                if(subParts.Length >= 2)
+                if (subParts.Length >= 2)
                 {
-                    mapping = (DioMapping) Convert.ToInt32(subParts[1]);
+                    mapping = (DioMapping)Convert.ToInt32(subParts[1]);
 
                     return;
                 }
             }
-            
+
             throw new RfmUsbCommandExecutionException($"Invalid response [{result}]");
         }
         ///<inheritdoc/>
@@ -761,7 +761,7 @@ namespace RfmUsb
             lock (_serialPort)
             {
                 _serialPort.Write($"{command}\n");
-                
+
                 var response = _serialPort.ReadLine();
 
                 _logger.LogDebug($"Command: [{command}] Result: [{response}]");
@@ -782,13 +782,13 @@ namespace RfmUsb
         }
         private void SetDioInterrupMask(DioIrq value)
         {
-            lock(_serialPort)
+            lock (_serialPort)
             {
                 byte mask = (byte)(((byte)value) >> 1);
 
                 SendCommandWithCheck($"s-di 0x{mask:X}", ResponseOk);
 
-                if(_serialPort.BytesToRead != 0)
+                if (_serialPort.BytesToRead != 0)
                 {
                     _serialPort.ReadLine();
                 }
@@ -900,11 +900,12 @@ namespace RfmUsb
 
         private void CheckOpen()
         {
-            if(_serialPort == null)
+            if (_serialPort == null)
             {
-                throw new ArgumentNullException("Instance not open");
+                throw new InvalidOperationException("Instance not open");
             }
         }
+
         #region IDisposible
         private bool disposedValue;
 

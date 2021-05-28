@@ -18,6 +18,7 @@
       1.0.13 Added strong name key
       1.0.14 Prevent operation being called when device not open
       1.0.15 Added package xml document
+      1.0.18 Updated open check
     </PackageReleaseNotes>
     <AssemblyVersion>1.0.13.0</AssemblyVersion>
     <FileVersion>1.0.13.0</FileVersion>
