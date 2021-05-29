@@ -541,8 +541,10 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void Reset()
         {
+            FlushSerialPort();
             SendCommandWithCheck($"e-r", ResponseOk);
         }
+
         ///<inheritdoc/>
         public void RestartRx()
         {
@@ -903,6 +905,15 @@ namespace RfmUsb
             if (_serialPort == null)
             {
                 throw new InvalidOperationException("Instance not open");
+            }
+        }
+
+        private void FlushSerialPort()
+        {
+            if (_serialPort != null)
+            {
+                _logger.LogDebug("Flushing Serial Ports input buffer");
+                _serialPort.DiscardInBuffer();
             }
         }
 
