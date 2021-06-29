@@ -2,6 +2,8 @@
 
 [![Build Status](https://dev.azure.com/DerekGn/GitHub/_apis/build/status/DerekGn.RfmUsb?branchName=main)](https://dev.azure.com/DerekGn/GitHub/_build/latest?definitionId=3&branchName=main)
 
+[![NuGet Badge](https://buildstats.info/nuget/RfmUsb)](https://www.nuget.org/packages/RfmUsb/)
+
 Api for the usb rfm69 usb serial device. The api allows for all configuration parameters of the Rfm69HW to be configured via a command line interface.
 
 ## Installing RfmUsb
