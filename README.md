@@ -1,6 +1,6 @@
 # RfmUsb
 
-[![Build Status](https://dev.azure.com/DerekGn/GitHub/_apis/build/status/DerekGn.RfmUsb?branchName=main)](https://dev.azure.com/DerekGn/GitHub/_build/latest?definitionId=3&branchName=main)
+[![Build Status](https://dev.azure.com/DerekGn/GitHub/_apis/build/status/DerekGn.RfmUsb.Net?branchName=main)](https://dev.azure.com/DerekGn/GitHub/_build/latest?definitionId=3&branchName=main)
 
 [![NuGet Badge](https://buildstats.info/nuget/RfmUsb)](https://www.nuget.org/packages/RfmUsb/)
 
