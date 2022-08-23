@@ -539,13 +539,13 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void AfcClear()
         {
-            SendCommandWithCheck("e-ac", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteAfcClear, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void AfcStart()
         {
-            SendCommandWithCheck("e-a", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteAfcStart, ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -560,13 +560,13 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void FeiStart()
         {
-            SendCommandWithCheck("e-fei", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteFeiStart, ResponseOk);
         }
 
         ///<inheritdoc/>
-        public void GetDioMapping(Dio dio, out DioMapping mapping)
+        public DioMapping GetDioMapping(Dio dio)
         {
-            var result = SendCommand($"g-dio 0x{(byte)dio:X}");
+            var result = SendCommand($"{Commands.GetDioMapping} 0x{(byte)dio:X}");
 
             var parts = result.Split('-');
 
@@ -576,9 +576,7 @@ namespace RfmUsb
 
                 if (subParts.Length >= 2)
                 {
-                    mapping = (DioMapping)Convert.ToInt32(subParts[1]);
-
-                    return;
+                    return (DioMapping)Convert.ToInt32(subParts[1]);
                 }
             }
 
@@ -592,7 +590,8 @@ namespace RfmUsb
             {
                 List<string> configs = new List<string>();
 
-                var result = SendCommand("g-rcl");
+                var result = SendCommand(Commands.GetRadioConfig);
+
                 configs.Add(result);
 
                 do
@@ -614,13 +613,13 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void ListenAbort()
         {
-            SendCommandWithCheck("e-lma", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteListenAbort, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void MeasureTemperature()
         {
-            SendCommandWithCheck("e-tm", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -654,68 +653,68 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void RcCalibration()
         {
-            SendCommandWithCheck("e-rc", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteRcCalibration, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void Reset()
         {
             FlushSerialPort();
-            SendCommandWithCheck($"e-r", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteReset, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void RestartRx()
         {
-            SendCommandWithCheck($"e-rr", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteRestartRx, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void SetAesKey(IEnumerable<byte> key)
         {
-            SendCommandWithCheck($"s-aes {BitConverter.ToString(key.ToArray()).Replace("-", string.Empty)}", ResponseOk);
+            SendCommandWithCheck($"{Commands.ExecuteSetAesKey} {BitConverter.ToString(key.ToArray()).Replace("-", string.Empty)}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public void SetDioMapping(Dio dio, DioMapping mapping)
         {
-            SendCommandWithCheck($"s-dio {(int)dio} {(int)mapping}", ResponseOk);
+            SendCommandWithCheck($"{Commands.SetDioMapping} {(int)dio} {(int)mapping}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public void StartRssi()
         {
-            SendCommandWithCheck($"e-rssi", ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
         }
 
         ///<inheritdoc/>
         public void Transmit(IList<byte> data)
         {
-            TransmitInternal($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
         }
 
         ///<inheritdoc/>
         public void Transmit(IList<byte> data, int txTimeout)
         {
-            TransmitInternal($"e-tx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
         }
 
         ///<inheritdoc/>
         public IList<byte> TransmitReceive(IList<byte> data)
         {
-            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
         }
 
         ///<inheritdoc/>
         public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
         {
-            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
         }
 
         ///<inheritdoc/>
         public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
         {
-            return TransmitReceiveInternal($"e-txrx {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
         }
 
         ///<inheritdoc/>
@@ -755,7 +754,7 @@ namespace RfmUsb
             {
                 DioIrq irqMask = DioIrq.None;
 
-                _serialPort.Write("g-di\n");
+                _serialPort.Write($"{Commands.GetDioInterrupt}\n");
 
                 for (int i = 0; i < 6; i++)
                 {
@@ -822,7 +821,7 @@ namespace RfmUsb
             {
                 Irq irq = Irq.None;
 
-                var result = SendCommand("g-irq");
+                var result = SendCommand(Commands.GetIrq);
 
                 while (!result.Contains("RX_RDY"))
                 {
@@ -970,7 +969,7 @@ namespace RfmUsb
             {
                 byte mask = (byte)(((byte)value) >> 1);
 
-                SendCommandWithCheck($"s-di 0x{mask:X}", ResponseOk);
+                SendCommandWithCheck($"{Commands.SetDio} 0x{mask:X}", ResponseOk);
 
                 if (_serialPort.BytesToRead != 0)
                 {
@@ -990,6 +989,7 @@ namespace RfmUsb
                     response = _serialPort.ReadLine();
                     _logger.LogDebug($"Response: [{response}]");
                 }
+
                 if (response.Contains("TX") || response.Contains("RX"))
                 {
                     throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");

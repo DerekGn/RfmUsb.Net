@@ -164,7 +164,6 @@ namespace RfmUsb.Net
         public const string ExecuteAfcClear = "e-ac";
         public const string ExecuteAfcStart = "e-a";
         public const string ExecuteFeiStart = "e-fei";
-        
         public const string ExecuteListenAbort = "e-lma";
         public const string ExecuteMeasureTemperature = "e-tm";
         public const string ExecuteRcCalibration = "e-rc";
@@ -173,6 +172,11 @@ namespace RfmUsb.Net
         public const string ExecuteRestartRx = "e-rr";
         public const string ExecuteStartRssi = "e-rssi";
         public const string ExecuteTransmit = "e-tx";
+        public const string ExecuteTransmitReceive = "e-txrx";
+        public const string GetDioInterrupt = "g-di";
+        public const string SetDioInterrupt = "s-di";
+        public const string GetDioMapping = "g-dio";
+        public const string SetDioMapping = "s-dio";
     }
 }
 

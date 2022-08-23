@@ -34,6 +34,7 @@ namespace RfmUsb.Ports
     internal class SerialPort : ISerialPort
     {
         private readonly System.IO.Ports.SerialPort _serialPort;
+        private bool disposedValue;
 
         public SerialPort(string serialPort)
         {
@@ -93,14 +94,6 @@ namespace RfmUsb.Ports
         public void DiscardOutBuffer()
         {
             _serialPort.DiscardOutBuffer();
-        }
-
-        public void Dispose()
-        {
-            _serialPort.Dispose();
-            _serialPort.ErrorReceived -= ErrorReceivedHandler;
-            _serialPort.DataReceived -= DataReceivedHandler;
-            _serialPort.PinChanged -= PinChangedHandler;
         }
 
         public void Open()
@@ -179,6 +172,32 @@ namespace RfmUsb.Ports
         {
             SerialErrorReceivedEventHandler handler = ErrorReceived;
             handler?.Invoke(this, e);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if(_serialPort != null)
+                    {
+                        _serialPort.ErrorReceived -= ErrorReceivedHandler;
+                        _serialPort.DataReceived -= DataReceivedHandler;
+                        _serialPort.PinChanged -= PinChangedHandler;
+                        _serialPort.Dispose();
+                    }
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

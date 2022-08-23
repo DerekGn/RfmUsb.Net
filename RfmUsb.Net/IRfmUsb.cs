@@ -446,8 +446,8 @@ namespace RfmUsb
         /// Get the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/></param>
-        /// <param name="mapping">The <see cref="DioMapping"/></param>
-        void GetDioMapping(Dio dio, out DioMapping mapping);
+        /// <returns>The <see cref="DioMapping"/></returns>
+        DioMapping GetDioMapping(Dio dio);
 
         /// <summary>
         /// Get a list of the pre-configured radio configurations

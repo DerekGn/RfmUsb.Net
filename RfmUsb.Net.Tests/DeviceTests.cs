@@ -754,9 +754,9 @@ namespace RfmUsb.Tests
         {
             _fixture.RfmUsbDevice.SetDioMapping(dio, dioMapping);
 
-            _fixture.RfmUsbDevice.GetDioMapping(dio, out var dioMappingValue);
+            var result = _fixture.RfmUsbDevice.GetDioMapping(dio);
 
-            dioMappingValue.Should().Be(dioMapping);
+            result.Should().Be(dioMapping);
         }
 
         [Fact]
