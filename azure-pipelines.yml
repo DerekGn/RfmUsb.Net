@@ -2,7 +2,7 @@ variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
 
-name: v$(Major).$(Minor).$(Patch)
+name: v$(Major).$(Minor).$(Patch).$(Build)
 
 trigger:
 - main
