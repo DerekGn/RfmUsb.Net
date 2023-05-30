@@ -22,28 +22,18 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+using Microsoft.Extensions.Logging;
+using RfmUsb.Ports;
+
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Selects type of threshold in the OOK data slicer
+    /// An implementation of the <see cref="IRfm9x"/> interface
     /// </summary>
-    public enum OokThresholdType
+    public class Rfm9x : RfmBase, IRfm9x
     {
-        /// <summary>
-        /// Fixed
-        /// </summary>
-        Fixed,
-        /// <summary>
-        /// Peak
-        /// </summary>
-        Peak,
-        /// <summary>
-        /// Average
-        /// </summary>
-        Average,
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved
+        public Rfm9x(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
+        {
+        }
     }
 }

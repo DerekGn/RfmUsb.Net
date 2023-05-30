@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,15 @@
 * SOFTWARE.
 */
 
-using System;
+using RfmUsb.Net;
 using System.Collections.Generic;
 
 namespace RfmUsb
 {
     /// <summary>
-    /// An rfm69 Usb device
+    /// An rfm6x device
     /// </summary>
-    public interface IRfmUsb : IDisposable
+    public interface IRfm6x : IRfm
     {
         /// <summary>
         /// Defines address based filtering in Rx
@@ -433,11 +433,6 @@ namespace RfmUsb
         void AfcStart();
 
         /// <summary>
-        /// Close the connection to the RfmUsb device
-        /// </summary>
-        public void Close();
-
-        /// <summary>
         /// Triggers a FEI measurement
         /// </summary>
         void FeiStart();
@@ -464,13 +459,6 @@ namespace RfmUsb
         /// Execute a temperature measurement
         /// </summary>
         void MeasureTemperature();
-
-        /// <summary>
-        /// Open the RfmUsb device
-        /// </summary>
-        /// <param name="serialPort">The serial port</param>
-        /// <param name="baudRate">The baud rate</param>
-        public void Open(string serialPort, int baudRate);
 
         /// <summary>
         /// Triggers the calibration of the RC oscillator

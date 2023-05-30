@@ -22,28 +22,16 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+using System;
+
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Selects type of threshold in the OOK data slicer
+    /// An Rfm device
     /// </summary>
-    public enum OokThresholdType
+    public interface IRfm : IDisposable
     {
-        /// <summary>
-        /// Fixed
-        /// </summary>
-        Fixed,
-        /// <summary>
-        /// Peak
-        /// </summary>
-        Peak,
-        /// <summary>
-        /// Average
-        /// </summary>
-        Average,
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved
+        void Close();
+        void Open(string serialPort, int baudRate);
     }
 }

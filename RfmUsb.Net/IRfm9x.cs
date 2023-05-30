@@ -22,28 +22,12 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Selects type of threshold in the OOK data slicer
+    /// An rfm9x device
     /// </summary>
-    public enum OokThresholdType
+    public interface IRfm9x : IRfm
     {
-        /// <summary>
-        /// Fixed
-        /// </summary>
-        Fixed,
-        /// <summary>
-        /// Peak
-        /// </summary>
-        Peak,
-        /// <summary>
-        /// Average
-        /// </summary>
-        Average,
-        /// <summary>
-        /// Reserved
-        /// </summary>
-        Reserved
     }
 }

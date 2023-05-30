@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -29,31 +29,22 @@ using RfmUsb.Net;
 using RfmUsb.Ports;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace RfmUsb
 {
     /// <summary>
-    /// An implementation of the <see cref="IRfmUsb"/> interface
+    /// An implementation of the <see cref="IRfm6x"/> interface
     /// </summary>
-    public class RfmUsb : IRfmUsb
+    public class Rfm6x : RfmBase, IRfm6x
     {
-        internal const string ResponseOk = "OK";
-        internal ISerialPort _serialPort;
-
-        private readonly ILogger<IRfmUsb> _logger;
-        private readonly ISerialPortFactory _serialPortFactory;
-
         /// <summary>
         /// Create an instance of a <see cref="RfmUsb"/>
         /// </summary>
         /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
         /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
-        public RfmUsb(ILogger<IRfmUsb> logger, ISerialPortFactory serialPortFactory)
+        public Rfm6x(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
         }
 
         ///<inheritdoc/>
@@ -504,11 +495,11 @@ namespace RfmUsb
         ///<inheritdoc/>
         public int Timeout
         {
-            get => _serialPort.ReadTimeout;
+            get => SerialPort.ReadTimeout;
             set
             {
-                _serialPort.ReadTimeout = value;
-                _serialPort.WriteTimeout = value;
+                SerialPort.ReadTimeout = value;
+                SerialPort.WriteTimeout = value;
             }
         }
 
@@ -549,15 +540,6 @@ namespace RfmUsb
         }
 
         ///<inheritdoc/>
-        public void Close()
-        {
-            if (_serialPort != null && _serialPort.IsOpen)
-            {
-                _serialPort.Close();
-            }
-        }
-
-        ///<inheritdoc/>
         public void FeiStart()
         {
             SendCommandWithCheck(Commands.ExecuteFeiStart, ResponseOk);
@@ -586,7 +568,7 @@ namespace RfmUsb
         ///<inheritdoc/>
         public IList<string> GetRadioConfigurations()
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 List<string> configs = new List<string>();
 
@@ -598,7 +580,7 @@ namespace RfmUsb
                 {
                     try
                     {
-                        configs.Add(_serialPort.ReadLine());
+                        configs.Add(SerialPort.ReadLine());
                     }
                     catch (TimeoutException)
                     {
@@ -620,34 +602,6 @@ namespace RfmUsb
         public void MeasureTemperature()
         {
             SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void Open(string serialPort, int baudRate)
-        {
-            try
-            {
-                if (_serialPort == null)
-                {
-                    _serialPort = _serialPortFactory.CreateSerialPortInstance(serialPort);
-
-                    _serialPort.BaudRate = baudRate;
-                    _serialPort.NewLine = "\r\n";
-                    _serialPort.DtrEnable = true;
-                    _serialPort.RtsEnable = true;
-                    _serialPort.ReadTimeout = 500;
-                    _serialPort.WriteTimeout = 500;
-                    _serialPort.Open();
-                }
-            }
-            catch (FileNotFoundException ex)
-            {
-                _logger.LogDebug(ex, "Exception occurred opening serial port");
-
-                throw new RfmUsbSerialPortNotFoundException(
-                    $"Unable to open serial port [{serialPort}] Reason: [{ex.Message}]. " +
-                    $"Available Serial Ports: [{string.Join(", ", _serialPortFactory.GetSerialPorts())}]");
-            }
         }
 
         ///<inheritdoc/>
@@ -720,9 +674,9 @@ namespace RfmUsb
         ///<inheritdoc/>
         public void WaitForIrq()
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
-                var irq = _serialPort.ReadLine();
+                var irq = SerialPort.ReadLine();
 
                 if (!irq.StartsWith("DIO PIN IRQ"))
                 {
@@ -733,7 +687,7 @@ namespace RfmUsb
 
         private void CheckOpen()
         {
-            if (_serialPort == null)
+            if (SerialPort == null)
             {
                 throw new InvalidOperationException("Instance not open");
             }
@@ -741,24 +695,24 @@ namespace RfmUsb
 
         private void FlushSerialPort()
         {
-            if (_serialPort != null)
+            if (SerialPort != null)
             {
-                _logger.LogDebug("Flushing Serial Ports input buffer");
-                _serialPort.DiscardInBuffer();
+                Logger.LogDebug("Flushing Serial Ports input buffer");
+                SerialPort.DiscardInBuffer();
             }
         }
 
         private DioIrq GetDioInterruptMask()
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 DioIrq irqMask = DioIrq.None;
 
-                _serialPort.Write($"{Commands.GetDioInterrupt}\n");
+                SerialPort.Write($"{Commands.GetDioInterrupt}\n");
 
                 for (int i = 0; i < 6; i++)
                 {
-                    var result = _serialPort.ReadLine();
+                    var result = SerialPort.ReadLine();
 
                     var parts = result.Split('-');
 
@@ -817,7 +771,7 @@ namespace RfmUsb
 
         private Irq GetIrqInternal()
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 Irq irq = Irq.None;
 
@@ -928,7 +882,7 @@ namespace RfmUsb
                             break;
                     }
 
-                    result = _serialPort.ReadLine();
+                    result = SerialPort.ReadLine();
                 }
 
                 return irq;
@@ -939,13 +893,13 @@ namespace RfmUsb
         {
             CheckOpen();
 
-            lock (_serialPort)
+            lock (SerialPort)
             {
-                _serialPort.Write($"{command}\n");
+                SerialPort.Write($"{command}\n");
 
-                var response = _serialPort.ReadLine();
+                var response = SerialPort.ReadLine();
 
-                _logger.LogDebug($"Command: [{command}] Result: [{response}]");
+                Logger.LogDebug($"Command: [{command}] Result: [{response}]");
 
                 return response;
             }
@@ -965,29 +919,29 @@ namespace RfmUsb
 
         private void SetDioInterrupMask(DioIrq value)
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 byte mask = (byte)(((byte)value) >> 1);
 
                 SendCommandWithCheck($"{Commands.SetDio} 0x{mask:X}", ResponseOk);
 
-                if (_serialPort.BytesToRead != 0)
+                if (SerialPort.BytesToRead != 0)
                 {
-                    _serialPort.ReadLine();
+                    SerialPort.ReadLine();
                 }
             }
         }
 
         private void TransmitInternal(string command)
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 var response = SendCommand(command);
 
                 if (response.StartsWith("DIO"))
                 {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
+                    response = SerialPort.ReadLine();
+                    Logger.LogDebug("Response: [{response}]", response);
                 }
 
                 if (response.Contains("TX") || response.Contains("RX"))
@@ -999,14 +953,14 @@ namespace RfmUsb
 
         private IList<byte> TransmitReceiveInternal(string command)
         {
-            lock (_serialPort)
+            lock (SerialPort)
             {
                 var response = SendCommand(command);
 
                 if (response.StartsWith("DIO"))
                 {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
+                    response = SerialPort.ReadLine();
+                    Logger.LogDebug("Response: [{response}]", response);
                 }
 
                 if (response.Contains("TX") || response.Contains("RX"))
@@ -1016,45 +970,12 @@ namespace RfmUsb
 
                 if (response.StartsWith("DIO"))
                 {
-                    response = _serialPort.ReadLine();
-                    _logger.LogDebug($"Response: [{response}]");
+                    response = SerialPort.ReadLine();
+                    Logger.LogDebug($"Response: [{response}]");
                 }
 
                 return response.ToBytes();
             }
         }
-
-        #region IDisposible
-
-        private bool disposedValue;
-
-        /// <summary>
-        /// Dispose the <see cref="IRfmUsb"/> instance
-        /// </summary>
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            System.GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Dispose the <see cref="IRfmUsb"/> instance
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _serialPort?.Close();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        #endregion IDisposible
     }
 }
