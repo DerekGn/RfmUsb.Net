@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Derek Goslin</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Company>Derek Goslin</Company>
-    <Copyright>Copyright © Derek Goslin 2021</Copyright>
+    <Copyright>Copyright © Derek Goslin 2022</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DerekGn/RfmUsb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DerekGn/RfmUsb</RepositoryUrl>
-    <PackageTags>Rfm69 Usb Serial</PackageTags>
+    <PackageTags>Rfm69 Rfm95 Usb Serial</PackageTags>
     <Description>An API for interacting with an RFMUSB adapter</Description>
     <PackageReleaseNotes>
       1.0.0 Initial Version
@@ -20,10 +19,11 @@
       1.0.15 Added package xml document
       1.0.18 Updated open check
       1.0.19 Updated reset operation
+      2.0.0 Added Rfm95
     </PackageReleaseNotes>
-    <Version>1.0.19</Version>
-    <AssemblyVersion>1.0.19.0</AssemblyVersion>
-    <FileVersion>1.0.19.0</FileVersion>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -37,8 +37,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
