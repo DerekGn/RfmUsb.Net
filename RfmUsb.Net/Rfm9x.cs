@@ -49,25 +49,45 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool AutoImageCalibrationOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool AutoImageCalibrationOn
+        {
+            get => SendCommand(Commands.GetAutoImageCalibrationOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetAutoImageCalibrationOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool BeaconOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool BeaconOn
+        {
+            get => SendCommand(Commands.GetBeaconOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetBeaconOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public byte BirRateFractional { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool BitSyncOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool BitSyncOn
+        {
+            get => SendCommand(Commands.GetBitSyncOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetBitSyncOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public CodingRate CodingRate => throw new System.NotImplementedException();
 
         ///<inheritdoc/>
-        public bool CrcWhiteningType { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool CrcWhiteningType
+        {
+            get => SendCommand(Commands.GetCrcWhiteningType).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetCrcWhiteningType} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool FastHopOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool FastHopOn
+        {
+            get => SendCommand(Commands.GetFastHopOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetFastHopOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public byte FifoAddressPointer { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
@@ -109,50 +129,93 @@ namespace RfmUsb.Net
         public FromStart FromStart { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool FromTransmit { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool FromTransmit
+        {
+            get => SendCommand(Commands.GetFromTransmit).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetFromTransmit} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public byte HopChannel => throw new System.NotImplementedException();
 
         ///<inheritdoc/>
-        public bool IdleMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool IdleMode
+        {
+            get => SendCommand(Commands.GetIdleMode).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetIdleMode} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool ImplicitHeaderModeOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool ImplicitHeaderModeOn
+        {
+            get => SendCommand(Commands.GetImplicitHeaderModeOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetImplicitHeaderModeOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool IoHomeOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool IoHomeOn
+        {
+            get => SendCommand(Commands.GetIoHomeOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetIoHomeOn} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool IoHomePowerFrame { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool IoHomePowerFrame
+        {
+            get => SendCommand(Commands.GetIoHomePowerFrame).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetIoHomePowerFrame} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool LnaBoostHf { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool LnaBoostHf
+        {
+            get => SendCommand(Commands.GetLnaBoostHf).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLnaBoostHf} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
-        public bool LongRangeMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool LongRangeMode
+        {
+            get => SendCommand(Commands.GetLongRangeMode).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLongRangeMode} {(value ? "1" : "0")}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public LoraMode LoraMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool LowBatteryOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool LowBatteryOn
+        {
+            get => SendCommand(Commands.GetLowBatteryOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLowBatteryOn} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public LowBatteryTrim LowBatteryTrim { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool LowDataRateOptimize { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool LowDataRateOptimize
+        {
+            get => SendCommand(Commands.GetLowDataRateOptimize).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLowDataRateOptimize} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public bool LowFrequencyMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool LowFrequencyMode
+        {
+            get => SendCommand(Commands.GetLowFrequencyMode).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLowFrequencyMode} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public bool LowPowerSelection { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool LowPowerSelection
+        {
+            get => SendCommand(Commands.GetLowPowerSelection).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetLowPowerSelection} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public bool MapPreambleDetect { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool MapPreambleDetect
+        {
+            get => SendCommand(Commands.GetMapPreambleDetect).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetMapPreambleDetect} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public ModemBw ModemBandwidth => throw new System.NotImplementedException();
 
@@ -172,8 +235,11 @@ namespace RfmUsb.Net
         public byte PpmCorrection { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool PreambleDetectorOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool PreambleDetectorOn
+        {
+            get => SendCommand(Commands.GetPreambleDetectorOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorOn} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public PreambleDetectorSize PreambleDetectorSize { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -184,11 +250,17 @@ namespace RfmUsb.Net
         public ushort PreambleLength { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool PreamblePolarity { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool PreamblePolarity
+        {
+            get => SendCommand(Commands.GetPreamblePolarity).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetPreamblePolarity} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public bool RestartRxOnCollision { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool RestartRxOnCollision
+        {
+            get => SendCommand(Commands.GetRestartRxOnCollision).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetRestartRxOnCollision} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public byte RssiCollisionThreshold { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -208,8 +280,11 @@ namespace RfmUsb.Net
         public byte RxCodingRate => throw new System.NotImplementedException();
 
         ///<inheritdoc/>
-        public bool RxPayloadCrcOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool RxPayloadCrcOn
+        {
+            get => SendCommand(Commands.GetRxPayloadCrcOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetRxPayloadCrcOn} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public SpreadingFactor SpredingFactor { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -217,17 +292,26 @@ namespace RfmUsb.Net
         public ushort SymbolTimeout { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool TcxoInputOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool TcxoInputOn
+        {
+            get => SendCommand(Commands.GetTcxoInputOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetTcxoInputOn} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
-        public bool TempChange { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool TempChange
+        {
+            get => SendCommand(Commands.GetTempChange).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetTempChange} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public TemperatureThreshold TemperatureThreshold { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool TempMonitorOff { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool TempMonitorOff
+        {
+            get => SendCommand(Commands.GetTempMonitorOff).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetTempMonitorOff} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public byte TimeoutRxPreamble { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -238,8 +322,11 @@ namespace RfmUsb.Net
         public byte TimeoutSignalSync { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
-        public bool TxContinuousMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool TxContinuousMode
+        {
+            get => SendCommand(Commands.GetTxContinuousMode).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetTxContinuousMode} {(value ? "1" : "0")}", ResponseOk);
+        }
         ///<inheritdoc/>
         public byte ValidHeaderCount => throw new System.NotImplementedException();
 

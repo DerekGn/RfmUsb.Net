@@ -45,12 +45,16 @@ namespace RfmUsb.Net
         public const string GetAfcAutoClear = "g-aac";
         public const string GetAfcAutoOn = "g-aao";
         public const string GetAfcLowBetaOn = "g-ab";
+        public const string GetAutoImageCalibrationOn = "";
         public const string GetAutoRxRestartOn = "g-arre";
+        public const string GetBeaconOn = "";
         public const string GetBitRate = "g-br";
+        public const string GetBitSyncOn = "";
         public const string GetBroadcastAddress = "g-ba";
         public const string GetContinuousDagc = "g-cd";
         public const string GetCrcAutoClear = "g-caco";
         public const string GetCrcOn = "g-cc";
+        public const string GetCrcWhiteningType = "";
         public const string GetCurrentLnaGain = "g-lnag";
         public const string GetDccFreq = "g-df";
         public const string GetDccFreqAfc = "g-dfa";
@@ -60,16 +64,22 @@ namespace RfmUsb.Net
         public const string GetDioMapping = "g-dio";
         public const string GetEnterCondition = "g-amec";
         public const string GetExitCondition = "g-amexc";
+        public const string GetFastHopOn = "";
         public const string GetFei = "g-a";
         public const string GetFifo = "g-fifo";
         public const string GetFifoFill = "g-ffc";
         public const string GetFifoThreshold = "g-ft";
         public const string GetFrequency = "g-f";
         public const string GetFrequencyDeviation = "g-fd";
+        public const string GetFromTransmit = "";
         public const string GetFskModulationShaping = "g-fs";
+        public const string GetIdleMode = "";
         public const string GetImpedance = "g-lnaz";
+        public const string GetImplicitHeaderModeOn = "";
         public const string GetIntermediateMode = "g-im";
         public const string GetInterPacketRxDelay = "g-iprd";
+        public const string GetIoHomeOn = "";
+        public const string GetIoHomePowerFrame = "";
         public const string GetIrq = "g-irq";
         public const string GetListenCoefficentIdle = "g-lic";
         public const string GetListenCoefficentRx = "g-lrc";
@@ -78,7 +88,9 @@ namespace RfmUsb.Net
         public const string GetListenerOn = "g-lo";
         public const string GetListenResolutionIdle = "g-ir";
         public const string GetListenResolutionRx = "g-rr";
+        public const string GetLnaBoostHf = "";
         public const string GetLnaGainSelect = "g-lnags";
+        public const string GetLoraAgcAutoOn = "g-laao";
         public const string GetLowBetaAfcOffset = "g-lbao";
         public const string GetMode = "g-om";
         public const string GetModulation = "g-mt";
@@ -117,12 +129,16 @@ namespace RfmUsb.Net
         public const string SetAfcAutoClear = "s-aac";
         public const string SetAfcAutoOn = "s-aao";
         public const string SetAfcLowBetaOn = "s-ab";
+        public const string SetAutoImageCalibrationOn = "";
         public const string SetAutoRxRestartOn = "s-arre";
+        public const string SetBeaconOn = "";
         public const string SetBitRate = "s-br";
+        public const string SetBitSyncOn = "";
         public const string SetBroadcastAddress = "s-ba";
         public const string SetContinuousDagc = "s-cd";
         public const string SetCrcAutoClear = "s-caco";
         public const string SetCrcOn = "s-cc";
+        public const string SetCrcWhiteningType = "";
         public const string SetDccFreq = "s-df";
         public const string SetDccFreqAfc = "s-dfa";
         public const string SetDcFree = "s-dfe";
@@ -131,15 +147,21 @@ namespace RfmUsb.Net
         public const string SetDioMapping = "s-dio";
         public const string SetEnterCondition = "s-amec";
         public const string SetExitCondition = "s-amexc";
+        public const string SetFastHopOn = "";
         public const string SetFifo = "s-fifo";
         public const string SetFifoFill = "s-ffc";
         public const string SetFifoThreshold = "s-ft";
         public const string SetFrequency = "s-f";
         public const string SetFrequencyDeviation = "s-fd";
+        public const string SetFromTransmit = "";
         public const string SetFskModulationShaping = "s-fs";
+        public const string SetIdleMode = "";
         public const string SetImpedance = "s-lnaz";
+        public const string SetImplicitHeaderModeOn = "";
         public const string SetIntermediateMode = "s-im";
         public const string SetInterPacketRxDelay = "s-iprd";
+        public const string SetIoHomeOn = "";
+        public const string SetIoHomePowerFrame = "";
         public const string SetListenCoefficentIdle = "s-lic";
         public const string SetListenCoefficentRx = "s-lrc";
         public const string SetListenCriteria = "s-lc";
@@ -147,7 +169,9 @@ namespace RfmUsb.Net
         public const string SetListenerOn = "s-lo";
         public const string SetListenResolutionIdle = "s-ir";
         public const string SetListenResolutionRx = "s-rr";
+        public const string SetLnaBoostHf = "";
         public const string SetLnaGainSelect = "s-lnags";
+        public const string SetLoraAgcAutoOn = "s-laao";
         public const string SetLowBetaAfcOffset = "s-lbao";
         public const string SetMode = "s-om";
         public const string SetModulation = "s-mt";
@@ -178,8 +202,50 @@ namespace RfmUsb.Net
         public const string SetTimeoutRssiThreshold = "s-trt";
         public const string SetTimeoutRxStart = "s-trs";
         public const string SetTxStartCondition = "s-tsc";
-        public const string GetLoraAgcAutoOn = "g-laao";
-        public const string SetLoraAgcAutoOn = "s-laao";
+
+        public const string GetLongRangeMode = "";
+        public const string SetLongRangeMode = "";
+
+        public const string GetLowBatteryOn = "";
+        public const string SetLowBatteryOn = "";
+
+        public const string GetLowDataRateOptimize = "";
+        public const string SetLowDataRateOptimize = "";
+
+        public const string GetLowFrequencyMode = "";
+        public const string SetLowFrequencyMode = "";
+
+        public const string GetLowPowerSelection = "";
+        public const string SetLowPowerSelection = "";
+
+        public const string GetMapPreambleDetect = "";
+        public const string SetMapPreambleDetect = "";
+
+        public const string GetPreambleDetectorOn = "";
+        public const string SetPreambleDetectorOn = "";
+
+        public const string GetPreamblePolarity = "";
+        public const string SetPreamblePolarity = "";
+
+        public const string GetRestartRxOnCollision = "";
+        public const string SetRestartRxOnCollision = "";
+
+        public const string GetRxPayloadCrcOn = "";
+        public const string SetRxPayloadCrcOn = "";
+
+        public const string GetTcxoInputOn = "";
+        public const string SetTcxoInputOn = "";
+
+        public const string GetTempChange = "";
+        public const string SetTempChange = "";
+
+        public const string GetTempMonitorOff = "";
+        public const string SetTempMonitorOff = "";
+
+        public const string GetTxContinuousMode = "";
+        public const string SetTxContinuousMode = "";
+
+        public const string Get = "";
+        public const string Set = "";
     }
 }
-
