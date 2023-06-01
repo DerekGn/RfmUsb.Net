@@ -25,7 +25,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     [ExcludeFromCodeCoverage]
     internal class SerialPortFactory : ISerialPortFactory

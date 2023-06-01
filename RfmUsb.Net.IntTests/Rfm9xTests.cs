@@ -22,20 +22,9 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb.Net
+namespace RfmUsb.Net.IntTests
 {
-    /// <summary>
-    /// Modulation scheme
-    /// </summary>
-    public enum Modulation
+    public class Rfm9xTests : RfmBaseTests
     {
-        /// <summary>
-        /// Fsk modulation
-        /// </summary>
-        Fsk = 0,
-        /// <summary>
-        /// Ook modulation
-        /// </summary>
-        Ook = 1
     }
 }

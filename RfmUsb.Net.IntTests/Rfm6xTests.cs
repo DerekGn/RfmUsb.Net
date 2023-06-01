@@ -22,20 +22,15 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb.Net
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace RfmUsb.Net.IntTests
 {
-    /// <summary>
-    /// Modulation scheme
-    /// </summary>
-    public enum Modulation
+    [TestClass]
+    public class Rfm6xTests : RfmBaseTests
     {
-        /// <summary>
-        /// Fsk modulation
-        /// </summary>
-        Fsk = 0,
-        /// <summary>
-        /// Ook modulation
-        /// </summary>
-        Ook = 1
+        public Rfm6xTests()
+        {
+        }
     }
 }

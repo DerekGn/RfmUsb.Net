@@ -25,7 +25,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     /// <summary>
     /// An <see cref="IServiceCollection"/> extensions

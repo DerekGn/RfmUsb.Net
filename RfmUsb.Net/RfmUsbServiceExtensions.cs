@@ -23,10 +23,10 @@
 */
 
 using Microsoft.Extensions.DependencyInjection;
-using RfmUsb.Ports;
+using RfmUsb.Net.Ports;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Extensions for the <see cref="IServiceCollection"/> to enable configuration of rfmusb dependencies

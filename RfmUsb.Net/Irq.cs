@@ -24,7 +24,7 @@
 
 using System;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// The set of Irq bits

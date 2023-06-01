@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     /// <summary>
     /// Defines the <see cref="ISerialPortFactory"/> interface

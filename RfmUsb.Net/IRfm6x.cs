@@ -25,7 +25,7 @@
 using RfmUsb.Net;
 using System.Collections.Generic;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// An rfm6x device
@@ -73,11 +73,6 @@ namespace RfmUsb
         /// true→ On. Rx automatically restarted after InterPacketRxDelay.
         /// </summary>
         bool AutoRxRestartOn { get; set; }
-
-        /// <summary>
-        /// Get or set the radio Tx/Rx bit rate
-        /// </summary>
-        ushort BitRate { get; set; }
 
         /// <summary>
         /// Broadcast address used in address filtering
@@ -144,11 +139,6 @@ namespace RfmUsb
         ushort Fei { get; }
 
         /// <summary>
-        /// Get or set the fifo data
-        /// </summary>
-        IEnumerable<byte> Fifo { get; set; }
-
-        /// <summary>
         /// FIFO filling condition:
         /// false → if SyncAddress interrupt occurs
         /// true → as long as FifoFillCondition is set
@@ -159,11 +149,6 @@ namespace RfmUsb
         /// Used to trigger FifoLevel interrupt.
         /// </summary>
         byte FifoThreshold { get; set; }
-
-        /// <summary>
-        /// Get or set the frequency
-        /// </summary>
-        uint Frequency { get; set; }
 
         /// <summary>
         /// Get or set the frequency deviation
@@ -238,11 +223,6 @@ namespace RfmUsb
         ListenResolution ListenResolutionRx { get; set; }
 
         /// <summary>
-        /// LNA gain setting
-        /// </summary>
-        LnaGain LnaGainSelect { get; set; }
-
-        /// <summary>
         /// AFC offset set for low modulation index systems, used if AfcLowBetaOn = true.
         /// </summary>
         byte LowBetaAfcOffset { get; set; }
@@ -261,16 +241,6 @@ namespace RfmUsb
         /// Node address used in address filtering
         /// </summary>
         byte NodeAddress { get; set; }
-
-        /// <summary>
-        /// Enables overload current protection (OCP) for the PA
-        /// </summary>
-        bool OcpEnable { get; set; }
-
-        /// <summary>
-        /// Trimming of OCP current
-        /// </summary>
-        OcpTrim OcpTrim { get; set; }
 
         /// <summary>
         /// Filter coefficients in average mode of the OOK demodulator
@@ -314,11 +284,6 @@ namespace RfmUsb
         /// true → Variable length
         /// </summary>
         bool PacketFormat { get; set; }
-
-        /// <summary>
-        /// Rise/Fall time of ramp up/down in FSK
-        /// </summary>
-        PaRamp PaRamp { get; set; }
 
         /// <summary>
         /// If PacketFormat = false (fixed), payload length.
@@ -418,11 +383,6 @@ namespace RfmUsb
         bool TxStartCondition { get; set; }
 
         /// <summary>
-        /// Get the FrmUsb version
-        /// </summary>
-        string Version { get; }
-
-        /// <summary>
         /// Clears the AfcValue if set in Rx mode
         /// </summary>
         void AfcClear();
@@ -436,13 +396,6 @@ namespace RfmUsb
         /// Triggers a FEI measurement
         /// </summary>
         void FeiStart();
-
-        /// <summary>
-        /// Get the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
-        /// </summary>
-        /// <param name="dio">The <see cref="Dio"/></param>
-        /// <returns>The <see cref="DioMapping"/></returns>
-        DioMapping GetDioMapping(Dio dio);
 
         /// <summary>
         /// Get a list of the pre-configured radio configurations
@@ -482,51 +435,9 @@ namespace RfmUsb
         void SetAesKey(IEnumerable<byte> key);
 
         /// <summary>
-        /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
-        /// </summary>
-        /// <param name="dio">The <see cref="Dio"/> configuration</param>
-        /// <param name="mapping">The <see cref="DioMapping"/></param>
-        void SetDioMapping(Dio dio, DioMapping mapping);
-
-        /// <summary>
         /// Trigger a RSSI measurement
         /// </summary>
         void StartRssi();
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        void Transmit(IList<byte> data);
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The transmit timeout</param>
-        void Transmit(IList<byte> data, int txTimeout);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        IList<byte> TransmitReceive(IList<byte> data);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The timeout in milliseconds </param>
-        /// <returns>The received packet bytes</returns>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
-        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
 
         /// <summary>
         /// Wait for a configured Irq to be signaled

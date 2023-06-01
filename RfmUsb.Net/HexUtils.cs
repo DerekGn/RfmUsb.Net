@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Set of hex string extensions

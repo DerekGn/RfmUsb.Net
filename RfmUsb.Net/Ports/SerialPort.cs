@@ -28,7 +28,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     [ExcludeFromCodeCoverage]
     internal class SerialPort : ISerialPort

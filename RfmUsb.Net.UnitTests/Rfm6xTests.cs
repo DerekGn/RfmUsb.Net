@@ -23,35 +23,23 @@
 */
 
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using RfmUsb.Exceptions;
-using RfmUsb.Net;
-using RfmUsb.Ports;
+using RfmUsb.Net.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
-namespace RfmUsb.UnitTests
+namespace RfmUsb.Net.UnitTests
 {
     [TestClass]
-    public class Rfm6xTests
+    public class Rfm6xTests : RfmBaseTests
     {
-        private readonly ILogger<IRfm> _logger;
-        private readonly Mock<ISerialPort> _mockSerialPort;
-        private readonly Mock<ISerialPortFactory> _mockSerialPortFactory;
         private readonly Rfm6x _rfm6x;
 
         public Rfm6xTests()
         {
-            _mockSerialPortFactory = new Mock<ISerialPortFactory>();
-
-            _mockSerialPort = new Mock<ISerialPort>();
-
-            _logger = Mock.Of<ILogger<IRfm>>();
-
-            _rfm6x = new Rfm6x(_logger, _mockSerialPortFactory.Object);
+            _rfm6x = new Rfm6x(MockLogger, MockSerialPortFactory.Object);
+            RfmBase = _rfm6x;
         }
 
         [TestMethod]
@@ -73,23 +61,6 @@ namespace RfmUsb.UnitTests
         }
 
         [TestMethod]
-        public void TestClose()
-        {
-            // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
-
-            _mockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            // Act
-            _rfm6x.Close();
-
-            // Assert
-            _mockSerialPort.Verify(_ => _.Close());
-        }
-
-        [TestMethod]
         public void TestFeiStart()
         {
             ExecuteTest(
@@ -102,13 +73,13 @@ namespace RfmUsb.UnitTests
         public void TestGetAddressFilter()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(RfmBase.ResponseOk);
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(AddressFilter.NodeBroaddcast.ToString("X"));
 
@@ -133,13 +104,13 @@ namespace RfmUsb.UnitTests
         public void TestGetAfc()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(RfmBase.ResponseOk);
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("0x100");
 
@@ -188,16 +159,6 @@ namespace RfmUsb.UnitTests
                 (v) => v.Should().BeTrue(),
                 Commands.GetAutoRxRestartOn,
                 "1");
-        }
-
-        [TestMethod]
-        public void TestGetBitRate()
-        {
-            ExecuteGetTest(
-                () => { return _rfm6x.BitRate; },
-                (v) => { v.Should().Be(0x100); },
-                Commands.GetBitRate,
-                "0x100");
         }
 
         [TestMethod]
@@ -314,9 +275,9 @@ namespace RfmUsb.UnitTests
         public void TestGetDioInterruptMask()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                .SetupSequence(_ => _.ReadLine())
                .Returns("1-DIO0")
                .Returns("0-DIO1")
@@ -331,7 +292,7 @@ namespace RfmUsb.UnitTests
             // Assert
             result.Should().Be(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4);
 
-            _mockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterrupt}\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterrupt}\n"), Times.Once);
         }
 
         [TestMethod]
@@ -344,9 +305,9 @@ namespace RfmUsb.UnitTests
         public void TestGetDioMapping(Dio dio)
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("0x0000-Map 00");
 
@@ -356,7 +317,7 @@ namespace RfmUsb.UnitTests
             // Assert
             result.Should().Be(DioMapping.DioMapping0);
 
-            _mockSerialPort.Verify(_ => _.Write($"{Commands.GetDioMapping} 0x{(byte)dio:X}\n"));
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioMapping} 0x{(byte)dio:X}\n"));
         }
 
         [TestMethod]
@@ -855,9 +816,9 @@ namespace RfmUsb.UnitTests
         public void TestGetRadioConfigurations()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
                 .Returns("A")
                 .Returns("B")
@@ -986,9 +947,9 @@ namespace RfmUsb.UnitTests
         public void TestGetTimeout()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadTimeout)
                 .Returns(1000);
 
@@ -1043,9 +1004,9 @@ namespace RfmUsb.UnitTests
         public void TestIrq()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
                 .Returns("0:CRC_OK")
                 .Returns("1:PAYLOAD_READY")
@@ -1065,7 +1026,7 @@ namespace RfmUsb.UnitTests
             var result = _rfm6x.Irq;
 
             // Assert
-            _mockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
 
             result.Should().Be(Irq.PayloadReady | Irq.FifoOverrun | Irq.FifoNotEmpty | Irq.FifoFull | Irq.AutoMode | Irq.Rssi | Irq.PllLock);
         }
@@ -1089,61 +1050,11 @@ namespace RfmUsb.UnitTests
         }
 
         [TestMethod]
-        public void TestOpen()
-        {
-            // Arrange
-            _mockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(_mockSerialPort.Object);
-
-            // Act
-            _rfm6x.Open("ComPort", 9600);
-
-            // Assert
-            _mockSerialPortFactory
-                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
-
-            _mockSerialPort.Verify(_ => _.Open(), Times.Once);
-        }
-
-        [TestMethod]
-        public void TestOpenNotFound()
-        {
-            // Arrange
-            _mockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(_mockSerialPort.Object);
-
-            _mockSerialPortFactory
-                .Setup(_ => _.GetSerialPorts())
-                .Returns(new List<string>() { });
-
-            _mockSerialPort
-                .Setup(_ => _.Open())
-                .Throws<FileNotFoundException>();
-
-            // Act
-            Action action = () => _rfm6x.Open("ComPort", 9600);
-
-            // Assert
-            action.Should().Throw<RfmUsbSerialPortNotFoundException>();
-        }
-
-        [TestMethod]
         public void TestRcCalibration()
         {
             ExecuteTest(
                 () => { _rfm6x.RcCalibration(); },
                 Commands.ExecuteRcCalibration,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestReset()
-        {
-            ExecuteTest(
-                () => { _rfm6x.Reset(); },
-                Commands.ExecuteReset,
                 RfmBase.ResponseOk);
         }
 
@@ -1160,9 +1071,9 @@ namespace RfmUsb.UnitTests
         public void TestSetAddressFilter()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(RfmBase.ResponseOk);
 
@@ -1170,7 +1081,7 @@ namespace RfmUsb.UnitTests
             _rfm6x.AddressFiltering = AddressFilter.Node;
 
             // Assert
-            _mockSerialPort.Verify(_ => _.Write($"{Commands.SetAddressFiltering} 0x{AddressFilter.Node:X}\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetAddressFiltering} 0x{AddressFilter.Node:X}\n"), Times.Once);
         }
 
         [TestMethod]
@@ -1326,9 +1237,9 @@ namespace RfmUsb.UnitTests
         public void TestSetDioInterruptMask()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                .Setup(_ => _.ReadLine())
                .Returns(RfmBase.ResponseOk);
 
@@ -1336,7 +1247,7 @@ namespace RfmUsb.UnitTests
             _rfm6x.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5;
 
             // Assert
-            _mockSerialPort
+            MockSerialPort
                 .Verify(_ => _.Write($"{Commands.SetDioInterrupt} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
                 Times.Once);
         }
@@ -1351,9 +1262,9 @@ namespace RfmUsb.UnitTests
         public void TestSetDioMapping(Dio dio, DioMapping mapping)
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                .Setup(_ => _.ReadLine())
                .Returns(RfmBase.ResponseOk);
 
@@ -1361,7 +1272,7 @@ namespace RfmUsb.UnitTests
             _rfm6x.SetDioMapping(dio, mapping);
 
             // Assert
-            _mockSerialPort
+            MockSerialPort
                 .Verify(_ => _.Write($"{Commands.SetDioMapping} {(byte)dio} {(byte)mapping}\n"),
                 Times.Once);
         }
@@ -1893,13 +1804,13 @@ namespace RfmUsb.UnitTests
         public void TestSetTimeout()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
             // Act
             _rfm6x.Timeout = 1000;
 
             // Assert
-            _mockSerialPort.VerifySet(_ => _.ReadTimeout = 1000, Times.Once);
+            MockSerialPort.VerifySet(_ => _.ReadTimeout = 1000, Times.Once);
         }
 
         [TestMethod]
@@ -1987,9 +1898,9 @@ namespace RfmUsb.UnitTests
         public void TestWaitForIrq()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("DIO PIN IRQ");
 
@@ -1997,7 +1908,7 @@ namespace RfmUsb.UnitTests
             _rfm6x.WaitForIrq();
 
             // Arrange
-            _mockSerialPort
+            MockSerialPort
                 .Verify(_ => _.ReadLine());
         }
 
@@ -2005,9 +1916,9 @@ namespace RfmUsb.UnitTests
         public void TestWaitForIrqNoIrqResponse()
         {
             // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
+            _rfm6x.SerialPort = MockSerialPort.Object;
 
-            _mockSerialPort
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("");
 
@@ -2019,56 +1930,6 @@ namespace RfmUsb.UnitTests
                 .Should()
                 .Throw<RfmUsbCommandExecutionException>()
                 .WithMessage("Invalid response received for IRQ signal: []");
-        }
-
-        private void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, string value)
-        {
-            // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
-
-            _mockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(value);
-
-            // Act
-            var result = action();
-
-            // Assert
-            _mockSerialPort.Verify(_ => _.Write($"{command}\n"));
-
-            validation(result);
-        }
-
-        private void ExecuteSetTest(Action action, string command, string value)
-        {
-            // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
-
-            _mockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            // Act
-            action();
-
-            // Assert
-            _mockSerialPort.Verify(_ => _.Write($"{command} {value}\n"), Times.Once);
-        }
-
-        private void ExecuteTest(Action action, string command, string response)
-        {
-            // Arrange
-            _rfm6x.SerialPort = _mockSerialPort.Object;
-
-            _mockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(response);
-
-            // Act
-            action();
-
-            // Assert
-            _mockSerialPort.Verify(_ => _.Write($"{command}\n"), Times.Once);
         }
     }
 }

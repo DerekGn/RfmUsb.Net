@@ -23,15 +23,14 @@
 */
 
 using Microsoft.Extensions.Logging;
-using RfmUsb.Exceptions;
-using RfmUsb.Extensions;
-using RfmUsb.Net;
-using RfmUsb.Ports;
+using RfmUsb.Net.Exceptions;
+using RfmUsb.Net.Extensions;
+using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// An implementation of the <see cref="IRfm6x"/> interface
@@ -90,13 +89,6 @@ namespace RfmUsb
         {
             get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public ushort BitRate
-        {
-            get => SendCommand(Commands.GetBitRate).ConvertToUInt16();
-            set => SendCommandWithCheck($"{Commands.SetBitRate} 0x{(int)value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -176,13 +168,6 @@ namespace RfmUsb
         public ushort Fei => SendCommand(Commands.GetFei).ConvertToUInt16();
 
         ///<inheritdoc/>
-        public IEnumerable<byte> Fifo
-        {
-            get => SendCommand(Commands.GetFifo).ToBytes();
-            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public bool FifoFill
         {
             get => SendCommand(Commands.GetFifoFill).StartsWith("1");
@@ -194,13 +179,6 @@ namespace RfmUsb
         {
             get => SendCommand(Commands.GetFifoThreshold).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetFifoThreshold} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public uint Frequency
-        {
-            get => Convert.ToUInt32(SendCommand(Commands.GetFrequency).Trim('[', ']'), 16);
-            set => SendCommandWithCheck($"{Commands.SetFrequency} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -291,13 +269,6 @@ namespace RfmUsb
         }
 
         ///<inheritdoc/>
-        public LnaGain LnaGainSelect
-        {
-            get => (LnaGain)SendCommand(Commands.GetLnaGainSelect).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetLnaGainSelect} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public byte LowBetaAfcOffset
         {
             get => SendCommand(Commands.GetLowBetaAfcOffset).ConvertToByte();
@@ -323,20 +294,6 @@ namespace RfmUsb
         {
             get => SendCommand(Commands.GetNodeAddress).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetNodeAddress} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public bool OcpEnable
-        {
-            get => SendCommand(Commands.GetOcpEnable).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetOcpEnable} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OcpTrim OcpTrim
-        {
-            get => (OcpTrim)SendCommand(Commands.GetOcpTrim).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOcpTrim} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -393,13 +350,6 @@ namespace RfmUsb
         {
             get => SendCommand(Commands.GetPacketFormat).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetPacketFormat} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public PaRamp PaRamp
-        {
-            get => (PaRamp)SendCommand(Commands.GetPaRamp).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetPaRamp} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -525,9 +475,6 @@ namespace RfmUsb
         }
 
         ///<inheritdoc/>
-        public string Version => SendCommand(Commands.GetVersion);
-
-        ///<inheritdoc/>
         public void AfcClear()
         {
             SendCommandWithCheck(Commands.ExecuteAfcClear, ResponseOk);
@@ -545,25 +492,6 @@ namespace RfmUsb
             SendCommandWithCheck(Commands.ExecuteFeiStart, ResponseOk);
         }
 
-        ///<inheritdoc/>
-        public DioMapping GetDioMapping(Dio dio)
-        {
-            var result = SendCommand($"{Commands.GetDioMapping} 0x{(byte)dio:X}");
-
-            var parts = result.Split('-');
-
-            if (parts.Length >= 2)
-            {
-                var subParts = parts[1].Split(' ');
-
-                if (subParts.Length >= 2)
-                {
-                    return (DioMapping)Convert.ToInt32(subParts[1]);
-                }
-            }
-
-            throw new RfmUsbCommandExecutionException($"Invalid response [{result}]");
-        }
 
         ///<inheritdoc/>
         public IList<string> GetRadioConfigurations()
@@ -611,13 +539,6 @@ namespace RfmUsb
         }
 
         ///<inheritdoc/>
-        public void Reset()
-        {
-            FlushSerialPort();
-            SendCommandWithCheck(Commands.ExecuteReset, ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public void RestartRx()
         {
             SendCommandWithCheck(Commands.ExecuteRestartRx, ResponseOk);
@@ -630,45 +551,9 @@ namespace RfmUsb
         }
 
         ///<inheritdoc/>
-        public void SetDioMapping(Dio dio, DioMapping mapping)
-        {
-            SendCommandWithCheck($"{Commands.SetDioMapping} {(int)dio} {(int)mapping}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public void StartRssi()
         {
             SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data)
-        {
-            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-        }
-
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data, int txTimeout)
-        {
-            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
         }
 
         ///<inheritdoc/>
@@ -682,23 +567,6 @@ namespace RfmUsb
                 {
                     throw new RfmUsbCommandExecutionException($"Invalid response received for IRQ signal: [{irq}]");
                 }
-            }
-        }
-
-        private void CheckOpen()
-        {
-            if (SerialPort == null)
-            {
-                throw new InvalidOperationException("Instance not open");
-            }
-        }
-
-        private void FlushSerialPort()
-        {
-            if (SerialPort != null)
-            {
-                Logger.LogDebug("Flushing Serial Ports input buffer");
-                SerialPort.DiscardInBuffer();
             }
         }
 
@@ -889,34 +757,6 @@ namespace RfmUsb
             }
         }
 
-        private string SendCommand(string command)
-        {
-            CheckOpen();
-
-            lock (SerialPort)
-            {
-                SerialPort.Write($"{command}\n");
-
-                var response = SerialPort.ReadLine();
-
-                Logger.LogDebug($"Command: [{command}] Result: [{response}]");
-
-                return response;
-            }
-        }
-
-        private void SendCommandWithCheck(string command, string response)
-        {
-            CheckOpen();
-
-            var result = SendCommand(command);
-
-            if (!result.StartsWith(response))
-            {
-                throw new RfmUsbCommandExecutionException($"Command: [{command}] Execution Failed Reason: [{result}]");
-            }
-        }
-
         private void SetDioInterrupMask(DioIrq value)
         {
             lock (SerialPort)
@@ -929,52 +769,6 @@ namespace RfmUsb
                 {
                     SerialPort.ReadLine();
                 }
-            }
-        }
-
-        private void TransmitInternal(string command)
-        {
-            lock (SerialPort)
-            {
-                var response = SendCommand(command);
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = SerialPort.ReadLine();
-                    Logger.LogDebug("Response: [{response}]", response);
-                }
-
-                if (response.Contains("TX") || response.Contains("RX"))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
-            }
-        }
-
-        private IList<byte> TransmitReceiveInternal(string command)
-        {
-            lock (SerialPort)
-            {
-                var response = SendCommand(command);
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = SerialPort.ReadLine();
-                    Logger.LogDebug("Response: [{response}]", response);
-                }
-
-                if (response.Contains("TX") || response.Contains("RX"))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = SerialPort.ReadLine();
-                    Logger.LogDebug($"Response: [{response}]");
-                }
-
-                return response.ToBytes();
             }
         }
     }

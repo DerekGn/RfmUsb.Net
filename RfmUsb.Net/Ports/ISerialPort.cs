@@ -27,7 +27,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     /// <summary>
     /// Defines a serial port interface

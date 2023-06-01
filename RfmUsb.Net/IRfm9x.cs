@@ -29,5 +29,38 @@ namespace RfmUsb.Net
     /// </summary>
     public interface IRfm9x : IRfm
     {
+        /// <summary>
+        /// The Temperature saved during the latest IQ (RSSI and Image) calibration
+        /// </summary>
+        byte FormerTemperature { get; set; }
+
+        /// <summary>
+        /// Enable Low Frequency (RFI_LF) LNA current adjustment
+        /// </summary>
+        bool LnaBoostHf { get; set; }
+
+        /// <summary>
+        /// Switch the device to long range mode
+        /// </summary>
+        bool LongRangeMode { get; set; }
+
+        /// <summary>
+        /// Access Low Frequency Mode registers
+        /// </summary>
+        bool LowFrequencyMode { get; set; }
+
+        /// <summary>
+        /// Controls the crystal oscillator
+        /// </summary>
+        /// <remarks>
+        /// 0: Crystal Oscillator with external Crystal
+        /// 1: External clipped sine TCXO AC-connected to XTA pin
+        /// </remarks>
+        bool TcxoInputOn { get; set; }
+
+        /// <summary>
+        /// The measured temperature
+        /// </summary>
+        byte Temperature { get; set; }
     }
 }

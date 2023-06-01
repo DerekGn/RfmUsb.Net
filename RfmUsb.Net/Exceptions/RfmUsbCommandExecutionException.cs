@@ -24,7 +24,7 @@
 
 using System;
 
-namespace RfmUsb.Exceptions
+namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
     /// Throw when a command execution fails

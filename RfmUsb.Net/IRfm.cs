@@ -23,6 +23,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace RfmUsb.Net
 {
@@ -31,7 +32,110 @@ namespace RfmUsb.Net
     /// </summary>
     public interface IRfm : IDisposable
     {
+        /// <summary>
+        /// Get or set the radio Tx/Rx bit rate
+        /// </summary>
+        ushort BitRate { get; set; }
+
+        /// <summary>
+        /// Get or set the fifo data
+        /// </summary>
+        IEnumerable<byte> Fifo { get; set; }
+
+        /// <summary>
+        /// Get or set the frequency
+        /// </summary>
+        uint Frequency { get; set; }
+
+        /// <summary>
+        /// LNA gain setting
+        /// </summary>
+        LnaGain LnaGainSelect { get; set; }
+
+        /// <summary>
+        /// Enables overload current protection (OCP) for the PA
+        /// </summary>
+        bool OcpEnable { get; set; }
+
+        /// <summary>
+        /// Trimming of OCP current
+        /// </summary>
+        OcpTrim OcpTrim { get; set; }
+
+        /// <summary>
+        /// Rise/Fall time of ramp up/down in FSK
+        /// </summary>
+        PaRamp PaRamp { get; set; }
+
+        /// <summary>
+        /// Get the FrmUsb version
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
+        /// Close the connection to the RfmUsb device
+        /// </summary>
         void Close();
+
+        /// <summary>
+        /// Enter the device bootloader
+        /// </summary>
+        void EnterBootloader();
+
+        /// <summary>
+        /// Get the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
+        /// </summary>
+        /// <param name="dio">The <see cref="Dio"/></param>
+        /// <returns>The <see cref="DioMapping"/></returns>
+        DioMapping GetDioMapping(Dio dio);
+
+        /// <summary>
+        /// Open the RfmUsb device
+        /// </summary>
+        /// <param name="serialPort">The serial port</param>
+        /// <param name="baudRate">The baud rate</param>
         void Open(string serialPort, int baudRate);
+
+        /// <summary>
+        /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
+        /// </summary>
+        /// <param name="dio">The <see cref="Dio"/> configuration</param>
+        /// <param name="mapping">The <see cref="DioMapping"/></param>
+        void SetDioMapping(Dio dio, DioMapping mapping);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        void Transmit(IList<byte> data);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The transmit timeout</param>
+        void Transmit(IList<byte> data, int txTimeout);
+
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        IList<byte> TransmitReceive(IList<byte> data);
+
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The timeout in milliseconds </param>
+        /// <returns>The received packet bytes</returns>
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
+
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
+        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
     }
 }

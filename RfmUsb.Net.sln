@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RfmUsb.Net.IntTests", "RfmUsb.Net.IntTests\RfmUsb.Net.IntTests.csproj", "{5FB7C18E-63C2-42FC-957E-7680B2597AEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{26C59642-E38B-4585-9D90-0316E117E1F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26C59642-E38B-4585-9D90-0316E117E1F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26C59642-E38B-4585-9D90-0316E117E1F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB7C18E-63C2-42FC-957E-7680B2597AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB7C18E-63C2-42FC-957E-7680B2597AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB7C18E-63C2-42FC-957E-7680B2597AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB7C18E-63C2-42FC-957E-7680B2597AEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

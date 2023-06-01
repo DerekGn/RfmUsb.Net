@@ -22,20 +22,19 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb.Net
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace RfmUsb.Net.UnitTests
 {
-    /// <summary>
-    /// Modulation scheme
-    /// </summary>
-    public enum Modulation
+    [TestClass]
+    public class Rfm9xTests : RfmBaseTests
     {
-        /// <summary>
-        /// Fsk modulation
-        /// </summary>
-        Fsk = 0,
-        /// <summary>
-        /// Ook modulation
-        /// </summary>
-        Ook = 1
+        private readonly Rfm9x _rfm9x;
+
+        public Rfm9xTests() : base()
+        {
+            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
+            RfmBase = _rfm9x;
+        }
     }
 }

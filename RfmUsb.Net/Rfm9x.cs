@@ -23,7 +23,7 @@
 */
 
 using Microsoft.Extensions.Logging;
-using RfmUsb.Ports;
+using RfmUsb.Net.Ports;
 
 namespace RfmUsb.Net
 {
@@ -32,8 +32,31 @@ namespace RfmUsb.Net
     /// </summary>
     public class Rfm9x : RfmBase, IRfm9x
     {
+        /// <summary>
+        /// Create an instance of a <see cref="Rfm9x"/> device
+        /// </summary>
+        /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
+        /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
         public Rfm9x(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
         {
         }
+
+        ///<inheritdoc/>
+        public bool LnaBoostHf { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
+        ///<inheritdoc/>
+        public bool LongRangeMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        
+        ///<inheritdoc/>
+        public bool LowFrequencyMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        
+        ///<inheritdoc/>
+        public bool TcxoInputOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        
+        ///<inheritdoc/>
+        public byte FormerTemperature { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        
+        ///<inheritdoc/>
+        public byte Temperature { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
