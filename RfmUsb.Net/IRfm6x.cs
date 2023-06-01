@@ -22,7 +22,6 @@
 * SOFTWARE.
 */
 
-using RfmUsb.Net;
 using System.Collections.Generic;
 
 namespace RfmUsb.Net
@@ -33,11 +32,6 @@ namespace RfmUsb.Net
     public interface IRfm6x : IRfm
     {
         /// <summary>
-        /// Defines address based filtering in Rx
-        /// </summary>
-        AddressFilter AddressFiltering { get; set; }
-
-        /// <summary>
         /// Enable the AES encryption/decryption:
         /// false → Off
         /// true → On (payload limited to 66 bytes maximum)
@@ -45,58 +39,16 @@ namespace RfmUsb.Net
         bool AesOn { get; set; }
 
         /// <summary>
-        /// The Afc value
-        /// </summary>
-        ushort Afc { get; }
-
-        /// <summary>
-        /// Only valid if AfcAutoOn is set
-        /// false → AFC register is not cleared before a new AFC phase
-        /// true → AFC register is cleared before a new AFC phase
-        /// </summary>
-        bool AfcAutoClear { get; set; }
-
-        /// <summary>
-        /// false → AFC is performed each time AfcStart is set
-        /// true → AFC is performed each time Rx mode is entered
-        /// </summary>
-        bool AfcAutoOn { get; set; }
-
-        /// <summary>
         /// Improved AFC routine for signals with modulation index lower than 2.
         /// </summary>
         bool AfcLowBetaOn { get; set; }
 
-        /// <summary>
-        /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
-        /// false → Off. RestartRx can be used.
-        /// true→ On. Rx automatically restarted after InterPacketRxDelay.
-        /// </summary>
-        bool AutoRxRestartOn { get; set; }
 
-        /// <summary>
-        /// Broadcast address used in address filtering
-        /// </summary>
-        byte BroadcastAddress { get; set; }
 
         /// <summary>
         /// Fading Margin Improvement
         /// </summary>
         ContinuousDagc ContinuousDagc { get; set; }
-
-        /// <summary>
-        /// Defines the behavior of the packet handler when CRC check fails:
-        /// false → Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
-        /// true → Do not clear FIFO. PayloadReady interrupt issued.
-        /// </summary>
-        bool CrcAutoClear { get; set; }
-
-        /// <summary>
-        /// Enables CRC calculation/check (Tx/Rx)
-        /// false → Off
-        /// true → On
-        /// </summary>
-        bool CrcOn { get; set; }
 
         /// <summary>
         /// Current LNA gain, set either manually, or by the AGC
@@ -114,11 +66,6 @@ namespace RfmUsb.Net
         DccFreq DccFreqAfc { get; set; }
 
         /// <summary>
-        /// Defines DC-free encoding/decoding performed
-        /// </summary>
-        DcFree DcFree { get; set; }
-
-        /// <summary>
         /// The Dio interrupt mask
         /// </summary>
         DioIrq DioInterruptMask { get; set; }
@@ -134,31 +81,13 @@ namespace RfmUsb.Net
         ExitCondition ExitCondition { get; set; }
 
         /// <summary>
-        /// The Fei value
-        /// </summary>
-        ushort Fei { get; }
-
-        /// <summary>
         /// FIFO filling condition:
         /// false → if SyncAddress interrupt occurs
         /// true → as long as FifoFillCondition is set
         /// </summary>
         bool FifoFill { get; set; }
 
-        /// <summary>
-        /// Used to trigger FifoLevel interrupt.
-        /// </summary>
-        byte FifoThreshold { get; set; }
 
-        /// <summary>
-        /// Get or set the frequency deviation
-        /// </summary>
-        ushort FrequencyDeviation { get; set; }
-
-        /// <summary>
-        /// The Fsk data shaping
-        /// </summary>
-        FskModulationShaping FskModulationShaping { get; set; }
 
         /// <summary>
         /// LNA’s input impedance
@@ -171,14 +100,6 @@ namespace RfmUsb.Net
         /// Intermediate mode
         /// </summary>
         IntermediateMode IntermediateMode { get; set; }
-
-        /// <summary>
-        /// After PayloadReady occurred, defines the delay between FIFO empty and the
-        /// start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
-        /// - Tdelay = 0 if InterpacketRxDelay >= 12
-        /// - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
-        /// </summary>
-        byte InterPacketRxDelay { get; set; }
 
         /// <summary>
         /// Get the Irq flags
@@ -227,51 +148,7 @@ namespace RfmUsb.Net
         /// </summary>
         byte LowBetaAfcOffset { get; set; }
 
-        /// <summary>
-        /// Get or set the current mode
-        /// </summary>
-        Mode Mode { get; set; }
 
-        /// <summary>
-        /// Get or set the modulation type
-        /// </summary>
-        Modulation Modulation { get; set; }
-
-        /// <summary>
-        /// Node address used in address filtering
-        /// </summary>
-        byte NodeAddress { get; set; }
-
-        /// <summary>
-        /// Filter coefficients in average mode of the OOK demodulator
-        /// </summary>
-        OokAverageThresholdFilter OokAverageThresholdFilter { get; set; }
-
-        /// <summary>
-        /// Fixed threshold value (in dB) in the OOK demodulator.
-        /// Used when OokThresholdType is <see cref="OokThresholdType.Fixed"/>
-        /// </summary>
-        byte OokFixedThreshold { get; set; }
-
-        /// <summary>
-        /// The Ook data shaping
-        /// </summary>
-        OokModulationShaping OokModulationShaping { get; set; }
-
-        /// <summary>
-        /// Period of decrement of the RSSI threshold in the OOK demodulator
-        /// </summary>
-        OokThresholdDec OokPeakThresholdDec { get; set; }
-
-        /// <summary>
-        /// Size of each decrement of the RSSI threshold in the OOKdemodulator
-        /// </summary>
-        OokThresholdStep OokPeakThresholdStep { get; set; }
-
-        /// <summary>
-        /// Selects type of threshold in the OOK data slicer
-        /// </summary>
-        OokThresholdType OokThresholdType { get; set; }
 
         /// <summary>
         /// Get or set the output power in dbm
@@ -279,47 +156,14 @@ namespace RfmUsb.Net
         int OutputPower { get; set; }
 
         /// <summary>
-        /// Defines the packet format used:
-        /// false → Fixed length
-        /// true → Variable length
-        /// </summary>
-        bool PacketFormat { get; set; }
-
-        /// <summary>
-        /// If PacketFormat = false (fixed), payload length.
-        /// If PacketFormat = true (variable), max length in Rx, not used in Tx.
-        /// </summary>
-        byte PayloadLength { get; set; }
-
-        /// <summary>
-        /// Size of the preamble to be sent (from TxStartConditionfulfilled)
-        /// </summary>
-        ushort PreambleSize { get; set; }
-
-        /// <summary>
         /// Sets the radio configuration to one of the preset configuration sets.
         /// </summary>
         byte RadioConfig { get; set; }
 
         /// <summary>
-        /// Absolute value of the RSSI in dBm, 0.5dB steps. RSSI = -RssiValue/2 [dBm
-        /// </summary>
-        byte Rssi { get; }
-
-        /// <summary>
         /// RSSI trigger level for Rssi interrupt
         /// </summary>
         byte RssiThreshold { get; set; }
-
-        /// <summary>
-        /// Gets the Rx channel filter bandwidth
-        /// </summary>
-        byte RxBw { get; set; }
-
-        /// <summary>
-        /// Gets the Rx channel filter bandwidth for Afc
-        /// </summary>
-        byte RxBwAfc { get; set; }
 
         /// <summary>
         /// High sensitivity or normal sensitivity mode
@@ -332,29 +176,9 @@ namespace RfmUsb.Net
         bool Sequencer { get; set; }
 
         /// <summary>
-        /// The radio sync bytes
-        /// </summary>
-        IEnumerable<byte> Sync { get; set; }
-
-        /// <summary>
         /// Get or set the number of tolerated bit errors in Sync word
         /// </summary>
         byte SyncBitErrors { get; set; }
-
-        /// <summary>
-        /// Enable sync word generation and detection
-        /// </summary>
-        bool SyncEnable { get; set; }
-
-        /// <summary>
-        /// The radio sync word size
-        /// </summary>
-        byte SyncSize { get; set; }
-
-        /// <summary>
-        /// Measured temperature value
-        /// </summary>
-        byte TemperatureValue { get; }
 
         /// <summary>
         /// Get or set the serial port timeout
@@ -375,12 +199,7 @@ namespace RfmUsb.Net
         /// </summary>
         byte TimeoutRxStart { get; set; }
 
-        /// <summary>
-        /// Defines the condition to start packet transmission :
-        /// false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
-        /// true → FifoNotEmpty (i.e. at least one byte in the FIFO)
-        /// </summary>
-        bool TxStartCondition { get; set; }
+
 
         /// <summary>
         /// Clears the AfcValue if set in Rx mode
@@ -412,11 +231,6 @@ namespace RfmUsb.Net
         /// Execute a temperature measurement
         /// </summary>
         void MeasureTemperature();
-
-        /// <summary>
-        /// Triggers the calibration of the RC oscillator
-        /// </summary>
-        void RcCalibration();
 
         /// <summary>
         /// Reset the radio

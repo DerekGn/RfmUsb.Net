@@ -22,39 +22,31 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
 
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsb.Net
 {
-    [TestClass]
-    public class Rfm9xTests : RfmBaseTests
+    /// <summary>
+    /// Controls the state-machine transition from the Receive state on a
+    /// RxTimeout interrupt(and on PayloadReady if FromReceive = ToPacketReceivedStateOnCrcOk
+    /// </summary>
+    public enum FromRxTimeout
     {
-        private readonly Rfm9x _rfm9x;
-
-        public Rfm9xTests() : base()
-        {
-            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm9x;
-        }
-
-        [TestMethod]
-        public void TestGetLoraAgcAutoOn()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.LoraAgcAutoOn; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetLoraAgcAutoOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetAesOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.LoraAgcAutoOn = true; },
-                Commands.SetLoraAgcAutoOn,
-                "1");
-        }
+        /// <summary>
+        /// o Receive
+        /// </summary>
+        ToReceive,
+        /// <summary>
+        /// To Transmit
+        /// </summary>
+        ToTransmit,
+        /// <summary>
+        /// To Low power selection
+        /// </summary>
+        ToLowPowerSelection,
+        /// <summary>
+        /// To Sequencer Off
+        /// </summary>
+        ToSequencerOff
     }
 }

@@ -178,6 +178,8 @@ namespace RfmUsb.Net
         public const string SetTimeoutRssiThreshold = "s-trt";
         public const string SetTimeoutRxStart = "s-trs";
         public const string SetTxStartCondition = "s-tsc";
+        public const string GetLoraAgcAutoOn = "g-laao";
+        public const string SetLoraAgcAutoOn = "s-laao";
     }
 }
 

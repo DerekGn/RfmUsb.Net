@@ -22,6 +22,10 @@
 * SOFTWARE.
 */
 
+#warning TODO rfm95 Irq flags
+
+using System;
+
 namespace RfmUsb.Net
 {
     /// <summary>
@@ -30,9 +34,74 @@ namespace RfmUsb.Net
     public interface IRfm9x : IRfm
     {
         /// <summary>
+        /// Enable agc auto on
+        /// </summary>
+        /// <remarks>
+        /// 0: LNA gain set by register LnaGain
+        /// 1: LNA gain set by the internal AGC loop
+        /// </remarks>
+        bool LoraAgcAutoOn { get; set; }
+
+        bool AutoImageCalibrationOn { get; set; }
+
+        bool BeaconOn { get; set; }
+
+        byte BirRateFractional { get; set; }
+
+        bool BitSyncOn { get; set; }
+
+        /// <summary>
+        /// The Error coding rate
+        /// </summary>
+        CodingRate CodingRate { get; }
+
+        bool CrcWhiteningType { get; set; }
+
+        bool FastHopOn { get; set; }
+
+        byte FifoAddressPointer { get; set; }
+
+        byte FifoRxBaseAddress { get; set; }
+
+        byte FifoRxByteAddressPointer { get; }
+
+        byte FifoRxBytesNumber { get; }
+
+        byte FifoTxBaseAddress { get; set; }
+
+        /// <summary>
         /// The Temperature saved during the latest IQ (RSSI and Image) calibration
         /// </summary>
-        byte FormerTemperature { get; set; }
+        sbyte FormerTemperatureValue { get; set; }
+
+        int FreqError { get; }
+
+        byte FreqHoppingPeriod { get; set; }
+
+        bool FromIdle { get; set; }
+
+        FromPacketReceived FromPacketReceived { get; set; }
+
+        FromReceive FromReceive { get; set; }
+
+        FromRxTimeout FromRxTimeout { get; set; }
+
+        FromStart FromStart { get; set; }
+
+        bool FromTransmit { get; set; }
+
+        byte HopChannel { get; }
+
+        bool IdleMode { get; set; }
+
+        /// <summary>
+        /// The Implicit header mode
+        /// </summary>
+        bool ImplicitHeaderModeOn { get; set; }
+
+        bool IoHomeOn { get; set; }
+
+        bool IoHomePowerFrame { get; set; }
 
         /// <summary>
         /// Enable Low Frequency (RFI_LF) LNA current adjustment
@@ -45,9 +114,57 @@ namespace RfmUsb.Net
         bool LongRangeMode { get; set; }
 
         /// <summary>
+        /// Get the lora mode
+        /// </summary>
+        LoraMode LoraMode { get; set; }
+
+        bool LowBatteryOn { get; set; }
+
+        LowBatteryTrim LowBatteryTrim { get; set; }
+
+        bool LowDataRateOptimize { get; set; }
+
+        /// <summary>
         /// Access Low Frequency Mode registers
         /// </summary>
         bool LowFrequencyMode { get; set; }
+
+        bool LowPowerSelection { get; set; }
+
+        bool MapPreambleDetect { get; set; }
+
+        ModemBw ModemBandwidth { get; }
+
+        ModemStatus ModemStatus { get; }
+
+        /// <summary>
+        /// Static offset added to the threshold in average mode in order to reduce glitching activity (OOK only)
+        /// </summary>
+        OokAverageOffset OokAverageOffset { get; set; }
+        byte PacketRssi { get; }
+        byte PacketSnr { get; }
+        byte PayloadMaxLength { get; set; }
+        byte PpmCorrection { get; set; }
+        bool PreambleDetectorOn { get; set; }
+        PreambleDetectorSize PreambleDetectorSize { get; set; }
+        byte PreambleDetectorTotal { get; set; }
+        ushort PreambleLength { get; set; }
+        bool PreamblePolarity { get; set; }
+        bool RestartRxOnCollision { get; set; }
+        byte RssiCollisionThreshold { get; set; }
+        byte RssiOffset { get; set; }
+        RssiSmoothing RssiSmoothing { get; set; }
+        byte RssiThreshold { get; set; }
+        byte RssiWideband { get; }
+        byte RxCodingRate { get; }
+        bool RxPayloadCrcOn { get; set; }
+
+        /// <summary>
+        /// The spreading factor rate
+        /// </summary>
+        SpreadingFactor SpredingFactor { get; set; }
+
+        ushort SymbolTimeout { get; set; }
 
         /// <summary>
         /// Controls the crystal oscillator
@@ -58,9 +175,40 @@ namespace RfmUsb.Net
         /// </remarks>
         bool TcxoInputOn { get; set; }
 
-        /// <summary>
-        /// The measured temperature
-        /// </summary>
-        byte Temperature { get; set; }
+        bool TempChange { get; set; }
+        TemperatureThreshold TemperatureThreshold { get; set; }
+        bool TempMonitorOff { get; set; }
+        byte TimeoutRxPreamble { get; set; }
+        byte TimeoutRxRssi { get; set; }
+        byte TimeoutSignalSync { get; set; }
+        bool TxContinuousMode { get; set; }
+
+        byte ValidHeaderCount { get; }
+
+        byte ValidPacketCount { get; }
+
+        void ClearFifoOverrun();
+
+        void ClearLowBattery();
+
+        void ClearPreambleDetect();
+
+        void ClearSyncAddressMatch();
+
+        void ExecuteAgcStart();
+
+        void ExecuteImageCalibration();
+
+        void ExecuteSequencerStart();
+
+        void ExecuteSequencerStop();
+
+        byte GetTimerCoefficient(Timer timer);
+
+        TimerResolution GetTimerResolution(Timer timer);
+
+        void RestartRxWithoutPllLock();
+
+        void RestartRxWithPllLock();
     }
 }

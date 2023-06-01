@@ -22,39 +22,44 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsb.Net
 {
-    [TestClass]
-    public class Rfm9xTests : RfmBaseTests
+    /// <summary>
+    /// Trimming of the LowBat threshold
+    /// </summary>
+    public enum LowBatteryTrim
     {
-        private readonly Rfm9x _rfm9x;
-
-        public Rfm9xTests() : base()
-        {
-            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm9x;
-        }
-
-        [TestMethod]
-        public void TestGetLoraAgcAutoOn()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.LoraAgcAutoOn; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetLoraAgcAutoOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetAesOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.LoraAgcAutoOn = true; },
-                Commands.SetLoraAgcAutoOn,
-                "1");
-        }
+        /// <summary>
+        /// 1.695 Volts
+        /// </summary>
+        Volts1_695,
+        /// <summary>
+        /// 1.764 Volts
+        /// </summary>
+        Volts1_764,
+        /// <summary>
+        /// 1.835 Volts
+        /// </summary>
+        Volts1_835,
+        /// <summary>
+        /// 1.985 Volts
+        /// </summary>
+        Volts1_905,
+        /// <summary>
+        /// 1.976 Volts
+        /// </summary>
+        Volts1_976,
+        /// <summary>
+        /// 2.045 Volts
+        /// </summary>
+        Volts2_045,
+        /// <summary>
+        /// 2.116 Volts
+        /// </summary>
+        Volts2_116,
+        /// <summary>
+        /// 2.185 Volts
+        /// </summary>
+        Volts2_185
     }
 }

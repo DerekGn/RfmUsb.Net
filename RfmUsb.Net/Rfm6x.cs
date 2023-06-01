@@ -47,34 +47,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public AddressFilter AddressFiltering
-        {
-            get => (AddressFilter)SendCommand(Commands.GetAddressFiltering).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAddressFiltering} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public bool AesOn
         {
             get => SendCommand(Commands.GetAesOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetAesOn} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public ushort Afc => SendCommand(Commands.GetAfc).ConvertToUInt16();
-
-        ///<inheritdoc/>
-        public bool AfcAutoClear
-        {
-            get => SendCommand(Commands.GetAfcAutoClear).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetAfcAutoClear} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public bool AfcAutoOn
-        {
-            get => SendCommand(Commands.GetAfcAutoOn).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetAfcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -85,38 +61,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool AutoRxRestartOn
-        {
-            get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte BroadcastAddress
-        {
-            get => SendCommand(Commands.GetBroadcastAddress).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetBroadcastAddress} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public ContinuousDagc ContinuousDagc
         {
             get => (ContinuousDagc)SendCommand(Commands.GetContinuousDagc).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetContinuousDagc} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public bool CrcAutoClear
-        {
-            get => SendCommand(Commands.GetCrcAutoClear).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetCrcAutoClear} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public bool CrcOn
-        {
-            get => SendCommand(Commands.GetCrcOn).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetCrcOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -134,13 +82,6 @@ namespace RfmUsb.Net
         {
             get => (DccFreq)SendCommand(Commands.GetDccFreqAfc).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetDccFreqAfc} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public DcFree DcFree
-        {
-            get => (DcFree)SendCommand(Commands.GetDcFree).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetDcFree} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -165,34 +106,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ushort Fei => SendCommand(Commands.GetFei).ConvertToUInt16();
-
-        ///<inheritdoc/>
         public bool FifoFill
         {
             get => SendCommand(Commands.GetFifoFill).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetFifoFill} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte FifoThreshold
-        {
-            get => SendCommand(Commands.GetFifoThreshold).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetFifoThreshold} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public ushort FrequencyDeviation
-        {
-            get => SendCommand(Commands.GetFrequencyDeviation).ConvertToUInt16();
-            set => SendCommandWithCheck($"{Commands.SetFrequencyDeviation} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public FskModulationShaping FskModulationShaping
-        {
-            get => (FskModulationShaping)SendCommand(Commands.GetFskModulationShaping).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetFskModulationShaping} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -207,13 +124,6 @@ namespace RfmUsb.Net
         {
             get => (IntermediateMode)SendCommand(Commands.GetIntermediateMode).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetIntermediateMode} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte InterPacketRxDelay
-        {
-            get => SendCommand(Commands.GetInterPacketRxDelay).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetInterPacketRxDelay} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -276,95 +186,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Mode Mode
-        {
-            get => (Mode)SendCommand(Commands.GetMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetMode} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public Modulation Modulation
-        {
-            get => (Modulation)SendCommand(Commands.GetModulation).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetModulation} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte NodeAddress
-        {
-            get => SendCommand(Commands.GetNodeAddress).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetNodeAddress} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OokAverageThresholdFilter OokAverageThresholdFilter
-        {
-            get => (OokAverageThresholdFilter)SendCommand(Commands.GetOokAverageThresholdFilter).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOokAverageThresholdFilter} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte OokFixedThreshold
-        {
-            get => SendCommand(Commands.GetOokFixedThreshold).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetOokFixedThreshold} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OokModulationShaping OokModulationShaping
-        {
-            get => (OokModulationShaping)SendCommand(Commands.GetOokModulationShaping).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOokModulationShaping} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OokThresholdDec OokPeakThresholdDec
-        {
-            get => (OokThresholdDec)SendCommand(Commands.GetOokPeakThresholdDec).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOokPeakThresholdDec} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OokThresholdStep OokPeakThresholdStep
-        {
-            get => (OokThresholdStep)SendCommand(Commands.GetOokPeakThresholdStep).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOokPeakThresholdStep} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public OokThresholdType OokThresholdType
-        {
-            get => (OokThresholdType)SendCommand(Commands.GetOokThresholdType).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOokThresholdType} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public int OutputPower
         {
             get => SendCommand(Commands.GetOutputPower).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{value:X}", ResponseOk);
         }
 
-        ///<inheritdoc/>
-        public bool PacketFormat
-        {
-            get => SendCommand(Commands.GetPacketFormat).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetPacketFormat} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte PayloadLength
-        {
-            get => SendCommand(Commands.GetPayloadLength).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetPayloadLength} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public ushort PreambleSize
-        {
-            get => SendCommand(Commands.GetPreambleSize).ConvertToUInt16();
-            set => SendCommandWithCheck($"{Commands.SetPreambleSize} 0x{value:X}", ResponseOk);
-        }
+        
 
         ///<inheritdoc/>
         public byte RadioConfig
@@ -374,27 +202,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte Rssi => SendCommand(Commands.GetRssi).ConvertToByte();
-
-        ///<inheritdoc/>
         public byte RssiThreshold
         {
             get => SendCommand(Commands.GetRssiThreshold).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte RxBw
-        {
-            get => Convert.ToByte(SendCommand(Commands.GetRxBw).Substring(0, 4), 16);
-            set => SendCommandWithCheck($"{Commands.SetRxBw} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte RxBwAfc
-        {
-            get => Convert.ToByte(SendCommand(Commands.GetRxBwAfc).Substring(0, 4), 16);
-            set => SendCommandWithCheck($"{Commands.SetRxBwAfc} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -412,35 +223,11 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public IEnumerable<byte> Sync
-        {
-            get => SendCommand(Commands.GetSync).ToBytes();
-            set => SendCommandWithCheck($"{Commands.SetSync} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public byte SyncBitErrors
         {
             get => SendCommand(Commands.GetSyncBitErrors).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetSyncBitErrors} 0x{value:X}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public bool SyncEnable
-        {
-            get => SendCommand(Commands.GetSyncEnable).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetSyncEnable} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte SyncSize
-        {
-            get => SendCommand(Commands.GetSyncSize).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetSyncSize} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte TemperatureValue => SendCommand(Commands.GetTemperatureValue).ConvertToByte();
 
         ///<inheritdoc/>
         public int Timeout
@@ -467,12 +254,7 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetTimeoutRxStart} 0x{value:X}", ResponseOk);
         }
 
-        ///<inheritdoc/>
-        public bool TxStartCondition
-        {
-            get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
-        }
+
 
         ///<inheritdoc/>
         public void AfcClear()
@@ -491,7 +273,6 @@ namespace RfmUsb.Net
         {
             SendCommandWithCheck(Commands.ExecuteFeiStart, ResponseOk);
         }
-
 
         ///<inheritdoc/>
         public IList<string> GetRadioConfigurations()
@@ -530,12 +311,6 @@ namespace RfmUsb.Net
         public void MeasureTemperature()
         {
             SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void RcCalibration()
-        {
-            SendCommandWithCheck(Commands.ExecuteRcCalibration, ResponseOk);
         }
 
         ///<inheritdoc/>

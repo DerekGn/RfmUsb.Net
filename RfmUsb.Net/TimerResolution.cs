@@ -22,39 +22,25 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsb.Net
 {
-    [TestClass]
-    public class Rfm9xTests : RfmBaseTests
+    public enum TimerResolution
     {
-        private readonly Rfm9x _rfm9x;
-
-        public Rfm9xTests() : base()
-        {
-            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm9x;
-        }
-
-        [TestMethod]
-        public void TestGetLoraAgcAutoOn()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.LoraAgcAutoOn; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetLoraAgcAutoOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetAesOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.LoraAgcAutoOn = true; },
-                Commands.SetLoraAgcAutoOn,
-                "1");
-        }
+        /// <summary>
+        /// Timer disabled
+        /// </summary>
+        Disabled,
+        /// <summary>
+        /// 64 us
+        /// </summary>
+        SixtyFourMicrosecopnds,
+        /// <summary>
+        /// 4.1 ms
+        /// </summary>
+        FourPointOneMilliseconds,
+        /// <summary>
+        /// 262 ms
+        /// </summary>
+        TwoHundredSixtyTwoMilliseconds
     }
 }

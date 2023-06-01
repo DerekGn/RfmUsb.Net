@@ -22,39 +22,44 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsb.Net
 {
-    [TestClass]
-    public class Rfm9xTests : RfmBaseTests
+    /// <summary>
+    /// Defines the number of samples taken to average the RSSI result
+    /// </summary>
+    public enum RssiSmoothing
     {
-        private readonly Rfm9x _rfm9x;
-
-        public Rfm9xTests() : base()
-        {
-            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm9x;
-        }
-
-        [TestMethod]
-        public void TestGetLoraAgcAutoOn()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.LoraAgcAutoOn; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetLoraAgcAutoOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetAesOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.LoraAgcAutoOn = true; },
-                Commands.SetLoraAgcAutoOn,
-                "1");
-        }
+        /// <summary>
+        /// 2 Samples
+        /// </summary>
+        Samples2,
+        /// <summary>
+        /// 4 Samples
+        /// </summary>
+        Samples4,
+        /// <summary>
+        /// 8 Samples
+        /// </summary>
+        Samples8,
+        /// <summary>
+        /// 16 Samples
+        /// </summary>
+        Samples16,
+        /// <summary>
+        /// 32 Samples
+        /// </summary>
+        Samples32,
+        /// <summary>
+        /// 64 Samples
+        /// </summary>
+        Samples64,
+        /// <summary>
+        /// 128 Samples
+        /// </summary>
+        Samples128,
+        /// <summary>
+        /// 256 Samples
+        /// </summary>
+        Samples256
     }
 }

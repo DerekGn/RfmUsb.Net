@@ -44,6 +44,11 @@ namespace RfmUsb.Net.Extensions
             return ParseAndConvert(s => Convert.ToUInt16(s, 16), value);
         }
 
+        public static short ConvertToInt16(this string value)
+        {
+            return ParseAndConvert(s => Convert.ToInt16(s, 16), value);
+        }
+
         public static byte ConvertToByte(this string value)
         {
             return ParseAndConvert(s => Convert.ToByte(s, 16), value);
