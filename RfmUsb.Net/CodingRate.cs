@@ -29,9 +29,21 @@ namespace RfmUsb.Net
     /// </summary>
     public enum CodingRate
     {
+        /// <summary>
+        /// 4/5
+        /// </summary>
         FourFive,
+        /// <summary>
+        /// 4/6
+        /// </summary>
         FourSix,
+        /// <summary>
+        /// 4/7
+        /// </summary>
         FourSeven,
+        /// <summary>
+        /// 4/8
+        /// </summary>
         FourEight
     }
 }

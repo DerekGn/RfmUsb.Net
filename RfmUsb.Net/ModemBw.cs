@@ -27,7 +27,7 @@ namespace RfmUsb.Net
     /// <summary>
     /// The lora modem bandwidth
     /// </summary>
-    public enum ModemBw
+    public enum ModemBandwidth
     {
         /// <summary>
         /// 7.8 kHz Bandwidth

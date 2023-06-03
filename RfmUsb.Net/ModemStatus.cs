@@ -22,11 +22,14 @@
 * SOFTWARE.
 */
 
+using System;
+
 namespace RfmUsb.Net
 {
     /// <summary>
     /// The modem status
     /// </summary>
+    [Flags]
     public enum ModemStatus
     {
         /// <summary>

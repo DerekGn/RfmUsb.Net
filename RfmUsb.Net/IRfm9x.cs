@@ -24,8 +24,6 @@
 
 #warning TODO rfm95 Irq flags
 
-using System;
-
 namespace RfmUsb.Net
 {
     /// <summary>
@@ -46,7 +44,7 @@ namespace RfmUsb.Net
 
         bool BeaconOn { get; set; }
 
-        byte BirRateFractional { get; set; }
+        byte BitRateFractional { get; set; }
 
         bool BitSyncOn { get; set; }
 
@@ -133,7 +131,7 @@ namespace RfmUsb.Net
 
         bool MapPreambleDetect { get; set; }
 
-        ModemBw ModemBandwidth { get; }
+        ModemBandwidth ModemBandwidth { get; }
 
         ModemStatus ModemStatus { get; }
 
@@ -162,7 +160,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// The spreading factor rate
         /// </summary>
-        SpreadingFactor SpredingFactor { get; set; }
+        SpreadingFactor SpreadingFactor { get; set; }
 
         ushort SymbolTimeout { get; set; }
 
@@ -207,8 +205,8 @@ namespace RfmUsb.Net
 
         TimerResolution GetTimerResolution(Timer timer);
 
-        void RestartRxWithoutPllLock();
+        void ExecuteRestartRxWithoutPllLock();
 
-        void RestartRxWithPllLock();
+        void ExecuteRestartRxWithPllLock();
     }
 }

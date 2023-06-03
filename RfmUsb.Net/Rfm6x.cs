@@ -192,8 +192,6 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{value:X}", ResponseOk);
         }
 
-        
-
         ///<inheritdoc/>
         public byte RadioConfig
         {
@@ -254,22 +252,20 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetTimeoutRxStart} 0x{value:X}", ResponseOk);
         }
 
-
-
         ///<inheritdoc/>
-        public void AfcClear()
+        public void ExecuteAfcClear()
         {
             SendCommandWithCheck(Commands.ExecuteAfcClear, ResponseOk);
         }
 
         ///<inheritdoc/>
-        public void AfcStart()
+        public void ExecuteAfcStart()
         {
             SendCommandWithCheck(Commands.ExecuteAfcStart, ResponseOk);
         }
 
         ///<inheritdoc/>
-        public void FeiStart()
+        public void ExecuteFeiStart()
         {
             SendCommandWithCheck(Commands.ExecuteFeiStart, ResponseOk);
         }
@@ -302,19 +298,19 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void ListenAbort()
+        public void ExecuteListenAbort()
         {
             SendCommandWithCheck(Commands.ExecuteListenAbort, ResponseOk);
         }
 
         ///<inheritdoc/>
-        public void MeasureTemperature()
+        public void ExecuteMeasureTemperature()
         {
             SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
         }
 
         ///<inheritdoc/>
-        public void RestartRx()
+        public void ExecuteRestartRx()
         {
             SendCommandWithCheck(Commands.ExecuteRestartRx, ResponseOk);
         }
@@ -326,7 +322,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void StartRssi()
+        public void ExecuteStartRssi()
         {
             SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
         }

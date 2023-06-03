@@ -43,28 +43,28 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestAfcClear()
+        public void TestExecuteAfcClear()
         {
             ExecuteTest(
-                () => { _rfm6x.AfcClear(); },
+                () => { _rfm6x.ExecuteAfcClear(); },
                 Commands.ExecuteAfcClear,
                 RfmBase.ResponseOk);
         }
 
         [TestMethod]
-        public void TestAfcStart()
+        public void TestExecuteAfcStart()
         {
             ExecuteTest(
-                () => { _rfm6x.AfcStart(); },
+                () => { _rfm6x.ExecuteAfcStart(); },
                 Commands.ExecuteAfcStart,
                 RfmBase.ResponseOk);
         }
 
         [TestMethod]
-        public void TestFeiStart()
+        public void TestExecuteFeiStart()
         {
             ExecuteTest(
-                () => { _rfm6x.FeiStart(); },
+                () => { _rfm6x.ExecuteFeiStart(); },
                 Commands.ExecuteFeiStart,
                 RfmBase.ResponseOk);
         }
@@ -344,18 +344,6 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(Modulation.Fsk)]
-        [DataRow(Modulation.Ook)]
-        public void TestGetModulation(Modulation expected)
-        {
-            ExecuteGetTest(
-                () => { return _rfm6x.Modulation; },
-                (v) => v.Should().Be(expected),
-                Commands.GetModulation,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
         public void TestGetOutputPower()
         {
             ExecuteGetTest(
@@ -423,17 +411,6 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().BeTrue(),
                 Commands.GetSequencer,
                 "1");
-        }
-
-        // Sync
-        [TestMethod]
-        public void TestGetSync()
-        {
-            ExecuteGetTest(
-                () => { return _rfm6x.Sync; },
-                (v) => v.Should().BeEquivalentTo(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }),
-                Commands.GetSync,
-                "0xAA55DEAD");
         }
 
         [TestMethod]
@@ -518,7 +495,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestListenAbort()
         {
             ExecuteTest(
-                () => { _rfm6x.ListenAbort(); },
+                () => { _rfm6x.ExecuteListenAbort(); },
                 Commands.ExecuteListenAbort,
                 RfmBase.ResponseOk);
         }
@@ -527,7 +504,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestMeasureTemperature()
         {
             ExecuteTest(
-                () => { _rfm6x.MeasureTemperature(); },
+                () => { _rfm6x.ExecuteMeasureTemperature(); },
                 Commands.ExecuteMeasureTemperature,
                 RfmBase.ResponseOk);
         }
@@ -536,26 +513,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestRestartRx()
         {
             ExecuteTest(
-                () => { _rfm6x.RestartRx(); },
+                () => { _rfm6x.ExecuteRestartRx(); },
                 Commands.ExecuteRestartRx,
                 RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestSetAddressFilter()
-        {
-            // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            // Act
-            _rfm6x.AddressFiltering = AddressFilter.Node;
-
-            // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetAddressFiltering} 0x{AddressFilter.Node:X}\n"), Times.Once);
         }
 
         [TestMethod]
@@ -577,48 +537,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAfcAutoClear()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.AfcAutoClear = true; },
-                Commands.SetAfcAutoClear,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetAfcAutoOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.AfcAutoOn = true; },
-                Commands.SetAfcAutoOn,
-                "1");
-        }
-
-        [TestMethod]
         public void TestSetAfcLowBetaOn()
         {
             ExecuteSetTest(
                 () => { _rfm6x.AfcLowBetaOn = true; },
                 Commands.SetAfcLowBetaOn,
                 "1");
-        }
-
-        [TestMethod]
-        public void TestSetAutoRxRestartOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.AutoRxRestartOn = true; },
-                Commands.SetAutoRxRestartOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetBroadcastAddress()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.BroadcastAddress = 0xAA; },
-                Commands.SetBroadcastAddress,
-                "0xAA");
         }
 
         [TestMethod]
@@ -631,24 +555,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm6x.ContinuousDagc = expected; },
                 Commands.SetContinuousDagc,
                 $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetCrcAutoClear()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.CrcAutoClear = true; },
-                Commands.SetCrcAutoClear,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetCrcOn()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.CrcOn = true; },
-                Commands.SetCrcOn,
-                "1");
         }
 
         [TestMethod]
@@ -682,19 +588,6 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm6x.DccFreqAfc = expected; },
                 Commands.SetDccFreqAfc,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(DcFree.Manchester)]
-        [DataRow(DcFree.None)]
-        [DataRow(DcFree.Reserved)]
-        [DataRow(DcFree.Whitening)]
-        public void TestSetDcFree(DcFree expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.DcFree = expected; },
-                Commands.SetDcFree,
                 $"0x{expected:X}");
         }
 
@@ -752,60 +645,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetFifo()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.Fifo = new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }; },
-                Commands.SetFifo,
-                "AA55DEAD");
-        }
-
-        [TestMethod]
         public void TestSetFifoFill()
         {
             ExecuteSetTest(
                 () => { _rfm6x.FifoFill = true; },
                 Commands.SetFifoFill,
                 "1");
-        }
-
-        [TestMethod]
-        public void TestSetFifoThreshold()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.FifoThreshold = 0x10; },
-                Commands.SetFifoThreshold,
-                "0x10");
-        }
-
-        [TestMethod]
-        public void TestSetFrequency()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.Frequency = 0x100000; },
-                Commands.SetFrequency,
-                "0x100000");
-        }
-
-        [TestMethod]
-        public void TestSetFrequencyDeviation()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.FrequencyDeviation = 0xA000; },
-                Commands.SetFrequencyDeviation,
-                "0xA000");
-        }
-
-        [TestMethod]
-        [DataRow(FskModulationShaping.GaussianBt0_3)]
-        [DataRow(FskModulationShaping.GaussianBt0_5)]
-        [DataRow(FskModulationShaping.GaussianBt1_0)]
-        public void TestSetFskModulationShaping(FskModulationShaping expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.FskModulationShaping = expected; },
-                Commands.SetFskModulationShaping,
-                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -828,15 +673,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm6x.IntermediateMode = expected; },
                 Commands.SetIntermediateMode,
                 $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetInterPacketRxDelay()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.InterPacketRxDelay = 0x60; },
-                Commands.SetInterPacketRxDelay,
-                "0x60");
         }
 
         [TestMethod]
@@ -915,22 +751,6 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(LnaGain.Auto)]
-        [DataRow(LnaGain.Max)]
-        [DataRow(LnaGain.MaxMinus12db)]
-        [DataRow(LnaGain.MaxMinus24db)]
-        [DataRow(LnaGain.MaxMinus36db)]
-        [DataRow(LnaGain.MaxMinus48db)]
-        [DataRow(LnaGain.MaxMinus6db)]
-        public void TestSetLnaGainSelect(LnaGain expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.LnaGainSelect = expected; },
-                Commands.SetLnaGainSelect,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
         public void TestSetLowBetaAfcOffset()
         {
             ExecuteSetTest(
@@ -940,164 +760,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(Mode.Rx)]
-        [DataRow(Mode.Sleep)]
-        [DataRow(Mode.Standby)]
-        [DataRow(Mode.Synth)]
-        [DataRow(Mode.Tx)]
-        public void TestSetMode(Mode expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.Mode = expected; },
-                Commands.SetMode,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetOcpEnable()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OcpEnable = true; },
-                Commands.SetOcpEnable,
-                "1");
-        }
-
-        [TestMethod]
-        [DataRow(OcpTrim.OcpTrim100)]
-        [DataRow(OcpTrim.OcpTrim105)]
-        [DataRow(OcpTrim.OcpTrim110)]
-        [DataRow(OcpTrim.OcpTrim115)]
-        [DataRow(OcpTrim.OcpTrim120)]
-        [DataRow(OcpTrim.OcpTrim45)]
-        [DataRow(OcpTrim.OcpTrim50)]
-        [DataRow(OcpTrim.OcpTrim55)]
-        [DataRow(OcpTrim.OcpTrim60)]
-        [DataRow(OcpTrim.OcpTrim65)]
-        [DataRow(OcpTrim.OcpTrim70)]
-        [DataRow(OcpTrim.OcpTrim75)]
-        [DataRow(OcpTrim.OcpTrim80)]
-        [DataRow(OcpTrim.OcpTrim85)]
-        [DataRow(OcpTrim.OcpTrim90)]
-        [DataRow(OcpTrim.OcpTrim95)]
-        public void TestSetOcpTrim(OcpTrim expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OcpTrim = expected; },
-                Commands.SetOcpTrim,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(OokAverageThresholdFilter.ChipRate2)]
-        [DataRow(OokAverageThresholdFilter.ChipRate32)]
-        [DataRow(OokAverageThresholdFilter.ChipRate4)]
-        [DataRow(OokAverageThresholdFilter.ChipRate8)]
-        public void TestSetOokAverageThresholdFilter(OokAverageThresholdFilter expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OokAverageThresholdFilter = expected; },
-                Commands.SetOokAverageThresholdFilter,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetOokFixedThreshold()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OokFixedThreshold = 0x60; },
-                Commands.SetOokFixedThreshold,
-                "0x60");
-        }
-
-        [TestMethod]
-        [DataRow(OokThresholdStep.Step0_5db)]
-        [DataRow(OokThresholdStep.Step1db)]
-        [DataRow(OokThresholdStep.Step1_5db)]
-        [DataRow(OokThresholdStep.Step2db)]
-        [DataRow(OokThresholdStep.Step3db)]
-        [DataRow(OokThresholdStep.Step4db)]
-        [DataRow(OokThresholdStep.Step5db)]
-        [DataRow(OokThresholdStep.Step6db)]
-        public void TestSetOokPeakThresholdStep(OokThresholdStep expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OokPeakThresholdStep = expected; },
-                Commands.SetOokPeakThresholdStep,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(OokThresholdType.Average)]
-        [DataRow(OokThresholdType.Fixed)]
-        [DataRow(OokThresholdType.Peak)]
-        [DataRow(OokThresholdType.Reserved)]
-        public void TestSetOokThresholdType(OokThresholdType expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.OokThresholdType = expected; },
-                Commands.SetOokThresholdType,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
         public void TestSetOutputPower()
         {
             ExecuteSetTest(
                 () => { _rfm6x.OutputPower = 0x60000; },
                 Commands.SetOutputPower,
                 "0x60000");
-        }
-
-        [TestMethod]
-        public void TestSetPacketFormat()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.PacketFormat = true; },
-                Commands.SetPacketFormat,
-                "1");
-        }
-
-        [TestMethod]
-        [DataRow(PaRamp.PowerAmpRamp10)]
-        [DataRow(PaRamp.PowerAmpRamp100)]
-        [DataRow(PaRamp.PowerAmpRamp1000)]
-        [DataRow(PaRamp.PowerAmpRamp12)]
-        [DataRow(PaRamp.PowerAmpRamp125)]
-        [DataRow(PaRamp.PowerAmpRamp15)]
-        [DataRow(PaRamp.PowerAmpRamp20)]
-        [DataRow(PaRamp.PowerAmpRamp2000)]
-        [DataRow(PaRamp.PowerAmpRamp25)]
-        [DataRow(PaRamp.PowerAmpRamp250)]
-        [DataRow(PaRamp.PowerAmpRamp31)]
-        [DataRow(PaRamp.PowerAmpRamp3400)]
-        [DataRow(PaRamp.PowerAmpRamp40)]
-        [DataRow(PaRamp.PowerAmpRamp50)]
-        [DataRow(PaRamp.PowerAmpRamp500)]
-        [DataRow(PaRamp.PowerAmpRamp62)]
-        public void TestSetPaRamp(PaRamp expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.PaRamp = expected; },
-                Commands.SetPaRamp,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetPayloadLength()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.PayloadLength = 0x60; },
-                Commands.SetPayloadLength,
-                "0x60");
-        }
-
-        [TestMethod]
-        public void TestSetPreambleSize()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.PreambleSize = 0x6000; },
-                Commands.SetPreambleSize,
-                "0x6000");
         }
 
         [TestMethod]
@@ -1115,24 +783,6 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm6x.RssiThreshold = 0xB0; },
                 Commands.SetRssiThreshold,
-                "0xB0");
-        }
-
-        [TestMethod]
-        public void TestSetRxBw()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.RxBw = 0xB0; },
-                Commands.SetRxBw,
-                "0xB0");
-        }
-
-        [TestMethod]
-        public void TestSetRxBwAfc()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.RxBwAfc = 0xB0; },
-                Commands.SetRxBwAfc,
                 "0xB0");
         }
 
@@ -1161,15 +811,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm6x.SyncBitErrors = 0xB0; },
                 Commands.SetSyncBitErrors,
                 "0xB0");
-        }
-
-        [TestMethod]
-        public void TestSetSyncEnable()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.SyncEnable = true; },
-                Commands.SetSyncEnable,
-                "1");
         }
 
         [TestMethod]
@@ -1204,19 +845,10 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTxStartCondition()
-        {
-            ExecuteSetTest(
-                () => { _rfm6x.TxStartCondition = true; },
-                Commands.SetTxStartCondition,
-                "1");
-        }
-
-        [TestMethod]
         public void TestStartRssi()
         {
             ExecuteTest(
-                () => { _rfm6x.StartRssi(); },
+                () => { _rfm6x.ExecuteStartRssi(); },
                 Commands.ExecuteStartRssi,
                 RfmBase.ResponseOk);
         }

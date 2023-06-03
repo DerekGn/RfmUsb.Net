@@ -24,4 +24,10 @@
     <ProjectReference Include="..\RfmUsb.Net\RfmUsb.Net.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Tests.runsettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

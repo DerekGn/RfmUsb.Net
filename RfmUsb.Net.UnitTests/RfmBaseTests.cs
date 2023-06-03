@@ -325,6 +325,18 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(Modulation.Fsk)]
+        [DataRow(Modulation.Ook)]
+        public void TestGetModulation(Modulation expected)
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.Modulation; },
+                (v) => v.Should().Be(expected),
+                Commands.GetModulation,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
         public void TestGetNodeAddress()
         {
             ExecuteGetTest(
@@ -544,6 +556,17 @@ namespace RfmUsb.Net.UnitTests
                 "0xA0");
         }
 
+        // Sync
+        [TestMethod]
+        public void TestGetSync()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.Sync; },
+                (v) => v.Should().BeEquivalentTo(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }),
+                Commands.GetSync,
+                "0xAA55DEAD");
+        }
+
         [TestMethod]
         public void TestGetSyncEnable()
         {
@@ -648,9 +671,53 @@ namespace RfmUsb.Net.UnitTests
         public void TestReset()
         {
             ExecuteTest(
-                () => { RfmBase.Reset(); },
+                () => { RfmBase.ExecuteReset(); },
                 Commands.ExecuteReset,
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestSetAddressFilter()
+        {
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk);
+
+            // Act
+            RfmBase.AddressFiltering = AddressFilter.Node;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetAddressFiltering} 0x{AddressFilter.Node:X}\n"), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestSetAfcAutoClear()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.AfcAutoClear = true; },
+                Commands.SetAfcAutoClear,
+                "1");
+        }
+
+        [TestMethod]
+        public void TestSetAfcAutoOn()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.AfcAutoOn = true; },
+                Commands.SetAfcAutoOn,
+                "1");
+        }
+
+        [TestMethod]
+        public void TestSetAutoRxRestartOn()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.AutoRxRestartOn = true; },
+                Commands.SetAutoRxRestartOn,
+                "1");
         }
 
         [TestMethod]
@@ -660,6 +727,46 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.BitRate = 0x100; },
                 Commands.SetBitRate,
                 "0x100");
+        }
+
+        [TestMethod]
+        public void TestSetBroadcastAddress()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.BroadcastAddress = 0xAA; },
+                Commands.SetBroadcastAddress,
+                "0xAA");
+        }
+
+        [TestMethod]
+        public void TestSetCrcAutoClear()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.CrcAutoClear = true; },
+                Commands.SetCrcAutoClear,
+                "1");
+        }
+
+        [TestMethod]
+        public void TestSetCrcOn()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.CrcOn = true; },
+                Commands.SetCrcOn,
+                "1");
+        }
+
+        [TestMethod]
+        [DataRow(DcFree.Manchester)]
+        [DataRow(DcFree.None)]
+        [DataRow(DcFree.Reserved)]
+        [DataRow(DcFree.Whitening)]
+        public void TestSetDcFree(DcFree expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.DcFree = expected; },
+                Commands.SetDcFree,
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -688,6 +795,93 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetFifo()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.Fifo = new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }; },
+                Commands.SetFifo,
+                "AA55DEAD");
+        }
+
+        [TestMethod]
+        public void TestSetFifoThreshold()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.FifoThreshold = 0x10; },
+                Commands.SetFifoThreshold,
+                "0x10");
+        }
+
+        [TestMethod]
+        public void TestSetFrequency()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.Frequency = 0x100000; },
+                Commands.SetFrequency,
+                "0x100000");
+        }
+
+        [TestMethod]
+        public void TestSetFrequencyDeviation()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.FrequencyDeviation = 0xA000; },
+                Commands.SetFrequencyDeviation,
+                "0xA000");
+        }
+
+        [TestMethod]
+        [DataRow(FskModulationShaping.GaussianBt0_3)]
+        [DataRow(FskModulationShaping.GaussianBt0_5)]
+        [DataRow(FskModulationShaping.GaussianBt1_0)]
+        public void TestSetFskModulationShaping(FskModulationShaping expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.FskModulationShaping = expected; },
+                Commands.SetFskModulationShaping,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetInterPacketRxDelay()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.InterPacketRxDelay = 0x60; },
+                Commands.SetInterPacketRxDelay,
+                "0x60");
+        }
+
+        [TestMethod]
+        [DataRow(LnaGain.Auto)]
+        [DataRow(LnaGain.Max)]
+        [DataRow(LnaGain.MaxMinus12db)]
+        [DataRow(LnaGain.MaxMinus24db)]
+        [DataRow(LnaGain.MaxMinus36db)]
+        [DataRow(LnaGain.MaxMinus48db)]
+        [DataRow(LnaGain.MaxMinus6db)]
+        public void TestSetLnaGainSelect(LnaGain expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.LnaGainSelect = expected; },
+                Commands.SetLnaGainSelect,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        [DataRow(Mode.Rx)]
+        [DataRow(Mode.Sleep)]
+        [DataRow(Mode.Standby)]
+        [DataRow(Mode.Synth)]
+        [DataRow(Mode.Tx)]
+        public void TestSetMode(Mode expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.Mode = expected; },
+                Commands.SetMode,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
         [DataRow(Modulation.Fsk)]
         [DataRow(Modulation.Ook)]
         public void TestSetModulation(Modulation expected)
@@ -704,6 +898,62 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { RfmBase.NodeAddress = 0x60; },
                 Commands.SetNodeAddress,
+                "0x60");
+        }
+
+        [TestMethod]
+        public void TestSetOcpEnable()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OcpEnable = true; },
+                Commands.SetOcpEnable,
+                "1");
+        }
+
+        [TestMethod]
+        [DataRow(OcpTrim.OcpTrim100)]
+        [DataRow(OcpTrim.OcpTrim105)]
+        [DataRow(OcpTrim.OcpTrim110)]
+        [DataRow(OcpTrim.OcpTrim115)]
+        [DataRow(OcpTrim.OcpTrim120)]
+        [DataRow(OcpTrim.OcpTrim45)]
+        [DataRow(OcpTrim.OcpTrim50)]
+        [DataRow(OcpTrim.OcpTrim55)]
+        [DataRow(OcpTrim.OcpTrim60)]
+        [DataRow(OcpTrim.OcpTrim65)]
+        [DataRow(OcpTrim.OcpTrim70)]
+        [DataRow(OcpTrim.OcpTrim75)]
+        [DataRow(OcpTrim.OcpTrim80)]
+        [DataRow(OcpTrim.OcpTrim85)]
+        [DataRow(OcpTrim.OcpTrim90)]
+        [DataRow(OcpTrim.OcpTrim95)]
+        public void TestSetOcpTrim(OcpTrim expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OcpTrim = expected; },
+                Commands.SetOcpTrim,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        [DataRow(OokAverageThresholdFilter.ChipRate2)]
+        [DataRow(OokAverageThresholdFilter.ChipRate32)]
+        [DataRow(OokAverageThresholdFilter.ChipRate4)]
+        [DataRow(OokAverageThresholdFilter.ChipRate8)]
+        public void TestSetOokAverageThresholdFilter(OokAverageThresholdFilter expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OokAverageThresholdFilter = expected; },
+                Commands.SetOokAverageThresholdFilter,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetOokFixedThreshold()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OokFixedThreshold = 0x60; },
+                Commands.SetOokFixedThreshold,
                 "0x60");
         }
 
@@ -738,6 +988,106 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(OokThresholdStep.Step0_5db)]
+        [DataRow(OokThresholdStep.Step1db)]
+        [DataRow(OokThresholdStep.Step1_5db)]
+        [DataRow(OokThresholdStep.Step2db)]
+        [DataRow(OokThresholdStep.Step3db)]
+        [DataRow(OokThresholdStep.Step4db)]
+        [DataRow(OokThresholdStep.Step5db)]
+        [DataRow(OokThresholdStep.Step6db)]
+        public void TestSetOokPeakThresholdStep(OokThresholdStep expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OokPeakThresholdStep = expected; },
+                Commands.SetOokPeakThresholdStep,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        [DataRow(OokThresholdType.Average)]
+        [DataRow(OokThresholdType.Fixed)]
+        [DataRow(OokThresholdType.Peak)]
+        [DataRow(OokThresholdType.Reserved)]
+        public void TestSetOokThresholdType(OokThresholdType expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.OokThresholdType = expected; },
+                Commands.SetOokThresholdType,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetPacketFormat()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.PacketFormat = true; },
+                Commands.SetPacketFormat,
+                "1");
+        }
+
+        [TestMethod]
+        [DataRow(PaRamp.PowerAmpRamp10)]
+        [DataRow(PaRamp.PowerAmpRamp100)]
+        [DataRow(PaRamp.PowerAmpRamp1000)]
+        [DataRow(PaRamp.PowerAmpRamp12)]
+        [DataRow(PaRamp.PowerAmpRamp125)]
+        [DataRow(PaRamp.PowerAmpRamp15)]
+        [DataRow(PaRamp.PowerAmpRamp20)]
+        [DataRow(PaRamp.PowerAmpRamp2000)]
+        [DataRow(PaRamp.PowerAmpRamp25)]
+        [DataRow(PaRamp.PowerAmpRamp250)]
+        [DataRow(PaRamp.PowerAmpRamp31)]
+        [DataRow(PaRamp.PowerAmpRamp3400)]
+        [DataRow(PaRamp.PowerAmpRamp40)]
+        [DataRow(PaRamp.PowerAmpRamp50)]
+        [DataRow(PaRamp.PowerAmpRamp500)]
+        [DataRow(PaRamp.PowerAmpRamp62)]
+        public void TestSetPaRamp(PaRamp expected)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.PaRamp = expected; },
+                Commands.SetPaRamp,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetPayloadLength()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.PayloadLength = 0x60; },
+                Commands.SetPayloadLength,
+                "0x60");
+        }
+
+        [TestMethod]
+        public void TestSetPreambleSize()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.PreambleSize = 0x6000; },
+                Commands.SetPreambleSize,
+                "0x6000");
+        }
+
+        [TestMethod]
+        public void TestSetRxBw()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.RxBw = 0xB0; },
+                Commands.SetRxBw,
+                "0xB0");
+        }
+
+        [TestMethod]
+        public void TestSetRxBwAfc()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.RxBwAfc = 0xB0; },
+                Commands.SetRxBwAfc,
+                "0xB0");
+        }
+
+        [TestMethod]
         public void TestSetSync()
         {
             ExecuteSetTest(
@@ -747,12 +1097,30 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetSyncEnable()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.SyncEnable = true; },
+                Commands.SetSyncEnable,
+                "1");
+        }
+
+        [TestMethod]
         public void TestSetSyncSize()
         {
             ExecuteSetTest(
                 () => { RfmBase.SyncSize = 0xB0; },
                 Commands.SetSyncSize,
                 "0xB0");
+        }
+
+        [TestMethod]
+        public void TestSetTxStartCondition()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.TxStartCondition = true; },
+                Commands.SetTxStartCondition,
+                "1");
         }
 
         [TestMethod]
@@ -834,20 +1202,31 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{command} {value}\n"), Times.Once);
         }
 
-        internal void ExecuteTest(Action action, string command, string response)
+        internal void ExecuteTest(Action action, string command, string? response = null)
         {
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
 
-            MockSerialPort
+            if(response != null )
+            {
+                MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(response);
+            }
 
             // Act
             action();
 
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{command}\n"), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestExecuteBootloader()
+        {
+            ExecuteTest(
+                () => { RfmBase.EnterBootloader(); },
+                Commands.ExecuteBootloader);
         }
     }
 }

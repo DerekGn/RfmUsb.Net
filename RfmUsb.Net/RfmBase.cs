@@ -73,9 +73,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool AfcAutoClearOn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        ///<inheritdoc/>
         public bool AfcAutoOn
         {
             get => SendCommand(Commands.GetAfcAutoOn).StartsWith("1");
@@ -140,6 +137,7 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetFifoThreshold).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetFifoThreshold} 0x{value:X}", ResponseOk);
         }
+
         ///<inheritdoc/>
         public uint Frequency
         {
@@ -209,9 +207,6 @@ namespace RfmUsb.Net
             get => (OcpTrim)SendCommand(Commands.GetOcpTrim).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetOcpTrim} 0x{value:X}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public OokAverageOffset OokAverageOffset { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         ///<inheritdoc/>
         public OokAverageThresholdFilter OokAverageThresholdFilter
@@ -330,7 +325,7 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
-        
+
         ///<inheritdoc/>
         public string Version => SendCommand(Commands.GetVersion);
 
@@ -402,8 +397,9 @@ namespace RfmUsb.Net
         {
             SendCommandWithCheck(Commands.ExecuteRcCalibration, ResponseOk);
         }
+
         ///<inheritdoc/>
-        public void Reset()
+        public void ExecuteReset()
         {
             FlushSerialPort();
             SendCommandWithCheck(Commands.ExecuteReset, ResponseOk);

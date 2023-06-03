@@ -18,6 +18,13 @@
 					<IncludeTestAssembly>false</IncludeTestAssembly>
 					<SkipAutoProps>true</SkipAutoProps>
 					<DeterministicReport>false</DeterministicReport>
+					<CodeCoverage>
+						<ModulePaths>
+							<Exclude>
+								<ModulePath>rfmusb.net.unittests.dll</ModulePath>
+							</Exclude>
+						</ModulePaths>
+					</CodeCoverage>
 				</Configuration>
 			</DataCollector>
 		</DataCollectors>

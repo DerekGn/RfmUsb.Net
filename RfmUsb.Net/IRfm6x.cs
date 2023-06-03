@@ -43,8 +43,6 @@ namespace RfmUsb.Net
         /// </summary>
         bool AfcLowBetaOn { get; set; }
 
-
-
         /// <summary>
         /// Fading Margin Improvement
         /// </summary>
@@ -86,8 +84,6 @@ namespace RfmUsb.Net
         /// true → as long as FifoFillCondition is set
         /// </summary>
         bool FifoFill { get; set; }
-
-
 
         /// <summary>
         /// LNA’s input impedance
@@ -199,22 +195,20 @@ namespace RfmUsb.Net
         /// </summary>
         byte TimeoutRxStart { get; set; }
 
-
-
         /// <summary>
         /// Clears the AfcValue if set in Rx mode
         /// </summary>
-        void AfcClear();
+        void ExecuteAfcClear();
 
         /// <summary>
         /// Triggers an AFC
         /// </summary>
-        void AfcStart();
+        void ExecuteAfcStart();
 
         /// <summary>
         /// Triggers a FEI measurement
         /// </summary>
-        void FeiStart();
+        void ExecuteFeiStart();
 
         /// <summary>
         /// Get a list of the pre-configured radio configurations
@@ -225,22 +219,22 @@ namespace RfmUsb.Net
         /// <summary>
         /// Abort listen mode
         /// </summary>
-        void ListenAbort();
+        void ExecuteListenAbort();
 
         /// <summary>
         /// Execute a temperature measurement
         /// </summary>
-        void MeasureTemperature();
+        void ExecuteMeasureTemperature();
 
         /// <summary>
         /// Reset the radio
         /// </summary>
-        public void Reset();
+        public void ExecuteReset();
 
         /// <summary>
         /// Forces the Receiver in WAIT mode, in Continuous Rx mode.
         /// </summary>
-        void RestartRx();
+        void ExecuteRestartRx();
 
         /// <summary>
         /// Set the AES encryption key
@@ -251,7 +245,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Trigger a RSSI measurement
         /// </summary>
-        void StartRssi();
+        void ExecuteStartRssi();
 
         /// <summary>
         /// Wait for a configured Irq to be signaled

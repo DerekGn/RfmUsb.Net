@@ -32,36 +32,36 @@ namespace RfmUsb.Net
         /// <summary>
         /// 64 Chips Symbol
         /// </summary>
-        SixtyFour,
+        SpreadFactor64,
 
         /// <summary>
         /// 128 Chips Symbol
         /// </summary>
-        OneHundredEight,
+        SpreadFactor128,
 
         /// <summary>
         /// 256 Chips Symbol
         /// </summary>
-        TwHunderedFiftySix,
+        SpreadFactor256,
 
         /// <summary>
         /// 512 Chips Symbol
         /// </summary>
-        FiveHundredTwelve,
+        SpreadFactor512,
 
         /// <summary>
         /// 1024 Chips Symbol
         /// </summary>
-        OneThousandTwentyFour,
+        SpreadFactor1024,
 
         /// <summary>
         /// 2048 Chips Symbol
         /// </summary>
-        TwoThousandFortyEigth,
+        SpreadFactor2048,
 
         /// <summary>
         /// 4096 Chips Symbol
         /// </summary>
-        FourThousandNintySix
+        SpreadFactor4096
     }
 }
