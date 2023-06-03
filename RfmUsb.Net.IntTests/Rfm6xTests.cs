@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RfmUsb.Net.IntTests
@@ -29,8 +30,14 @@ namespace RfmUsb.Net.IntTests
     [TestClass]
     public class Rfm6xTests : RfmBaseTests
     {
+        private readonly IRfm6x _rfm6x;
+
         public Rfm6xTests()
         {
+            _rfm6x = _serviceProvider.GetService<IRfm6x>();
+            RfmBase = _rfm6x;
+
+            _rfm6x.Open("COM12", 230400);
         }
     }
 }
