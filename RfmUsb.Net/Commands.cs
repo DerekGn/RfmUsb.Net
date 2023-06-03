@@ -133,6 +133,7 @@ namespace RfmUsb.Net
         public const string GetNodeAddress = "g-na";
         public const string GetOcpEnable = "g-ocp";
         public const string GetOcpTrim = "g-ocpt";
+        public const string GetOokAverageOffset = "";
         public const string GetOokAverageThresholdFilter = "g-oatf";
         public const string GetOokFixedThreshold = "g-oft";
         public const string GetOokModulationShaping = "g-os";
@@ -183,6 +184,8 @@ namespace RfmUsb.Net
         public const string GetTimeoutRxRssi = "";
         public const string GetTimeoutRxStart = "g-trs";
         public const string GetTimeoutSignalSync = "";
+        public const string GetTimerCoefficient = "";
+        public const string GetTimerResolution = "";
         public const string GetTxContinuousMode = "";
         public const string GetTxStartCondition = "g-tsc";
         public const string GetValidHeaderCount = "";
@@ -261,6 +264,7 @@ namespace RfmUsb.Net
         public const string SetNodeAddress = "s-na";
         public const string SetOcpEnable = "s-ocp";
         public const string SetOcpTrim = "s-ocpt";
+        public const string SetOokAverageOffset = "";
         public const string SetOokAverageThresholdFilter = "s-oatf";
         public const string SetOokFixedThreshold = "s-oft";
         public const string SetOokModulationShaping = "s-os";
@@ -305,9 +309,9 @@ namespace RfmUsb.Net
         public const string SetTimeoutRxRssi = "";
         public const string SetTimeoutRxStart = "s-trs";
         public const string SetTimeoutSignalSync = "";
+        public const string SetTimerCoefficient = "";
+        public const string SetTimerResolution = "";
         public const string SetTxContinuousMode = "";
         public const string SetTxStartCondition = "s-tsc";
-        public const string GetOokAverageOffset = "";
-        public const string SetOokAverageOffset = "";
     }
 }

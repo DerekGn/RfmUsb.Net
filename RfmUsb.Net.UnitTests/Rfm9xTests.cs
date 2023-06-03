@@ -39,6 +39,96 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void ExecuteSequencerStart()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteSequencerStart(); },
+                Commands.ExecuteSequencerStart,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestClearFifoOverrun()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ClearFifoOverrun(); },
+                Commands.ExecuteClearFifoOverrun,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestClearLowBattery()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ClearLowBattery(); },
+                Commands.ExecuteClearLowBattery,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestClearPreambleDetect()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ClearPreambleDetect(); },
+                Commands.ExecuteClearPreambleDetect,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestClearSyncAddressMatch()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ClearSyncAddressMatch(); },
+                Commands.ExecuteClearSyncAddressMatch,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestExecuteAgcStart()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteAgcStart(); },
+                Commands.ExecuteAgcStart,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestExecuteImageCalibration()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteImageCalibration(); },
+                Commands.ExecuteImageCalibration,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestExecuteRestartRxWithoutPllLock()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteRestartRxWithoutPllLock(); },
+                Commands.ExecuteRestartRxWithoutPllLock,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestExecuteRestartRxWithPllLock()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteRestartRxWithPllLock(); },
+                Commands.ExecuteRestartRxWithPllLock,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestExecuteSequencerStop()
+        {
+            ExecuteTest(
+                () => { _rfm9x.ExecuteSequencerStop(); },
+                Commands.ExecuteSequencerStop,
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
         public void TestGetAutoImageCalibrationOn()
         {
             ExecuteGetTest(
@@ -459,6 +549,20 @@ namespace RfmUsb.Net.UnitTests
                  (v) => { v.Should().Be(expected); },
                  Commands.GetModemStatus,
                  $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        [DataRow(OokAverageOffset.Offset0dB)]
+        [DataRow(OokAverageOffset.Offset2dB)]
+        [DataRow(OokAverageOffset.Offset4dB)]
+        [DataRow(OokAverageOffset.Offset6dB)]
+        public void TestGetOokAverageOffset(OokAverageOffset expected)
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.OokAverageOffset; },
+                (v) => { v.Should().Be(expected); },
+                Commands.GetOokAverageOffset,
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -1084,6 +1188,19 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(OokAverageOffset.Offset0dB)]
+        [DataRow(OokAverageOffset.Offset2dB)]
+        [DataRow(OokAverageOffset.Offset4dB)]
+        [DataRow(OokAverageOffset.Offset6dB)]
+        public void TestSetOokAverageOffset(OokAverageOffset expected)
+        {
+            ExecuteSetTest(
+                () => { _rfm9x.OokAverageOffset = expected; },
+                Commands.SetOokAverageOffset,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
         public void TestSetPayloadMaxLength()
         {
             ExecuteSetTest(
@@ -1312,121 +1429,33 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(OokAverageOffset.Offset0dB)]
-        [DataRow(OokAverageOffset.Offset2dB)]
-        [DataRow(OokAverageOffset.Offset4dB)]
-        [DataRow(OokAverageOffset.Offset6dB)]
-        public void TestSetOokAverageOffset(OokAverageOffset expected)
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.OokAverageOffset = expected; },
-                Commands.SetOokAverageOffset,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(OokAverageOffset.Offset0dB)]
-        [DataRow(OokAverageOffset.Offset2dB)]
-        [DataRow(OokAverageOffset.Offset4dB)]
-        [DataRow(OokAverageOffset.Offset6dB)]
-        public void TestGetOokAverageOffset(OokAverageOffset expected)
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void GetTimerCoefficient(Timer timer)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.OokAverageOffset; },
-                (v) => { v.Should().Be(expected); },
-                Commands.GetOokAverageOffset,
-                $"0x{expected:X}");
-        }
-
-
-        [TestMethod]
-        public void TestClearFifoOverrun()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ClearFifoOverrun(); },
-                Commands.ExecuteClearFifoOverrun,
-                RfmBase.ResponseOk);
+                () => { return _rfm9x.GetTimerCoefficient(timer); },
+                (v) => v.Should().Be(0x10),
+                $"{Commands.GetTimerCoefficient} {(int)timer}",
+                "0x10");
         }
 
         [TestMethod]
-        public void TestClearLowBattery()
+        [DataRow(Timer.Timer1, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]
+        public void GetTimerResolution(Timer timer, TimerResolution expected)
         {
-            ExecuteTest(
-                () => { _rfm9x.ClearLowBattery(); },
-                Commands.ExecuteClearLowBattery,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestClearPreambleDetect()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ClearPreambleDetect(); },
-                Commands.ExecuteClearPreambleDetect,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestClearSyncAddressMatch()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ClearSyncAddressMatch(); },
-                Commands.ExecuteClearSyncAddressMatch,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestExecuteAgcStart()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteAgcStart(); },
-                Commands.ExecuteAgcStart,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestExecuteImageCalibration()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteImageCalibration(); },
-                Commands.ExecuteImageCalibration,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestExecuteRestartRxWithoutPllLock()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteRestartRxWithoutPllLock(); },
-                Commands.ExecuteRestartRxWithoutPllLock,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestExecuteRestartRxWithPllLock()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteRestartRxWithPllLock(); },
-                Commands.ExecuteRestartRxWithPllLock,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void ExecuteSequencerStart()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteSequencerStart(); },
-                Commands.ExecuteSequencerStart,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestExecuteSequencerStop()
-        {
-            ExecuteTest(
-                () => { _rfm9x.ExecuteSequencerStop(); },
-                Commands.ExecuteSequencerStop,
-                RfmBase.ResponseOk);
+            ExecuteGetTest(
+                () => { return _rfm9x.GetTimerResolution(timer); },
+                (v) => v.Should().Be(expected),
+                $"{Commands.GetTimerResolution} {(int)timer}",
+                ((int)expected).ToString());
         }
     }
 }

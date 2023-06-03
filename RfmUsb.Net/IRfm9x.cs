@@ -31,15 +31,6 @@ namespace RfmUsb.Net
     /// </summary>
     public interface IRfm9x : IRfm
     {
-        /// <summary>
-        /// Enable agc auto on
-        /// </summary>
-        /// <remarks>
-        /// 0: LNA gain set by register LnaGain
-        /// 1: LNA gain set by the internal AGC loop
-        /// </remarks>
-        bool LoraAgcAutoOn { get; set; }
-
         bool AutoImageCalibrationOn { get; set; }
 
         bool BeaconOn { get; set; }
@@ -111,6 +102,14 @@ namespace RfmUsb.Net
         /// </summary>
         bool LongRangeMode { get; set; }
 
+        /// <summary>
+        /// Enable agc auto on
+        /// </summary>
+        /// <remarks>
+        /// 0: LNA gain set by register LnaGain
+        /// 1: LNA gain set by the internal AGC loop
+        /// </remarks>
+        bool LoraAgcAutoOn { get; set; }
         /// <summary>
         /// Get the lora mode
         /// </summary>
@@ -197,6 +196,10 @@ namespace RfmUsb.Net
 
         void ExecuteImageCalibration();
 
+        void ExecuteRestartRxWithoutPllLock();
+
+        void ExecuteRestartRxWithPllLock();
+
         void ExecuteSequencerStart();
 
         void ExecuteSequencerStop();
@@ -205,8 +208,8 @@ namespace RfmUsb.Net
 
         TimerResolution GetTimerResolution(Timer timer);
 
-        void ExecuteRestartRxWithoutPllLock();
+        void SetTimerCoefficient(Timer timer, byte value);
 
-        void ExecuteRestartRxWithPllLock();
+        void SetTimerResolution(Timer timer, TimerResolution value);
     }
 }

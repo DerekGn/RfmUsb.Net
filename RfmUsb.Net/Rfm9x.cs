@@ -530,13 +530,25 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public byte GetTimerCoefficient(Timer timer)
         {
-            throw new System.NotImplementedException();
+            return SendCommand($"{Commands.GetTimerCoefficient} {(int)timer}").ConvertToByte();
         }
 
         ///<inheritdoc/>
         public TimerResolution GetTimerResolution(Timer timer)
         {
-            throw new System.NotImplementedException();
+            return (TimerResolution)SendCommand($"{Commands.GetTimerResolution} {(int)timer}").ConvertToInt32();
+        }
+
+        ///<inheritdoc/>
+        public void SetTimerCoefficient(Timer timer, byte value)
+        {
+            SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} {value}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public void SetTimerResolution(Timer timer, TimerResolution value)
+        {
+            SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} {(int)value}", ResponseOk);
         }
     }
 }

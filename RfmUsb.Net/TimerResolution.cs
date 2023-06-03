@@ -24,6 +24,9 @@
 
 namespace RfmUsb.Net
 {
+    /// <summary>
+    /// The timer resolution
+    /// </summary>
     public enum TimerResolution
     {
         /// <summary>
@@ -33,14 +36,14 @@ namespace RfmUsb.Net
         /// <summary>
         /// 64 us
         /// </summary>
-        SixtyFourMicrosecopnds,
+        Resolution64us,
         /// <summary>
         /// 4.1 ms
         /// </summary>
-        FourPointOneMilliseconds,
+        Resolution4_1ms,
         /// <summary>
         /// 262 ms
         /// </summary>
-        TwoHundredSixtyTwoMilliseconds
+        Resolution256ms
     }
 }
