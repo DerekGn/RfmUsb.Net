@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// 0dB Offset
         /// </summary>
         Offset0dB,
+
         /// <summary>
         /// 2 dB Offset
         /// </summary>
         Offset2dB,
+
         /// <summary>
         /// 4 dB Offset
         /// </summary>
         Offset4dB,
+
         /// <summary>
         /// 6 dB Offset
         /// </summary>

@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// No Shapping
         /// </summary>
         None,
+
         /// <summary>
         /// Gaussian filter, BT = 1.0
         /// </summary>
         GaussianBt1_0,
+
         /// <summary>
         /// Gaussian filter, BT = 0.5
         /// </summary>
         GaussianBt0_5,
+
         /// <summary>
         /// Gaussian filter, BT = 0.3
         /// </summary>

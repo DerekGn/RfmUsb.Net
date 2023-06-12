@@ -25,7 +25,7 @@
 namespace RfmUsb.Net
 {
     /// <summary>
-    /// Resolution of Listen mode Idle time 
+    /// Resolution of Listen mode Idle time
     /// </summary>
     public enum ListenResolution
     {
@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// Reserved
         /// </summary>
         Reserved,
+
         /// <summary>
         /// 64 us
         /// </summary>
         Idle64us,
+
         /// <summary>
         /// 4.1 ms
         /// </summary>
         Idle4_1ms,
+
         /// <summary>
         /// 262 ms
         /// </summary>

@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// Chip rate / 32.π
         /// </summary>
         ChipRate32,
+
         /// <summary>
         /// Chip rate / 8.π
         /// </summary>
         ChipRate8,
+
         /// <summary>
-        /// Chip rate / 4.π 
+        /// Chip rate / 4.π
         /// </summary>
         ChipRate4,
+
         /// <summary>
         /// Chip rate / 2.π
         /// </summary>

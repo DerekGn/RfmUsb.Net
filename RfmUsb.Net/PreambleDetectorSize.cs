@@ -33,10 +33,12 @@ namespace RfmUsb.Net
         /// One byte
         /// </summary>
         OneByte,
+
         /// <summary>
         /// Two bytes
         /// </summary>
         TwoBytes,
+
         /// <summary>
         /// Three bytes
         /// </summary>

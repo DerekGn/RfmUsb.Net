@@ -22,51 +22,26 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb.Net
+using System;
+
+namespace RfmUsb.Net.Exceptions
 {
-    /// <summary>
-    /// Size of each decrement of the RSSI threshold in the OOKdemodulator
-    /// </summary>
-    public enum OokThresholdStep
+    [Serializable]
+    public class RfmUsbInvalidDeviceTypeException : Exception
     {
-        /// <summary>
-        /// 0.5 db
-        /// </summary>
-        Step0_5db,
+        public RfmUsbInvalidDeviceTypeException()
+        { }
 
-        /// <summary>
-        /// 1 db
-        /// </summary>
-        Step1db,
+        public RfmUsbInvalidDeviceTypeException(string message) : base(message)
+        {
+        }
 
-        /// <summary>
-        /// 1.5 db
-        /// </summary>
-        Step1_5db,
+        public RfmUsbInvalidDeviceTypeException(string message, Exception inner) : base(message, inner)
+        {
+        }
 
-        /// <summary>
-        /// 2 db
-        /// </summary>
-        Step2db,
-
-        /// <summary>
-        /// 3 db
-        /// </summary>
-        Step3db,
-
-        /// <summary>
-        /// 4 db
-        /// </summary>
-        Step4db,
-
-        /// <summary>
-        /// 5 db
-        /// </summary>
-        Step5db,
-
-        /// <summary>
-        /// 6 db
-        /// </summary>
-        Step6db,
+        protected RfmUsbInvalidDeviceTypeException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

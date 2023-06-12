@@ -33,15 +33,18 @@ namespace RfmUsb.Net
         /// Chip stays in Rx mode. Listen mode stops and must be disabled.
         /// </summary>
         Rx,
+
         /// <summary>
         /// chip stays in Rx mode until PayloadReady orTimeout interrupt occurs. It then goes to the mode defined by Mode.
         /// </summary>
         Mode,
+
         /// <summary>
         /// chip stays in Rx mode until PayloadReady or Timeout interrupt occurs. Listen mode then resumes in Idle state.
         /// FIFO content is lost at next Rx wakeup.
         /// </summary>
         Idle,
+
         /// <summary>
         /// Reserved
         /// </summary>

@@ -38,26 +38,32 @@ namespace RfmUsb.Net
         /// Standby Mode (STDBY)
         /// </summary>
         Standby,
+
         /// <summary>
         /// Frequency synthesis TX (FSTX)
         /// </summary>
         SynthTx,
+
         /// <summary>
         /// Transmit (TX)
         /// </summary>
         Tx,
+
         /// <summary>
         /// Frequency synthesis RX (FSRX)
         /// </summary>
         SynthRx,
+
         /// <summary>
         /// Receive continuous (RXCONTINUOUS)
         /// </summary>
         RxContinuous,
+
         /// <summary>
         /// Receive single (RXSINGLE)
         /// </summary>
         RxSingle,
+
         /// <summary>
         /// Channel activity detection (CAD)
         /// </summary>

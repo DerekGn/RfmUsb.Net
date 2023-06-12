@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// None Off
         /// </summary>
         None,
+
         /// <summary>
         /// Manchester encoding
         /// </summary>
         Manchester,
+
         /// <summary>
         /// Data whitening
         /// </summary>
         Whitening,
+
         /// <summary>
         /// Reserved
         /// </summary>

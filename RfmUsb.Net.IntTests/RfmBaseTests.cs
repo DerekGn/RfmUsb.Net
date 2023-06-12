@@ -348,7 +348,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestRssi()
         {
-            Read<byte>(() => RfmBase.Rssi);
+            Read<sbyte>(() => RfmBase.Rssi);
         }
 
         [TestMethod]
@@ -400,9 +400,15 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestVersion()
+        public void TestFirmwareVersion()
         {
-            Read(() => RfmBase.Version);
+            Read(() => RfmBase.FirmwareVersion);
+        }
+
+        [TestMethod]
+        public void TestRadioVersion()
+        {
+            Read(() => RfmBase.RadioVersion);
         }
 
         [TestMethod]
@@ -523,7 +529,7 @@ namespace RfmUsb.Net.IntTests
                 .AddLogging(builder => builder.AddSerilog())
                 .AddSingleton(_configuration)
                 .AddSingleton<IRfm9x, Rfm9x>()
-                .AddSingleton<IRfm6x, Rfm6x>()
+                .AddSingleton<IRfm69, Rfm69>()
                 .AddSerialPortFactory()
                 .AddLogging();
 

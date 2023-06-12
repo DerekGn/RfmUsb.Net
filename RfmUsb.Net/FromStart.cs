@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// To Low Power
         /// </summary>
         ToLowPowerSelection,
+
         /// <summary>
         /// To Receive
         /// </summary>
         ToReceive,
+
         /// <summary>
         /// To Transmit
         /// </summary>
         ToTransmit,
+
         /// <summary>
         /// To transmit on fifo level
         /// </summary>

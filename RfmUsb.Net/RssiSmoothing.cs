@@ -33,30 +33,37 @@ namespace RfmUsb.Net
         /// 2 Samples
         /// </summary>
         Samples2,
+
         /// <summary>
         /// 4 Samples
         /// </summary>
         Samples4,
+
         /// <summary>
         /// 8 Samples
         /// </summary>
         Samples8,
+
         /// <summary>
         /// 16 Samples
         /// </summary>
         Samples16,
+
         /// <summary>
         /// 32 Samples
         /// </summary>
         Samples32,
+
         /// <summary>
         /// 64 Samples
         /// </summary>
         Samples64,
+
         /// <summary>
         /// 128 Samples
         /// </summary>
         Samples128,
+
         /// <summary>
         /// 256 Samples
         /// </summary>

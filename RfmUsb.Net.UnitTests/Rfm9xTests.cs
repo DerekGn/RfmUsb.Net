@@ -24,6 +24,7 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace RfmUsb.Net.UnitTests
 {
@@ -45,6 +46,36 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm9x.ExecuteSequencerStart(); },
                 Commands.ExecuteSequencerStart,
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void GetTimerCoefficient(Timer timer)
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.GetTimerCoefficient(timer); },
+                (v) => v.Should().Be(0x10),
+                $"{Commands.GetTimerCoefficient} {(int)timer}",
+                "0x10");
+        }
+
+        [TestMethod]
+        [DataRow(Timer.Timer1, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]
+        public void GetTimerResolution(Timer timer, TimerResolution expected)
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.GetTimerResolution(timer); },
+                (v) => v.Should().Be(expected),
+                $"{Commands.GetTimerResolution} {(int)timer}",
+                ((int)expected).ToString());
         }
 
         [TestMethod]
@@ -683,9 +714,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfm9x.RssiOffset; },
-                (v) => v.Should().Be(0xAA),
+                (v) => v.Should().Be(-98),
                 Commands.GetRssiOffset,
-                "0xAA");
+                $"0x{(sbyte)-98:X2}");
         }
 
         [TestMethod]
@@ -711,9 +742,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfm9x.RssiThreshold; },
-                (v) => v.Should().Be(0xAA),
+                (v) => v.Should().Be(-114),
                 Commands.GetRssiThreshold,
-                "0xAA");
+                $"0x{(sbyte)-114:X2}");
         }
 
         [TestMethod]
@@ -761,6 +792,7 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetSpreadingFactor,
                 $"0x{expected:X}");
         }
+
         [TestMethod]
         public void TestGetSymbolTimeout()
         {
@@ -873,6 +905,28 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().Be(0xAA),
                 Commands.GetValidPacketCount,
                 "0xAA");
+        }
+
+        [TestMethod]
+        public void TestOpen()
+        {
+            // Arrange
+            MockSerialPortFactory
+                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
+                .Returns(MockSerialPort.Object);
+
+            MockSerialPort
+            .Setup(_ => _.ReadLine())
+                .Returns("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
+
+            // Act
+            _rfm9x.Open("ComPort", 9600);
+
+            // Assert
+            MockSerialPortFactory
+                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
+
+            MockSerialPort.Verify(_ => _.Open(), Times.Once);
         }
 
         [TestMethod]
@@ -1314,11 +1368,10 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RssiThreshold = 0x55; },
+                () => { _rfm9x.RssiThreshold = -114; },
                 Commands.SetRssiThreshold,
-                "0x55");
+                $"0x{(sbyte)-114:X2}");
         }
-
         [TestMethod]
         public void TestSetRxPayloadCrcOn()
         {
@@ -1426,36 +1479,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm9x.TxContinuousMode = true; },
                 Commands.SetTxContinuousMode,
                 "1");
-        }
-
-        [TestMethod]
-        [DataRow(Timer.Timer1)]
-        [DataRow(Timer.Timer2)]
-        public void GetTimerCoefficient(Timer timer)
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.GetTimerCoefficient(timer); },
-                (v) => v.Should().Be(0x10),
-                $"{Commands.GetTimerCoefficient} {(int)timer}",
-                "0x10");
-        }
-
-        [TestMethod]
-        [DataRow(Timer.Timer1, TimerResolution.Disabled)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
-        [DataRow(Timer.Timer2, TimerResolution.Disabled)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]
-        public void GetTimerResolution(Timer timer, TimerResolution expected)
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.GetTimerResolution(timer); },
-                (v) => v.Should().Be(expected),
-                $"{Commands.GetTimerResolution} {(int)timer}",
-                ((int)expected).ToString());
         }
     }
 }

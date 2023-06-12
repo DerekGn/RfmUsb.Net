@@ -29,7 +29,7 @@ namespace RfmUsb.Net
     /// <summary>
     /// An rfm6x device
     /// </summary>
-    public interface IRfm6x : IRfm
+    public interface IRfm69 : IRfm
     {
         /// <summary>
         /// Enable the AES encryption/decryption:
@@ -157,7 +157,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// RSSI trigger level for Rssi interrupt
         /// </summary>
-        byte RssiThreshold { get; set; }
+        sbyte RssiThreshold { get; set; }
 
         /// <summary>
         /// High sensitivity or normal sensitivity mode

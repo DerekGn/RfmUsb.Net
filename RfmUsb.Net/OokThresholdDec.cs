@@ -33,30 +33,37 @@ namespace RfmUsb.Net
         /// Once every chip
         /// </summary>
         OncePerChip,
+
         /// <summary>
         /// Once every 2 chips
         /// </summary>
         OnceEvery2Chips,
+
         /// <summary>
         /// Once every 4 chips
         /// </summary>
         OnceEvery4Chips,
+
         /// <summary>
         /// Once every 8 chips
         /// </summary>
         OnceEvery8Chips,
+
         /// <summary>
         /// 2 times in each chip
         /// </summary>
         TwiceInEachChip,
+
         /// <summary>
         /// 4 times in each chip
         /// </summary>
         FourTimesInEachChip,
+
         /// <summary>
         /// 8 times in each chip
         /// </summary>
         EightTimesInEachChip,
+
         /// <summary>
         /// 16 times in each chip
         /// </summary>

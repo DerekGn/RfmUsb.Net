@@ -39,6 +39,7 @@ namespace RfmUsb.Net.Ports
         {
             return new SerialPort(serialPort);
         }
+
         /// <summary>
         /// Get the list of serial ports from the OD
         /// </summary>

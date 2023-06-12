@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// Fixed
         /// </summary>
         Fixed,
+
         /// <summary>
         /// Peak
         /// </summary>
         Peak,
+
         /// <summary>
         /// Average
         /// </summary>
         Average,
+
         /// <summary>
         /// Reserved
         /// </summary>

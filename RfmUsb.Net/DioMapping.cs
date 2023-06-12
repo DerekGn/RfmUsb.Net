@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// Dio Mapping 0
         /// </summary>
         DioMapping0,
+
         /// <summary>
         /// Dio Mapping 1
         /// </summary>
         DioMapping1,
+
         /// <summary>
         /// Dio Mapping 2
         /// </summary>
         DioMapping2,
+
         /// <summary>
         /// Dio Mapping 3
         /// </summary>

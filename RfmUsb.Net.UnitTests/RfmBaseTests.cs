@@ -26,6 +26,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json.Linq;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using System;
@@ -531,9 +532,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return RfmBase.Rssi; },
-                (v) => v.Should().Be(0xA0),
+                (v) => v.Should().Be(-66),
                 Commands.GetRssi,
-                "0xA0");
+                $"0x{(sbyte)-66:X2}");
         }
 
         [TestMethod]
@@ -608,31 +609,23 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetVersion()
+        public void TestGetRadioVersion()
         {
             ExecuteGetTest(
-                () => { return RfmBase.Version; },
-                (v) => v.Should().Be("1.2"),
-                Commands.GetVersion,
-                "1.2");
+                () => { return RfmBase.RadioVersion; },
+                (v) => v.Should().Be(0x24),
+                Commands.GetRadioVersion,
+                "0x24");
         }
 
         [TestMethod]
-        public void TestOpen()
+        public void TestGetFirmwareVersion()
         {
-            // Arrange
-            MockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(MockSerialPort.Object);
-
-            // Act
-            RfmBase.Open("ComPort", 9600);
-
-            // Assert
-            MockSerialPortFactory
-                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
-
-            MockSerialPort.Verify(_ => _.Open(), Times.Once);
+            ExecuteGetTest(
+                () => { return RfmBase.FirmwareVersion; },
+                (v) => v.Should().Be("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz"),
+                Commands.GetFirmwareVersion,
+                "RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [TestMethod]

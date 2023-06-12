@@ -33,6 +33,7 @@ namespace RfmUsb.Net
         /// Timer 1
         /// </summary>
         Timer1,
+
         /// <summary>
         /// Timer 2
         /// </summary>

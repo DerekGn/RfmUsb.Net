@@ -109,6 +109,11 @@ namespace RfmUsb.Net
         byte FifoThreshold { get; set; }
 
         /// <summary>
+        /// Get the RfmUsb firmware version
+        /// </summary>
+        string FirmwareVersion { get; }
+
+        /// <summary>
         /// Get or set the frequency
         /// </summary>
         uint Frequency { get; set; }
@@ -216,9 +221,14 @@ namespace RfmUsb.Net
         ushort PreambleSize { get; set; }
 
         /// <summary>
+        /// Get the RfmUsb radio version
+        /// </summary>
+        byte RadioVersion { get; }
+
+        /// <summary>
         /// Absolute value of the RSSI in dBm, 0.5dB steps. RSSI = -RssiValue/2 [dBm
         /// </summary>
-        byte Rssi { get; }
+        sbyte Rssi { get; }
 
         /// <summary>
         /// Gets the Rx channel filter bandwidth
@@ -256,11 +266,6 @@ namespace RfmUsb.Net
         /// true → FifoNotEmpty (i.e. at least one byte in the FIFO)
         /// </summary>
         bool TxStartCondition { get; set; }
-
-        /// <summary>
-        /// Get the FrmUsb version
-        /// </summary>
-        string Version { get; }
 
         /// <summary>
         /// Close the connection to the RfmUsb device

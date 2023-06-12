@@ -86,6 +86,7 @@ namespace RfmUsb.Net
         public const string GetFifoRxBytesNumber = "";
         public const string GetFifoThreshold = "g-ft";
         public const string GetFifoTxBaseAddress = "";
+        public const string GetFirmwareVersion = "g-fv";
         public const string GetFormerTemperatureValue = "";
         public const string GetFreqError = "";
         public const string GetFreqHoppingPeriod = "";
@@ -155,8 +156,9 @@ namespace RfmUsb.Net
         public const string GetPreamblePolarity = "";
         public const string GetPreambleSize = "g-ps";
         public const string GetRadioConfig = "g-rc";
+        public const string GetRadioVersion = "g-rv";
         public const string GetRestartRxOnCollision = "";
-        public const string GetRssi = "g-rssi";
+        public const string GetRssi = "g-r";
         public const string GetRssiCollisionThreshold = "";
         public const string GetRssiOffset = "";
         public const string GetRssiSmoothing = "";
@@ -190,7 +192,6 @@ namespace RfmUsb.Net
         public const string GetTxStartCondition = "g-tsc";
         public const string GetValidHeaderCount = "";
         public const string GetValidPacketCount = "";
-        public const string GetVersion = "g-fv";
         public const string SetAddressFiltering = "s-af";
         public const string SetAesOn = "s-ae";
         public const string SetAfcAutoClear = "s-aac";

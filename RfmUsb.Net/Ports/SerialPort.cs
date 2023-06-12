@@ -52,6 +52,7 @@ namespace RfmUsb.Net.Ports
             _serialPort.DataReceived += DataReceivedHandler;
             _serialPort.PinChanged += PinChangedHandler;
         }
+
         public Handshake Handshake { get => _serialPort.Handshake; set => _serialPort.Handshake = value; }
         public Encoding Encoding { get => _serialPort.Encoding; set => _serialPort.Encoding = value; }
         public bool DtrEnable { get => _serialPort.DtrEnable; set => _serialPort.DtrEnable = value; }
@@ -77,8 +78,11 @@ namespace RfmUsb.Net.Ports
         public bool BreakState { get => _serialPort.BreakState; set => _serialPort.BreakState = value; }
         public Stream BaseStream => _serialPort.BaseStream;
         public int BytesToRead => _serialPort.BytesToRead;
+
         public event SerialDataReceivedEventHandler DataReceived;
+
         public event SerialPinChangedEventHandler PinChanged;
+
         public event SerialErrorReceivedEventHandler ErrorReceived;
 
         public void Close()
@@ -180,7 +184,7 @@ namespace RfmUsb.Net.Ports
             {
                 if (disposing)
                 {
-                    if(_serialPort != null)
+                    if (_serialPort != null)
                     {
                         _serialPort.ErrorReceived -= ErrorReceivedHandler;
                         _serialPort.DataReceived -= DataReceivedHandler;

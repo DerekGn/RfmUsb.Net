@@ -59,7 +59,7 @@ namespace RfmUsb.Net.Extensions
             return ParseAndConvert(s => Convert.ToSByte(s, 16), value);
         }
 
-        private static T ParseAndConvert<T>(Func<string,T> convertOperation, string value)
+        private static T ParseAndConvert<T>(Func<string, T> convertOperation, string value)
         {
             var elements = value.Split('-');
 

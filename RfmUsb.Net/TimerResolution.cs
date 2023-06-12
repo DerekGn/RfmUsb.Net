@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// Timer disabled
         /// </summary>
         Disabled,
+
         /// <summary>
         /// 64 us
         /// </summary>
         Resolution64us,
+
         /// <summary>
         /// 4.1 ms
         /// </summary>
         Resolution4_1ms,
+
         /// <summary>
         /// 262 ms
         /// </summary>

@@ -36,6 +36,7 @@ namespace RfmUsb.Net.Ports
         /// </summary>
         /// <returns></returns>
         IList<string> GetSerialPorts();
+
         /// <summary>
         /// Create an <see cref="ISerialPort"/> instance
         /// </summary>

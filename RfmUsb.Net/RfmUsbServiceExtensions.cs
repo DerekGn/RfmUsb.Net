@@ -34,14 +34,14 @@ namespace RfmUsb.Net
     public static class RfmUsbServiceExtensions
     {
         /// <summary>
-        /// Add a singleton instance of an <see cref="IRfm6x"/> implementation
+        /// Add a singleton instance of an <see cref="IRfm69"/> implementation
         /// </summary>
-        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfm6x"/> instance</param>
+        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfm69"/> instance</param>
         /// <returns>The <see cref="IServiceCollection"/></returns>
         [ExcludeFromCodeCoverage]
         public static IServiceCollection AddRfm6x(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IRfm6x, Rfm6x>();
+            serviceCollection.AddSingleton<IRfm69, Rfm69>();
             serviceCollection.AddSerialPortFactory();
             return serviceCollection;
         }

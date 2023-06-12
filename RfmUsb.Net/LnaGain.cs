@@ -33,26 +33,32 @@ namespace RfmUsb.Net
         /// Auto
         /// </summary>
         Auto,
+
         /// <summary>
         /// Max
         /// </summary>
         Max,
+
         /// <summary>
         /// Max - 6db
         /// </summary>
         MaxMinus6db,
+
         /// <summary>
         /// Max - 12db
         /// </summary>
         MaxMinus12db,
+
         /// <summary>
         /// Max - 12db
         /// </summary>
         MaxMinus24db,
+
         /// <summary>
         /// Max - 36db
         /// </summary>
         MaxMinus36db,
+
         /// <summary>
         /// Max - 48db
         /// </summary>

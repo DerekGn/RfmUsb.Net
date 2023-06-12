@@ -36,18 +36,22 @@ namespace RfmUsb.Net
         /// Signal Detected
         /// </summary>
         SignalDetected,
+
         /// <summary>
         /// Signal Synchronized
         /// </summary>
         SignalSynchronized,
+
         /// <summary>
         /// Rx Ongoing
         /// </summary>
         StatusRxOnGoing,
+
         /// <summary>
         /// Header Info Valid
         /// </summary>
         HeaderInfoValid,
+
         /// <summary>
         /// Modem Clear
         /// </summary>

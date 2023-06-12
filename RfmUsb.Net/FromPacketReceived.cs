@@ -33,22 +33,27 @@ namespace RfmUsb.Net
         /// To PacketReceived On PayloadReady Irq
         /// </summary>
         ToPacketReceivedOnPayloadReady,
+
         /// <summary>
         /// To LowPowerSelection On PayloadReady Irq
         /// </summary>
         ToLowPowerSelectionOnPayloadReady,
+
         /// <summary>
         /// To PacketReceived On CrcOk Irq
         /// </summary>
         ToPacketReceivedStateOnCrcOk,
+
         /// <summary>
         /// To SequencerOff On Rssi Irq
         /// </summary>
         ToSequenceROffOnRssi,
+
         /// <summary>
         /// To SequencerOff On SyncAddress Irq
         /// </summary>
         ToSequencerOffOnSyncAddress,
+
         /// <summary>
         /// To SequencerOff On PreambleDetect Irq
         /// </summary>

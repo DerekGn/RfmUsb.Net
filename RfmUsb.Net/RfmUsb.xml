@@ -271,30 +271,30 @@
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbCommandExecutionException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException" /> class.
             </summary>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbCommandExecutionException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException" /> class.
             </summary>
             <param name="message">The message that describes the error.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbCommandExecutionException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException" /> class.
             </summary>
             <param name="message">The error message that explains the reason for the exception.</param>
-            <param name="inner">The exception that is the cause of the current exception, 
+            <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbCommandExecutionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException"/> class with serialized data.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbCommandExecutionException" /> class with serialized data.
             </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds 
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds
             the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information
             about the source or destination.</param>
         </member>
         <member name="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException">
@@ -304,63 +304,63 @@
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException" /> class.
             </summary>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException" /> class.
             </summary>
             <param name="message">The message that describes the error.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException" /> class.
             </summary>
             <param name="message">The error message that explains the reason for the exception.</param>
-            <param name="inner">The exception that is the cause of the current exception, 
+            <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException"/> class with serialized data.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbSerialPortNotFoundException" /> class with serialized data.
             </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds 
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds
             the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information
             about the source or destination.</param>
         </member>
         <member name="T:RfmUsb.Exceptions.RfmUsbTransmitException">
             <summary>
-            Throw when a error occurs during transmission 
+            Throw when a error occurs during transmission
             </summary>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbTransmitException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException" /> class.
             </summary>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbTransmitException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException" /> class.
             </summary>
             <param name="message">The message that describes the error.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbTransmitException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException"/> class.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException" /> class.
             </summary>
             <param name="message">The error message that explains the reason for the exception.</param>
-            <param name="inner">The exception that is the cause of the current exception, 
+            <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
         <member name="M:RfmUsb.Exceptions.RfmUsbTransmitException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException"/> class with serialized data.
+            Initializes a new instance of the <see cref="T:RfmUsb.Exceptions.RfmUsbTransmitException" /> class with serialized data.
             </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds 
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds
             the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information
             about the source or destination.</param>
         </member>
         <member name="T:RfmUsb.ExitCondition">
@@ -532,12 +532,12 @@
         </member>
         <member name="P:RfmUsb.IRfmUsb.ListenResolutionIdle">
             <summary>
-            The resolution of Listen mode Idle time 
+            The resolution of Listen mode Idle time
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.ListenResolutionRx">
             <summary>
-            The resolution of Listen mode Rx time 
+            The resolution of Listen mode Rx time
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.ListenCriteria">
@@ -647,12 +647,12 @@
         <member name="P:RfmUsb.IRfmUsb.OokFixedThreshold">
             <summary>
             Fixed threshold value (in dB) in the OOK demodulator.
-            Used when OokThresholdType is <see cref="F:RfmUsb.OokThresholdType.Fixed"/>
+            Used when OokThresholdType is <see cref="F:RfmUsb.OokThresholdType.Fixed" />
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AfcAutoClear">
             <summary>
-            Only valid if AfcAutoOn is set 
+            Only valid if AfcAutoOn is set
             false → AFC register is not cleared before a new AFC phase
             true → AFC register is cleared before a new AFC phase
             </summary>
@@ -690,14 +690,14 @@
         </member>
         <member name="P:RfmUsb.IRfmUsb.TimeoutRxStart">
             <summary>
-            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
+            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
             if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
             0x00: TimeoutRxStart is disabled
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.TimeoutRssiThreshold">
             <summary>
-            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode 
+            Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
             if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
             0x00: TimeoutRxStart is disabled
             </summary>
@@ -714,7 +714,7 @@
         </member>
         <member name="P:RfmUsb.IRfmUsb.FifoFill">
             <summary>
-            FIFO filling condition: 
+            FIFO filling condition:
             false → if SyncAddress interrupt occurs
             true → as long as FifoFillCondition is set
             </summary>
@@ -798,7 +798,7 @@
         </member>
         <member name="P:RfmUsb.IRfmUsb.TxStartCondition">
             <summary>
-            Defines the condition to start packet transmission : 
+            Defines the condition to start packet transmission :
             false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
             true → FifoNotEmpty (i.e. at least one byte in the FIFO)
             </summary>
@@ -810,22 +810,22 @@
         </member>
         <member name="P:RfmUsb.IRfmUsb.InterPacketRxDelay">
             <summary>
-            After PayloadReady occurred, defines the delay between FIFO empty and the 
+            After PayloadReady occurred, defines the delay between FIFO empty and the
             start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
-            - Tdelay = 0 if InterpacketRxDelay >= 12 
+            - Tdelay = 0 if InterpacketRxDelay >= 12
             - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AutoRxRestartOn">
             <summary>
-            Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO: 
-            false → Off. RestartRx can be used. 
+            Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
+            false → Off. RestartRx can be used.
             true→ On. Rx automatically restarted after InterPacketRxDelay.
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AesOn">
             <summary>
-            Enable the AES encryption/decryption: 
+            Enable the AES encryption/decryption:
             false → Off
             true → On (payload limited to 66 bytes maximum)
             </summary>
@@ -925,17 +925,17 @@
         </member>
         <member name="M:RfmUsb.IRfmUsb.SetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping)">
             <summary>
-            Set the <see cref="T:RfmUsb.Dio"/> mapping configuration <see cref="T:RfmUsb.DioMapping"/>
+            Set the <see cref="T:RfmUsb.Dio" /> mapping configuration <see cref="T:RfmUsb.DioMapping" />
             </summary>
-            <param name="dio">The <see cref="T:RfmUsb.Dio"/> configuration</param>
-            <param name="mapping">The <see cref="T:RfmUsb.DioMapping"/></param>
+            <param name="dio">The <see cref="T:RfmUsb.Dio" /> configuration</param>
+            <param name="mapping">The <see cref="T:RfmUsb.DioMapping" /></param>
         </member>
         <member name="M:RfmUsb.IRfmUsb.GetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping@)">
             <summary>
-            Get the <see cref="T:RfmUsb.Dio"/> mapping configuration <see cref="T:RfmUsb.DioMapping"/>
+            Get the <see cref="T:RfmUsb.Dio" /> mapping configuration <see cref="T:RfmUsb.DioMapping" />
             </summary>
-            <param name="dio">The <see cref="T:RfmUsb.Dio"/></param>
-            <param name="mapping">The <see cref="T:RfmUsb.DioMapping"/></param>
+            <param name="dio">The <see cref="T:RfmUsb.Dio" /></param>
+            <param name="mapping">The <see cref="T:RfmUsb.DioMapping" /></param>
         </member>
         <member name="M:RfmUsb.IRfmUsb.RestartRx">
             <summary>
@@ -1042,7 +1042,7 @@
         </member>
         <member name="F:RfmUsb.Irq.AutoMode">
             <summary>
-            Set when entering Intermediate mode. Cleared when exiting 
+            Set when entering Intermediate mode. Cleared when exiting
             Intermediate mode. Please note that in Sleep mode a small
             delay can be observed between AutoMode interrupt and the
             corresponding enter/exit condition.
@@ -1075,9 +1075,9 @@
         </member>
         <member name="F:RfmUsb.Irq.ModeReady">
             <summary>
-            Set when the operation mode requested in Mode, is ready 
-            - Sleep: Entering Sleep mode 
-            - Standby: XO is running 
+            Set when the operation mode requested in Mode, is ready
+            - Sleep: Entering Sleep mode
+            - Standby: XO is running
             - FS: PLL is locked
             - Rx: RSSI sampling starts
             - Tx: PA ramp-up completed
@@ -1112,7 +1112,7 @@
         </member>
         <member name="T:RfmUsb.ListenResolution">
             <summary>
-            Resolution of Listen mode Idle time 
+            Resolution of Listen mode Idle time
             </summary>
         </member>
         <member name="F:RfmUsb.ListenResolution.Reserved">
@@ -1322,7 +1322,7 @@
         </member>
         <member name="F:RfmUsb.OokAverageThresholdFilter.ChipRate4">
             <summary>
-            Chip rate / 4.π 
+            Chip rate / 4.π
             </summary>
         </member>
         <member name="F:RfmUsb.OokAverageThresholdFilter.ChipRate2">
@@ -1592,7 +1592,7 @@
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.IsOpen">
             <summary>
-            Gets a value indicating the open or closed status of the <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            Gets a value indicating the open or closed status of the <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.DsrHolding">
@@ -1602,13 +1602,13 @@
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.NewLine">
             <summary>
-            Gets or sets the value used to interpret the end of a call to the <see cref="T:RfmUsb.Ports.ISerialPort"/>.ReadLine
-            and <see cref="T:RfmUsb.Ports.ISerialPort"/>.WriteLine(System.String) methods.
+            Gets or sets the value used to interpret the end of a call to the <see cref="T:RfmUsb.Ports.ISerialPort" />.ReadLine
+            and <see cref="T:RfmUsb.Ports.ISerialPort" />.WriteLine(System.String) methods.
             </summary>
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.ReadBufferSize">
             <summary>
-            Gets or sets the size of the <see cref="T:RfmUsb.Ports.ISerialPort"/> input buffer.
+            Gets or sets the size of the <see cref="T:RfmUsb.Ports.ISerialPort" /> input buffer.
             </summary>
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.ParityReplace">
@@ -1633,7 +1633,7 @@
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.ReceivedBytesThreshold">
             <summary>
-            Gets or sets the number of bytes in the internal input buffer before a <see cref="T:RfmUsb.Ports.ISerialPort"/>.DataReceived event occurs.
+            Gets or sets the number of bytes in the internal input buffer before a <see cref="T:RfmUsb.Ports.ISerialPort" />.DataReceived event occurs.
             </summary>
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.RtsEnable">
@@ -1678,7 +1678,7 @@
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.BaseStream">
             <summary>
-            Gets the underlying System.IO.Stream object for a <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            Gets the underlying System.IO.Stream object for a <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="P:RfmUsb.Ports.ISerialPort.BytesToRead">
@@ -1688,23 +1688,23 @@
         </member>
         <member name="E:RfmUsb.Ports.ISerialPort.DataReceived">
             <summary>
-            Indicates that data has been received through a port represented by the <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            Indicates that data has been received through a port represented by the <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="E:RfmUsb.Ports.ISerialPort.PinChanged">
             <summary>
-            Indicates that a non-data signal event has occurred on the port represented by the <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            Indicates that a non-data signal event has occurred on the port represented by the <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="E:RfmUsb.Ports.ISerialPort.ErrorReceived">
             <summary>
-            Indicates that an error has occurred with a port represented by a <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            Indicates that an error has occurred with a port represented by a <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.Close">
             <summary>
-            Closes the port connection, sets the <see cref="T:RfmUsb.Ports.ISerialPort"/>.IsOpen property
-            to false, and disposes of the internal <see cref="T:System.IO.Stream"/> object.
+            Closes the port connection, sets the <see cref="T:RfmUsb.Ports.ISerialPort" />.IsOpen property
+            to false, and disposes of the internal <see cref="T:System.IO.Stream" /> object.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.DiscardInBuffer">
@@ -1724,34 +1724,34 @@
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.Read(System.Byte[],System.Int32,System.Int32)">
             <summary>
-            Reads a number of bytes from the <see cref="T:RfmUsb.Ports.ISerialPort"/> input buffer and
+            Reads a number of bytes from the <see cref="T:RfmUsb.Ports.ISerialPort" /> input buffer and
             writes those bytes into a byte array at the specified offset.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.Read(System.Char[],System.Int32,System.Int32)">
             <summary>
-            Reads a number of characters from the <see cref="T:RfmUsb.Ports.ISerialPort"/> input buffer and writes them into an array of characters at a given offset.
+            Reads a number of characters from the <see cref="T:RfmUsb.Ports.ISerialPort" /> input buffer and writes them into an array of characters at a given offset.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.ReadByte">
             <summary>
-            Synchronously reads one byte from the <see cref="T:RfmUsb.Ports.ISerialPort"/> input buffer.
+            Synchronously reads one byte from the <see cref="T:RfmUsb.Ports.ISerialPort" /> input buffer.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.ReadChar">
             <summary>
-            Synchronously reads one character from the <see cref="T:RfmUsb.Ports.ISerialPort"/> input buffer.
+            Synchronously reads one character from the <see cref="T:RfmUsb.Ports.ISerialPort" /> input buffer.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.ReadExisting">
             <summary>
             Reads all immediately available bytes, based on the encoding, in both the stream
-            and the input buffer of the <see cref="T:RfmUsb.Ports.ISerialPort"/> object.
+            and the input buffer of the <see cref="T:RfmUsb.Ports.ISerialPort" /> object.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.ReadLine">
             <summary>
-            Reads up to the <see cref="T:RfmUsb.Ports.ISerialPort"/>.NewLine value in the input buffer.
+            Reads up to the <see cref="T:RfmUsb.Ports.ISerialPort" />.NewLine value in the input buffer.
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.ReadTo(System.String)">
@@ -1761,7 +1761,7 @@
         <member name="M:RfmUsb.Ports.ISerialPort.Write(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Writes a specified number of bytes to the serial port using data from a buffer.
-            </summary>        
+            </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.Write(System.String)">
             <summary>
@@ -1775,12 +1775,12 @@
         </member>
         <member name="M:RfmUsb.Ports.ISerialPort.WriteLine(System.String)">
             <summary>
-            Writes the specified string and the <see cref="P:RfmUsb.Ports.ISerialPort.NewLine"/> value to the output buffer.
+            Writes the specified string and the <see cref="P:RfmUsb.Ports.ISerialPort.NewLine" /> value to the output buffer.
             </summary>
         </member>
         <member name="T:RfmUsb.Ports.ISerialPortFactory">
             <summary>
-            Defines the <see cref="T:RfmUsb.Ports.ISerialPortFactory"/> interface
+            Defines the <see cref="T:RfmUsb.Ports.ISerialPortFactory" /> interface
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.ISerialPortFactory.GetSerialPorts">
@@ -1791,29 +1791,29 @@
         </member>
         <member name="M:RfmUsb.Ports.ISerialPortFactory.CreateSerialPortInstance(System.String)">
             <summary>
-            Create an <see cref="T:RfmUsb.Ports.ISerialPort"/> instance
+            Create an <see cref="T:RfmUsb.Ports.ISerialPort" /> instance
             </summary>
             <param name="serialPort"></param>
             <returns></returns>
         </member>
         <member name="T:RfmUsb.Ports.PortsServiceExtensions">
             <summary>
-            An <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> extensions
+            An <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> extensions
             </summary>
         </member>
         <member name="M:RfmUsb.Ports.PortsServiceExtensions.AddSerialPortFactory(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Adds the <see cref="T:RfmUsb.Ports.ISerialPortFactory"/> instance to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+            Adds the <see cref="T:RfmUsb.Ports.ISerialPortFactory" /> instance to the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />
             </summary>
-            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
+            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /></param>
             <returns></returns>
         </member>
         <member name="M:RfmUsb.Ports.SerialPortFactory.CreateSerialPortInstance(System.String)">
             <summary>
-            Create an instance of a <see cref="T:RfmUsb.Ports.ISerialPort"/>
+            Create an instance of a <see cref="T:RfmUsb.Ports.ISerialPort" />
             </summary>
             <param name="serialPort">The port to use (for example, COM1).</param>
-            <returns>An instance of the <see cref="T:RfmUsb.Ports.ISerialPort"/></returns>
+            <returns>An instance of the <see cref="T:RfmUsb.Ports.ISerialPort" /></returns>
         </member>
         <member name="M:RfmUsb.Ports.SerialPortFactory.GetSerialPorts">
             <summary>
@@ -1823,317 +1823,317 @@
         </member>
         <member name="T:RfmUsb.RfmUsb">
             <summary>
-            An implementation of the <see cref="T:RfmUsb.IRfmUsb"/> interface
+            An implementation of the <see cref="T:RfmUsb.IRfmUsb" /> interface
             </summary>
         </member>
         <member name="M:RfmUsb.RfmUsb.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.IRfmUsb},RfmUsb.Ports.ISerialPortFactory)">
             <summary>
-            Create an instance of a <see cref="T:RfmUsb.RfmUsb"/>
+            Create an instance of a <see cref="T:RfmUsb.RfmUsb" />
             </summary>
-            <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> for logging</param>
-            <param name="serialPortFactory">The <see cref="T:RfmUsb.Ports.ISerialPortFactory"/> instance for creating and querying serial port instances</param>
+            <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILogger`1" /> for logging</param>
+            <param name="serialPortFactory">The <see cref="T:RfmUsb.Ports.ISerialPortFactory" /> instance for creating and querying serial port instances</param>
         </member>
         <member name="P:RfmUsb.RfmUsb.Fifo">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Sequencer">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenerOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Mode">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Modulation">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.FskModulationShaping">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokModulationShaping">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.BitRate">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.FrequencyDeviation">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Frequency">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AfcLowBetaOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenResolutionIdle">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenResolutionRx">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenCriteria">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenEnd">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenCoefficentIdle">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ListenCoefficentRx">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Version">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OutputPower">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.PaRamp">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OcpEnable">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OcpTrim">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Impedance">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.CurrentLnaGain">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.LnaGainSelect">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.DccFreq">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.RxBw">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.DccFreqAfc">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.RxBwAfc">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokThresholdType">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokPeakThresholdStep">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokPeakThresholdDec">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokAverageThresholdFilter">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.OokFixedThreshold">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AfcAutoClear">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AfcAutoOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Afc">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Fei">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Rssi">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Irq">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.RssiThreshold">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.TimeoutRxStart">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.TimeoutRssiThreshold">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.PreambleSize">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.SyncEnable">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.FifoFill">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.SyncBitErrors">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Sync">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.SyncSize">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.PacketFormat">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.DcFree">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.CrcOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.CrcAutoClear">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AddressFiltering">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.PayloadLength">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.NodeAddress">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.BroadcastAddress">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.EnterCondition">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ExitCondition">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.IntermediateMode">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.TxStartCondition">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.FifoThreshold">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.InterPacketRxDelay">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AutoRxRestartOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.AesOn">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.TemperatureValue">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.SensitivityBoost">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.ContinuousDagc">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.LowBetaAfcOffset">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.DioInterruptMask">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.Timeout">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:RfmUsb.RfmUsb.RadioConfig">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.AfcClear">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.AfcStart">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Close">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.FeiStart">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.ListenAbort">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.MeasureTemperature">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Open(System.String,System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.RcCalibration">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Reset">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.RestartRx">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.SetAesKey(System.Collections.Generic.IEnumerable{System.Byte})">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.SetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.GetDioMapping(RfmUsb.Dio,RfmUsb.DioMapping@)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.StartRssi">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.GetRadioConfigurations">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Transmit(System.Collections.Generic.IList{System.Byte})">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.TransmitReceive(System.Collections.Generic.IList{System.Byte})">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.WaitForIrq">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:RfmUsb.RfmUsb.Dispose(System.Boolean)">
             <summary>
-            Dispose the <see cref="T:RfmUsb.IRfmUsb"/> instance
+            Dispose the <see cref="T:RfmUsb.IRfmUsb" /> instance
             </summary>
             <param name="disposing"></param>
         </member>
         <member name="M:RfmUsb.RfmUsb.Dispose">
             <summary>
-            Dispose the <see cref="T:RfmUsb.IRfmUsb"/> instance
+            Dispose the <see cref="T:RfmUsb.IRfmUsb" /> instance
             </summary>
         </member>
         <member name="T:RfmUsb.RfmUsbServiceExtensions">
             <summary>
-            Extensions for the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to enable configuration of rfmusb dependencies
+            Extensions for the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to enable configuration of rfmusb dependencies
             </summary>
         </member>
         <member name="M:RfmUsb.RfmUsbServiceExtensions.AddRfmUsb(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Add a singleton instance of an <see cref="T:RfmUsb.IRfmUsb"/> implementation
+            Add a singleton instance of an <see cref="T:RfmUsb.IRfmUsb" /> implementation
             </summary>
-            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to add the <see cref="T:RfmUsb.IRfmUsb"/> instance</param>
-            <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+            <param name="serviceCollection">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add the <see cref="T:RfmUsb.IRfmUsb" /> instance</param>
+            <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /></returns>
         </member>
     </members>
 </doc>

@@ -33,6 +33,7 @@ namespace RfmUsb.Net
         /// Fsk modulation
         /// </summary>
         Fsk = 0,
+
         /// <summary>
         /// Ook modulation
         /// </summary>

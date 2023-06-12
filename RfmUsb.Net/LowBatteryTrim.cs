@@ -33,30 +33,37 @@ namespace RfmUsb.Net
         /// 1.695 Volts
         /// </summary>
         Volts1_695,
+
         /// <summary>
         /// 1.764 Volts
         /// </summary>
         Volts1_764,
+
         /// <summary>
         /// 1.835 Volts
         /// </summary>
         Volts1_835,
+
         /// <summary>
         /// 1.985 Volts
         /// </summary>
         Volts1_905,
+
         /// <summary>
         /// 1.976 Volts
         /// </summary>
         Volts1_976,
+
         /// <summary>
         /// 2.045 Volts
         /// </summary>
         Volts2_045,
+
         /// <summary>
         /// 2.116 Volts
         /// </summary>
         Volts2_116,
+
         /// <summary>
         /// 2.185 Volts
         /// </summary>

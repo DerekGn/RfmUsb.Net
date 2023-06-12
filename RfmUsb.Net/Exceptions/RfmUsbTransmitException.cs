@@ -27,7 +27,7 @@ using System;
 namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
-    /// Throw when a error occurs during transmission 
+    /// Throw when a error occurs during transmission
     /// </summary>
     [Serializable]
     public class RfmUsbTransmitException : System.Exception
@@ -35,23 +35,27 @@ namespace RfmUsb.Net.Exceptions
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbTransmitException"/> class.
         /// </summary>
-        public RfmUsbTransmitException() { }
+        public RfmUsbTransmitException()
+        { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbTransmitException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public RfmUsbTransmitException(string message) : base(message) { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbTransmitException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="inner">The exception that is the cause of the current exception, 
+        /// <param name="inner">The exception that is the cause of the current exception,
         /// or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public RfmUsbTransmitException(string message, Exception inner) : base(message, inner) { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbTransmitException"/> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="System.Runtime.Serialization.SerializationInfo"/> that holds 
+        /// <param name="info">The <see cref="System.Runtime.Serialization.SerializationInfo"/> that holds
         /// the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="System.Runtime.Serialization.StreamingContext"/> that contains contextual information
         /// about the source or destination.</param>

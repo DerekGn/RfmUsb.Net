@@ -119,7 +119,7 @@ namespace RfmUsb.Net
         public sbyte FormerTemperatureValue
         {
             get => SendCommand(Commands.GetFormerTemperatureValue).ConvertToSByte();
-            set => SendCommandWithCheck($"{Commands.SetFormerTemperatureValue} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetFormerTemperatureValue} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -358,10 +358,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte RssiOffset
+        public sbyte RssiOffset
         {
-            get => SendCommand(Commands.GetRssiOffset).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetRssiOffset} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetRssiOffset).ConvertToSByte();
+            set => SendCommandWithCheck($"{Commands.SetRssiOffset} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -372,10 +372,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte RssiThreshold
+        public sbyte RssiThreshold
         {
-            get => SendCommand(Commands.GetRssiThreshold).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetRssiThreshold).ConvertToSByte();
+            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

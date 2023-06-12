@@ -49,7 +49,7 @@ namespace RfmUsb.Net
         byte BitRateFractional { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool BitSyncOn { get; set; }
 
@@ -124,6 +124,7 @@ namespace RfmUsb.Net
         /// 1: LNA gain set by the internal AGC loop
         /// </remarks>
         bool LoraAgcAutoOn { get; set; }
+
         /// <summary>
         /// Get the lora mode
         /// </summary>
@@ -152,6 +153,7 @@ namespace RfmUsb.Net
         /// Static offset added to the threshold in average mode in order to reduce glitching activity (OOK only)
         /// </summary>
         OokAverageOffset OokAverageOffset { get; set; }
+
         byte PacketRssi { get; }
         byte PacketSnr { get; }
         byte PayloadMaxLength { get; set; }
@@ -163,9 +165,10 @@ namespace RfmUsb.Net
         bool PreamblePolarity { get; set; }
         bool RestartRxOnCollision { get; set; }
         byte RssiCollisionThreshold { get; set; }
-        byte RssiOffset { get; set; }
+        sbyte RssiOffset { get; set; }
         RssiSmoothing RssiSmoothing { get; set; }
-        byte RssiThreshold { get; set; }
+#warning Consolidate ??
+        sbyte RssiThreshold { get; set; }
         byte RssiWideband { get; }
         byte RxCodingRate { get; }
         bool RxPayloadCrcOn { get; set; }

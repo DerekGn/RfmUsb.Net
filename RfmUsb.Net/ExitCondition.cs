@@ -33,30 +33,37 @@ namespace RfmUsb.Net
         /// None (AutoModes Off)
         /// </summary>
         Off,
+
         /// <summary>
         /// Falling edge of FifoNotEmpty (i.e. FIFO empty)
         /// </summary>
         FifoEmpty,
+
         /// <summary>
         /// Rising edge of FifoLevel or Timeout
         /// </summary>
         FifoLevel,
+
         /// <summary>
         /// Rising edge of CrcOk or Timeout
         /// </summary>
         CrcOk,
+
         /// <summary>
         /// Rising edge of PayloadReady or Timeout
         /// </summary>
         PayloadReady,
+
         /// <summary>
         /// Rising edge of SyncAddress or Timeout
         /// </summary>
         SyncAddressMatch,
+
         /// <summary>
         /// Rising edge of PacketSent
         /// </summary>
         PacketSent,
+
         /// <summary>
         /// Rising edge of Timeout
         /// </summary>

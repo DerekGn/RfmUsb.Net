@@ -33,16 +33,16 @@ using System.Linq;
 namespace RfmUsb.Net
 {
     /// <summary>
-    /// An implementation of the <see cref="IRfm6x"/> interface
+    /// An implementation of the <see cref="IRfm69"/> interface
     /// </summary>
-    public class Rfm6x : RfmBase, IRfm6x
+    public class Rfm69 : RfmBase, IRfm69
     {
         /// <summary>
         /// Create an instance of a <see cref="RfmUsb"/>
         /// </summary>
         /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
         /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
-        public Rfm6x(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
+        public Rfm69(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
         {
         }
 
@@ -200,10 +200,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte RssiThreshold
+        public sbyte RssiThreshold
         {
-            get => SendCommand(Commands.GetRssiThreshold).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetRssiThreshold).ConvertToSByte();
+            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -271,6 +271,30 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public void ExecuteListenAbort()
+        {
+            SendCommandWithCheck(Commands.ExecuteListenAbort, ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public void ExecuteMeasureTemperature()
+        {
+            SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public void ExecuteRestartRx()
+        {
+            SendCommandWithCheck(Commands.ExecuteRestartRx, ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public void ExecuteStartRssi()
+        {
+            SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public IList<string> GetRadioConfigurations()
         {
             lock (SerialPort)
@@ -298,33 +322,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void ExecuteListenAbort()
-        {
-            SendCommandWithCheck(Commands.ExecuteListenAbort, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ExecuteMeasureTemperature()
-        {
-            SendCommandWithCheck(Commands.ExecuteMeasureTemperature, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ExecuteRestartRx()
-        {
-            SendCommandWithCheck(Commands.ExecuteRestartRx, ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public void SetAesKey(IEnumerable<byte> key)
         {
             SendCommandWithCheck($"{Commands.ExecuteSetAesKey} {BitConverter.ToString(key.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ExecuteStartRssi()
-        {
-            SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
         }
 
         ///<inheritdoc/>

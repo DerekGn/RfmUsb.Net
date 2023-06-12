@@ -22,8 +22,6 @@
 * SOFTWARE.
 */
 
-using System.Threading;
-
 namespace RfmUsb.Net
 {
     /// <summary>
@@ -36,14 +34,17 @@ namespace RfmUsb.Net
         /// o Receive
         /// </summary>
         ToReceive,
+
         /// <summary>
         /// To Transmit
         /// </summary>
         ToTransmit,
+
         /// <summary>
         /// To Low power selection
         /// </summary>
         ToLowPowerSelection,
+
         /// <summary>
         /// To Sequencer Off
         /// </summary>

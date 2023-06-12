@@ -139,6 +139,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public string FirmwareVersion => SendCommand(Commands.GetFirmwareVersion).Replace(Environment.NewLine, string.Empty);
+
+        ///<inheritdoc/>
         public uint Frequency
         {
             get => Convert.ToUInt32(SendCommand(Commands.GetFrequency).Trim('[', ']'), 16);
@@ -279,13 +282,16 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte Rssi => SendCommand(Commands.GetRssi).ConvertToByte();
+        public byte RadioVersion => SendCommand(Commands.GetRadioVersion).ConvertToByte();
+
+        ///<inheritdoc/>
+        public sbyte Rssi => SendCommand(Commands.GetRssi).ConvertToSByte();
 
         ///<inheritdoc/>
         public byte RxBw
         {
             get => Convert.ToByte(SendCommand(Commands.GetRxBw).Substring(0, 4), 16);
-            set => SendCommandWithCheck($"{Commands.SetRxBw} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetRxBw} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -327,9 +333,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public string Version => SendCommand(Commands.GetVersion);
-
-        ///<inheritdoc/>
         public void Close()
         {
             if (SerialPort != null && SerialPort.IsOpen)
@@ -342,6 +345,13 @@ namespace RfmUsb.Net
         public void EnterBootloader()
         {
             SendCommand(Commands.ExecuteBootloader);
+        }
+
+        ///<inheritdoc/>
+        public void ExecuteReset()
+        {
+            FlushSerialPort();
+            SendCommandWithCheck(Commands.ExecuteReset, ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -381,6 +391,11 @@ namespace RfmUsb.Net
                     SerialPort.WriteTimeout = 500;
                     SerialPort.Open();
                 }
+
+                CheckDeviceVersion(FirmwareVersion);
+
+#warning TODO handle base
+                //SendCommandWithCheck($"{Commands.SetOutputbase} 0", ResponseOk );
             }
             catch (FileNotFoundException ex)
             {
@@ -396,13 +411,6 @@ namespace RfmUsb.Net
         public void RcCalibration()
         {
             SendCommandWithCheck(Commands.ExecuteRcCalibration, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ExecuteReset()
-        {
-            FlushSerialPort();
-            SendCommandWithCheck(Commands.ExecuteReset, ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -475,6 +483,23 @@ namespace RfmUsb.Net
             if (!result.StartsWith(response))
             {
                 throw new RfmUsbCommandExecutionException($"Command: [{command}] Execution Failed Reason: [{result}]");
+            }
+        }
+
+        /// <summary>
+        /// Check the firmware version of the connected device
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version string to check</param>
+        private void CheckDeviceVersion(string firmwareVersion)
+        {
+            if (string.IsNullOrWhiteSpace(firmwareVersion))
+            {
+                throw new RfmUsbInvalidDeviceTypeException("FirmwareVersion is empty");
+            }
+
+            if (!firmwareVersion.Contains(GetType().Name, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new RfmUsbInvalidDeviceTypeException($"Invalid Device Type firmware value {firmwareVersion}");
             }
         }
 

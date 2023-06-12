@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// None
         /// </summary>
         None,
+
         /// <summary>
         /// Node
         /// </summary>
         Node,
+
         /// <summary>
         /// Node or Broadcast
         /// </summary>
         NodeBroaddcast,
+
         /// <summary>
         /// Reserved
         /// </summary>

@@ -33,10 +33,12 @@ namespace RfmUsb.Net
         /// Normal Mode
         /// </summary>
         Normal,
+
         /// <summary>
         /// Improved margin, use if AfcLowBetaOn=1
         /// </summary>
         ImprovedLowBeta1,
+
         /// <summary>
         /// Improved margin, use if AfcLowBetaOn=0
         /// </summary>

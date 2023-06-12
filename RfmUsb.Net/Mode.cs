@@ -33,18 +33,22 @@ namespace RfmUsb.Net
         /// Sleep Mode (SLEEP)
         /// </summary>
         Sleep,
+
         /// <summary>
         /// Standby Mode (STDBY)
         /// </summary>
         Standby,
+
         /// <summary>
         /// Frequency Synthesizer mode (FS)
         /// </summary>
         Synth,
+
         /// <summary>
         /// Transmitter mode (TX)
         /// </summary>
         Tx,
+
         /// <summary>
         /// Receiver mode (RX)
         /// </summary>

@@ -33,14 +33,17 @@ namespace RfmUsb.Net
         /// No Shaping
         /// </summary>
         None,
+
         /// <summary>
         /// filtering with fcutoff = BR
         /// </summary>
         FilteringBr,
+
         /// <summary>
         /// filtering with fcutoff = 2*BR
         /// </summary>
         Filtering2Br,
+
         /// <summary>
         /// Reserved
         /// </summary>

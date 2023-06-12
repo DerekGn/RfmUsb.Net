@@ -32,13 +32,13 @@ using System.Collections.Generic;
 namespace RfmUsb.Net.UnitTests
 {
     [TestClass]
-    public class Rfm6xTests : RfmBaseTests
+    public class Rfm69Tests : RfmBaseTests
     {
-        private readonly Rfm6x _rfm6x;
+        private readonly Rfm69 _rfm6x;
 
-        public Rfm6xTests()
+        public Rfm69Tests()
         {
-            _rfm6x = new Rfm6x(MockLogger, MockSerialPortFactory.Object);
+            _rfm6x = new Rfm69(MockLogger, MockSerialPortFactory.Object);
             RfmBase = _rfm6x;
         }
 
@@ -350,7 +350,7 @@ namespace RfmUsb.Net.UnitTests
                 () => { return _rfm6x.OutputPower; },
                 (v) => v.Should().Be(-2),
                 Commands.GetOutputPower,
-                "-2");
+                $"0x{(sbyte)-2:X2}");
         }
 
         [TestMethod]
@@ -388,9 +388,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfm6x.RssiThreshold; },
-                (v) => v.Should().Be(0xA0),
+                (v) => v.Should().Be(-114),
                 Commands.GetRssiThreshold,
-                "0xA0");
+                "0x8E");
         }
 
         [TestMethod]
@@ -507,6 +507,28 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm6x.ExecuteMeasureTemperature(); },
                 Commands.ExecuteMeasureTemperature,
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestOpen()
+        {
+            // Arrange
+            MockSerialPortFactory
+                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
+                .Returns(MockSerialPort.Object);
+
+            MockSerialPort
+            .Setup(_ => _.ReadLine())
+                .Returns("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
+
+            // Act
+            _rfm6x.Open("ComPort", 9600);
+
+            // Assert
+            MockSerialPortFactory
+                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
+
+            MockSerialPort.Verify(_ => _.Open(), Times.Once);
         }
 
         [TestMethod]
@@ -765,9 +787,8 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm6x.OutputPower = -2; },
                 Commands.SetOutputPower,
-                "-2");
+                 $"0x{(sbyte)-2:X2}");
         }
-
         [TestMethod]
         public void TestSetRadioConfig()
         {
@@ -781,9 +802,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm6x.RssiThreshold = 0xB0; },
+                () => { _rfm6x.RssiThreshold = -114; },
                 Commands.SetRssiThreshold,
-                "0xB0");
+                $"0x{(sbyte)-114:X2}");
         }
 
         [TestMethod]
