@@ -144,12 +144,10 @@ namespace RfmUsb.Net
         /// </summary>
         byte LowBetaAfcOffset { get; set; }
 
-
-
         /// <summary>
         /// Get or set the output power in dbm
         /// </summary>
-        int OutputPower { get; set; }
+        sbyte OutputPower { get; set; }
 
         /// <summary>
         /// Sets the radio configuration to one of the preset configuration sets.

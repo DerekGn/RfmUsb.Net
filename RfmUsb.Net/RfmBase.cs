@@ -87,9 +87,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ushort BitRate
+        public uint BitRate
         {
-            get => SendCommand(Commands.GetBitRate).ConvertToUInt16();
+            get => SendCommand(Commands.GetBitRate).ConvertToUInt32();
             set => SendCommandWithCheck($"{Commands.SetBitRate} 0x{(int)value:X}", ResponseOk);
         }
 

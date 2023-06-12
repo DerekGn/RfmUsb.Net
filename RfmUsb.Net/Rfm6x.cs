@@ -186,9 +186,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public int OutputPower
+        public sbyte OutputPower
         {
-            get => SendCommand(Commands.GetOutputPower).ConvertToInt32();
+            get => SendCommand(Commands.GetOutputPower).ConvertToSByte();
             set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{value:X}", ResponseOk);
         }
 

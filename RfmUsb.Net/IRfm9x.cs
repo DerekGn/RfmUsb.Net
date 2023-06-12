@@ -31,12 +31,26 @@ namespace RfmUsb.Net
     /// </summary>
     public interface IRfm9x : IRfm
     {
+        /// <summary>
+        /// Controls the Image calibration mechanism
+        /// 0 : Calibration of the receiver depending on the temperature is disabled
+        /// 1 : Calibration of the receiver depending on the temperature enabled.
+        /// </summary>
         bool AutoImageCalibrationOn { get; set; }
 
+        /// <summary>
+        /// Enables the Beacon mode in Fixed packetformat
+        /// </summary>
         bool BeaconOn { get; set; }
 
+        /// <summary>
+        /// Fractional part of the bit rate divider (Only valid for FSK)
+        /// </summary>
         byte BitRateFractional { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         bool BitSyncOn { get; set; }
 
         /// <summary>

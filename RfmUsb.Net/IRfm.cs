@@ -67,7 +67,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get or set the radio Tx/Rx bit rate
         /// </summary>
-        ushort BitRate { get; set; }
+        uint BitRate { get; set; }
 
         /// <summary>
         /// Broadcast address used in address filtering

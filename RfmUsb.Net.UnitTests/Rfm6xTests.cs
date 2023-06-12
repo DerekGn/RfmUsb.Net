@@ -348,9 +348,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfm6x.OutputPower; },
-                (v) => v.Should().Be(0x60000),
+                (v) => v.Should().Be(-2),
                 Commands.GetOutputPower,
-                "0x60000");
+                "-2");
         }
 
         [TestMethod]
@@ -763,9 +763,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetOutputPower()
         {
             ExecuteSetTest(
-                () => { _rfm6x.OutputPower = 0x60000; },
+                () => { _rfm6x.OutputPower = -2; },
                 Commands.SetOutputPower,
-                "0x60000");
+                "-2");
         }
 
         [TestMethod]

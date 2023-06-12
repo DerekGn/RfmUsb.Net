@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+	<DataCollectionRunSettings>
+		<DataCollectors>
+			<DataCollector friendlyName="XPlat code coverage">
+				<Configuration>
+					<Format>json,cobertura,lcov,teamcity,opencover</Format>
+					<Exclude>[coverlet.*.tests?]*,[*]Coverlet.Core*</Exclude>
+					<!-- [Assembly-Filter]Type-Filter -->
+					<Include></Include>
+					<!-- [Assembly-Filter]Type-Filter -->
+					<ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+					<ExcludeByFile></ExcludeByFile>
+					<!-- Globbing filter -->
+					<IncludeDirectory></IncludeDirectory>
+					<SingleHit>false</SingleHit>
+					<UseSourceLink>true</UseSourceLink>
+					<IncludeTestAssembly>false</IncludeTestAssembly>
+					<SkipAutoProps>true</SkipAutoProps>
+					<DeterministicReport>false</DeterministicReport>
+					<CodeCoverage>
+						<ModulePaths>
+							<Exclude>
+								<ModulePath>rfmusb.net.unittests.dll</ModulePath>
+							</Exclude>
+						</ModulePaths>
+					</CodeCoverage>
+				</Configuration>
+			</DataCollector>
+		</DataCollectors>
+	</DataCollectionRunSettings>
+	<MSTest>
+		<CaptureTraceOutput>true</CaptureTraceOutput>
+	</MSTest>
+</RunSettings>
