@@ -90,7 +90,7 @@ namespace RfmUsb.Net
         public uint BitRate
         {
             get => SendCommand(Commands.GetBitRate).ConvertToUInt32();
-            set => SendCommandWithCheck($"{Commands.SetBitRate} 0x{(int)value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetBitRate} 0x{(uint)value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>

@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+#warning TODO split rfm9x tests into lora and fsk/ook tests
+
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +31,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RfmUsb.Net.Ports;
 using Serilog;
 using Serilog.Core;
-using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -38,26 +39,40 @@ namespace RfmUsb.Net.IntTests
     public abstract class RfmBaseTests : IDisposable
     {
         internal readonly ServiceProvider _serviceProvider;
-        private readonly Logger _logger;
         protected IRfm RfmBase;
         private readonly IConfiguration _configuration;
+        private readonly Logger _logger;
         private bool disposedValue;
 
         public RfmBaseTests()
         {
-            _configuration = SetupConfiguration();
-            _serviceProvider = BuildServiceProvider();
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
             _logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)
                 .CreateLogger();
+
+            var serviceCollection = new ServiceCollection()
+                .AddLogging(builder =>
+                {
+                    builder.AddSerilog(_logger);
+                })
+                .AddSingleton(_configuration)
+                .AddSingleton<IRfm9x, Rfm9x>()
+                .AddSingleton<IRfm69, Rfm69>()
+                .AddSerialPortFactory();
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        //[ClassInitialize]
-        //public void TestFixtureSetup(TestContext context)
-        //{
-        //    RfmBase.Open("COM3", 230400);
-        //}
+        [TestMethod]
+        public void RxBwAfc()
+        {
+            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 23);
+        }
 
         [TestMethod]
         [DataRow(AddressFilter.None)]
@@ -91,11 +106,11 @@ namespace RfmUsb.Net.IntTests
         {
             TestRangeBool(() => RfmBase.AutoRxRestartOn, (v) => RfmBase.AutoRxRestartOn = v);
         }
-        
+
         [TestMethod]
         public void TestBitrate()
         {
-            TestRange<uint>(() => RfmBase.BitRate, (v) => RfmBase.BitRate = v, 488, 300000);
+            TestRange<uint>(() => RfmBase.BitRate, (v) => RfmBase.BitRate = v, 1200, 300000);
         }
 
         [TestMethod]
@@ -127,6 +142,37 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [DataRow(Dio.Dio0, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio0, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio0, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio0, DioMapping.DioMapping3)]
+        [DataRow(Dio.Dio1, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio1, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio1, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio1, DioMapping.DioMapping3)]
+        [DataRow(Dio.Dio2, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio2, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio2, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio2, DioMapping.DioMapping3)]
+        [DataRow(Dio.Dio3, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio3, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio3, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio3, DioMapping.DioMapping3)]
+        [DataRow(Dio.Dio4, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio4, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio4, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio4, DioMapping.DioMapping3)]
+        [DataRow(Dio.Dio5, DioMapping.DioMapping0)]
+        [DataRow(Dio.Dio5, DioMapping.DioMapping1)]
+        [DataRow(Dio.Dio5, DioMapping.DioMapping2)]
+        [DataRow(Dio.Dio5, DioMapping.DioMapping3)]
+        public void TestDioMapping(Dio dio, DioMapping expected)
+        {
+            RfmBase.SetDioMapping(dio, expected);
+            RfmBase.GetDioMapping(dio).Should().Be(expected);
+        }
+
+        [TestMethod]
         public void TestFei()
         {
             Read(() => RfmBase.Fei);
@@ -145,6 +191,12 @@ namespace RfmUsb.Net.IntTests
         public void TestFifoThreshold()
         {
             TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 127);
+        }
+
+        [TestMethod]
+        public void TestFirmwareVersion()
+        {
+            Read(() => RfmBase.FirmwareVersion);
         }
 
         [TestMethod]
@@ -238,8 +290,6 @@ namespace RfmUsb.Net.IntTests
         [DataRow(OcpTrim.OcpTrim110)]
         [DataRow(OcpTrim.OcpTrim115)]
         [DataRow(OcpTrim.OcpTrim120)]
-        
-
         public void TestOcpTrim(OcpTrim expected)
         {
             TestAssignedValue(expected, () => RfmBase.OcpTrim, (v) => RfmBase.OcpTrim = v);
@@ -328,21 +378,27 @@ namespace RfmUsb.Net.IntTests
         [DataRow(PaRamp.PowerAmpRamp250)]
         [DataRow(PaRamp.PowerAmpRamp500)]
         [DataRow(PaRamp.PowerAmpRamp1000)]
-
-
-
-
-
         public void TestPaRamp(PaRamp expected)
         {
             TestAssignedValue(expected, () => RfmBase.PaRamp, (v) => RfmBase.PaRamp = v);
         }
 
-        
         [TestMethod]
         public void TestPreambleSize()
         {
             TestRange(() => RfmBase.PreambleSize, (v) => RfmBase.PreambleSize = v);
+        }
+
+        [TestMethod]
+        public void TestRadioVersion()
+        {
+            Read(() => RfmBase.RadioVersion);
+        }
+
+        [TestMethod]
+        public void TestRcCalibration()
+        {
+            RfmBase.RcCalibration();
         }
 
         [TestMethod]
@@ -355,12 +411,6 @@ namespace RfmUsb.Net.IntTests
         public void TestRxBw()
         {
             TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 23);
-        }
-
-        [TestMethod]
-        public void RxBwAfc()
-        {
-            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 23);
         }
 
         [TestMethod]
@@ -394,68 +444,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestTxStartCondition()
-        {
-            TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);
-        }
-
-        [TestMethod]
-        public void TestFirmwareVersion()
-        {
-            Read(() => RfmBase.FirmwareVersion);
-        }
-
-        [TestMethod]
-        public void TestRadioVersion()
-        {
-            Read(() => RfmBase.RadioVersion);
-        }
-
-        [TestMethod]
-        [DataRow(Dio.Dio0,DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping3)]
-        public void TestDioMapping(Dio dio, DioMapping expected)
-        {
-            RfmBase.SetDioMapping(dio, expected);
-            RfmBase.GetDioMapping(dio).Should().Be(expected);
-        }
-
-        [TestMethod]
-        public void TestRcCalibration()
-        {
-            RfmBase.RcCalibration();
-        }
-
-        [TestMethod]
         public void TestTransmit()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void TestTransmitWithTimeout()
         {
             throw new NotImplementedException();
         }
@@ -472,27 +461,25 @@ namespace RfmUsb.Net.IntTests
             throw new NotImplementedException();
         }
 
+        [TestMethod]
+        public void TestTransmitWithTimeout()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void TestTxStartCondition()
+        {
+            TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);
+        }
+
         internal static void TestAssignedValue<T>(T value, Func<T> read, Action<T> write)
         {
             write(value);
             read().Should().Be(value);
         }
 
-        internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
-        {
-            _logger.Debug($"Function {callerName} Returned: {func()}");
-        }
-
-        private static IConfiguration SetupConfiguration()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                //.AddEnvironmentVariables()
-                .Build();
-        }
-
-        internal static void TestRange<T>(Func<T> read, Action<T> write,T expectedMin, T expectedMax) where T : IMinMaxValue<T>
+        internal static void TestRange<T>(Func<T> read, Action<T> write, T expectedMin, T expectedMax) where T : IMinMaxValue<T>
         {
             write(expectedMin);
 
@@ -523,18 +510,11 @@ namespace RfmUsb.Net.IntTests
             changed.Should().Be(!current);
         }
 
-        private ServiceProvider BuildServiceProvider()
+        internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
         {
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(builder => builder.AddSerilog())
-                .AddSingleton(_configuration)
-                .AddSingleton<IRfm9x, Rfm9x>()
-                .AddSingleton<IRfm69, Rfm69>()
-                .AddSerialPortFactory()
-                .AddLogging();
-
-            return serviceCollection.BuildServiceProvider();
+            _logger.Debug($"Function {callerName} Returned: {func()}");
         }
+
         #region IDisposable
 
         public void Dispose()

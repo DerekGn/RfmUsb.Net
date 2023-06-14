@@ -22,9 +22,22 @@
 * SOFTWARE.
 */
 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace RfmUsb.Net.IntTests
 {
-    public class Rfm9xTests : RfmBaseTests
+    [TestClass]
+    public class Rfm9xFskTests : RfmBaseTests
     {
+        private readonly IRfm9x _rfm9x;
+
+        public Rfm9xFskTests()
+        {
+            _rfm9x = _serviceProvider.GetService<IRfm9x>();
+            RfmBase = _rfm9x;
+
+            _rfm9x.Open("COM14", 230400);
+        }
     }
 }

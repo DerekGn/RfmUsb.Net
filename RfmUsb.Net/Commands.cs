@@ -156,7 +156,7 @@ namespace RfmUsb.Net
         public const string GetPreamblePolarity = "";
         public const string GetPreambleSize = "g-ps";
         public const string GetRadioConfig = "g-rc";
-        public const string GetRadioVersion = "g-rv";
+        public const string GetRadioVersion = "g-v";
         public const string GetRestartRxOnCollision = "";
         public const string GetRssi = "g-r";
         public const string GetRssiCollisionThreshold = "";
@@ -206,7 +206,7 @@ namespace RfmUsb.Net
         public const string SetBroadcastAddress = "s-ba";
         public const string SetContinuousDagc = "s-cd";
         public const string SetCrcAutoClear = "s-caco";
-        public const string SetCrcOn = "s-cc";
+        public const string SetCrcOn = "s-crc";
         public const string SetCrcWhiteningType = "";
         public const string SetDccFreq = "s-df";
         public const string SetDccFreqAfc = "s-dfa";
