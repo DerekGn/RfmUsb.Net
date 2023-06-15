@@ -131,16 +131,6 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetAutoRxRestartOn()
-        {
-            ExecuteGetTest(
-                () => { return RfmBase.AutoRxRestartOn; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetAutoRxRestartOn,
-                "1");
-        }
-
-        [TestMethod]
         public void TestGetBitRate()
         {
             ExecuteGetTest(
@@ -704,14 +694,6 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
-        [TestMethod]
-        public void TestSetAutoRxRestartOn()
-        {
-            ExecuteSetTest(
-                () => { RfmBase.AutoRxRestartOn = true; },
-                Commands.SetAutoRxRestartOn,
-                "1");
-        }
 
         [TestMethod]
         public void TestSetBitRate()
@@ -759,7 +741,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { RfmBase.DcFree = expected; },
                 Commands.SetDcFree,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]

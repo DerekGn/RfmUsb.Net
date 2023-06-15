@@ -65,7 +65,7 @@ namespace RfmUsb.Net
         public const string GetCodingRate = "";
         public const string GetContinuousDagc = "g-cd";
         public const string GetCrcAutoClear = "g-caco";
-        public const string GetCrcOn = "g-cc";
+        public const string GetCrcOn = "g-crc";
         public const string GetCrcWhiteningType = "";
         public const string GetCurrentLnaGain = "g-lnag";
         public const string GetDccFreq = "g-df";
@@ -139,7 +139,7 @@ namespace RfmUsb.Net
         public const string GetOokFixedThreshold = "g-oft";
         public const string GetOokModulationShaping = "g-os";
         public const string GetOokPeakThresholdDec = "g-optd";
-        public const string GetOokPeakThresholdStep = "g-ots";
+        public const string GetOokPeakThresholdStep = "g-opts";
         public const string GetOokThresholdType = "g-ott";
         public const string GetOutputPower = "g-op";
         public const string GetPacketFormat = "g-pf";
@@ -270,7 +270,7 @@ namespace RfmUsb.Net
         public const string SetOokFixedThreshold = "s-oft";
         public const string SetOokModulationShaping = "s-os";
         public const string SetOokPeakThresholdDec = "s-optd";
-        public const string SetOokPeakThresholdStep = "s-ots";
+        public const string SetOokPeakThresholdStep = "s-opts";
         public const string SetOokThresholdType = "s-ott";
         public const string SetOutputPower = "s-op";
         public const string SetPacketFormat = "s-pf";
@@ -314,5 +314,6 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "";
         public const string SetTxContinuousMode = "";
         public const string SetTxStartCondition = "s-tsc";
+        internal static string GetAutoRestartRxMode;
     }
 }

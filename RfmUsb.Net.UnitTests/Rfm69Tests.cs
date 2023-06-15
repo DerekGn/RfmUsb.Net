@@ -90,6 +90,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetAutoRxRestartOn()
+        {
+            ExecuteGetTest(
+                () => { return _rfm6x.AutoRxRestartOn; },
+                (v) => v.Should().BeTrue(),
+                Commands.GetAutoRxRestartOn,
+                "1");
+        }
+
+        [TestMethod]
         [DataRow(ContinuousDagc.Normal)]
         [DataRow(ContinuousDagc.ImprovedLowBeta0)]
         [DataRow(ContinuousDagc.ImprovedLowBeta1)]
@@ -567,6 +577,14 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
+        [TestMethod]
+        public void TestSetAutoRxRestartOn()
+        {
+            ExecuteSetTest(
+                () => { _rfm6x.AutoRxRestartOn = true; },
+                Commands.SetAutoRxRestartOn,
+                "1");
+        }
         [TestMethod]
         [DataRow(ContinuousDagc.Normal)]
         [DataRow(ContinuousDagc.ImprovedLowBeta0)]

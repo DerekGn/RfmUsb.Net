@@ -44,6 +44,13 @@ namespace RfmUsb.Net
         bool AfcLowBetaOn { get; set; }
 
         /// <summary>
+        /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
+        /// false → Off. RestartRx can be used.
+        /// true→ On. Rx automatically restarted after InterPacketRxDelay.
+        /// </summary>
+        bool AutoRxRestartOn { get; set; }
+
+        /// <summary>
         /// Fading Margin Improvement
         /// </summary>
         ContinuousDagc ContinuousDagc { get; set; }
@@ -209,12 +216,6 @@ namespace RfmUsb.Net
         void ExecuteFeiStart();
 
         /// <summary>
-        /// Get a list of the pre-configured radio configurations
-        /// </summary>
-        /// <returns></returns>
-        IList<string> GetRadioConfigurations();
-
-        /// <summary>
         /// Abort listen mode
         /// </summary>
         void ExecuteListenAbort();
@@ -235,16 +236,20 @@ namespace RfmUsb.Net
         void ExecuteRestartRx();
 
         /// <summary>
-        /// Set the AES encryption key
-        /// </summary>
-        /// <param name="key"></param>
-        void SetAesKey(IEnumerable<byte> key);
-
-        /// <summary>
         /// Trigger a RSSI measurement
         /// </summary>
         void ExecuteStartRssi();
 
+        /// <summary>
+        /// Get a list of the pre-configured radio configurations
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetRadioConfigurations();
+        /// <summary>
+        /// Set the AES encryption key
+        /// </summary>
+        /// <param name="key"></param>
+        void SetAesKey(IEnumerable<byte> key);
         /// <summary>
         /// Wait for a configured Irq to be signaled
         /// </summary>

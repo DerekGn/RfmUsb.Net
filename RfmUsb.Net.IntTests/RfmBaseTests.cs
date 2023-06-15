@@ -68,11 +68,7 @@ namespace RfmUsb.Net.IntTests
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        [TestMethod]
-        public void RxBwAfc()
-        {
-            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 23);
-        }
+        
 
         [TestMethod]
         [DataRow(AddressFilter.None)]
@@ -99,12 +95,6 @@ namespace RfmUsb.Net.IntTests
         public void TestAfcAutoOn()
         {
             TestRangeBool(() => RfmBase.AfcAutoOn, (v) => RfmBase.AfcAutoOn = v);
-        }
-
-        [TestMethod]
-        public void TestAutoRxRestartOn()
-        {
-            TestRangeBool(() => RfmBase.AutoRxRestartOn, (v) => RfmBase.AutoRxRestartOn = v);
         }
 
         [TestMethod]
@@ -178,20 +168,7 @@ namespace RfmUsb.Net.IntTests
             Read(() => RfmBase.Fei);
         }
 
-        [TestMethod]
-        public void TestFifo()
-        {
-            var expected = new List<byte> { 0xAA, 0x55, 0xAA };
-            RfmBase.Fifo = expected;
-
-            RfmBase.Fifo.Should().StartWith(expected);
-        }
-
-        [TestMethod]
-        public void TestFifoThreshold()
-        {
-            TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 127);
-        }
+        
 
         [TestMethod]
         public void TestFirmwareVersion()
@@ -204,12 +181,6 @@ namespace RfmUsb.Net.IntTests
         {
 #warning Check freq max
             TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 0, 1020000000);
-        }
-
-        [TestMethod]
-        public void TestFrequencyDeviation()
-        {
-            TestRange(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, ushort.MinValue, (ushort)16383);
         }
 
         [TestMethod]
@@ -405,12 +376,6 @@ namespace RfmUsb.Net.IntTests
         public void TestRssi()
         {
             Read<sbyte>(() => RfmBase.Rssi);
-        }
-
-        [TestMethod]
-        public void TestRxBw()
-        {
-            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 23);
         }
 
         [TestMethod]

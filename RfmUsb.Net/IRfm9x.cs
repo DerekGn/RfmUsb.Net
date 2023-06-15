@@ -24,6 +24,8 @@
 
 #warning TODO rfm95 Irq flags
 
+using System.Runtime.Intrinsics.Arm;
+
 namespace RfmUsb.Net
 {
     /// <summary>
@@ -37,6 +39,12 @@ namespace RfmUsb.Net
         /// 1 : Calibration of the receiver depending on the temperature enabled.
         /// </summary>
         bool AutoImageCalibrationOn { get; set; }
+
+        /// <summary>
+        /// Controls the automatic restart of the receiver after the reception of 
+        /// a valid packet(PayloadReady or CrcOk)
+        /// </summary>
+        AutoRestartRxMode AutoRestartRxMode { get; set; }
 
         /// <summary>
         /// Enables the Beacon mode in Fixed packetformat

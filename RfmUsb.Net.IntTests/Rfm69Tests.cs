@@ -38,7 +38,19 @@ namespace RfmUsb.Net.IntTests
             _rfm69 = _serviceProvider.GetService<IRfm69>();
             RfmBase = _rfm69;
 
-            _rfm69.Open("COM12", 230400);
+            _rfm69.Open("COM3", 230400);
+        }
+
+        [TestMethod]
+        public void CurrentLnaGain()
+        {
+            Read(() => _rfm69.CurrentLnaGain);
+        }
+
+        [TestMethod]
+        public void RxBwAfc()
+        {
+            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 23);
         }
 
         [TestMethod]
@@ -54,18 +66,18 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestAutoRxRestartOn()
+        {
+            TestRangeBool(() => _rfm69.AutoRxRestartOn, (v) => _rfm69.AutoRxRestartOn = v);
+        }
+
+        [TestMethod]
         [DataRow(ContinuousDagc.Normal)]
         [DataRow(ContinuousDagc.ImprovedLowBeta0)]
         [DataRow(ContinuousDagc.ImprovedLowBeta1)]
         public void TestContinuousDagc(ContinuousDagc expected)
         {
             TestAssignedValue(expected, () => _rfm69.ContinuousDagc, (v) => _rfm69.ContinuousDagc = v);
-        }
-
-        [TestMethod]
-        public void CurrentLnaGain()
-        {
-            Read(() => _rfm69.CurrentLnaGain);
         }
 
         [TestMethod]
@@ -124,6 +136,54 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestExecuteAfcClear()
+        {
+            _rfm69.ExecuteAfcClear();
+        }
+
+        [TestMethod]
+        public void TestExecuteAfcStart()
+        {
+            _rfm69.ExecuteAfcStart();
+        }
+
+        [TestMethod]
+        public void TestExecuteFeiStart()
+        {
+            _rfm69.ExecuteFeiStart();
+        }
+
+        [TestMethod]
+        public void TestExecuteListenAbort()
+        {
+            _rfm69.ExecuteListenAbort();
+        }
+
+        [TestMethod]
+        public void TestExecuteMeasureTemperature()
+        {
+            _rfm69.ExecuteMeasureTemperature();
+        }
+
+        [TestMethod]
+        public void TestExecuteReset()
+        {
+            _rfm69.ExecuteReset();
+        }
+
+        [TestMethod]
+        public void TestExecuteRestartRx()
+        {
+            _rfm69.ExecuteRestartRx();
+        }
+
+        [TestMethod]
+        public void TestExecuteStartRssi()
+        {
+            _rfm69.ExecuteStartRssi();
+        }
+
+        [TestMethod]
         [DataRow(ExitCondition.CrcOk)]
         [DataRow(ExitCondition.FifoEmpty)]
         [DataRow(ExitCondition.FifoLevel)]
@@ -138,9 +198,36 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestFifo()
+        {
+            var expected = new List<byte> { 0xAA, 0x55, 0xAA };
+            _rfm69.Fifo = expected;
+
+            _rfm69.Fifo.Should().StartWith(expected);
+        }
+
+        [TestMethod]
         public void TestFifoFill()
         {
-            TestRangeBool(() => _rfm69.FifoFill, (v) => _rfm69.FifoFill = v);   
+            TestRangeBool(() => _rfm69.FifoFill, (v) => _rfm69.FifoFill = v);
+        }
+
+        [TestMethod]
+        public void TestFifoThreshold()
+        {
+            TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
+        }
+
+        [TestMethod]
+        public void TestFrequencyDeviation()
+        {
+            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 300000);
+        }
+
+        [TestMethod]
+        public void TestGetRadioConfigurations()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -233,6 +320,12 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestPayloadLength()
+        {
+            TestRange<ushort>(() => _rfm69.PayloadLength, (v) => _rfm69.PayloadLength = v, 0, 0xFF);
+        }
+
+        [TestMethod]
         public void TestRadioConfig()
         {
             throw new NotImplementedException();
@@ -245,15 +338,27 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestRxBw()
+        {
+            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 23);
+        }
+
+        [TestMethod]
         public void TestSensitivityBoost()
         {
-            TestRangeBool(() => _rfm69.SensitivityBoost, (v) => _rfm69.SensitivityBoost = v); 
+            TestRangeBool(() => _rfm69.SensitivityBoost, (v) => _rfm69.SensitivityBoost = v);
         }
 
         [TestMethod]
         public void TestSequencer()
         {
             TestRangeBool(() => _rfm69.Sequencer, (v) => _rfm69.Sequencer = v);
+        }
+
+        [TestMethod]
+        public void TestSetAesKey()
+        {
+            _rfm69.Sync = new List<byte> { 0xAA, 0x55, 0xAA, 0x55 };
         }
 
         [TestMethod]
@@ -268,77 +373,10 @@ namespace RfmUsb.Net.IntTests
         {
             TestRange(() => _rfm69.Timeout, (v) => _rfm69.Timeout = v, 0, 1000);
         }
-
-        [TestMethod]
-        public void TestPayloadLength()
-        {
-            TestRange<ushort>(() => _rfm69.PayloadLength, (v) => _rfm69.PayloadLength = v, 0, 0xFF);
-        }
-
         [TestMethod]
         public void TestTimeoutRxStart()
         {
             TestRange(() => _rfm69.TimeoutRxStart, (v) => _rfm69.TimeoutRxStart = v);
-        }
-
-        [TestMethod]
-        public void TestExecuteAfcClear()
-        {
-            _rfm69.ExecuteAfcClear();
-        }
-
-        [TestMethod]
-        public void TestExecuteAfcStart()
-        {
-            _rfm69.ExecuteAfcStart();
-        }
-
-        [TestMethod]
-        public void TestExecuteFeiStart()
-        {
-            _rfm69.ExecuteFeiStart();
-        }
-
-        [TestMethod]
-        public void TestGetRadioConfigurations()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void TestExecuteListenAbort()
-        {
-            _rfm69.ExecuteListenAbort();
-        }
-
-        [TestMethod]
-        public void TestExecuteMeasureTemperature()
-        {
-            _rfm69.ExecuteMeasureTemperature();
-        }
-
-        [TestMethod]
-        public void TestExecuteReset()
-        {
-            _rfm69.ExecuteReset();
-        }
-
-        [TestMethod]
-        public void TestExecuteRestartRx()
-        {
-            _rfm69.ExecuteRestartRx();
-        }
-
-        [TestMethod]
-        public void TestSetAesKey()
-        {
-            _rfm69.Sync = new List<byte> { 0xAA, 0x55, 0xAA, 0x55 };
-        }
-
-        [TestMethod]
-        public void TestExecuteStartRssi()
-        {
-            _rfm69.ExecuteStartRssi();
         }
     }
 }

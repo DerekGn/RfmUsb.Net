@@ -58,13 +58,6 @@ namespace RfmUsb.Net
         bool AfcAutoOn { get; set; }
 
         /// <summary>
-        /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
-        /// false → Off. RestartRx can be used.
-        /// true→ On. Rx automatically restarted after InterPacketRxDelay.
-        /// </summary>
-        bool AutoRxRestartOn { get; set; }
-
-        /// <summary>
         /// Get or set the radio Tx/Rx bit rate
         /// </summary>
         uint BitRate { get; set; }
@@ -121,7 +114,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get or set the frequency deviation
         /// </summary>
-        ushort FrequencyDeviation { get; set; }
+        uint FrequencyDeviation { get; set; }
 
         /// <summary>
         /// The Fsk data shaping

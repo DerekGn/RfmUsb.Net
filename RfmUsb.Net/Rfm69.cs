@@ -61,6 +61,12 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public bool AutoRxRestartOn
+        {
+            get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
+            set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
+        }
+        ///<inheritdoc/>
         public ContinuousDagc ContinuousDagc
         {
             get => (ContinuousDagc)SendCommand(Commands.GetContinuousDagc).ConvertToInt32();
@@ -211,6 +217,13 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetSensitivityBoost).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetSensitivityBoost} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public override IEnumerable<byte> Fifo
+        {
+            get => SendCommand(Commands.GetFifo).ToBytes();
+            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
         }
 
         ///<inheritdoc/>

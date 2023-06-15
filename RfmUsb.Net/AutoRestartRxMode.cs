@@ -22,46 +22,29 @@
 * SOFTWARE.
 */
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace RfmUsb.Net.IntTests
+namespace RfmUsb.Net
 {
-    [TestClass]
-    public class Rfm9xFskTests : RfmBaseTests
+    /// <summary>
+    /// Controls the automatic restart of the receiver 
+    /// after the reception of a valid packet
+    /// </summary>
+    public enum AutoRestartRxMode
     {
-        private readonly IRfm9x _rfm9x;
-
-        public Rfm9xFskTests()
-        {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>();
-            RfmBase = _rfm9x;
-
-            _rfm9x.Open("COM4", 230400);
-        }
-
-        [TestMethod]
-        public void TestFifoThreshold()
-        {
-            TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
-        }
-
-        [TestMethod]
-        public void TestFrequencyDeviation()
-        {
-            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 200000);
-        }
-
-        [TestMethod]
-        public void TestRxBw()
-        {
-            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 21);
-        }
-
-        [TestMethod]
-        public void TestRxBwAfc()
-        {
-            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 21);
-        }
+        /// <summary>
+        /// Off
+        /// </summary>
+        Off,
+        /// <summary>
+        /// On, without waiting for the PLL to re-lock
+        /// </summary>
+        OnWithoutPllRelock,
+        /// <summary>
+        /// On, wait for the PLL to lock (frequency changed)
+        /// </summary>
+        OnWaitForPllLock,
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved
     }
 }

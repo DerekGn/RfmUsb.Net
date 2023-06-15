@@ -25,6 +25,7 @@
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
+using System.Collections.Generic;
 
 namespace RfmUsb.Net
 {
@@ -47,6 +48,13 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetAutoImageCalibrationOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetAutoImageCalibrationOn} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public AutoRestartRxMode AutoRestartRxMode
+        { 
+            get => (AutoRestartRxMode)SendCommand(Commands.GetAutoRestartRxMode).ConvertToInt32(); 
+            set => SendCommandWithCheck($"{Commands.GetAutoRestartRxMode} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -87,6 +95,8 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetFastHopOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetFastHopOn} {(value ? "1" : "0")}", ResponseOk);
         }
+
+        public override IEnumerable<byte> Fifo { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
         public byte FifoAddressPointer
@@ -466,7 +476,6 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
-
         ///<inheritdoc/>
         public void ClearFifoOverrun()
         {

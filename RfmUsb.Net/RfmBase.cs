@@ -80,13 +80,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool AutoRxRestartOn
-        {
-            get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public uint BitRate
         {
             get => SendCommand(Commands.GetBitRate).ConvertToUInt32();
@@ -118,18 +111,13 @@ namespace RfmUsb.Net
         public DcFree DcFree
         {
             get => (DcFree)SendCommand(Commands.GetDcFree).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetDcFree} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetDcFree} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public short Fei => SendCommand(Commands.GetFei).ConvertToInt16();
 
-        ///<inheritdoc/>
-        public IEnumerable<byte> Fifo
-        {
-            get => SendCommand(Commands.GetFifo).ToBytes();
-            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
+        public abstract IEnumerable<byte> Fifo { get; set; }
 
         ///<inheritdoc/>
         public byte FifoThreshold
@@ -149,9 +137,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ushort FrequencyDeviation
+        public uint FrequencyDeviation
         {
-            get => SendCommand(Commands.GetFrequencyDeviation).ConvertToUInt16();
+            get => SendCommand(Commands.GetFrequencyDeviation).ConvertToUInt32();
             set => SendCommandWithCheck($"{Commands.SetFrequencyDeviation} 0x{value:X}", ResponseOk);
         }
 
@@ -331,7 +319,6 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
-
         ///<inheritdoc/>
         public void Close()
         {
