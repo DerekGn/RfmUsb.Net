@@ -297,7 +297,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFreqError()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FreqError; },
+                () => { return _rfm9x.FrequencyError; },
                 (v) => v.Should().Be(0x2000),
                 Commands.GetFreqError,
                 "0x2000");
@@ -307,7 +307,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFreqHoppingPeriod()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FreqHoppingPeriod; },
+                () => { return _rfm9x.FrequencyHoppingPeriod; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFreqHoppingPeriod,
                 "0xAA");
@@ -324,11 +324,11 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(FromPacketReceived.ToSequencerOffOnPreambleDetect)]
-        [DataRow(FromPacketReceived.ToSequenceROffOnRssi)]
-        [DataRow(FromPacketReceived.ToSequencerOffOnSyncAddress)]
-        [DataRow(FromPacketReceived.ToPacketReceivedStateOnCrcOk)]
-        [DataRow(FromPacketReceived.ToLowPowerSelectionOnPayloadReady)]
+        [DataRow(FromPacketReceived.ToLowPowerSelection)]
+        [DataRow(FromPacketReceived.ToReceiveState)]
+        [DataRow(FromPacketReceived.ToReceiveViaFSMode)]
+        [DataRow(FromPacketReceived.ToSequencerOff)]
+        [DataRow(FromPacketReceived.ToTransmitStateOnFifoEmpty)]
         public void TestGetFromPacketReceived(FromPacketReceived expected)
         {
             ExecuteGetTest(
@@ -340,7 +340,7 @@ namespace RfmUsb.Net.UnitTests
 
         [TestMethod]
         [DataRow(FromReceive.ToSequencerOffOnPreambleDetect)]
-        [DataRow(FromReceive.ToSequenceroffOnRssi)]
+        [DataRow(FromReceive.ToSequencerOffOnRssi)]
         [DataRow(FromReceive.ToSequencerOffOnSyncAddress)]
         [DataRow(FromReceive.ToPacketReceivedStateOnCrcOk)]
         [DataRow(FromReceive.ToLowPowerSelectionOnPayLoadReady)]
@@ -673,7 +673,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleLength()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreambleLength; },
+                () => { return _rfm9x.PreambleSize; },
                 (v) => v.Should().Be(0x100),
                 Commands.GetPreambleLength,
                 "0x100");
@@ -810,16 +810,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { return _rfm9x.TcxoInputOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetTcxoInputOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestGetTempChange()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.TempChange; },
-                (v) => v.Should().BeTrue(),
-                Commands.GetTempChange,
                 "1");
         }
 
@@ -1032,7 +1022,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFreqHoppingPeriod()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FreqHoppingPeriod = 0x55; },
+                () => { _rfm9x.FrequencyHoppingPeriod = 0x55; },
                 Commands.SetFreqHoppingPeriod,
                 "0x55");
         }
@@ -1047,11 +1037,11 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(FromPacketReceived.ToSequencerOffOnPreambleDetect)]
-        [DataRow(FromPacketReceived.ToSequenceROffOnRssi)]
-        [DataRow(FromPacketReceived.ToSequencerOffOnSyncAddress)]
-        [DataRow(FromPacketReceived.ToPacketReceivedStateOnCrcOk)]
-        [DataRow(FromPacketReceived.ToLowPowerSelectionOnPayloadReady)]
+        [DataRow(FromPacketReceived.ToLowPowerSelection)]
+        [DataRow(FromPacketReceived.ToReceiveState)]
+        [DataRow(FromPacketReceived.ToReceiveViaFSMode)]
+        [DataRow(FromPacketReceived.ToSequencerOff)]
+        [DataRow(FromPacketReceived.ToTransmitStateOnFifoEmpty)]
         public void TestSetFromPacketReceived(FromPacketReceived expected)
         {
             ExecuteSetTest(
@@ -1062,7 +1052,7 @@ namespace RfmUsb.Net.UnitTests
 
         [TestMethod]
         [DataRow(FromReceive.ToSequencerOffOnPreambleDetect)]
-        [DataRow(FromReceive.ToSequenceroffOnRssi)]
+        [DataRow(FromReceive.ToSequencerOffOnRssi)]
         [DataRow(FromReceive.ToSequencerOffOnSyncAddress)]
         [DataRow(FromReceive.ToPacketReceivedStateOnCrcOk)]
         [DataRow(FromReceive.ToLowPowerSelectionOnPayLoadReady)]
@@ -1242,6 +1232,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(ModemBandwidth.Bandwidth10_4KHZ)]
+        public void TestSetModemBandwidth(ModemBandwidth expected)
+        {
+            ExecuteSetTest(
+    () => { _rfm9x.ModemBandwidth = expected; },
+    Commands.SetModemBandwidth,
+    $"0x{expected:X}");
+        }
+        [TestMethod]
         [DataRow(OokAverageOffset.Offset0dB)]
         [DataRow(OokAverageOffset.Offset2dB)]
         [DataRow(OokAverageOffset.Offset4dB)]
@@ -1306,7 +1305,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleLength()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleLength = 0x100; },
+                () => { _rfm9x.PreambleSize = 0x100; },
                 Commands.SetPreambleLength,
                 "0x100");
         }
@@ -1411,15 +1410,6 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.TcxoInputOn = true; },
                 Commands.SetTcxoInputOn,
-                "1");
-        }
-
-        [TestMethod]
-        public void TestSetTempChange()
-        {
-            ExecuteSetTest(
-                () => { _rfm9x.TempChange = true; },
-                Commands.SetTempChange,
                 "1");
         }
 

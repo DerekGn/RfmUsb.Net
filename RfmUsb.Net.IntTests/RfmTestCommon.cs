@@ -22,54 +22,15 @@
 * SOFTWARE.
 */
 
-#warning TODO split rfm9x tests into lora and fsk/ook tests
-
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RfmUsb.Net.Ports;
-using Serilog;
-using Serilog.Core;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace RfmUsb.Net.IntTests
 {
-    public abstract class RfmBaseTests : IDisposable
+    public abstract class RfmTestCommon : RfmTestBase
     {
-        internal readonly ServiceProvider _serviceProvider;
-        protected IRfm RfmBase;
-        private readonly IConfiguration _configuration;
-        private readonly Logger _logger;
-        private bool disposedValue;
-
-        public RfmBaseTests()
-        {
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            _logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(_configuration)
-                .CreateLogger();
-
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(builder =>
-                {
-                    builder.AddSerilog(_logger);
-                })
-                .AddSingleton(_configuration)
-                .AddSingleton<IRfm9x, Rfm9x>()
-                .AddSingleton<IRfm69, Rfm69>()
-                .AddSerialPortFactory();
-
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-        }
-
-        
-
         [TestMethod]
         [DataRow(AddressFilter.None)]
         [DataRow(AddressFilter.NodeBroaddcast)]
@@ -168,8 +129,6 @@ namespace RfmUsb.Net.IntTests
             Read(() => RfmBase.Fei);
         }
 
-        
-
         [TestMethod]
         public void TestFirmwareVersion()
         {
@@ -218,7 +177,6 @@ namespace RfmUsb.Net.IntTests
         [DataRow(Mode.Standby)]
         [DataRow(Mode.Synth)]
         [DataRow(Mode.Tx)]
-        [Ignore]
         public void TestMode(Mode expected)
         {
             TestAssignedValue(expected, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
@@ -437,81 +395,5 @@ namespace RfmUsb.Net.IntTests
         {
             TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);
         }
-
-        internal static void TestAssignedValue<T>(T value, Func<T> read, Action<T> write)
-        {
-            write(value);
-            read().Should().Be(value);
-        }
-
-        internal static void TestRange<T>(Func<T> read, Action<T> write, T expectedMin, T expectedMax) where T : IMinMaxValue<T>
-        {
-            write(expectedMin);
-
-            var min = read();
-
-            write((T)expectedMax);
-
-            var max = read();
-
-            min.Should().Be(expectedMin);
-
-            max.Should().Be(expectedMax);
-        }
-
-        internal static void TestRange<T>(Func<T> read, Action<T> write) where T : IMinMaxValue<T>
-        {
-            TestRange<T>(read, write, T.MinValue, T.MaxValue);
-        }
-
-        internal static void TestRangeBool(Func<bool> read, Action<bool> write)
-        {
-            var current = read();
-
-            write(!current);
-
-            var changed = read();
-
-            changed.Should().Be(!current);
-        }
-
-        internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
-        {
-            _logger.Debug($"Function {callerName} Returned: {func()}");
-        }
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    RfmBase.Close();
-                    RfmBase.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~RfmBaseTests()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        #endregion IDisposable
     }
 }

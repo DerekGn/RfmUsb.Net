@@ -30,33 +30,24 @@ namespace RfmUsb.Net
     public enum FromPacketReceived
     {
         /// <summary>
-        /// To PacketReceived On PayloadReady Irq
+        /// To SequencerOff state
         /// </summary>
-        ToPacketReceivedOnPayloadReady,
-
+        ToSequencerOff,
         /// <summary>
-        /// To LowPowerSelection On PayloadReady Irq
+        /// To Transmit state on a FifoEmpty interrupt
         /// </summary>
-        ToLowPowerSelectionOnPayloadReady,
-
+        ToTransmitStateOnFifoEmpty,
         /// <summary>
-        /// To PacketReceived On CrcOk Irq
+        /// To LowPowerSelection
         /// </summary>
-        ToPacketReceivedStateOnCrcOk,
-
+        ToLowPowerSelection,
         /// <summary>
-        /// To SequencerOff On Rssi Irq
+        /// To Receive via FS mode, if frequency was changed
         /// </summary>
-        ToSequenceROffOnRssi,
-
+        ToReceiveViaFSMode,
         /// <summary>
-        /// To SequencerOff On SyncAddress Irq
+        /// To Receive state (no frequencychange)
         /// </summary>
-        ToSequencerOffOnSyncAddress,
-
-        /// <summary>
-        /// To SequencerOff On PreambleDetect Irq
-        /// </summary>
-        ToSequencerOffOnPreambleDetect
+        ToReceiveState
     }
 }

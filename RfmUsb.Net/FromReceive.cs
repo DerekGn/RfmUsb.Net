@@ -47,7 +47,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// To SequencerOff On Rssi Irq
         /// </summary>
-        ToSequenceroffOnRssi,
+        ToSequencerOffOnRssi,
 
         /// <summary>
         /// To SequencerOff On SyncAddress Irq

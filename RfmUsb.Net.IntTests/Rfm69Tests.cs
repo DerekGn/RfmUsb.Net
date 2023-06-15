@@ -29,7 +29,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace RfmUsb.Net.IntTests
 {
     [TestClass]
-    public class Rfm69Tests : RfmBaseTests
+    public class Rfm69Tests : RfmTestCommon
     {
         private readonly IRfm69 _rfm69;
 
@@ -373,6 +373,7 @@ namespace RfmUsb.Net.IntTests
         {
             TestRange(() => _rfm69.Timeout, (v) => _rfm69.Timeout = v, 0, 1000);
         }
+
         [TestMethod]
         public void TestTimeoutRxStart()
         {

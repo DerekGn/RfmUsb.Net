@@ -168,7 +168,7 @@ namespace RfmUsb.Net
         public Mode Mode
         {
             get => (Mode)SendCommand(Commands.GetMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetMode} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

@@ -44,6 +44,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public bool AccessSharedRegisters
+        {
+            get => SendCommand(Commands.GetAccessSharedRegisters).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetAccessSharedRegisters} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public bool AutoImageCalibrationOn
         {
             get => SendCommand(Commands.GetAutoImageCalibrationOn).Substring(0, 1) == "1";
@@ -52,8 +59,8 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public AutoRestartRxMode AutoRestartRxMode
-        { 
-            get => (AutoRestartRxMode)SendCommand(Commands.GetAutoRestartRxMode).ConvertToInt32(); 
+        {
+            get => (AutoRestartRxMode)SendCommand(Commands.GetAutoRestartRxMode).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.GetAutoRestartRxMode} 0x{value:X}", ResponseOk);
         }
 
@@ -66,7 +73,6 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte BitRateFractional
-
         {
             get => SendCommand(Commands.GetBitRateFractional).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetBitRateFractional} 0x{value:X}", ResponseOk);
@@ -119,6 +125,9 @@ namespace RfmUsb.Net
         public byte FifoRxBytesNumber => SendCommand(Commands.GetFifoRxBytesNumber).ConvertToByte();
 
         ///<inheritdoc/>
+        public byte FifoRxCurrentAddress => SendCommand(Commands.GetFifoRxCurrentAddress).ConvertToByte();
+
+        ///<inheritdoc/>
         public byte FifoTxBaseAddress
         {
             get => SendCommand(Commands.GetFifoTxBaseAddress).ConvertToByte();
@@ -133,10 +142,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public int FreqError => SendCommand(Commands.GetFreqError).ConvertToInt32();
+        public int FrequencyError => SendCommand(Commands.GetFreqError).ConvertToInt32();
 
         ///<inheritdoc/>
-        public byte FreqHoppingPeriod
+        public byte FrequencyHoppingPeriod
         {
             get => SendCommand(Commands.GetFreqHoppingPeriod).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetFreqHoppingPeriod} 0x{value:X}", ResponseOk);
@@ -271,6 +280,8 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetLowFrequencyMode} {(value ? "1" : "0")}", ResponseOk);
         }
 
+        public bool LowFrequencyModeOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
         ///<inheritdoc/>
         public bool LowPowerSelection
         {
@@ -286,7 +297,11 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ModemBandwidth ModemBandwidth => (ModemBandwidth)SendCommand(Commands.GetModemBandwidth).ConvertToInt32();
+        public ModemBandwidth ModemBandwidth
+        {
+            get => (ModemBandwidth)SendCommand(Commands.GetModemBandwidth).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetModemBandwidth} 0x{value:X}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public ModemStatus ModemStatus => (ModemStatus)SendCommand(Commands.GetModemStatus).ConvertToInt32();
@@ -339,12 +354,6 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotal} 0x{value:X}", ResponseOk);
         }
 
-        ///<inheritdoc/>
-        public ushort PreambleLength
-        {
-            get => SendCommand(Commands.GetPreambleLength).ConvertToUInt16();
-            set => SendCommandWithCheck($"{Commands.SetPreambleLength} 0x{value:X}", ResponseOk);
-        }
 
         ///<inheritdoc/>
         public bool PreamblePolarity
@@ -420,13 +429,6 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetTcxoInputOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetTcxoInputOn} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public bool TempChange
-        {
-            get => SendCommand(Commands.GetTempChange).Substring(0, 1) == "1";
-            set => SendCommandWithCheck($"{Commands.SetTempChange} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
