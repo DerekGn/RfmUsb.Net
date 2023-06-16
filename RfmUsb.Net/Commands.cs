@@ -86,6 +86,7 @@ namespace RfmUsb.Net
         public const string GetFifoRxBaseAddress = "";
         public const string GetFifoRxByteAddressPointer = "";
         public const string GetFifoRxBytesNumber = "";
+        public const string GetFifoRxCurrentAddress = "g-";
         public const string GetFifoThreshold = "g-ft";
         public const string GetFifoTxBaseAddress = "";
         public const string GetFirmwareVersion = "g-fv";
@@ -153,8 +154,7 @@ namespace RfmUsb.Net
         public const string GetPpmCorrection = "";
         public const string GetPreambleDetectorOn = "";
         public const string GetPreambleDetectorSize = "";
-        public const string GetPreambleDetectorTotal = "";
-        public const string GetPreambleLength = "";
+        public const string GetPreambleDetectorTotalerance = "g-pdt";
         public const string GetPreamblePolarity = "";
         public const string GetPreambleSize = "g-ps";
         public const string GetRadioConfig = "g-rc";
@@ -200,6 +200,7 @@ namespace RfmUsb.Net
         public const string SetAfcAutoOn = "s-aao";
         public const string SetAfcLowBetaOn = "s-ab";
         public const string SetAutoImageCalibrationOn = "";
+        public const string SetAutoRestartRxMode = "";
         public const string SetAutoRxRestartOn = "s-arre";
         public const string SetBeaconOn = "";
         public const string SetBitRate = "s-br";
@@ -263,6 +264,7 @@ namespace RfmUsb.Net
         public const string SetLowPowerSelection = "";
         public const string SetMapPreambleDetect = "";
         public const string SetMode = "s-om";
+        public const string SetModemBandwidth = "s-";
         public const string SetModulation = "s-mt";
         public const string SetNodeAddress = "s-na";
         public const string SetOcpEnable = "s-ocp";
@@ -282,8 +284,8 @@ namespace RfmUsb.Net
         public const string SetPpmCorrection = "";
         public const string SetPreambleDetectorOn = "";
         public const string SetPreambleDetectorSize = "";
-        public const string SetPreambleDetectorTotal = "";
-        public const string SetPreambleLength = "";
+        public const string SetPreambleDetectorTotalerance = "s-pdt";
+        public const string SetPreambleLength = "s-ps";
         public const string SetPreamblePolarity = "";
         public const string SetPreambleSize = "s-ps";
         public const string SetRadioConfig = "s-rc";
@@ -315,7 +317,5 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "";
         public const string SetTxContinuousMode = "";
         public const string SetTxStartCondition = "s-tsc";
-        public const string GetFifoRxCurrentAddress = "g-";
-        public const string SetModemBandwidth = "s-";
     }
 }

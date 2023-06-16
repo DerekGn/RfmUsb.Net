@@ -117,6 +117,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public short Fei => SendCommand(Commands.GetFei).ConvertToInt16();
 
+        ///<inheritdoc/>
         public abstract IEnumerable<byte> Fifo { get; set; }
 
         ///<inheritdoc/>

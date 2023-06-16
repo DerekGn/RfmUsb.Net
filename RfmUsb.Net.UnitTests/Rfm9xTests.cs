@@ -160,6 +160,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetAccessSharedRegisters()
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.AccessSharedRegisters; },
+                (v) => v.Should().BeTrue(),
+                Commands.GetAccessSharedRegisters,
+                "1");
+        }
+
+        [TestMethod]
         public void TestGetAutoImageCalibrationOn()
         {
             ExecuteGetTest(
@@ -167,6 +177,20 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().BeTrue(),
                 Commands.GetAutoImageCalibrationOn,
                 "1");
+        }
+
+        [TestMethod]
+        [DataRow(AutoRestartRxMode.Off)]
+        [DataRow(AutoRestartRxMode.OnWaitForPllLock)]
+        [DataRow(AutoRestartRxMode.OnWithoutPllRelock)]
+        [DataRow(AutoRestartRxMode.Reserved)]
+        public void TestGetAutoRestartRxMode(AutoRestartRxMode expected)
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.AutoRestartRxMode; },
+                (v) => { v.Should().Be(expected); },
+                Commands.GetAutoRestartRxMode,
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -273,6 +297,15 @@ namespace RfmUsb.Net.UnitTests
                 "0x20");
         }
 
+        [TestMethod]
+        public void TestGetFifoRxCurrentAddress()
+        {
+            ExecuteGetTest(
+                () => { return _rfm9x.FifoRxCurrentAddress; },
+                (v) => v.Should().Be(0xAA),
+                Commands.GetFifoRxCurrentAddress,
+                "0xAA");
+        }
         [TestMethod]
         public void TestGetFifoTxBaseAddress()
         {
@@ -660,23 +693,13 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetPreambleDetectorTotal()
+        public void TestGetPreambleDetectorTotalerance()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreambleDetectorTotal; },
-                (v) => v.Should().Be(0xAA),
-                Commands.GetPreambleDetectorTotal,
-                "0xAA");
-        }
-
-        [TestMethod]
-        public void TestGetPreambleLength()
-        {
-            ExecuteGetTest(
-                () => { return _rfm9x.PreambleSize; },
-                (v) => v.Should().Be(0x100),
-                Commands.GetPreambleLength,
-                "0x100");
+                () => { return _rfm9x.PreambleDetectorTotalerance; },
+                (v) => v.Should().Be(30),
+                Commands.GetPreambleDetectorTotalerance,
+                $"0x{(sbyte)30:X2}");
         }
 
         [TestMethod]
@@ -746,7 +769,6 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
-
         [TestMethod]
         public void TestGetRssiWideband()
         {
@@ -920,6 +942,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetAccessSharedRegisters()
+        {
+            ExecuteSetTest(
+                () => { _rfm9x.AccessSharedRegisters = true; },
+                Commands.SetAccessSharedRegisters,
+                "1");
+        }
+
+        [TestMethod]
         public void TestSetAesOn()
         {
             ExecuteSetTest(
@@ -935,6 +966,19 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm9x.AutoImageCalibrationOn = true; },
                 Commands.SetAutoImageCalibrationOn,
                 "1");
+        }
+
+        [TestMethod]
+        [DataRow(AutoRestartRxMode.Off)]
+        [DataRow(AutoRestartRxMode.OnWaitForPllLock)]
+        [DataRow(AutoRestartRxMode.OnWithoutPllRelock)]
+        [DataRow(AutoRestartRxMode.Reserved)]
+        public void TestSetAutoRestartRxMode(AutoRestartRxMode expected)
+        {
+            ExecuteSetTest(
+                () => { _rfm9x.AutoRestartRxMode = expected; },
+                Commands.SetAutoRestartRxMode,
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -1293,12 +1337,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetPreambleDetectorTotal()
+        public void TestSetPreambleDetectorTotalerance()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleDetectorTotal = 0x55; },
-                Commands.SetPreambleDetectorTotal,
-                "0x55");
+                () => { _rfm9x.PreambleDetectorTotalerance = 55; },
+                Commands.SetPreambleDetectorTotalerance,
+                $"0x{(sbyte)55:X2}");
         }
 
         [TestMethod]
@@ -1371,6 +1415,7 @@ namespace RfmUsb.Net.UnitTests
                 Commands.SetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
+
         [TestMethod]
         public void TestSetRxPayloadCrcOn()
         {

@@ -61,7 +61,7 @@ namespace RfmUsb.Net
         public AutoRestartRxMode AutoRestartRxMode
         {
             get => (AutoRestartRxMode)SendCommand(Commands.GetAutoRestartRxMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.GetAutoRestartRxMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetAutoRestartRxMode} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -102,6 +102,7 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetFastHopOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
+        ///<inheritdoc/>
         public override IEnumerable<byte> Fifo { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
@@ -280,8 +281,6 @@ namespace RfmUsb.Net
             set => SendCommandWithCheck($"{Commands.SetLowFrequencyMode} {(value ? "1" : "0")}", ResponseOk);
         }
 
-        public bool LowFrequencyModeOn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
         ///<inheritdoc/>
         public bool LowPowerSelection
         {
@@ -346,14 +345,6 @@ namespace RfmUsb.Net
             get => (PreambleDetectorSize)SendCommand(Commands.GetPreambleDetectorSize).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetPreambleDetectorSize} 0x{value:X}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public byte PreambleDetectorTotal
-        {
-            get => SendCommand(Commands.GetPreambleDetectorTotal).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotal} 0x{value:X}", ResponseOk);
-        }
-
 
         ///<inheritdoc/>
         public bool PreamblePolarity
@@ -478,6 +469,14 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
+
+        ///<inheritdoc/>
+        public byte PreambleDetectorTotalerance
+        {
+            get => SendCommand(Commands.GetPreambleDetectorTotalerance).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{(byte)value:X2}", ResponseOk);
+        }
+
         ///<inheritdoc/>
         public void ClearFifoOverrun()
         {

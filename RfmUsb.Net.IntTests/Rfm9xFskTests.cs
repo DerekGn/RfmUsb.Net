@@ -97,7 +97,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestFormerTemperatureValue()
         {
-            var x = _rfm9x.FormerTemperatureValue;
+            TestRange(() => _rfm9x.FormerTemperatureValue, (v) => _rfm9x.FormerTemperatureValue = v);
         }
 
         [TestMethod]
@@ -251,7 +251,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestPreambleDetectorTotal()
         {
-            TestRange(() => _rfm9x.PreambleDetectorTotal, (v) => _rfm9x.PreambleDetectorTotal = v);
+            TestRange<byte>(() => _rfm9x.PreambleDetectorTotalerance, (v) => _rfm9x.PreambleDetectorTotalerance = v, 0, 0x0F);
         }
 
         [TestMethod]

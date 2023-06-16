@@ -853,7 +853,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { RfmBase.Mode = expected; },
                 Commands.SetMode,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]

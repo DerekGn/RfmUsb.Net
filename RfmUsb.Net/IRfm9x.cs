@@ -22,8 +22,6 @@
 * SOFTWARE.
 */
 
-using System.Runtime.Intrinsics.X86;
-
 namespace RfmUsb.Net
 {
     /// <summary>
@@ -68,8 +66,12 @@ namespace RfmUsb.Net
         byte BitRateFractional { get; set; }
 
         /// <summary>
-        /// 
+        /// Enables the Bit Synchronizer.
         /// </summary>
+        /// <remarks>
+        /// 0 : Bit Sync disabled (not possible in Packet mode)
+        /// 1 : Bit Sync enabled
+        /// </remarks>
         bool BitSyncOn { get; set; }
 
         /// <summary>
@@ -77,14 +79,50 @@ namespace RfmUsb.Net
         /// </summary>
         CodingRate CodingRate { get; }
 
+        /// <summary>
+        /// Selects the CRC and whitening algorithms
+        /// </summary>
+        /// <remarks>
+        /// 0 : CCITT CRC implementation with standard whitening
+        /// 1 : IBM CRC implementation with alternate whitening
+        /// </remarks>
         bool CrcWhiteningType { get; set; }
+
+        /// <summary>
+        /// Bypasses the main state machine for a quick frequency hop.
+        /// </summary>
         bool FastHopOn { get; set; }
+
+        /// <summary>
+        /// The fifo address pointer
+        /// </summary>
         byte FifoAddressPointer { get; set; }
+
+        /// <summary>
+        /// Read base address in FIFO data buffer for RX
+        /// </summary>
         byte FifoRxBaseAddress { get; set; }
+
+        /// <summary>
+        /// Current value of RX databuffer pointer
+        /// </summary>
         byte FifoRxByteAddressPointer { get; }
+
+        /// <summary>
+        /// Number of payload bytes of latest packetreceived
+        /// </summary>
         byte FifoRxBytesNumber { get; }
+
+        /// <summary>
+        /// Start address (in data buffer) of last packet received
+        /// </summary>
         byte FifoRxCurrentAddress { get; }
+
 #warning TODO check accesssharedregisters state in fsk
+
+        /// <summary>
+        /// Write base address in FIFO data buffer for TX
+        /// </summary>
         byte FifoTxBaseAddress { get; set; }
 
         /// <summary>
@@ -104,7 +142,7 @@ namespace RfmUsb.Net
         byte FrequencyHoppingPeriod { get; set; }
 
         /// <summary>
-        /// Controls the sequencer transition from the 
+        /// Controls the sequencer transition from the
         /// idle state on a T1 interrupt.
         /// </summary>
         /// <remarks>
@@ -124,13 +162,13 @@ namespace RfmUsb.Net
         FromReceive FromReceive { get; set; }
 
         /// <summary>
-        /// Controls the state-machine transition from the 
+        /// Controls the state-machine transition from the
         /// Receive state on a RxTimeout interrupt
         /// </summary>
         FromRxTimeout FromRxTimeout { get; set; }
 
         /// <summary>
-        /// Controls the sequencer transition when sequencer 
+        /// Controls the sequencer transition when sequencer
         /// is a set to true in sleep or standby mode
         /// </summary>
         FromStart FromStart { get; set; }
@@ -238,15 +276,6 @@ namespace RfmUsb.Net
         bool LowFrequencyMode { get; set; }
 
         /// <summary>
-        /// Access Low Frequency Mode registers
-        /// </summary>
-        /// <remarks>
-        /// 0 : High Frequency Mode
-        /// 1 : Low Frequency Mode
-        /// </remarks>
-        bool LowFrequencyModeOn { get; set; }
-
-        /// <summary>
         /// Selects Sequencer LowPower state after a to LowPowerSelection transition
         /// </summary>
         /// <remarks>
@@ -290,7 +319,7 @@ namespace RfmUsb.Net
         byte PacketSnr { get; }
 
         /// <summary>
-        /// Maximum payload length; if header payload length exceeds value a 
+        /// Maximum payload length; if header payload length exceeds value a
         /// header CRC error is generated.Allows filtering of packet with a bad size.
         /// </summary>
         byte PayloadMaxLength { get; set; }
@@ -314,7 +343,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Number or chip errors tolerated overPreambleDetectorSize. 4 chips per bit
         /// </summary>
-        byte PreambleDetectorTotal { get; set; }
+        byte PreambleDetectorTotalerance { get; set; }
 
         /// <summary>
         /// Sets the polarity of the Preamble
@@ -326,8 +355,8 @@ namespace RfmUsb.Net
         bool PreamblePolarity { get; set; }
 
         /// <summary>
-        /// Turns on the mechanism restarting the receiver 
-        /// automatically if it gets saturated or a packet 
+        /// Turns on the mechanism restarting the receiver
+        /// automatically if it gets saturated or a packet
         /// collision is detected
         /// </summary>
         /// <remarks>
@@ -337,7 +366,7 @@ namespace RfmUsb.Net
         bool RestartRxOnCollision { get; set; }
 
         /// <summary>
-        /// Sets the threshold used to consider that an interferer is detected, 
+        /// Sets the threshold used to consider that an interferer is detected,
         /// witnessing a packet collision. 1dB/LSB
         /// </summary>
         byte RssiCollisionThreshold { get; set; }
