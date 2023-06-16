@@ -41,48 +41,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestFifoThreshold()
-        {
-            TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
-        }
-
-        [TestMethod]
-        public void TestFrequencyDeviation()
-        {
-            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 200000);
-        }
-
-        [TestMethod]
-        public void TestRxBw()
-        {
-            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 21);
-        }
-
-        [TestMethod]
-        public void TestRxBwAfc()
-        {
-            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 21);
-        }
-
-        [TestMethod]
-        public void TestClearFifoOverrun()
-        {
-            _rfm9x.ClearFifoOverrun();
-        }
-
-        [TestMethod]
-        public void TestFastHopOn()
-        {
-            TestRangeBool(() => _rfm9x.FastHopOn, (v) => _rfm9x.FastHopOn = v);
-        }
-
-        [TestMethod]
-        public void TestCrcWhiteningType()
-        {
-            TestRangeBool(() => _rfm9x.CrcWhiteningType, (v) => _rfm9x.CrcWhiteningType = v);
-        }
-
-        [TestMethod]
         public void TestAutoImageCalibrationOn()
         {
             TestRangeBool(() => _rfm9x.AutoImageCalibrationOn, (v) => _rfm9x.AutoImageCalibrationOn = v);
@@ -95,9 +53,95 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestClearFifoOverrun()
+        {
+            _rfm9x.ClearFifoOverrun();
+        }
+
+        [TestMethod]
+        public void TestClearLowBattery()
+        {
+            _rfm9x.ClearLowBattery();
+        }
+
+        [TestMethod]
+        public void TestClearPreambleDetect()
+        {
+            _rfm9x.ClearPreambleDetect();
+        }
+
+        [TestMethod]
+        public void TestClearSyncAddressMatch()
+        {
+            _rfm9x.ClearSyncAddressMatch();
+        }
+
+        [TestMethod]
+        [DataRow(CrcWhiteningType.CrcCCITT)]
+        [DataRow(CrcWhiteningType.CrcIbm)]
+        public void TestCrcWhiteningType(CrcWhiteningType expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.CrcWhiteningType, (v) => _rfm9x.CrcWhiteningType = v);
+        }
+
+        [TestMethod]
+        public void TestExecuteAgcStart()
+        {
+            _rfm9x.ExecuteAgcStart();
+        }
+
+        [TestMethod]
+        public void TestExecuteImageCalibration()
+        {
+            _rfm9x.ExecuteImageCalibration();
+        }
+
+        [TestMethod]
+        public void TestExecuteRestartRxWithoutPllLock()
+        {
+            _rfm9x.ExecuteRestartRxWithoutPllLock();
+        }
+
+        [TestMethod]
+        public void TestExecuteRestartRxWithPllLock()
+        {
+            _rfm9x.ExecuteRestartRxWithPllLock();
+        }
+
+        [TestMethod]
+        public void TestExecuteSequencerStart()
+        {
+            _rfm9x.ExecuteSequencerStart();
+        }
+
+        [TestMethod]
+        public void TestExecuteSequencerStop()
+        {
+            _rfm9x.ExecuteSequencerStop();
+        }
+
+        [TestMethod]
+        public void TestFastHopOn()
+        {
+            TestRangeBool(() => _rfm9x.FastHopOn, (v) => _rfm9x.FastHopOn = v);
+        }
+
+        [TestMethod]
+        public void TestFifoThreshold()
+        {
+            TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
+        }
+
+        [TestMethod]
         public void TestFormerTemperatureValue()
         {
             TestRange(() => _rfm9x.FormerTemperatureValue, (v) => _rfm9x.FormerTemperatureValue = v);
+        }
+
+        [TestMethod]
+        public void TestFrequencyDeviation()
+        {
+            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 200000);
         }
 
         [TestMethod]
@@ -156,9 +200,33 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [DataRow(OokAverageOffset.Offset0dB)]
+        [DataRow(OokAverageOffset.Offset2dB)]
+        [DataRow(OokAverageOffset.Offset4dB)]
+        [DataRow(OokAverageOffset.Offset6dB)]
+        public void TestFromStart(OokAverageOffset expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.OokAverageOffset, (v) => _rfm9x.OokAverageOffset = v);
+        }
+
+        [TestMethod]
         public void TestFromTransmit()
         {
             TestRangeBool(() => _rfm9x.FromTransmit, (v) => _rfm9x.FromTransmit = v);
+        }
+
+        [TestMethod]
+        public void TestGetCodingRate()
+        {
+            var x = _rfm9x.CodingRate;
+        }
+
+        [TestMethod]
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void TestGetTimerCoefficient(Timer expected)
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -221,16 +289,6 @@ namespace RfmUsb.Net.IntTests
         public void TestMapPreambleDetect()
         {
             TestRangeBool(() => _rfm9x.MapPreambleDetect, (v) => _rfm9x.MapPreambleDetect = v);
-        }
-
-        [TestMethod]
-        [DataRow(OokAverageOffset.Offset0dB)]
-        [DataRow(OokAverageOffset.Offset2dB)]
-        [DataRow(OokAverageOffset.Offset4dB)]
-        [DataRow(OokAverageOffset.Offset6dB)]
-        public void TestFromStart(OokAverageOffset expected)
-        {
-            TestAssignedValue(expected, () => _rfm9x.OokAverageOffset, (v) => _rfm9x.OokAverageOffset = v);
         }
 
         [TestMethod]
@@ -299,6 +357,17 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestRxBw()
+        {
+            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 21);
+        }
+
+        [TestMethod]
+        public void TestRxBwAfc()
+        {
+            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 21);
+        }
+        [TestMethod]
         public void TestTcxoInputOn()
         {
             TestRangeBool(() => _rfm9x.TcxoInputOn, (v) => _rfm9x.TcxoInputOn = v);
@@ -337,73 +406,10 @@ namespace RfmUsb.Net.IntTests
         {
             TestRange(() => _rfm9x.TimeoutSignalSync, (v) => _rfm9x.TimeoutSignalSync = v);
         }
-
-        [TestMethod]
-        public void TestClearLowBattery()
-        { 
-            _rfm9x.ClearLowBattery();
-        }
-
-        [TestMethod]
-        public void TestClearPreambleDetect()
-        {
-            _rfm9x.ClearPreambleDetect();
-        }
-
-        [TestMethod]
-        public void TestClearSyncAddressMatch()
-        {
-            _rfm9x.ClearSyncAddressMatch();
-        }
-
-        [TestMethod]
-        public void TestExecuteAgcStart()
-        {
-            _rfm9x.ExecuteAgcStart();
-        }
-
-        [TestMethod]
-        public void TestExecuteImageCalibration()
-        {
-            _rfm9x.ExecuteImageCalibration();
-        }
-
-        [TestMethod]
-        public void TestExecuteRestartRxWithoutPllLock()
-        {
-            _rfm9x.ExecuteRestartRxWithoutPllLock();
-        }
-
-        [TestMethod]
-        public void TestExecuteRestartRxWithPllLock()
-        {
-            _rfm9x.ExecuteRestartRxWithPllLock();
-        }
-
-        [TestMethod]
-        public void TestExecuteSequencerStart()
-        {
-            _rfm9x.ExecuteSequencerStart();
-        }
-
-        [TestMethod]
-        public void TestExecuteSequencerStop()
-        {
-            _rfm9x.ExecuteSequencerStop();
-        }
-
         [TestMethod]
         [DataRow(Timer.Timer1)]
         [DataRow(Timer.Timer2)]
         public void TestTimerCoefficient(Timer expected)
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        [DataRow(Timer.Timer1)]
-        [DataRow(Timer.Timer2)]
-        public void TestGetTimerCoefficient(Timer expected)
         {
             throw new NotImplementedException();
         }

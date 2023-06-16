@@ -61,7 +61,7 @@ namespace RfmUsb.Net
         public AutoRestartRxMode AutoRestartRxMode
         {
             get => (AutoRestartRxMode)SendCommand(Commands.GetAutoRestartRxMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAutoRestartRxMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetAutoRestartRxMode} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -89,10 +89,10 @@ namespace RfmUsb.Net
         public CodingRate CodingRate => (CodingRate)SendCommand(Commands.GetCodingRate).ConvertToInt32();
 
         ///<inheritdoc/>
-        public bool CrcWhiteningType
+        public CrcWhiteningType CrcWhiteningType
         {
-            get => SendCommand(Commands.GetCrcWhiteningType).Substring(0, 1) == "1";
-            set => SendCommandWithCheck($"{Commands.SetCrcWhiteningType} {(value ? "1" : "0")}", ResponseOk);
+            get => (CrcWhiteningType)SendCommand(Commands.GetCrcWhiteningType).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetCrcWhiteningType} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -163,7 +163,7 @@ namespace RfmUsb.Net
         public FromPacketReceived FromPacketReceived
         {
             get => (FromPacketReceived)SendCommand(Commands.GetFromPacketReceived).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetFromPacketReceived} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetFromPacketReceived} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -264,7 +264,7 @@ namespace RfmUsb.Net
         public LowBatteryTrim LowBatteryTrim
         {
             get => (LowBatteryTrim)SendCommand(Commands.GetLowBatteryTrim).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetLowBatteryTrim} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetLowBatteryTrim} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -316,7 +316,7 @@ namespace RfmUsb.Net
         public byte PacketRssi => SendCommand(Commands.GetPacketRssi).ConvertToByte();
 
         ///<inheritdoc/>
-        public byte PacketSnr => SendCommand(Commands.GetPacketSnr).ConvertToByte();
+        public byte LastPacketSnr => SendCommand(Commands.GetLastPacketSnr).ConvertToByte();
 
         ///<inheritdoc/>
         public byte PayloadMaxLength
@@ -343,7 +343,7 @@ namespace RfmUsb.Net
         public PreambleDetectorSize PreambleDetectorSize
         {
             get => (PreambleDetectorSize)SendCommand(Commands.GetPreambleDetectorSize).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorSize} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorSize} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -426,7 +426,7 @@ namespace RfmUsb.Net
         public TemperatureThreshold TemperatureThreshold
         {
             get => (TemperatureThreshold)SendCommand(Commands.GetTemperatureThreshold).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetTemperatureThreshold} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetTemperatureThreshold} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

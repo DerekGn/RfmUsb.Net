@@ -38,6 +38,8 @@ namespace RfmUsb.Net.IntTests
             RfmBase = _rfm9x;
 
             _rfm9x.Open("COM4", 230400);
+
+            _rfm9x.LongRangeMode = true;
         }
 
         [TestMethod]
@@ -92,12 +94,6 @@ namespace RfmUsb.Net.IntTests
         public void TestBitRateFractional()
         {
             TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = v);
-        }
-
-        [TestMethod]
-        public void TestCodingRate()
-        {
-            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -193,7 +189,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestPacketSnr()
         {
-            var x = _rfm9x.PacketSnr;
+            var x = _rfm9x.LastPacketSnr;
         }
 
         [TestMethod]

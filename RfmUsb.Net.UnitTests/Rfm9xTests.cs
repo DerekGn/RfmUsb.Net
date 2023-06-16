@@ -238,13 +238,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetCrcWhiteningType()
+        [DataRow(CrcWhiteningType.CrcCCITT)]
+        [DataRow(CrcWhiteningType.CrcIbm)]
+        public void TestGetCrcWhiteningType(CrcWhiteningType expected)
         {
             ExecuteGetTest(
                 () => { return _rfm9x.CrcWhiteningType; },
-                (v) => v.Should().BeTrue(),
+                (v) => { v.Should().Be(expected); },
                 Commands.GetCrcWhiteningType,
-                "1");
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -643,9 +645,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPacketSnr()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PacketSnr; },
+                () => { return _rfm9x.LastPacketSnr; },
                 (v) => v.Should().Be(0xAA),
-                Commands.GetPacketSnr,
+                Commands.GetLastPacketSnr,
                 "0xAA");
         }
 
@@ -1009,12 +1011,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetCrcWhiteningType()
+        [DataRow(CrcWhiteningType.CrcCCITT)]
+        [DataRow(CrcWhiteningType.CrcIbm)]
+        public void TestSetCrcWhiteningType(CrcWhiteningType expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.CrcWhiteningType = true; },
+                () => { _rfm9x.CrcWhiteningType = expected; },
                 Commands.SetCrcWhiteningType,
-                "1");
+                $"0x{expected:X}");
         }
 
         [TestMethod]

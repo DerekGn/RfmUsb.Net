@@ -82,11 +82,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Selects the CRC and whitening algorithms
         /// </summary>
-        /// <remarks>
-        /// 0 : CCITT CRC implementation with standard whitening
-        /// 1 : IBM CRC implementation with alternate whitening
-        /// </remarks>
-        bool CrcWhiteningType { get; set; }
+        CrcWhiteningType CrcWhiteningType { get; set; }
 
         /// <summary>
         /// Bypasses the main state machine for a quick frequency hop.
@@ -316,7 +312,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Estimation of SNR on last packet received.
         /// </summary>
-        byte PacketSnr { get; }
+        byte LastPacketSnr { get; }
 
         /// <summary>
         /// Maximum payload length; if header payload length exceeds value a
