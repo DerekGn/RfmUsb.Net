@@ -38,6 +38,8 @@ namespace RfmUsb.Net.IntTests
             RfmBase = _rfm9x;
 
             _rfm9x.Open("COM4", 230400);
+
+            _rfm9x.LongRangeMode = false;
         }
 
         [TestMethod]
@@ -133,22 +135,13 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore("not implemented in device")]
         public void TestFormerTemperatureValue()
         {
             TestRange(() => _rfm9x.FormerTemperatureValue, (v) => _rfm9x.FormerTemperatureValue = v);
         }
 
-        [TestMethod]
-        public void TestFrequencyDeviation()
-        {
-            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 200000);
-        }
-
-        [TestMethod]
-        public void TestFrequencyHoppingPeriod()
-        {
-            TestRange(() => _rfm9x.FrequencyHoppingPeriod, (v) => _rfm9x.FrequencyHoppingPeriod = v);
-        }
+        
 
         [TestMethod]
         public void TestFromIdle()
@@ -174,6 +167,8 @@ namespace RfmUsb.Net.IntTests
         [DataRow(FromReceive.ToSequencerOffOnPreambleDetect)]
         [DataRow(FromReceive.ToSequencerOffOnRssi)]
         [DataRow(FromReceive.ToSequencerOffOnSyncAddress)]
+        [DataRow(FromReceive.UnusedA)]
+        [DataRow(FromReceive.UnusedB)]
         public void TestFromReceive(FromReceive expected)
         {
             TestAssignedValue(expected, () => _rfm9x.FromReceive, (v) => _rfm9x.FromReceive = v);
@@ -227,12 +222,6 @@ namespace RfmUsb.Net.IntTests
         public void TestGetTimerCoefficient(Timer expected)
         {
             throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void TestImplicitHeaderModeOn()
-        {
-            TestRangeBool(() => _rfm9x.ImplicitHeaderModeOn, (v) => _rfm9x.ImplicitHeaderModeOn = v);
         }
 
         [TestMethod]

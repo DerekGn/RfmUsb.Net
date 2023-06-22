@@ -100,7 +100,7 @@ namespace RfmUsb.Net
         public const string GetFromReceive = "g-fr";
         public const string GetFromRxTimeout = "g-frto";
         public const string GetFromStart = "g-fs";
-        public const string GetFromTransmit = "g-ft";
+        public const string GetFromTransmit = "g-frmt";
         public const string GetFskModulationShaping = "g-fs";
         public const string GetHopChannel = "g-hc";
         public const string GetIdleMode = "g-im";
@@ -147,7 +147,7 @@ namespace RfmUsb.Net
         public const string GetOutputPower = "g-op";
         public const string GetPacketFormat = "g-pf";
         public const string GetPacketRssi = "g-ps";
-        public const string GetLastPacketSnr = "g-lps";
+        public const string GetLastPacketSnr = "g-lpsnr";
         public const string GetPaRamp = "g-par";
         public const string GetPayloadLength = "g-pl";
         public const string GetPayloadMaxLength = "g-mpl";
@@ -158,6 +158,7 @@ namespace RfmUsb.Net
         public const string GetPreamblePolarity = "g-pp";
         public const string GetPreambleSize = "g-ps";
         public const string GetRadioConfig = "g-rc";
+        public const string GetRadioConfigList = "g-rcl";
         public const string GetRadioVersion = "g-v";
         public const string GetRestartRxOnCollision = "g-rroc";
         public const string GetRssi = "g-r";
@@ -235,7 +236,7 @@ namespace RfmUsb.Net
         public const string SetFromReceive = "s-fr";
         public const string SetFromRxTimeout = "s-frt";
         public const string SetFromStart = "s-fs";
-        public const string SetFromTransmit = "s-ft";
+        public const string SetFromTransmit = "s-frmt";
         public const string SetFskModulationShaping = "s-fs";
         public const string SetIdleMode = "s-im";
         public const string SetImpedance = "s-lnaz";
@@ -317,5 +318,6 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
+        public const string SetOutputbase = "s-ob";
     }
 }

@@ -46,14 +46,14 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Only valid if AfcAutoOn is set
-        /// false → AFC register is not cleared before a new AFC phase
-        /// true → AFC register is cleared before a new AFC phase
+        /// false : AFC register is not cleared before a new AFC phase
+        /// true : AFC register is cleared before a new AFC phase
         /// </summary>
         bool AfcAutoClear { get; set; }
 
         /// <summary>
-        /// false → AFC is performed each time AfcStart is set
-        /// true → AFC is performed each time Rx mode is entered
+        /// false : AFC is performed each time AfcStart is set
+        /// true : AFC is performed each time Rx mode is entered
         /// </summary>
         bool AfcAutoOn { get; set; }
 
@@ -69,15 +69,15 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Defines the behavior of the packet handler when CRC check fails:
-        /// false → Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
-        /// true → Do not clear FIFO. PayloadReady interrupt issued.
+        /// false : Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
+        /// true : Do not clear FIFO. PayloadReady interrupt issued.
         /// </summary>
         bool CrcAutoClear { get; set; }
 
         /// <summary>
         /// Enables CRC calculation/check (Tx/Rx)
-        /// false → Off
-        /// true → On
+        /// false : Off
+        /// true : On
         /// </summary>
         bool CrcOn { get; set; }
 
@@ -114,7 +114,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get or set the frequency deviation
         /// </summary>
-        uint FrequencyDeviation { get; set; }
+        ushort FrequencyDeviation { get; set; }
 
         /// <summary>
         /// The Fsk data shaping
@@ -192,8 +192,8 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Defines the packet format used:
-        /// false → Fixed length
-        /// true → Variable length
+        /// false : Fixed length
+        /// true : Variable length
         /// </summary>
         bool PacketFormat { get; set; }
 
@@ -212,6 +212,11 @@ namespace RfmUsb.Net
         /// Size of the preamble to be sent (from TxStartConditionfulfilled)
         /// </summary>
         ushort PreambleSize { get; set; }
+
+        /// <summary>
+        /// The current predefined radio configuration
+        /// </summary>
+        byte RadioConfig { get; set; }
 
         /// <summary>
         /// Get the RfmUsb radio version
@@ -255,8 +260,8 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Defines the condition to start packet transmission :
-        /// false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
-        /// true → FifoNotEmpty (i.e. at least one byte in the FIFO)
+        /// false : FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
+        /// true : FifoNotEmpty (i.e. at least one byte in the FIFO)
         /// </summary>
         bool TxStartCondition { get; set; }
 
@@ -271,11 +276,22 @@ namespace RfmUsb.Net
         void EnterBootloader();
 
         /// <summary>
+        /// Reset the radio settings to default
+        /// </summary>
+        void ExecuteReset();
+
+        /// <summary>
         /// Get the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/></param>
         /// <returns>The <see cref="DioMapping"/></returns>
         DioMapping GetDioMapping(Dio dio);
+
+        /// <summary>
+        /// Get the list of predefined radio configurations.
+        /// </summary>
+        /// <returns>The discriptive list of ratio configurations</returns>
+        IList<string> GetRadioConfigurations();
 
         /// <summary>
         /// Open the RfmUsb device
@@ -306,8 +322,25 @@ namespace RfmUsb.Net
         /// Transmit a packet of data bytes
         /// </summary>
         /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The transmit timeout</param>
-        void Transmit(IList<byte> data, int txTimeout);
+        /// <param name="txCount">The number of transmissions</param>
+        void Transmit(IList<byte> data, int txCount);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txCount">The number of transmissions</param>
+        /// <param name="txInterval">The interval between transmissions</param>
+        void Transmit(IList<byte> data, int txCount, int txInterval);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txCount">The number of transmissions</param>
+        /// <param name="txInterval">The interval between transmissions</param>
+        /// <param name="txTimeout">The tx timeout</param>
+        void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout);
 
         /// <summary>
         /// Transmit a packet of data bytes and wait for a response

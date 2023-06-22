@@ -170,7 +170,7 @@ namespace RfmUsb.Net
         public FromReceive FromReceive
         {
             get => (FromReceive)SendCommand(Commands.GetFromReceive).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetFromReceive} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetFromReceive} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

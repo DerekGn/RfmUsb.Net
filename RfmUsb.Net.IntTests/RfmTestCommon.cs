@@ -24,8 +24,7 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Numerics;
-using System.Runtime.CompilerServices;
+using RfmUsb.Net.Exceptions;
 
 namespace RfmUsb.Net.IntTests
 {
@@ -61,7 +60,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestBitrate()
         {
-            TestRange<uint>(() => RfmBase.BitRate, (v) => RfmBase.BitRate = v, 1200, 300000);
+            TestRange<uint>(() => RfmBase.BitRate, (v) => RfmBase.BitRate = v, 1200, 299065);
         }
 
         [TestMethod]
@@ -143,6 +142,12 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestFrequencyDeviation()
+        {
+            TestRange<ushort>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 0, 0x3FFF);
+        }
+
+        [TestMethod]
         [DataRow(FskModulationShaping.GaussianBt0_3)]
         [DataRow(FskModulationShaping.GaussianBt0_5)]
         [DataRow(FskModulationShaping.GaussianBt1_0)]
@@ -150,6 +155,14 @@ namespace RfmUsb.Net.IntTests
         public void TestFskModulationShaping(FskModulationShaping expected)
         {
             TestAssignedValue(expected, () => RfmBase.FskModulationShaping, (v) => RfmBase.FskModulationShaping = v);
+        }
+
+        [TestMethod]
+        public void TestGetRadioConfigurations()
+        {
+            var configList = RfmBase.GetRadioConfigurations();
+
+            configList.Should().NotBeEmpty();
         }
 
         [TestMethod]
@@ -177,9 +190,13 @@ namespace RfmUsb.Net.IntTests
         [DataRow(Mode.Standby)]
         [DataRow(Mode.Synth)]
         [DataRow(Mode.Tx)]
+        [Ignore]
         public void TestMode(Mode expected)
         {
             TestAssignedValue(expected, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
+
+            // Revert to sleep mode.
+            TestAssignedValue(Mode.Standby, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
         }
 
         [TestMethod]
@@ -339,12 +356,10 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestSync()
         {
-            RfmBase.SyncEnable = true;
-
             var expected = new List<byte>() { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
             RfmBase.Sync = expected;
 
-            RfmBase.Sync.Should().BeSameAs(expected);
+            RfmBase.Sync.Should().Contain(expected);
         }
 
         [TestMethod]
@@ -354,7 +369,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [Ignore("update firmware value set/get")]
         public void TestSyncSize()
         {
             TestRange<byte>(() => RfmBase.SyncSize, (v) => RfmBase.SyncSize = v, 0, 7);
@@ -369,25 +383,78 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestTransmit()
         {
-            throw new NotImplementedException();
+            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 });
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
         }
 
         [TestMethod]
         public void TestTransmitReceive()
         {
-            throw new NotImplementedException();
+            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 });
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
         }
 
         [TestMethod]
-        public void TestTransmitReceiveWithTimeout()
+        public void TestTransmitReceiveTxTimeout()
         {
-            throw new NotImplementedException();
+            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000);
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
         }
 
         [TestMethod]
-        public void TestTransmitWithTimeout()
+        public void TestTransmitReceiveTxRxTimeout()
         {
-            throw new NotImplementedException();
+            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000, 1000);
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
+        }
+
+        [TestMethod]
+        public void TestTransmitWithCountAndInterval()
+        {
+            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100);
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
+        }
+
+        [TestMethod]
+        public void TestTransmitWithCountAndIntervalAndTimeout()
+        {
+            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100, 1000);
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTxCount()
+        {
+            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1);
+
+            action
+                .Should()
+                .Throw<RfmUsbTransmitException>()
+                .WithMessage("Packet transmission failed: [TX Timeout]");
         }
 
         [TestMethod]

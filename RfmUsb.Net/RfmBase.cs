@@ -29,7 +29,9 @@ using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
+using System.Threading;
 
 namespace RfmUsb.Net
 {
@@ -39,6 +41,7 @@ namespace RfmUsb.Net
     public abstract class RfmBase : IRfm
     {
         internal const string ResponseOk = "OK";
+        internal readonly AutoResetEvent _autoResetEvent;
         internal readonly ILogger<IRfm> Logger;
         internal readonly ISerialPortFactory SerialPortFactory;
         internal ISerialPort SerialPort;
@@ -53,6 +56,7 @@ namespace RfmUsb.Net
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
+            _autoResetEvent = new AutoResetEvent(false);
         }
 
         ///<inheritdoc/>
@@ -138,10 +142,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public uint FrequencyDeviation
+        public ushort FrequencyDeviation
         {
-            get => SendCommand(Commands.GetFrequencyDeviation).ConvertToUInt32();
-            set => SendCommandWithCheck($"{Commands.SetFrequencyDeviation} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetFrequencyDeviation).ConvertToUInt16();
+            set => SendCommandWithCheck($"{Commands.SetFrequencyDeviation} 0x{(ushort)value:X4}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -271,10 +275,17 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public byte RadioConfig
+        {
+            get => SendCommand(Commands.GetRadioConfig).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetRadioConfig} 0x{value:X}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public byte RadioVersion => SendCommand(Commands.GetRadioVersion).ConvertToByte();
 
         ///<inheritdoc/>
-        public sbyte Rssi => SendCommand(Commands.GetRssi).ConvertToSByte();
+        public sbyte Rssi => (sbyte)SendCommand(Commands.GetRssi).ConvertToUInt32();
 
         ///<inheritdoc/>
         public byte RxBw
@@ -308,7 +319,7 @@ namespace RfmUsb.Net
         public byte SyncSize
         {
             get => SendCommand(Commands.GetSyncSize).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetSyncSize} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetSyncSize} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -320,12 +331,15 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
+
         ///<inheritdoc/>
         public void Close()
         {
             if (SerialPort != null && SerialPort.IsOpen)
             {
                 SerialPort.Close();
+
+                SerialPort = null;
             }
         }
 
@@ -363,6 +377,33 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public IList<string> GetRadioConfigurations()
+        {
+            lock (SerialPort)
+            {
+                List<string> configs = new List<string>();
+
+                var result = SendCommand(Commands.GetRadioConfigList);
+
+                configs.Add(result);
+
+                do
+                {
+                    try
+                    {
+                        configs.Add(SerialPort.ReadLine());
+                    }
+                    catch (TimeoutException)
+                    {
+                        break;
+                    }
+                } while (true);
+
+                return configs.AsReadOnly();
+            }
+        }
+
+        ///<inheritdoc/>
         public void Open(string serialPort, int baudRate)
         {
             try
@@ -378,12 +419,13 @@ namespace RfmUsb.Net
                     SerialPort.ReadTimeout = 500;
                     SerialPort.WriteTimeout = 500;
                     SerialPort.Open();
+
+                    SerialPort.DataReceived += SerialPort_DataReceived;
                 }
 
                 CheckDeviceVersion(FirmwareVersion);
 
-#warning TODO handle base
-                //SendCommandWithCheck($"{Commands.SetOutputbase} 0", ResponseOk );
+                SendCommand($"{Commands.SetOutputbase} 0");
             }
             catch (FileNotFoundException ex)
             {
@@ -408,15 +450,41 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void Transmit(IList<byte> data)
+        public void Transmit(IList<byte> data, int txCount, int txInterval)
         {
-            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X} " +
+                $"0x{txInterval:X}");
         }
 
         ///<inheritdoc/>
-        public void Transmit(IList<byte> data, int txTimeout)
+        public void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout)
         {
-            TransmitInternal($"{Commands.ExecuteTransmit} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X} " +
+                $"0x{txInterval:X} " +
+                $"0x{txTimeout:X}");
+        }
+
+        ///<inheritdoc/>
+        public void Transmit(IList<byte> data)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+        }
+
+        ///<inheritdoc/>
+        public void Transmit(IList<byte> data, int txCount)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X}");
         }
 
         ///<inheritdoc/>
@@ -454,7 +522,14 @@ namespace RfmUsb.Net
             {
                 SerialPort.Write($"{command}\n");
 
-                var response = SerialPort.ReadLine();
+                _autoResetEvent.WaitOne();
+
+                string response;
+
+                do
+                {
+                    response = SerialPort.ReadLine();
+                } while (string.IsNullOrEmpty(response));
 
                 Logger.LogDebug($"Command: [{command}] Result: [{response}]");
 
@@ -464,8 +539,6 @@ namespace RfmUsb.Net
 
         internal void SendCommandWithCheck(string command, string response)
         {
-            CheckOpen();
-
             var result = SendCommand(command);
 
             if (!result.StartsWith(response))
@@ -493,10 +566,17 @@ namespace RfmUsb.Net
 
         private void CheckOpen()
         {
-            if (SerialPort == null)
+            if (SerialPort != null && !SerialPort.IsOpen)
             {
                 throw new InvalidOperationException("Instance not open");
             }
+        }
+
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            Logger.LogDebug("Recieved Serial Port Data: {type}", e.EventType);
+
+            _autoResetEvent.Set();
         }
 
         private void TransmitInternal(string command)
@@ -511,7 +591,7 @@ namespace RfmUsb.Net
                     Logger.LogDebug("Response: [{response}]", response);
                 }
 
-                if (response.Contains("TX") || response.Contains("RX"))
+                if (!response.Contains("Ok", StringComparison.InvariantCultureIgnoreCase))
                 {
                     throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
                 }

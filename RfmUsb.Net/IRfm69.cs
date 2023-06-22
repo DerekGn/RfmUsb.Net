@@ -157,11 +157,6 @@ namespace RfmUsb.Net
         sbyte OutputPower { get; set; }
 
         /// <summary>
-        /// Sets the radio configuration to one of the preset configuration sets.
-        /// </summary>
-        byte RadioConfig { get; set; }
-
-        /// <summary>
         /// RSSI trigger level for Rssi interrupt
         /// </summary>
         sbyte RssiThreshold { get; set; }
@@ -226,11 +221,6 @@ namespace RfmUsb.Net
         void ExecuteMeasureTemperature();
 
         /// <summary>
-        /// Reset the radio
-        /// </summary>
-        public void ExecuteReset();
-
-        /// <summary>
         /// Forces the Receiver in WAIT mode, in Continuous Rx mode.
         /// </summary>
         void ExecuteRestartRx();
@@ -241,15 +231,11 @@ namespace RfmUsb.Net
         void ExecuteStartRssi();
 
         /// <summary>
-        /// Get a list of the pre-configured radio configurations
-        /// </summary>
-        /// <returns></returns>
-        IList<string> GetRadioConfigurations();
-        /// <summary>
         /// Set the AES encryption key
         /// </summary>
         /// <param name="key"></param>
         void SetAesKey(IEnumerable<byte> key);
+
         /// <summary>
         /// Wait for a configured Irq to be signaled
         /// </summary>

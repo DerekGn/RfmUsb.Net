@@ -194,22 +194,15 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public sbyte OutputPower
         {
-            get => SendCommand(Commands.GetOutputPower).ConvertToSByte();
+            get => (sbyte)SendCommand(Commands.GetOutputPower).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public byte RadioConfig
-        {
-            get => SendCommand(Commands.GetRadioConfig).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetRadioConfig} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public sbyte RssiThreshold
         {
-            get => SendCommand(Commands.GetRssiThreshold).ConvertToSByte();
-            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X2}", ResponseOk);
+            get => (sbyte)SendCommand(Commands.GetRssiThreshold).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -305,33 +298,6 @@ namespace RfmUsb.Net
         public void ExecuteStartRssi()
         {
             SendCommandWithCheck(Commands.ExecuteStartRssi, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public IList<string> GetRadioConfigurations()
-        {
-            lock (SerialPort)
-            {
-                List<string> configs = new List<string>();
-
-                var result = SendCommand(Commands.GetRadioConfig);
-
-                configs.Add(result);
-
-                do
-                {
-                    try
-                    {
-                        configs.Add(SerialPort.ReadLine());
-                    }
-                    catch (TimeoutException)
-                    {
-                        break;
-                    }
-                } while (true);
-
-                return configs;
-            }
         }
 
         ///<inheritdoc/>

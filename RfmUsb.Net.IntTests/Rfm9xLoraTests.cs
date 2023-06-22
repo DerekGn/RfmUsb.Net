@@ -49,32 +49,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestLongRangeMode()
-        {
-            TestRangeBool(() => _rfm9x.LongRangeMode, (v) => _rfm9x.LongRangeMode = v);
-        }
-
-        [TestMethod]
-        [DataRow(LoraMode.Cad)]
-        [DataRow(LoraMode.RxContinuous)]
-        [DataRow(LoraMode.RxSingle)]
-        [DataRow(LoraMode.Sleep)]
-        [DataRow(LoraMode.Standby)]
-        [DataRow(LoraMode.SynthRx)]
-        [DataRow(LoraMode.SynthTx)]
-        [DataRow(LoraMode.Tx)]
-        public void TestLoraMode(LoraMode expected)
-        {
-            TestAssignedValue(expected, () => _rfm9x.LoraMode, (v) => _rfm9x.LoraMode = v);
-        }
-
-        [TestMethod]
-        public void TestLoraAgcAutoOn()
-        {
-            TestRangeBool(() => _rfm9x.LoraAgcAutoOn, (v) => _rfm9x.LoraAgcAutoOn = v);
-        }
-
-        [TestMethod]
         [DataRow(AutoRestartRxMode.Off)]
         [DataRow(AutoRestartRxMode.OnWaitForPllLock)]
         [DataRow(AutoRestartRxMode.OnWithoutPllRelock)]
@@ -82,6 +56,35 @@ namespace RfmUsb.Net.IntTests
         public void TestAutoRestartRxMode(AutoRestartRxMode expected)
         {
             TestAssignedValue(expected, () => _rfm9x.AutoRestartRxMode, (v) => _rfm9x.AutoRestartRxMode = v);
+        }
+
+        [TestMethod]
+        [DataRow(ModemBandwidth.Bandwidth10_4KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth125KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth15_6KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth20_8KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth250KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth31_25KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth41_7KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth500KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth62_5KHZ)]
+        [DataRow(ModemBandwidth.Bandwidth7_8KHZ)]
+        public void TestAutoRestartRxMode(ModemBandwidth expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.ModemBandwidth, (v) => _rfm9x.ModemBandwidth = v);
+        }
+
+        [TestMethod]
+        [DataRow(SpreadingFactor.SpreadFactor1024)]
+        [DataRow(SpreadingFactor.SpreadFactor128)]
+        [DataRow(SpreadingFactor.SpreadFactor2048)]
+        [DataRow(SpreadingFactor.SpreadFactor256)]
+        [DataRow(SpreadingFactor.SpreadFactor4096)]
+        [DataRow(SpreadingFactor.SpreadFactor512)]
+        [DataRow(SpreadingFactor.SpreadFactor64)]
+        public void TestAutoRestartRxMode(SpreadingFactor expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.SpreadingFactor, (v) => _rfm9x.SpreadingFactor = v);
         }
 
         [TestMethod]
@@ -103,24 +106,10 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestFifoTxBaseAddress()
-        {
-            TestRange(() => _rfm9x.FifoTxBaseAddress, (v) => _rfm9x.FifoTxBaseAddress = v);
-        }
-
-        [TestMethod]
         public void TestFifoRxBaseAddress()
         {
             TestRange(() => _rfm9x.FifoRxBaseAddress, (v) => _rfm9x.FifoRxBaseAddress = v);
         }
-
-        [TestMethod]
-        public void TestFifoRxCurrentAddress()
-        {
-            var x = _rfm9x.FifoRxCurrentAddress;
-        }
-
-#warning IRQ test
 
         [TestMethod]
         public void TestFifoRxBytesNumber()
@@ -129,15 +118,15 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestValidHeaderCount()
+        public void TestFifoRxCurrentAddress()
         {
-            var x = _rfm9x.ValidHeaderCount;
+            var x = _rfm9x.FifoRxCurrentAddress;
         }
 
         [TestMethod]
-        public void TestValidPacketCount()
+        public void TestFifoTxBaseAddress()
         {
-            var x = _rfm9x.ValidPacketCount;
+            TestRange(() => _rfm9x.FifoTxBaseAddress, (v) => _rfm9x.FifoTxBaseAddress = v);
         }
 
         [TestMethod]
@@ -159,25 +148,42 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestModemStatud()
+        public void TestImplicitHeaderModeOn()
         {
-            var x = _rfm9x.ModemStatus;
+            TestRangeBool(() => _rfm9x.ImplicitHeaderModeOn, (v) => _rfm9x.ImplicitHeaderModeOn = v);
+        }
+        [TestMethod]
+        public void TestLongRangeMode()
+        {
+            TestRangeBool(() => _rfm9x.LongRangeMode, (v) => _rfm9x.LongRangeMode = v);
         }
 
         [TestMethod]
-        [DataRow(ModemBandwidth.Bandwidth10_4KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth125KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth15_6KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth20_8KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth250KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth31_25KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth41_7KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth500KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth62_5KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth7_8KHZ)]
-        public void TestAutoRestartRxMode(ModemBandwidth expected)
+        public void TestLoraAgcAutoOn()
         {
-            TestAssignedValue(expected, () => _rfm9x.ModemBandwidth, (v) => _rfm9x.ModemBandwidth = v);
+            TestRangeBool(() => _rfm9x.LoraAgcAutoOn, (v) => _rfm9x.LoraAgcAutoOn = v);
+        }
+
+        [TestMethod]
+        [DataRow(LoraMode.Cad)]
+        [DataRow(LoraMode.RxContinuous)]
+        [DataRow(LoraMode.RxSingle)]
+        [DataRow(LoraMode.Sleep)]
+        [DataRow(LoraMode.Standby)]
+        [DataRow(LoraMode.SynthRx)]
+        [DataRow(LoraMode.SynthTx)]
+        [DataRow(LoraMode.Tx)]
+        public void TestLoraMode(LoraMode expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.LoraMode, (v) => _rfm9x.LoraMode = v);
+        }
+
+#warning IRQ test
+
+        [TestMethod]
+        public void TestModemStatud()
+        {
+            var x = _rfm9x.ModemStatus;
         }
 
         [TestMethod]
@@ -223,19 +229,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(SpreadingFactor.SpreadFactor1024)]
-        [DataRow(SpreadingFactor.SpreadFactor128)]
-        [DataRow(SpreadingFactor.SpreadFactor2048)]
-        [DataRow(SpreadingFactor.SpreadFactor256)]
-        [DataRow(SpreadingFactor.SpreadFactor4096)]
-        [DataRow(SpreadingFactor.SpreadFactor512)]
-        [DataRow(SpreadingFactor.SpreadFactor64)]
-        public void TestAutoRestartRxMode(SpreadingFactor expected)
-        {
-            TestAssignedValue(expected, () => _rfm9x.SpreadingFactor, (v) => _rfm9x.SpreadingFactor = v);
-        }
-
-        [TestMethod]
         public void TestSymbolTimeout()
         {
             TestRange(() => _rfm9x.SymbolTimeout, (v) => _rfm9x.SymbolTimeout = v);
@@ -245,6 +238,18 @@ namespace RfmUsb.Net.IntTests
         public void TestTxContinuousMode()
         {
             TestRangeBool(() => _rfm9x.TxContinuousMode, (v) => _rfm9x.TxContinuousMode = v);
+        }
+
+        [TestMethod]
+        public void TestValidHeaderCount()
+        {
+            var x = _rfm9x.ValidHeaderCount;
+        }
+
+        [TestMethod]
+        public void TestValidPacketCount()
+        {
+            var x = _rfm9x.ValidPacketCount;
         }
     }
 }

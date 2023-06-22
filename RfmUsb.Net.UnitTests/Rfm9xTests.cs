@@ -980,7 +980,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.AutoRestartRxMode = expected; },
                 Commands.SetAutoRestartRxMode,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1018,7 +1018,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.CrcWhiteningType = expected; },
                 Commands.SetCrcWhiteningType,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1095,7 +1095,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.FromPacketReceived = expected; },
                 Commands.SetFromPacketReceived,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1240,7 +1240,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.LowBatteryTrim = expected; },
                 Commands.SetLowBatteryTrim,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1337,7 +1337,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.PreambleDetectorSize = expected; },
                 Commands.SetPreambleDetectorSize,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1472,7 +1472,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.TemperatureThreshold = expected; },
                 Commands.SetTemperatureThreshold,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]

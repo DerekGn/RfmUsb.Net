@@ -200,7 +200,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestFifo()
         {
-            var expected = new List<byte> { 0xAA, 0x55, 0xAA };
+            var expected = RandomSequence().Take(66).ToList();
             _rfm69.Fifo = expected;
 
             _rfm69.Fifo.Should().StartWith(expected);
@@ -216,18 +216,6 @@ namespace RfmUsb.Net.IntTests
         public void TestFifoThreshold()
         {
             TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
-        }
-
-        [TestMethod]
-        public void TestFrequencyDeviation()
-        {
-            TestRange<uint>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 600, 300000);
-        }
-
-        [TestMethod]
-        public void TestGetRadioConfigurations()
-        {
-            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -328,13 +316,13 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestRadioConfig()
         {
-            throw new NotImplementedException();
+            TestRange<byte>(() => _rfm69.RadioConfig, (v) => _rfm69.RadioConfig = v, 0,26);
         }
 
         [TestMethod]
         public void TestRssiThreshold()
         {
-            TestRange(() => _rfm69.RssiThreshold, (v) => _rfm69.RssiThreshold = v);
+            TestRange<sbyte>(() => _rfm69.RssiThreshold, (v) => _rfm69.RssiThreshold = v, -115, 0);
         }
 
         [TestMethod]
@@ -378,6 +366,14 @@ namespace RfmUsb.Net.IntTests
         public void TestTimeoutRxStart()
         {
             TestRange(() => _rfm69.TimeoutRxStart, (v) => _rfm69.TimeoutRxStart = v);
+        }
+
+
+        private static IEnumerable<byte> RandomSequence()
+        {
+            Random r = new Random();
+            while (true)
+                yield return (byte)r.Next(0, 0xFF);
         }
     }
 }

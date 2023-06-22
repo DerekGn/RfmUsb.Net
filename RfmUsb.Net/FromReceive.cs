@@ -30,6 +30,10 @@ namespace RfmUsb.Net
     public enum FromReceive
     {
         /// <summary>
+        /// Unused state
+        /// </summary>
+        UnusedA,
+        /// <summary>
         /// To PacketReceived On PayloadReady Irq
         /// </summary>
         ToPacketReceivedOnPayloadReady,
@@ -57,6 +61,11 @@ namespace RfmUsb.Net
         /// <summary>
         /// To SequencerOff On SyncAddress Irq
         /// </summary>
-        ToSequencerOffOnPreambleDetect
+        ToSequencerOffOnPreambleDetect,
+        /// <summary>
+        /// Unused state
+        /// </summary>
+        UnusedB
+
     }
 }
