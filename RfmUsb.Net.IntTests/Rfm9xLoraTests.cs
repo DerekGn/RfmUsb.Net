@@ -39,6 +39,8 @@ namespace RfmUsb.Net.IntTests
 
             _rfm9x.Open("COM4", 230400);
 
+            _rfm9x.ExecuteReset();
+
             _rfm9x.LongRangeMode = true;
         }
 
@@ -99,6 +101,15 @@ namespace RfmUsb.Net.IntTests
             TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = v);
         }
 
+        [TestMethod]
+        [DataRow(ErrorCodingRate.FourEight)]
+        [DataRow(ErrorCodingRate.FourFive)]
+        [DataRow(ErrorCodingRate.FourSeven)]
+        [DataRow(ErrorCodingRate.FourSix)]
+        public void TestErrorCodingRate(ErrorCodingRate expected)
+        {
+            TestAssignedValue(expected, () => _rfm9x.ErrorCodingRate, (v) => _rfm9x.ErrorCodingRate = v);
+        }
         [TestMethod]
         public void TestFifoAddressPointer()
         {

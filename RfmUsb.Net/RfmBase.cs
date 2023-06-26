@@ -514,6 +514,11 @@ namespace RfmUsb.Net
             }
         }
 
+        internal virtual string GetDeviceName()
+        {
+            return GetType().Name;
+        }
+
         internal string SendCommand(string command)
         {
             CheckOpen();
@@ -522,7 +527,7 @@ namespace RfmUsb.Net
             {
                 SerialPort.Write($"{command}\n");
 
-                _autoResetEvent.WaitOne();
+                WaitForSerialPortDataSignal();
 
                 string response;
 
@@ -547,6 +552,11 @@ namespace RfmUsb.Net
             }
         }
 
+        internal virtual void WaitForSerialPortDataSignal()
+        {
+            _autoResetEvent.WaitOne();
+        }
+
         /// <summary>
         /// Check the firmware version of the connected device
         /// </summary>
@@ -558,12 +568,11 @@ namespace RfmUsb.Net
                 throw new RfmUsbInvalidDeviceTypeException("FirmwareVersion is empty");
             }
 
-            if (!firmwareVersion.Contains(GetType().Name, StringComparison.InvariantCultureIgnoreCase))
+            if (!firmwareVersion.Contains(GetDeviceName(), StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new RfmUsbInvalidDeviceTypeException($"Invalid Device Type firmware value {firmwareVersion}");
             }
         }
-
         private void CheckOpen()
         {
             if (SerialPort != null && !SerialPort.IsOpen)

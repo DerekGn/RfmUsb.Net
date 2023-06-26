@@ -39,7 +39,7 @@ namespace RfmUsb.Net.IntTests
 
             _rfm9x.Open("COM4", 230400);
 
-            _rfm9x.LongRangeMode = false;
+            _rfm9x.ExecuteReset();
         }
 
         [TestMethod]
@@ -211,15 +211,9 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestGetCodingRate()
-        {
-            var x = _rfm9x.CodingRate;
-        }
-
-        [TestMethod]
         [DataRow(Timer.Timer1)]
         [DataRow(Timer.Timer2)]
-        public void TestGetTimerCoefficient(Timer expected)
+        public void TestTimerCoefficient(Timer expected)
         {
             throw new NotImplementedException();
         }
@@ -394,13 +388,6 @@ namespace RfmUsb.Net.IntTests
         public void TestTimeoutSignalSync()
         {
             TestRange(() => _rfm9x.TimeoutSignalSync, (v) => _rfm9x.TimeoutSignalSync = v);
-        }
-        [TestMethod]
-        [DataRow(Timer.Timer1)]
-        [DataRow(Timer.Timer2)]
-        public void TestTimerCoefficient(Timer expected)
-        {
-            throw new NotImplementedException();
         }
     }
 }

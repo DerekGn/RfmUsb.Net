@@ -356,13 +356,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [Ignore]
-        public void TestTimeout()
-        {
-            TestRange(() => _rfm69.Timeout, (v) => _rfm69.Timeout = v, 0, 1000);
-        }
-
-        [TestMethod]
         public void TestTimeoutRxStart()
         {
             TestRange(() => _rfm69.TimeoutRxStart, (v) => _rfm69.TimeoutRxStart = v);

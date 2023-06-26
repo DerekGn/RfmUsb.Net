@@ -27,7 +27,7 @@ namespace RfmUsb.Net
     /// <summary>
     /// Error coding rate
     /// </summary>
-    public enum CodingRate
+    public enum ErrorCodingRate
     {
         /// <summary>
         /// 4/5

@@ -64,7 +64,7 @@ namespace RfmUsb.Net
         public const string GetBitRateFractional = "g-brf";
         public const string GetBitSyncOn = "g-bs";
         public const string GetBroadcastAddress = "g-ba";
-        public const string GetCodingRate = "g-cr";
+        public const string GetErrorCodingRate = "g-cr";
         public const string GetContinuousDagc = "g-cd";
         public const string GetCrcAutoClear = "g-caco";
         public const string GetCrcOn = "g-crc";
@@ -111,6 +111,7 @@ namespace RfmUsb.Net
         public const string GetIoHomeOn = "g-iho";
         public const string GetIoHomePowerFrame = "g-ihpf";
         public const string GetIrq = "g-irq";
+        public const string GetLastPacketSnr = "g-lpsnr";
         public const string GetListenCoefficentIdle = "g-lic";
         public const string GetListenCoefficentRx = "g-lrc";
         public const string GetListenCriteria = "g-lc";
@@ -147,7 +148,6 @@ namespace RfmUsb.Net
         public const string GetOutputPower = "g-op";
         public const string GetPacketFormat = "g-pf";
         public const string GetPacketRssi = "g-ps";
-        public const string GetLastPacketSnr = "g-lpsnr";
         public const string GetPaRamp = "g-par";
         public const string GetPayloadLength = "g-pl";
         public const string GetPayloadMaxLength = "g-mpl";
@@ -208,6 +208,7 @@ namespace RfmUsb.Net
         public const string SetBitRateFractional = "s-brf";
         public const string SetBitSyncOn = "s-bs";
         public const string SetBroadcastAddress = "s-ba";
+        public const string SetErrorCodingRate = "s-cr";
         public const string SetContinuousDagc = "s-cd";
         public const string SetCrcAutoClear = "s-caco";
         public const string SetCrcOn = "s-crc";
@@ -277,6 +278,7 @@ namespace RfmUsb.Net
         public const string SetOokPeakThresholdDec = "s-optd";
         public const string SetOokPeakThresholdStep = "s-opts";
         public const string SetOokThresholdType = "s-ott";
+        public const string SetOutputbase = "s-ob";
         public const string SetOutputPower = "s-op";
         public const string SetPacketFormat = "s-pf";
         public const string SetPaRamp = "s-par";
@@ -318,6 +320,5 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
-        public const string SetOutputbase = "s-ob";
     }
 }

@@ -77,7 +77,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// The Error coding rate
         /// </summary>
-        CodingRate CodingRate { get; }
+        ErrorCodingRate ErrorCodingRate { get; set; }
 
         /// <summary>
         /// Selects the CRC and whitening algorithms

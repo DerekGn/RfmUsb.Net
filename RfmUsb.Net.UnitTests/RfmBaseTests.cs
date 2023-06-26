@@ -26,7 +26,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json.Linq;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using System;
@@ -69,10 +68,23 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestExecuteBootloader()
+        {
+            ExecuteTest(
+                () => { RfmBase.EnterBootloader(); },
+                Commands.ExecuteBootloader,
+                "Ok");
+        }
+
+        [TestMethod]
         public void TestGetAddressFilter()
         {
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -94,6 +106,10 @@ namespace RfmUsb.Net.UnitTests
         {
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -197,6 +213,10 @@ namespace RfmUsb.Net.UnitTests
             RfmBase.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("0x0000-Map 00");
 
@@ -238,6 +258,16 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().Be(0x10),
                 Commands.GetFifoThreshold,
                 "0x10");
+        }
+
+        [TestMethod]
+        public void TestGetFirmwareVersion()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.FirmwareVersion; },
+                (v) => v.Should().Be("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz"),
+                Commands.GetFirmwareVersion,
+                "RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [TestMethod]
@@ -518,6 +548,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetRadioVersion()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.RadioVersion; },
+                (v) => v.Should().Be(0x24),
+                Commands.GetRadioVersion,
+                "0x24");
+        }
+
+        [TestMethod]
         public void TestGetRssi()
         {
             ExecuteGetTest(
@@ -597,27 +637,6 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetTxStartCondition,
                 "1");
         }
-
-        [TestMethod]
-        public void TestGetRadioVersion()
-        {
-            ExecuteGetTest(
-                () => { return RfmBase.RadioVersion; },
-                (v) => v.Should().Be(0x24),
-                Commands.GetRadioVersion,
-                "0x24");
-        }
-
-        [TestMethod]
-        public void TestGetFirmwareVersion()
-        {
-            ExecuteGetTest(
-                () => { return RfmBase.FirmwareVersion; },
-                (v) => v.Should().Be("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz"),
-                Commands.GetFirmwareVersion,
-                "RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
-        }
-
         [TestMethod]
         public void TestOpenNotFound()
         {
@@ -666,6 +685,10 @@ namespace RfmUsb.Net.UnitTests
             RfmBase.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(RfmBase.ResponseOk);
 
@@ -693,7 +716,6 @@ namespace RfmUsb.Net.UnitTests
                 Commands.SetAfcAutoOn,
                 "1");
         }
-
 
         [TestMethod]
         public void TestSetBitRate()
@@ -755,6 +777,10 @@ namespace RfmUsb.Net.UnitTests
         {
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
 
             MockSerialPort
                .Setup(_ => _.ReadLine())
@@ -1139,7 +1165,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteTest(
                 () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200); },
-                $"{Commands.ExecuteTransmit} AADDFFCC 200",
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8",
                 RfmBase.ResponseOk);
         }
 
@@ -1147,6 +1173,10 @@ namespace RfmUsb.Net.UnitTests
         {
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -1167,6 +1197,10 @@ namespace RfmUsb.Net.UnitTests
             RfmBase.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(RfmBase.ResponseOk);
 
@@ -1182,7 +1216,11 @@ namespace RfmUsb.Net.UnitTests
             // Arrange
             RfmBase.SerialPort = MockSerialPort.Object;
 
-            if(response != null )
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            if (response != null)
             {
                 MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -1196,12 +1234,29 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{command}\n"), Times.Once);
         }
 
-        [TestMethod]
-        public void TestExecuteBootloader()
+        internal void TestOpen(string version)
         {
-            ExecuteTest(
-                () => { RfmBase.EnterBootloader(); },
-                Commands.ExecuteBootloader);
+            // Arrange
+            MockSerialPortFactory
+                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
+                .Returns(MockSerialPort.Object);
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+            .Setup(_ => _.ReadLine())
+                .Returns(version);
+
+            // Act
+            RfmBase.Open("ComPort", 9600);
+
+            // Assert
+            MockSerialPortFactory
+                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
+
+            MockSerialPort.Verify(_ => _.Open(), Times.Once);
         }
     }
 }

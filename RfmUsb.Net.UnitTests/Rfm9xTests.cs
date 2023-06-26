@@ -35,7 +35,7 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm9xTests() : base()
         {
-            _rfm9x = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
+            _rfm9x = new Rfm9xTestDevice(MockLogger, MockSerialPortFactory.Object);
             RfmBase = _rfm9x;
         }
 
@@ -224,16 +224,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(CodingRate.FourFive)]
-        [DataRow(CodingRate.FourSix)]
-        [DataRow(CodingRate.FourSeven)]
-        [DataRow(CodingRate.FourEight)]
-        public void TestGetCodingRate(CodingRate expected)
+        [DataRow(ErrorCodingRate.FourFive)]
+        [DataRow(ErrorCodingRate.FourSix)]
+        [DataRow(ErrorCodingRate.FourSeven)]
+        [DataRow(ErrorCodingRate.FourEight)]
+        public void TestGetCodingRate(ErrorCodingRate expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.CodingRate; },
+                () => { return _rfm9x.ErrorCodingRate; },
                 (v) => { v.Should().Be(expected); },
-                Commands.GetCodingRate,
+                Commands.GetErrorCodingRate,
                 $"0x{expected:X}");
         }
 
@@ -308,6 +308,7 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetFifoRxCurrentAddress,
                 "0xAA");
         }
+
         [TestMethod]
         public void TestGetFifoTxBaseAddress()
         {
@@ -771,6 +772,7 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
+
         [TestMethod]
         public void TestGetRssiWideband()
         {
@@ -924,23 +926,7 @@ namespace RfmUsb.Net.UnitTests
         [TestMethod]
         public void TestOpen()
         {
-            // Arrange
-            MockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(MockSerialPort.Object);
-
-            MockSerialPort
-            .Setup(_ => _.ReadLine())
-                .Returns("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
-
-            // Act
-            _rfm9x.Open("ComPort", 9600);
-
-            // Assert
-            MockSerialPortFactory
-                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
-
-            MockSerialPort.Verify(_ => _.Open(), Times.Once);
+            TestOpen("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [TestMethod]
@@ -1008,6 +994,19 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfm9x.BitSyncOn = true; },
                 Commands.SetBitSyncOn,
                 "1");
+        }
+
+        [TestMethod]
+        [DataRow(ErrorCodingRate.FourFive)]
+        [DataRow(ErrorCodingRate.FourSix)]
+        [DataRow(ErrorCodingRate.FourSeven)]
+        [DataRow(ErrorCodingRate.FourEight)]
+        public void TestSetCodingRate(ErrorCodingRate expected)
+        {
+            ExecuteSetTest(
+                () => { _rfm9x.ErrorCodingRate = expected; },
+                Commands.SetErrorCodingRate,
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1109,7 +1108,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfm9x.FromReceive = expected; },
                 Commands.SetFromReceive,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1288,6 +1287,7 @@ namespace RfmUsb.Net.UnitTests
     Commands.SetModemBandwidth,
     $"0x{expected:X}");
         }
+
         [TestMethod]
         [DataRow(OokAverageOffset.Offset0dB)]
         [DataRow(OokAverageOffset.Offset2dB)]

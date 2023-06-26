@@ -86,7 +86,11 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public CodingRate CodingRate => (CodingRate)SendCommand(Commands.GetCodingRate).ConvertToInt32();
+        public ErrorCodingRate ErrorCodingRate
+        {
+            get => (ErrorCodingRate)SendCommand(Commands.GetErrorCodingRate).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetErrorCodingRate} 0x{(byte)value:X2}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public CrcWhiteningType CrcWhiteningType
@@ -226,6 +230,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public byte LastPacketSnr => SendCommand(Commands.GetLastPacketSnr).ConvertToByte();
+
+        ///<inheritdoc/>
         public bool LnaBoostHf
         {
             get => SendCommand(Commands.GetLnaBoostHf).Substring(0, 1) == "1";
@@ -314,10 +321,6 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte PacketRssi => SendCommand(Commands.GetPacketRssi).ConvertToByte();
-
-        ///<inheritdoc/>
-        public byte LastPacketSnr => SendCommand(Commands.GetLastPacketSnr).ConvertToByte();
-
         ///<inheritdoc/>
         public byte PayloadMaxLength
         {
@@ -344,6 +347,13 @@ namespace RfmUsb.Net
         {
             get => (PreambleDetectorSize)SendCommand(Commands.GetPreambleDetectorSize).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetPreambleDetectorSize} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public byte PreambleDetectorTotalerance
+        {
+            get => SendCommand(Commands.GetPreambleDetectorTotalerance).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -469,14 +479,6 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
-
-        ///<inheritdoc/>
-        public byte PreambleDetectorTotalerance
-        {
-            get => SendCommand(Commands.GetPreambleDetectorTotalerance).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{(byte)value:X2}", ResponseOk);
-        }
-
         ///<inheritdoc/>
         public void ClearFifoOverrun()
         {

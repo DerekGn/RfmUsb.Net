@@ -38,7 +38,7 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm69Tests()
         {
-            _rfm6x = new Rfm69(MockLogger, MockSerialPortFactory.Object);
+            _rfm6x = new Rfm69TestDevice(MockLogger, MockSerialPortFactory.Object);
             RfmBase = _rfm6x;
         }
 
@@ -380,6 +380,10 @@ namespace RfmUsb.Net.UnitTests
             _rfm6x.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
                 .Returns("A")
                 .Returns("B")
@@ -477,6 +481,10 @@ namespace RfmUsb.Net.UnitTests
             _rfm6x.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
                 .Returns("0:CRC_OK")
                 .Returns("1:PAYLOAD_READY")
@@ -522,23 +530,7 @@ namespace RfmUsb.Net.UnitTests
         [TestMethod]
         public void TestOpen()
         {
-            // Arrange
-            MockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(MockSerialPort.Object);
-
-            MockSerialPort
-            .Setup(_ => _.ReadLine())
-                .Returns("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
-
-            // Act
-            _rfm6x.Open("ComPort", 9600);
-
-            // Assert
-            MockSerialPortFactory
-                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
-
-            MockSerialPort.Verify(_ => _.Open(), Times.Once);
+            TestOpen("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [TestMethod]
@@ -636,6 +628,10 @@ namespace RfmUsb.Net.UnitTests
         {
             // Arrange
             _rfm6x.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
 
             MockSerialPort
                .Setup(_ => _.ReadLine())

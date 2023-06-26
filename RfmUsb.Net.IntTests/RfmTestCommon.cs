@@ -190,7 +190,7 @@ namespace RfmUsb.Net.IntTests
         [DataRow(Mode.Standby)]
         [DataRow(Mode.Synth)]
         [DataRow(Mode.Tx)]
-        [Ignore]
+        //[Ignore]
         public void TestMode(Mode expected)
         {
             TestAssignedValue(expected, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
