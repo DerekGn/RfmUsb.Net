@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -40,6 +41,8 @@ namespace RfmUsb.Net.IntTests
             _rfm9x.Open("COM4", 230400);
 
             _rfm9x.ExecuteReset();
+
+            _rfm9x.Mode = Mode.Sleep;
 
             _rfm9x.LongRangeMode = true;
         }
@@ -96,12 +99,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestBitRateFractional()
-        {
-            TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = v);
-        }
-
-        [TestMethod]
         [DataRow(ErrorCodingRate.FourEight)]
         [DataRow(ErrorCodingRate.FourFive)]
         [DataRow(ErrorCodingRate.FourSeven)]
@@ -110,6 +107,7 @@ namespace RfmUsb.Net.IntTests
         {
             TestAssignedValue(expected, () => _rfm9x.ErrorCodingRate, (v) => _rfm9x.ErrorCodingRate = v);
         }
+
         [TestMethod]
         public void TestFifoAddressPointer()
         {
@@ -125,13 +123,13 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestFifoRxBytesNumber()
         {
-            var x = _rfm9x.FifoRxBytesNumber;
+            _rfm9x.FifoRxBytesNumber.Should().Be(0);
         }
 
         [TestMethod]
         public void TestFifoRxCurrentAddress()
         {
-            var x = _rfm9x.FifoRxCurrentAddress;
+            _rfm9x.FifoRxCurrentAddress.Should().Be(0);
         }
 
         [TestMethod]
@@ -141,9 +139,9 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestFrequencyError()
+        public void TestGetFrequencyError()
         {
-            var x = _rfm9x.FrequencyError;
+            _rfm9x.FrequencyError.Should().Be(0);
         }
 
         [TestMethod]
@@ -153,9 +151,11 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestHopChannel()
+        public void TestGetHopChannel()
         {
-            var x = _rfm9x.HopChannel;
+            var hopChannel = _rfm9x.HopChannel;
+
+            hopChannel.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -163,6 +163,7 @@ namespace RfmUsb.Net.IntTests
         {
             TestRangeBool(() => _rfm9x.ImplicitHeaderModeOn, (v) => _rfm9x.ImplicitHeaderModeOn = v);
         }
+
         [TestMethod]
         public void TestLongRangeMode()
         {
@@ -176,7 +177,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(LoraMode.Cad)]
         [DataRow(LoraMode.RxContinuous)]
         [DataRow(LoraMode.RxSingle)]
         [DataRow(LoraMode.Sleep)]
@@ -189,12 +189,21 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => _rfm9x.LoraMode, (v) => _rfm9x.LoraMode = v);
         }
 
+        [TestMethod]
+        public void TestLoraModeCad()
+        {
+            // Cad auto transitions to standby
+            _rfm9x.LoraMode = LoraMode.Cad;
+
+            _rfm9x.LoraMode.Should().Be(LoraMode.Standby);
+        }
+
 #warning IRQ test
 
         [TestMethod]
-        public void TestModemStatud()
+        public void TestModemStatus()
         {
-            var x = _rfm9x.ModemStatus;
+            _rfm9x.ModemStatus.Should().Be(ModemStatus.None);
         }
 
         [TestMethod]
@@ -242,7 +251,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestSymbolTimeout()
         {
-            TestRange(() => _rfm9x.SymbolTimeout, (v) => _rfm9x.SymbolTimeout = v);
+            TestRange<ushort>(() => _rfm9x.SymbolTimeout, (v) => _rfm9x.SymbolTimeout = v, 0, 0x3FF);
         }
 
         [TestMethod]

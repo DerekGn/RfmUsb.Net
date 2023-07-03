@@ -107,7 +107,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get the Irq flags
         /// </summary>
-        Irq Irq { get; }
+        Rfm69IrqFlags IrqFlags { get; }
 
         /// <summary>
         /// Duration of the Idle phase in Listen mode

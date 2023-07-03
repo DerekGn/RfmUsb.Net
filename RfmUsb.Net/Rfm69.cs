@@ -66,6 +66,7 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
         }
+
         ///<inheritdoc/>
         public ContinuousDagc ContinuousDagc
         {
@@ -112,6 +113,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public override IEnumerable<byte> Fifo
+        {
+            get => SendCommand(Commands.GetFifo).ToBytes();
+            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public bool FifoFill
         {
             get => SendCommand(Commands.GetFifoFill).StartsWith("1");
@@ -133,7 +141,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Irq Irq => GetIrqInternal();
+        public Rfm69IrqFlags IrqFlags => GetIrqInternal();
 
         ///<inheritdoc/>
         public byte ListenCoefficentIdle
@@ -210,13 +218,6 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetSensitivityBoost).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetSensitivityBoost} {(value ? "1" : "0")}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public override IEnumerable<byte> Fifo
-        {
-            get => SendCommand(Commands.GetFifo).ToBytes();
-            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -387,124 +388,119 @@ namespace RfmUsb.Net
             }
         }
 
-        private Irq GetIrqInternal()
+        private Rfm69IrqFlags GetIrqInternal()
         {
-            lock (SerialPort)
+            Rfm69IrqFlags irq = Rfm69IrqFlags.None;
+
+            var lines = SendCommandListResponse(Commands.GetIrq);
+
+            lines.ForEach(_ =>
             {
-                Irq irq = Irq.None;
+                var parts = _.Split(':');
 
-                var result = SendCommand(Commands.GetIrq);
-
-                while (!result.Contains("RX_RDY"))
+                switch (parts[1])
                 {
-                    var parts = result.Split(':');
+                    case "CRC_OK":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.CrcOK;
+                        }
+                        break;
 
-                    switch (parts[1])
-                    {
-                        case "CRC_OK":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.CrcOK;
-                            }
-                            break;
+                    case "PAYLOAD_READY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.PayloadReady;
+                        }
+                        break;
 
-                        case "PAYLOAD_READY":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.PayloadReady;
-                            }
-                            break;
+                    case "FIFO_OVERRUN":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.FifoOverrun;
+                        }
+                        break;
 
-                        case "FIFO_OVERRUN":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.FifoOverrun;
-                            }
-                            break;
+                    case "FIFO_LEVEL":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.FifoLevel;
+                        }
+                        break;
 
-                        case "FIFO_LEVEL":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.FifoLevel;
-                            }
-                            break;
+                    case "FIFO_NOT_EMPTY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.FifoNotEmpty;
+                        }
+                        break;
 
-                        case "FIFO_NOT_EMPTY":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.FifoNotEmpty;
-                            }
-                            break;
+                    case "FIFO_FULL":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.FifoFull;
+                        }
+                        break;
 
-                        case "FIFO_FULL":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.FifoFull;
-                            }
-                            break;
+                    case "ADDRESS_MATCH":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.AddressMatch;
+                        }
+                        break;
 
-                        case "ADDRESS_MATCH":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.AddressMatch;
-                            }
-                            break;
+                    case "AUTO_MODE":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.AutoMode;
+                        }
+                        break;
 
-                        case "AUTO_MODE":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.AutoMode;
-                            }
-                            break;
+                    case "TIMEOUT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.Timeout;
+                        }
+                        break;
 
-                        case "TIMEOUT":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.Timeout;
-                            }
-                            break;
+                    case "RSSI":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.Rssi;
+                        }
+                        break;
 
-                        case "RSSI":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.Rssi;
-                            }
-                            break;
+                    case "PLL_LOCK":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.PllLock;
+                        }
+                        break;
 
-                        case "PLL_LOCK":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.PllLock;
-                            }
-                            break;
+                    case "TX_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.TxReady;
+                        }
+                        break;
 
-                        case "TX_RDY":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.TxReady;
-                            }
-                            break;
+                    case "RX_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.RxReady;
+                        }
+                        break;
 
-                        case "RX_RDY":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.RxReady;
-                            }
-                            break;
-
-                        case "MODE_RDY":
-                            if (parts[0] == "1")
-                            {
-                                irq |= Irq.ModeReady;
-                            }
-                            break;
-                    }
-
-                    result = SerialPort.ReadLine();
+                    case "MODE_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.ModeReady;
+                        }
+                        break;
                 }
+            });
 
-                return irq;
-            }
+            return irq;
         }
 
         private void SetDioInterrupMask(DioIrq value)

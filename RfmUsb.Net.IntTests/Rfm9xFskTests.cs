@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -46,6 +47,12 @@ namespace RfmUsb.Net.IntTests
         public void TestAutoImageCalibrationOn()
         {
             TestRangeBool(() => _rfm9x.AutoImageCalibrationOn, (v) => _rfm9x.AutoImageCalibrationOn = v);
+        }
+
+        [TestMethod]
+        public void TestBitRateFractional()
+        {
+            TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = (byte) v, 0, 0x0F);
         }
 
         [TestMethod]
@@ -141,8 +148,6 @@ namespace RfmUsb.Net.IntTests
             TestRange(() => _rfm9x.FormerTemperatureValue, (v) => _rfm9x.FormerTemperatureValue = v);
         }
 
-        
-
         [TestMethod]
         public void TestFromIdle()
         {
@@ -211,14 +216,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(Timer.Timer1)]
-        [DataRow(Timer.Timer2)]
-        public void TestTimerCoefficient(Timer expected)
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
         public void TestIoHomeOn()
         {
             TestRangeBool(() => _rfm9x.IoHomeOn, (v) => _rfm9x.IoHomeOn = v);
@@ -228,6 +225,13 @@ namespace RfmUsb.Net.IntTests
         public void TestIoHomePowerFrame()
         {
             TestRangeBool(() => _rfm9x.IoHomePowerFrame, (v) => _rfm9x.IoHomePowerFrame = v);
+        }
+
+        [TestMethod]
+        public void TestIrq()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.FifoNotEmpty | Rfm9xIrqFlags.ModeReady);
         }
 
         [TestMethod]
@@ -316,7 +320,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestRssiOffset()
         {
-            TestRange(() => _rfm9x.RssiOffset, (v) => _rfm9x.RssiOffset = v);
+            TestRange(() => _rfm9x.RssiOffset, (v) => _rfm9x.RssiOffset = (sbyte)v, -16, 15);
         }
 
         [TestMethod]
@@ -336,20 +340,21 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestRssiThreshold()
         {
-            TestRange(() => _rfm9x.RssiThreshold, (v) => _rfm9x.RssiThreshold = v);
+            TestRange(() => _rfm9x.RssiThreshold, (v) => _rfm9x.RssiThreshold = (sbyte)v, 0, -127);
         }
 
         [TestMethod]
         public void TestRxBw()
         {
-            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 21);
+            TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 20);
         }
 
         [TestMethod]
         public void TestRxBwAfc()
         {
-            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 21);
+            TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 20);
         }
+
         [TestMethod]
         public void TestTcxoInputOn()
         {
@@ -388,6 +393,14 @@ namespace RfmUsb.Net.IntTests
         public void TestTimeoutSignalSync()
         {
             TestRange(() => _rfm9x.TimeoutSignalSync, (v) => _rfm9x.TimeoutSignalSync = v);
+        }
+
+        [TestMethod]
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void TestTimerCoefficient(Timer expected)
+        {
+            throw new NotImplementedException();
         }
     }
 }

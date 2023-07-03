@@ -27,10 +27,10 @@ using System;
 namespace RfmUsb.Net
 {
     /// <summary>
-    /// The set of Irq bits
+    /// The set of <see cref="Rfm69"/> Irq bits
     /// </summary>
     [Flags]
-    public enum Irq
+    public enum Rfm69IrqFlags
     {
         /// <summary>
         /// No Irq bit is sey
@@ -43,7 +43,8 @@ namespace RfmUsb.Net
         CrcOK = 0x0002,
 
         /// <summary>
-        /// Set in Rx when the payload is ready (i.e. last byte received and CRC, if enabled and CrcAutoClearOff is cleared,is Ok). Cleared when FIFO is empty.
+        /// Set in Rx when the payload is ready (i.e. last byte received and CRC,
+        /// if enabled and CrcAutoClearOff is cleared,is Ok). Cleared when FIFO is empty.
         /// </summary>
         PayloadReady = 0x0004,
 

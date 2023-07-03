@@ -238,7 +238,7 @@ namespace RfmUsb.Net.IntTests
         public void TestIrq()
         {
             _rfm69.ExecuteReset();
-            _rfm69.Irq.Should().Be(Irq.None);
+            _rfm69.IrqFlags.Should().Be(Rfm69IrqFlags.None);
         }
 
         [TestMethod]

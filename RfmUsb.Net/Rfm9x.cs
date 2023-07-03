@@ -25,6 +25,7 @@
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
+using System;
 using System.Collections.Generic;
 
 namespace RfmUsb.Net
@@ -86,17 +87,17 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ErrorCodingRate ErrorCodingRate
-        {
-            get => (ErrorCodingRate)SendCommand(Commands.GetErrorCodingRate).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetErrorCodingRate} 0x{(byte)value:X2}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public CrcWhiteningType CrcWhiteningType
         {
             get => (CrcWhiteningType)SendCommand(Commands.GetCrcWhiteningType).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetCrcWhiteningType} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public ErrorCodingRate ErrorCodingRate
+        {
+            get => (ErrorCodingRate)SendCommand(Commands.GetErrorCodingRate).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetErrorCodingRate} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -199,7 +200,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte HopChannel => SendCommand(Commands.GetHopChannel).ConvertToByte();
+        public HopChannel HopChannel => GetHopChannel();
 
         ///<inheritdoc/>
         public bool IdleMode
@@ -230,6 +231,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public Rfm9xIrqFlags IrqFlags => GetIrqInternal();
+
+        ///<inheritdoc/>
         public byte LastPacketSnr => SendCommand(Commands.GetLastPacketSnr).ConvertToByte();
 
         ///<inheritdoc/>
@@ -257,7 +261,14 @@ namespace RfmUsb.Net
         public LoraMode LoraMode
         {
             get => (LoraMode)SendCommand(Commands.GetLoraMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetLoraMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetLoraMode} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public byte LoraPayloadLength
+        {
+            get => SendCommand(Commands.GetLoraPayloadLength).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetLoraPayloadLength} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -310,7 +321,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public ModemStatus ModemStatus => (ModemStatus)SendCommand(Commands.GetModemStatus).ConvertToInt32();
+        public ModemStatus ModemStatus => GetModemStatus();
 
         ///<inheritdoc/>
         public OokAverageOffset OokAverageOffset
@@ -321,6 +332,7 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte PacketRssi => SendCommand(Commands.GetPacketRssi).ConvertToByte();
+
         ///<inheritdoc/>
         public byte PayloadMaxLength
         {
@@ -357,6 +369,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public ushort PreambleLength
+        {
+            get => SendCommand(Commands.GetPreambleLength).ConvertToUInt16();
+            set => SendCommandWithCheck($"{Commands.SetPreambleLength} 0x{value:X4}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public bool PreamblePolarity
         {
             get => SendCommand(Commands.GetPreamblePolarity).Substring(0, 1) == "1";
@@ -380,7 +399,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public sbyte RssiOffset
         {
-            get => SendCommand(Commands.GetRssiOffset).ConvertToSByte();
+            get => (sbyte)SendCommand(Commands.GetRssiOffset).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetRssiOffset} 0x{value:X2}", ResponseOk);
         }
 
@@ -394,7 +413,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public sbyte RssiThreshold
         {
-            get => SendCommand(Commands.GetRssiThreshold).ConvertToSByte();
+            get => (sbyte)SendCommand(Commands.GetRssiThreshold).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetRssiThreshold} 0x{value:X2}", ResponseOk);
         }
 
@@ -479,6 +498,9 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
+
+        public Rfm9xLoraIrqFlags LoraIrqFlags => throw new NotImplementedException();
+
         ///<inheritdoc/>
         public void ClearFifoOverrun()
         {
@@ -561,6 +583,225 @@ namespace RfmUsb.Net
         public void SetTimerResolution(Timer timer, TimerResolution value)
         {
             SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} {(int)value}", ResponseOk);
+        }
+
+        private HopChannel GetHopChannel()
+        {
+            var lines = SendCommandListResponse(Commands.GetHopChannel);
+
+            bool pll = false;
+            bool crc = false;
+            byte channel = 0;
+
+            lines.ForEach(_ => 
+            {
+                var parts = _.Split(':');
+
+                switch (parts[1])
+                {
+                    case "PLL_TIMEOUT":
+                        if (parts[0] == "1")
+                        {
+                            pll = true;
+                        }
+                        break;
+                    case "CRC_ON_PAYLOAD":
+                        if (parts[0] == "1")
+                        {
+                            crc = true;
+                        }
+                        break;
+                    case "FHSS_PRESENT_CHANNEL":
+                        channel = parts[0].ConvertToByte();
+                        break;
+                }
+            });
+            
+            return new HopChannel(pll, crc, channel);
+        }
+
+        private Rfm9xIrqFlags GetIrqInternal()
+        {
+            Rfm9xIrqFlags irq = Rfm9xIrqFlags.None;
+
+            var lines = SendCommandListResponse(Commands.GetIrq);
+
+            lines.ForEach(_ =>
+            {
+                var parts = _.Split(':');
+
+                switch (parts[1])
+                {
+                    case "LOW_BATTERY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.LowBattery;
+                        }
+                        break;
+
+                    case "CRC_OK":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.CrcOK;
+                        }
+                        break;
+
+                    case "PAYLOAD_READY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.PayloadReady;
+                        }
+                        break;
+
+                    case "PACKET_SENT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.PacketSent;
+                        }
+                        break;
+
+                    case "FIFO_OVERRUN":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.FifoOverrun;
+                        }
+                        break;
+
+                    case "FIFO_LEVEL":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.FifoLevel;
+                        }
+                        break;
+
+                    case "FIFO_NOT_EMPTY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.FifoNotEmpty;
+                        }
+                        break;
+
+                    case "FIFO_FULL":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.FifoFull;
+                        }
+                        break;
+
+                    case "ADDRESS_MATCH":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.AddressMatch;
+                        }
+                        break;
+
+                    case "PREAMBLE_DETECT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.PreambleDetect;
+                        }
+                        break;
+
+                    case "TIMEOUT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.Timeout;
+                        }
+                        break;
+
+                    case "RSSI":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.Rssi;
+                        }
+                        break;
+
+                    case "PLL_LOCK":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.PllLock;
+                        }
+                        break;
+
+                    case "TX_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.TxReady;
+                        }
+                        break;
+
+                    case "RX_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.RxReady;
+                        }
+                        break;
+
+                    case "MODE_RDY":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm9xIrqFlags.ModeReady;
+                        }
+                        break;
+                }
+            });
+
+            return irq;
+        }
+
+        private ModemStatus GetModemStatus()
+        {
+            lock (SerialPort)
+            {
+                ModemStatus status = ModemStatus.None;
+
+                var lines = SendCommandListResponse(Commands.GetModemStatus);
+
+                lines.ForEach(_ =>
+                {
+                    var parts = _.Split(':');
+
+                    switch (parts[1])
+                    {
+                        case "SIGNAL_DETECTED":
+                            if (parts[0] == "1")
+                            {
+                                status |= ModemStatus.SignalDetected;
+                            }
+                            break;
+
+                        case "SIGNAL_SYNCHRONIZED":
+                            if (parts[0] == "1")
+                            {
+                                status |= ModemStatus.SignalSynchronized;
+                            }
+                            break;
+
+                        case "RX_ONGOING":
+                            if (parts[0] == "1")
+                            {
+                                status |= ModemStatus.RxOnGoing;
+                            }
+                            break;
+
+                        case "HEADER_INFO_VALID":
+                            if (parts[0] == "1")
+                            {
+                                status |= ModemStatus.HeaderInfoValid;
+                            }
+                            break;
+
+                        case "MODEM_CLEAR":
+                            if (parts[0] == "1")
+                            {
+                                status |= ModemStatus.ModemClear;
+                            }
+                            break;
+                    }
+                });
+
+                return status;
+            }
         }
     }
 }

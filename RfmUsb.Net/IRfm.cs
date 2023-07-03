@@ -203,6 +203,7 @@ namespace RfmUsb.Net
         PaRamp PaRamp { get; set; }
 
         /// <summary>
+        /// The payload length
         /// If PacketFormat = false (fixed), payload length.
         /// If PacketFormat = true (variable), max length in Rx, not used in Tx.
         /// </summary>

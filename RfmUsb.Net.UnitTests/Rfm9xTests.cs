@@ -24,26 +24,25 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace RfmUsb.Net.UnitTests
 {
     [TestClass]
     public class Rfm9xTests : RfmBaseTests
     {
-        private readonly Rfm9x _rfm9x;
+        private readonly Rfm9x _rfmDevice;
 
         public Rfm9xTests() : base()
         {
-            _rfm9x = new Rfm9xTestDevice(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm9x;
+            _rfmDevice = new Rfm9xTestDevice(MockLogger, MockSerialPortFactory.Object);
+            RfmBase = _rfmDevice;
         }
 
         [TestMethod]
         public void ExecuteSequencerStart()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteSequencerStart(); },
+                () => { _rfmDevice.ExecuteSequencerStart(); },
                 Commands.ExecuteSequencerStart,
                 RfmBase.ResponseOk);
         }
@@ -54,7 +53,7 @@ namespace RfmUsb.Net.UnitTests
         public void GetTimerCoefficient(Timer timer)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.GetTimerCoefficient(timer); },
+                () => { return _rfmDevice.GetTimerCoefficient(timer); },
                 (v) => v.Should().Be(0x10),
                 $"{Commands.GetTimerCoefficient} {(int)timer}",
                 "0x10");
@@ -72,7 +71,7 @@ namespace RfmUsb.Net.UnitTests
         public void GetTimerResolution(Timer timer, TimerResolution expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.GetTimerResolution(timer); },
+                () => { return _rfmDevice.GetTimerResolution(timer); },
                 (v) => v.Should().Be(expected),
                 $"{Commands.GetTimerResolution} {(int)timer}",
                 ((int)expected).ToString());
@@ -82,7 +81,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestClearFifoOverrun()
         {
             ExecuteTest(
-                () => { _rfm9x.ClearFifoOverrun(); },
+                () => { _rfmDevice.ClearFifoOverrun(); },
                 Commands.ExecuteClearFifoOverrun,
                 RfmBase.ResponseOk);
         }
@@ -91,7 +90,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestClearLowBattery()
         {
             ExecuteTest(
-                () => { _rfm9x.ClearLowBattery(); },
+                () => { _rfmDevice.ClearLowBattery(); },
                 Commands.ExecuteClearLowBattery,
                 RfmBase.ResponseOk);
         }
@@ -100,7 +99,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestClearPreambleDetect()
         {
             ExecuteTest(
-                () => { _rfm9x.ClearPreambleDetect(); },
+                () => { _rfmDevice.ClearPreambleDetect(); },
                 Commands.ExecuteClearPreambleDetect,
                 RfmBase.ResponseOk);
         }
@@ -109,7 +108,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestClearSyncAddressMatch()
         {
             ExecuteTest(
-                () => { _rfm9x.ClearSyncAddressMatch(); },
+                () => { _rfmDevice.ClearSyncAddressMatch(); },
                 Commands.ExecuteClearSyncAddressMatch,
                 RfmBase.ResponseOk);
         }
@@ -118,7 +117,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteAgcStart()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteAgcStart(); },
+                () => { _rfmDevice.ExecuteAgcStart(); },
                 Commands.ExecuteAgcStart,
                 RfmBase.ResponseOk);
         }
@@ -127,7 +126,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteImageCalibration()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteImageCalibration(); },
+                () => { _rfmDevice.ExecuteImageCalibration(); },
                 Commands.ExecuteImageCalibration,
                 RfmBase.ResponseOk);
         }
@@ -136,7 +135,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteRestartRxWithoutPllLock()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteRestartRxWithoutPllLock(); },
+                () => { _rfmDevice.ExecuteRestartRxWithoutPllLock(); },
                 Commands.ExecuteRestartRxWithoutPllLock,
                 RfmBase.ResponseOk);
         }
@@ -145,7 +144,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteRestartRxWithPllLock()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteRestartRxWithPllLock(); },
+                () => { _rfmDevice.ExecuteRestartRxWithPllLock(); },
                 Commands.ExecuteRestartRxWithPllLock,
                 RfmBase.ResponseOk);
         }
@@ -154,7 +153,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteSequencerStop()
         {
             ExecuteTest(
-                () => { _rfm9x.ExecuteSequencerStop(); },
+                () => { _rfmDevice.ExecuteSequencerStop(); },
                 Commands.ExecuteSequencerStop,
                 RfmBase.ResponseOk);
         }
@@ -163,7 +162,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAccessSharedRegisters()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.AccessSharedRegisters; },
+                () => { return _rfmDevice.AccessSharedRegisters; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetAccessSharedRegisters,
                 "1");
@@ -173,7 +172,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAutoImageCalibrationOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.AutoImageCalibrationOn; },
+                () => { return _rfmDevice.AutoImageCalibrationOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetAutoImageCalibrationOn,
                 "1");
@@ -187,7 +186,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAutoRestartRxMode(AutoRestartRxMode expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.AutoRestartRxMode; },
+                () => { return _rfmDevice.AutoRestartRxMode; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetAutoRestartRxMode,
                 $"0x{expected:X}");
@@ -197,7 +196,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetBeaconOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.BeaconOn; },
+                () => { return _rfmDevice.BeaconOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetBeaconOn,
                 "1");
@@ -207,7 +206,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetBitRateFractional()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.BitRateFractional; },
+                () => { return _rfmDevice.BitRateFractional; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetBitRateFractional,
                 "0xAA");
@@ -217,7 +216,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetBitSyncOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.BitSyncOn; },
+                () => { return _rfmDevice.BitSyncOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetBitSyncOn,
                 "1");
@@ -231,7 +230,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetCodingRate(ErrorCodingRate expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.ErrorCodingRate; },
+                () => { return _rfmDevice.ErrorCodingRate; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetErrorCodingRate,
                 $"0x{expected:X}");
@@ -243,7 +242,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetCrcWhiteningType(CrcWhiteningType expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.CrcWhiteningType; },
+                () => { return _rfmDevice.CrcWhiteningType; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetCrcWhiteningType,
                 $"0x{expected:X}");
@@ -253,7 +252,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFastHopOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FastHopOn; },
+                () => { return _rfmDevice.FastHopOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetFastHopOn,
                 "1");
@@ -263,7 +262,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoAddressPointer()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoAddressPointer; },
+                () => { return _rfmDevice.FifoAddressPointer; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFifoAddressPointer,
                 "0xAA");
@@ -273,7 +272,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoRxBaseAddress()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoRxBaseAddress; },
+                () => { return _rfmDevice.FifoRxBaseAddress; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFifoRxBaseAddress,
                 "0xAA");
@@ -283,7 +282,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoRxByteAddressPointer()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoRxByteAddressPointer; },
+                () => { return _rfmDevice.FifoRxByteAddressPointer; },
                 (v) => v.Should().Be(0x20),
                 Commands.GetFifoRxByteAddressPointer,
                 "0x20");
@@ -293,7 +292,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoRxBytesNumber()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoRxBytesNumber; },
+                () => { return _rfmDevice.FifoRxBytesNumber; },
                 (v) => v.Should().Be(0x20),
                 Commands.GetFifoRxBytesNumber,
                 "0x20");
@@ -303,7 +302,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoRxCurrentAddress()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoRxCurrentAddress; },
+                () => { return _rfmDevice.FifoRxCurrentAddress; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFifoRxCurrentAddress,
                 "0xAA");
@@ -313,7 +312,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoTxBaseAddress()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FifoTxBaseAddress; },
+                () => { return _rfmDevice.FifoTxBaseAddress; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFifoTxBaseAddress,
                 "0xAA");
@@ -323,7 +322,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFormerTemperatureValue()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FormerTemperatureValue; },
+                () => { return _rfmDevice.FormerTemperatureValue; },
                 (v) => v.Should().Be((sbyte)0xA),
                 Commands.GetFormerTemperatureValue,
                 "0xA");
@@ -333,7 +332,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFreqError()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FrequencyError; },
+                () => { return _rfmDevice.FrequencyError; },
                 (v) => v.Should().Be(0x2000),
                 Commands.GetFreqError,
                 "0x2000");
@@ -343,7 +342,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFreqHoppingPeriod()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FrequencyHoppingPeriod; },
+                () => { return _rfmDevice.FrequencyHoppingPeriod; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetFreqHoppingPeriod,
                 "0xAA");
@@ -353,7 +352,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromIdle()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromIdle; },
+                () => { return _rfmDevice.FromIdle; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetFromIdle,
                 "1");
@@ -368,7 +367,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromPacketReceived(FromPacketReceived expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromPacketReceived; },
+                () => { return _rfmDevice.FromPacketReceived; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetFromPacketReceived,
                 $"0x{expected:X}");
@@ -383,7 +382,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromReceived(FromReceive expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromReceive; },
+                () => { return _rfmDevice.FromReceive; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetFromReceive,
                 $"0x{expected:X}");
@@ -397,7 +396,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromRxTimeout(FromRxTimeout expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromRxTimeout; },
+                () => { return _rfmDevice.FromRxTimeout; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetFromRxTimeout,
                 $"0x{expected:X}");
@@ -411,7 +410,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromStart(FromStart expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromStart; },
+                () => { return _rfmDevice.FromStart; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetFromStart,
                 $"0x{expected:X}");
@@ -421,27 +420,53 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFromTransmit()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.FromTransmit; },
+                () => { return _rfmDevice.FromTransmit; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetFromTransmit,
                 "1");
         }
 
         [TestMethod]
-        public void TestGetHopChannel()
+        [DataRow(true, 0xAA)]
+        [DataRow(false, 0x55)]
+        public void TestGetHopChannel(bool state, int count)
         {
-            ExecuteGetTest(
-                () => { return _rfm9x.HopChannel; },
-                (v) => v.Should().Be(0xAA),
-                Commands.GetHopChannel,
-                "0xAA");
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns($"{(state ? "1:PLL_TIMEOUT" : "0:PLL_TIMEOUT")}")
+                .Returns($"{(state ? "1:CRC_ON_PAYLOAD" : "0:CRC_ON_PAYLOAD")}")
+                .Returns($"0x{count:X2}:FHSS_PRESENT_CHANNEL");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.HopChannel;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetHopChannel}\n"));
+
+            result.Should().NotBeNull();
+            result.PllTimeout.Should().Be(state);
+            result.CrcOnPayload.Should().Be(state);
+            result.Channel.Should().Be((byte)count);
         }
 
         [TestMethod]
         public void TestGetIdleMode()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.IdleMode; },
+                () => { return _rfmDevice.IdleMode; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetIdleMode,
                 "1");
@@ -451,7 +476,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetImplicitHeaderModeOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.ImplicitHeaderModeOn; },
+                () => { return _rfmDevice.ImplicitHeaderModeOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetImplicitHeaderModeOn,
                 "1");
@@ -461,7 +486,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetIoHomeOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.IoHomeOn; },
+                () => { return _rfmDevice.IoHomeOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetIoHomeOn,
                 "1");
@@ -471,7 +496,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetIoHomePowerFrame()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.IoHomePowerFrame; },
+                () => { return _rfmDevice.IoHomePowerFrame; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetIoHomePowerFrame,
                 "1");
@@ -481,7 +506,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLnaBoostHf()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LnaBoostHf; },
+                () => { return _rfmDevice.LnaBoostHf; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLnaBoostHf,
                 "1");
@@ -491,7 +516,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLongRangeMode()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LongRangeMode; },
+                () => { return _rfmDevice.LongRangeMode; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLongRangeMode,
                 "1");
@@ -501,7 +526,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLoraAgcAutoOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LoraAgcAutoOn; },
+                () => { return _rfmDevice.LoraAgcAutoOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLoraAgcAutoOn,
                 "1");
@@ -518,17 +543,27 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLoraMode(LoraMode expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LoraMode; },
+                () => { return _rfmDevice.LoraMode; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetLoraMode,
                 $"0x{expected:X}");
         }
 
         [TestMethod]
+        public void TestGetLoraPayloadLength()
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.LoraPayloadLength; },
+                (v) => v.Should().Be(0xAA),
+                Commands.GetLoraPayloadLength,
+                "0xAA");
+        }
+
+        [TestMethod]
         public void TestGetLowBatteryOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LowBatteryOn; },
+                () => { return _rfmDevice.LowBatteryOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLowBatteryOn,
                 "1");
@@ -546,7 +581,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLowBatteryTrim(LowBatteryTrim expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LowBatteryTrim; },
+                () => { return _rfmDevice.LowBatteryTrim; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetLowBatteryTrim,
                 $"0x{expected:X}");
@@ -556,7 +591,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLowDataRateOptimize()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LowDataRateOptimize; },
+                () => { return _rfmDevice.LowDataRateOptimize; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLowDataRateOptimize,
                 "1");
@@ -566,7 +601,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLowFrequencyMode()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LowFrequencyMode; },
+                () => { return _rfmDevice.LowFrequencyMode; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLowFrequencyMode,
                 "1");
@@ -576,7 +611,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLowPowerSelection()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LowPowerSelection; },
+                () => { return _rfmDevice.LowPowerSelection; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetLowPowerSelection,
                 "1");
@@ -586,7 +621,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetMapPreambleDetect()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.MapPreambleDetect; },
+                () => { return _rfmDevice.MapPreambleDetect; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetMapPreambleDetect,
                 "1");
@@ -597,7 +632,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetModemBandwidth(ModemBandwidth expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.ModemBandwidth; },
+                () => { return _rfmDevice.ModemBandwidth; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetModemBandwidth,
                 $"0x{expected:X}");
@@ -607,15 +642,11 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(ModemStatus.SignalDetected)]
         [DataRow(ModemStatus.SignalSynchronized)]
         [DataRow(ModemStatus.HeaderInfoValid)]
-        [DataRow(ModemStatus.StatusRxOnGoing)]
+        [DataRow(ModemStatus.RxOnGoing)]
         [DataRow(ModemStatus.ModemClear)]
         public void TestGetModemStatus(ModemStatus expected)
         {
-            ExecuteGetTest(
-                 () => { return _rfm9x.ModemStatus; },
-                 (v) => { v.Should().Be(expected); },
-                 Commands.GetModemStatus,
-                 $"0x{expected:X}");
+            throw new System.NotImplementedException();
         }
 
         [TestMethod]
@@ -626,7 +657,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetOokAverageOffset(OokAverageOffset expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.OokAverageOffset; },
+                () => { return _rfmDevice.OokAverageOffset; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetOokAverageOffset,
                 $"0x{expected:X}");
@@ -636,7 +667,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPacketRssi()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PacketRssi; },
+                () => { return _rfmDevice.PacketRssi; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetPacketRssi,
                 "0xAA");
@@ -646,7 +677,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPacketSnr()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.LastPacketSnr; },
+                () => { return _rfmDevice.LastPacketSnr; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetLastPacketSnr,
                 "0xAA");
@@ -656,7 +687,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPayloadMaxLength()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PayloadMaxLength; },
+                () => { return _rfmDevice.PayloadMaxLength; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetPayloadMaxLength,
                 "0xAA");
@@ -666,7 +697,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPpmCorrection()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PpmCorrection; },
+                () => { return _rfmDevice.PpmCorrection; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetPpmCorrection,
                 "0xAA");
@@ -676,7 +707,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleDetectorOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreambleDetectorOn; },
+                () => { return _rfmDevice.PreambleDetectorOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetPreambleDetectorOn,
                 "1");
@@ -689,7 +720,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleDetectorSize(PreambleDetectorSize expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreambleDetectorSize; },
+                () => { return _rfmDevice.PreambleDetectorSize; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetPreambleDetectorSize,
                 $"0x{expected:X}");
@@ -699,17 +730,27 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleDetectorTotalerance()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreambleDetectorTotalerance; },
+                () => { return _rfmDevice.PreambleDetectorTotalerance; },
                 (v) => v.Should().Be(30),
                 Commands.GetPreambleDetectorTotalerance,
                 $"0x{(sbyte)30:X2}");
         }
 
         [TestMethod]
+        public void TestGetPreambleLength()
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.PreambleLength; },
+                (v) => v.Should().Be(0xAA),
+                Commands.GetPreambleLength,
+                "0xAA");
+        }
+
+        [TestMethod]
         public void TestGetPreamblePolarity()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.PreamblePolarity; },
+                () => { return _rfmDevice.PreamblePolarity; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetPreamblePolarity,
                 "1");
@@ -719,7 +760,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRestartRxOnCollision()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RestartRxOnCollision; },
+                () => { return _rfmDevice.RestartRxOnCollision; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetRestartRxOnCollision,
                 "1");
@@ -729,7 +770,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiCollisionThreshold()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RssiCollisionThreshold; },
+                () => { return _rfmDevice.RssiCollisionThreshold; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetRssiCollisionThreshold,
                 "0xAA");
@@ -739,7 +780,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiOffset()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RssiOffset; },
+                () => { return _rfmDevice.RssiOffset; },
                 (v) => v.Should().Be(-98),
                 Commands.GetRssiOffset,
                 $"0x{(sbyte)-98:X2}");
@@ -757,7 +798,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiSmoothing(RssiSmoothing expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RssiSmoothing; },
+                () => { return _rfmDevice.RssiSmoothing; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetRssiSmoothing,
                 $"0x{expected:X}");
@@ -767,7 +808,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiThreshold()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RssiThreshold; },
+                () => { return _rfmDevice.RssiThreshold; },
                 (v) => v.Should().Be(-114),
                 Commands.GetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
@@ -777,7 +818,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiWideband()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RssiWideband; },
+                () => { return _rfmDevice.RssiWideband; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetRssiWideband,
                 "0xAA");
@@ -787,7 +828,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRxCodingRate()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RxCodingRate; },
+                () => { return _rfmDevice.RxCodingRate; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetRxCodingRate,
                 "0xAA");
@@ -797,7 +838,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRxPayloadCrcOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.RxPayloadCrcOn; },
+                () => { return _rfmDevice.RxPayloadCrcOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetRxPayloadCrcOn,
                 "1");
@@ -813,7 +854,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetSpreadingFactor(SpreadingFactor expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.SpreadingFactor; },
+                () => { return _rfmDevice.SpreadingFactor; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetSpreadingFactor,
                 $"0x{expected:X}");
@@ -823,7 +864,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetSymbolTimeout()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.SymbolTimeout; },
+                () => { return _rfmDevice.SymbolTimeout; },
                 (v) => v.Should().Be(0x100),
                 Commands.GetSymbolTimeout,
                 "0x100");
@@ -833,7 +874,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTcxoInputOn()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TcxoInputOn; },
+                () => { return _rfmDevice.TcxoInputOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetTcxoInputOn,
                 "1");
@@ -847,7 +888,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTemperatureThreshold(TemperatureThreshold expected)
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TemperatureThreshold; },
+                () => { return _rfmDevice.TemperatureThreshold; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetTemperatureThreshold,
                 $"0x{expected:X}");
@@ -857,7 +898,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTempMonitorOff()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TempMonitorOff; },
+                () => { return _rfmDevice.TempMonitorOff; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetTempMonitorOff,
                 "1");
@@ -867,7 +908,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeoutRxPreamble()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TimeoutRxPreamble; },
+                () => { return _rfmDevice.TimeoutRxPreamble; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetTimeoutRxPreamble,
                 "0xAA");
@@ -877,7 +918,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeoutRxRssi()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TimeoutRxRssi; },
+                () => { return _rfmDevice.TimeoutRxRssi; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetTimeoutRxRssi,
                 "0xAA");
@@ -887,7 +928,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeoutSignalSync()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TimeoutSignalSync; },
+                () => { return _rfmDevice.TimeoutSignalSync; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetTimeoutSignalSync,
                 "0xAA");
@@ -897,7 +938,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTxContinuousMode()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.TxContinuousMode; },
+                () => { return _rfmDevice.TxContinuousMode; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetTxContinuousMode,
                 "1");
@@ -907,7 +948,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetValidHeaderCount()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.ValidHeaderCount; },
+                () => { return _rfmDevice.ValidHeaderCount; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetValidHeaderCount,
                 "0xAA");
@@ -917,10 +958,83 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetValidPacketCount()
         {
             ExecuteGetTest(
-                () => { return _rfm9x.ValidPacketCount; },
+                () => { return _rfmDevice.ValidPacketCount; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetValidPacketCount,
                 "0xAA");
+        }
+
+        [TestMethod]
+        public void TestIrq()
+        {
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:LOW_BATTERY")
+                .Returns("1:CRC_OK")
+                .Returns("1:PAYLOAD_READY")
+                .Returns("1:PACKET_SENT")
+                .Returns("1:FIFO_OVERRUN")
+                .Returns("1:FIFO_LEVEL")
+                .Returns("1:FIFO_NOT_EMPTY")
+                .Returns("1:FIFO_FULL")
+                .Returns("1:ADDRESS_MATCH")
+                .Returns("1:PREAMBLE_DETECT")
+                .Returns("1:TIMEOUT")
+                .Returns("1:RSSI")
+                .Returns("1:PLL_LOCK")
+                .Returns("1:TX_RDY")
+                .Returns("1:RX_RDY")
+                .Returns("1:MODE_RDY");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.IrqFlags;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
+
+            result.Should()
+                .Be(Rfm9xIrqFlags.LowBattery |
+                    Rfm9xIrqFlags.CrcOK |
+                    Rfm9xIrqFlags.PayloadReady |
+                    Rfm9xIrqFlags.PacketSent |
+                    Rfm9xIrqFlags.FifoOverrun |
+                    Rfm9xIrqFlags.FifoLevel |
+                    Rfm9xIrqFlags.FifoNotEmpty |
+                    Rfm9xIrqFlags.FifoFull |
+                    Rfm9xIrqFlags.AddressMatch |
+                    Rfm9xIrqFlags.PreambleDetect |
+                    Rfm9xIrqFlags.Timeout |
+                    Rfm9xIrqFlags.Rssi |
+                    Rfm9xIrqFlags.PllLock |
+                    Rfm9xIrqFlags.TxReady |
+                    Rfm9xIrqFlags.RxReady |
+                    Rfm9xIrqFlags.ModeReady);
         }
 
         [TestMethod]
@@ -933,7 +1047,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAccessSharedRegisters()
         {
             ExecuteSetTest(
-                () => { _rfm9x.AccessSharedRegisters = true; },
+                () => { _rfmDevice.AccessSharedRegisters = true; },
                 Commands.SetAccessSharedRegisters,
                 "1");
         }
@@ -942,7 +1056,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAesOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LoraAgcAutoOn = true; },
+                () => { _rfmDevice.LoraAgcAutoOn = true; },
                 Commands.SetLoraAgcAutoOn,
                 "1");
         }
@@ -951,7 +1065,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAutoImageCalibrationOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.AutoImageCalibrationOn = true; },
+                () => { _rfmDevice.AutoImageCalibrationOn = true; },
                 Commands.SetAutoImageCalibrationOn,
                 "1");
         }
@@ -964,7 +1078,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAutoRestartRxMode(AutoRestartRxMode expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.AutoRestartRxMode = expected; },
+                () => { _rfmDevice.AutoRestartRxMode = expected; },
                 Commands.SetAutoRestartRxMode,
                 $"0x{(byte)expected:X2}");
         }
@@ -973,7 +1087,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetBeaconOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.BeaconOn = true; },
+                () => { _rfmDevice.BeaconOn = true; },
                 Commands.SetBeaconOn,
                 "1");
         }
@@ -982,7 +1096,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetBitRateFractional()
         {
             ExecuteSetTest(
-                () => { _rfm9x.BitRateFractional = 0x55; },
+                () => { _rfmDevice.BitRateFractional = 0x55; },
                 Commands.SetBitRateFractional,
                 "0x55");
         }
@@ -991,7 +1105,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetBitSyncOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.BitSyncOn = true; },
+                () => { _rfmDevice.BitSyncOn = true; },
                 Commands.SetBitSyncOn,
                 "1");
         }
@@ -1004,7 +1118,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetCodingRate(ErrorCodingRate expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.ErrorCodingRate = expected; },
+                () => { _rfmDevice.ErrorCodingRate = expected; },
                 Commands.SetErrorCodingRate,
                 $"0x{(byte)expected:X2}");
         }
@@ -1015,7 +1129,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetCrcWhiteningType(CrcWhiteningType expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.CrcWhiteningType = expected; },
+                () => { _rfmDevice.CrcWhiteningType = expected; },
                 Commands.SetCrcWhiteningType,
                 $"0x{(byte)expected:X2}");
         }
@@ -1024,7 +1138,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFastHopOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FastHopOn = true; },
+                () => { _rfmDevice.FastHopOn = true; },
                 Commands.SetFastHopOn,
                 "1");
         }
@@ -1033,7 +1147,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFifoAddressPointer()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FifoAddressPointer = 0x55; },
+                () => { _rfmDevice.FifoAddressPointer = 0x55; },
                 Commands.SetFifoAddressPointer,
                 "0x55");
         }
@@ -1042,7 +1156,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFifoRxBaseAddress()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FifoRxBaseAddress = 0x55; },
+                () => { _rfmDevice.FifoRxBaseAddress = 0x55; },
                 Commands.SetFifoRxBaseAddress,
                 "0x55");
         }
@@ -1051,7 +1165,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFifoTxBaseAddress()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FifoTxBaseAddress = 0x55; },
+                () => { _rfmDevice.FifoTxBaseAddress = 0x55; },
                 Commands.SetFifoTxBaseAddress,
                 "0x55");
         }
@@ -1060,7 +1174,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFormerTemperatureValue()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FormerTemperatureValue = 0x55; },
+                () => { _rfmDevice.FormerTemperatureValue = 0x55; },
                 Commands.SetFormerTemperatureValue,
                 "0x55");
         }
@@ -1069,7 +1183,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFreqHoppingPeriod()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FrequencyHoppingPeriod = 0x55; },
+                () => { _rfmDevice.FrequencyHoppingPeriod = 0x55; },
                 Commands.SetFreqHoppingPeriod,
                 "0x55");
         }
@@ -1078,7 +1192,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromIdle()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromIdle = true; },
+                () => { _rfmDevice.FromIdle = true; },
                 Commands.SetFromIdle,
                 "1");
         }
@@ -1092,7 +1206,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromPacketReceived(FromPacketReceived expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromPacketReceived = expected; },
+                () => { _rfmDevice.FromPacketReceived = expected; },
                 Commands.SetFromPacketReceived,
                 $"0x{(byte)expected:X2}");
         }
@@ -1106,7 +1220,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromReceived(FromReceive expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromReceive = expected; },
+                () => { _rfmDevice.FromReceive = expected; },
                 Commands.SetFromReceive,
                 $"0x{(byte)expected:X2}");
         }
@@ -1119,7 +1233,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromRxTimeout(FromRxTimeout expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromRxTimeout = expected; },
+                () => { _rfmDevice.FromRxTimeout = expected; },
                 Commands.SetFromRxTimeout,
                 $"0x{expected:X}");
         }
@@ -1132,7 +1246,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromStart(FromStart expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromStart = expected; },
+                () => { _rfmDevice.FromStart = expected; },
                 Commands.SetFromStart,
                 $"0x{expected:X}");
         }
@@ -1141,7 +1255,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFromTransmit()
         {
             ExecuteSetTest(
-                () => { _rfm9x.FromTransmit = true; },
+                () => { _rfmDevice.FromTransmit = true; },
                 Commands.SetFromTransmit,
                 "1");
         }
@@ -1150,7 +1264,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetIdleMode()
         {
             ExecuteSetTest(
-                () => { _rfm9x.IdleMode = true; },
+                () => { _rfmDevice.IdleMode = true; },
                 Commands.SetIdleMode,
                 "1");
         }
@@ -1159,7 +1273,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetImplicitHeaderModeOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.ImplicitHeaderModeOn = true; },
+                () => { _rfmDevice.ImplicitHeaderModeOn = true; },
                 Commands.SetImplicitHeaderModeOn,
                 "1");
         }
@@ -1168,7 +1282,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetIoHomeOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.IoHomeOn = true; },
+                () => { _rfmDevice.IoHomeOn = true; },
                 Commands.SetIoHomeOn,
                 "1");
         }
@@ -1177,7 +1291,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetIoHomePowerFrame()
         {
             ExecuteSetTest(
-                () => { _rfm9x.IoHomePowerFrame = true; },
+                () => { _rfmDevice.IoHomePowerFrame = true; },
                 Commands.SetIoHomePowerFrame,
                 "1");
         }
@@ -1186,7 +1300,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLnaBoostHf()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LnaBoostHf = true; },
+                () => { _rfmDevice.LnaBoostHf = true; },
                 Commands.SetLnaBoostHf,
                 "1");
         }
@@ -1195,7 +1309,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLongRangeMode()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LongRangeMode = true; },
+                () => { _rfmDevice.LongRangeMode = true; },
                 Commands.SetLongRangeMode,
                 "1");
         }
@@ -1211,16 +1325,25 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLoraMode(LoraMode expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.LoraMode = expected; },
+                () => { _rfmDevice.LoraMode = expected; },
                 Commands.SetLoraMode,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
+        }
+
+        [TestMethod]
+        public void TestSetLoraPayloadLength()
+        {
+            ExecuteSetTest(
+                () => { _rfmDevice.LoraPayloadLength = 0x55; },
+                Commands.SetLoraPayloadLength,
+                "0x55");
         }
 
         [TestMethod]
         public void TestSetLowBatteryOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LowBatteryOn = true; },
+                () => { _rfmDevice.LowBatteryOn = true; },
                 Commands.SetLowBatteryOn,
                 "1");
         }
@@ -1237,7 +1360,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLowBatteryTrim(LowBatteryTrim expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.LowBatteryTrim = expected; },
+                () => { _rfmDevice.LowBatteryTrim = expected; },
                 Commands.SetLowBatteryTrim,
                 $"0x{(byte)expected:X2}");
         }
@@ -1246,7 +1369,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLowDataRateOptimize()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LowDataRateOptimize = true; },
+                () => { _rfmDevice.LowDataRateOptimize = true; },
                 Commands.SetLowDataRateOptimize,
                 "1");
         }
@@ -1255,7 +1378,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLowFrequencyMode()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LowFrequencyMode = true; },
+                () => { _rfmDevice.LowFrequencyMode = true; },
                 Commands.SetLowFrequencyMode,
                 "1");
         }
@@ -1264,7 +1387,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLowPowerSelection()
         {
             ExecuteSetTest(
-                () => { _rfm9x.LowPowerSelection = true; },
+                () => { _rfmDevice.LowPowerSelection = true; },
                 Commands.SetLowPowerSelection,
                 "1");
         }
@@ -1273,7 +1396,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetMapPreambleDetect()
         {
             ExecuteSetTest(
-                () => { _rfm9x.MapPreambleDetect = true; },
+                () => { _rfmDevice.MapPreambleDetect = true; },
                 Commands.SetMapPreambleDetect,
                 "1");
         }
@@ -1283,7 +1406,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetModemBandwidth(ModemBandwidth expected)
         {
             ExecuteSetTest(
-    () => { _rfm9x.ModemBandwidth = expected; },
+    () => { _rfmDevice.ModemBandwidth = expected; },
     Commands.SetModemBandwidth,
     $"0x{expected:X}");
         }
@@ -1296,7 +1419,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetOokAverageOffset(OokAverageOffset expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.OokAverageOffset = expected; },
+                () => { _rfmDevice.OokAverageOffset = expected; },
                 Commands.SetOokAverageOffset,
                 $"0x{expected:X}");
         }
@@ -1305,7 +1428,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPayloadMaxLength()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PayloadMaxLength = 0x55; },
+                () => { _rfmDevice.PayloadMaxLength = 0x55; },
                 Commands.SetPayloadMaxLength,
                 "0x55");
         }
@@ -1314,7 +1437,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPpmCorrection()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PpmCorrection = 0x55; },
+                () => { _rfmDevice.PpmCorrection = 0x55; },
                 Commands.SetPpmCorrection,
                 "0x55");
         }
@@ -1323,7 +1446,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleDetectorOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleDetectorOn = true; },
+                () => { _rfmDevice.PreambleDetectorOn = true; },
                 Commands.SetPreambleDetectorOn,
                 "1");
         }
@@ -1335,7 +1458,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleDetectorSize(PreambleDetectorSize expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleDetectorSize = expected; },
+                () => { _rfmDevice.PreambleDetectorSize = expected; },
                 Commands.SetPreambleDetectorSize,
                 $"0x{(byte)expected:X2}");
         }
@@ -1344,7 +1467,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleDetectorTotalerance()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleDetectorTotalerance = 55; },
+                () => { _rfmDevice.PreambleDetectorTotalerance = 55; },
                 Commands.SetPreambleDetectorTotalerance,
                 $"0x{(sbyte)55:X2}");
         }
@@ -1353,16 +1476,16 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleLength()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreambleSize = 0x100; },
+                () => { _rfmDevice.PreambleLength = 0xAA55; },
                 Commands.SetPreambleLength,
-                "0x100");
+                "0xAA55");
         }
 
         [TestMethod]
         public void TestSetPreamblePolarity()
         {
             ExecuteSetTest(
-                () => { _rfm9x.PreamblePolarity = true; },
+                () => { _rfmDevice.PreamblePolarity = true; },
                 Commands.SetPreamblePolarity,
                 "1");
         }
@@ -1371,7 +1494,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRestartRxOnCollision()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RestartRxOnCollision = true; },
+                () => { _rfmDevice.RestartRxOnCollision = true; },
                 Commands.SetRestartRxOnCollision,
                 "1");
         }
@@ -1380,7 +1503,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiCollisionThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RssiCollisionThreshold = 0x55; },
+                () => { _rfmDevice.RssiCollisionThreshold = 0x55; },
                 Commands.SetRssiCollisionThreshold,
                 "0x55");
         }
@@ -1389,7 +1512,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiOffset()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RssiOffset = 0x55; },
+                () => { _rfmDevice.RssiOffset = 0x55; },
                 Commands.SetRssiOffset,
                 "0x55");
         }
@@ -1406,7 +1529,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiSmoothing(RssiSmoothing expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.RssiSmoothing = expected; },
+                () => { _rfmDevice.RssiSmoothing = expected; },
                 Commands.SetRssiSmoothing,
                 $"0x{expected:X}");
         }
@@ -1415,7 +1538,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RssiThreshold = -114; },
+                () => { _rfmDevice.RssiThreshold = -114; },
                 Commands.SetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
@@ -1424,7 +1547,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRxPayloadCrcOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.RxPayloadCrcOn = true; },
+                () => { _rfmDevice.RxPayloadCrcOn = true; },
                 Commands.SetRxPayloadCrcOn,
                 "1");
         }
@@ -1439,7 +1562,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetSpreadingFactor(SpreadingFactor expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.SpreadingFactor = expected; },
+                () => { _rfmDevice.SpreadingFactor = expected; },
                 Commands.SetSpreadingFactor,
                 $"0x{expected:X}");
         }
@@ -1448,7 +1571,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetSymbolTimeout()
         {
             ExecuteSetTest(
-                () => { _rfm9x.SymbolTimeout = 0x100; },
+                () => { _rfmDevice.SymbolTimeout = 0x100; },
                 Commands.SetSymbolTimeout,
                 "0x100");
         }
@@ -1457,7 +1580,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTcxoInputOn()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TcxoInputOn = true; },
+                () => { _rfmDevice.TcxoInputOn = true; },
                 Commands.SetTcxoInputOn,
                 "1");
         }
@@ -1470,7 +1593,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTemperatureThreshold(TemperatureThreshold expected)
         {
             ExecuteSetTest(
-                () => { _rfm9x.TemperatureThreshold = expected; },
+                () => { _rfmDevice.TemperatureThreshold = expected; },
                 Commands.SetTemperatureThreshold,
                 $"0x{(byte)expected:X2}");
         }
@@ -1479,7 +1602,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTempMonitorOff()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TempMonitorOff = true; },
+                () => { _rfmDevice.TempMonitorOff = true; },
                 Commands.SetTempMonitorOff,
                 "1");
         }
@@ -1488,7 +1611,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeoutRxPreamble()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TimeoutRxPreamble = 0x55; },
+                () => { _rfmDevice.TimeoutRxPreamble = 0x55; },
                 Commands.SetTimeoutRxPreamble,
                 "0x55");
         }
@@ -1497,7 +1620,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeoutRxRssi()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TimeoutRxRssi = 0x55; },
+                () => { _rfmDevice.TimeoutRxRssi = 0x55; },
                 Commands.SetTimeoutRxRssi,
                 "0x55");
         }
@@ -1506,7 +1629,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeoutSignalSync()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TimeoutSignalSync = 0x55; },
+                () => { _rfmDevice.TimeoutSignalSync = 0x55; },
                 Commands.SetTimeoutSignalSync,
                 "0x55");
         }
@@ -1515,7 +1638,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTxContinuousMode()
         {
             ExecuteSetTest(
-                () => { _rfm9x.TxContinuousMode = true; },
+                () => { _rfmDevice.TxContinuousMode = true; },
                 Commands.SetTxContinuousMode,
                 "1");
         }

@@ -22,44 +22,47 @@
 * SOFTWARE.
 */
 
-using System;
-
 namespace RfmUsb.Net
 {
     /// <summary>
-    /// The modem status
+    /// The FHSS hop channel information
     /// </summary>
-    [Flags]
-    public enum ModemStatus
+    public struct HopChannel
     {
         /// <summary>
-        /// No <see cref="ModemStatus"/> bit is set
+        /// Create a <see cref="HopChannel"/> instance
         /// </summary>
-        None,
+        /// <param name="pllTimeout"></param>
+        /// <param name="crcOnPayload"></param>
+        /// <param name="channel"></param>
+        public HopChannel(bool pllTimeout, bool crcOnPayload, byte channel)
+        {
+            PllTimeout = pllTimeout;
+            CrcOnPayload = crcOnPayload;
+            Channel = channel;
+        }
 
         /// <summary>
-        /// Signal Detected
+        /// PLL failed to lock while attempting a TX/RX/CAD operation
         /// </summary>
-        SignalDetected,
+        /// <remarks>
+        /// true : PLL did not lock
+        /// false : PLL did lock
+        /// </remarks>
+        public bool PllTimeout { get; }
 
         /// <summary>
-        /// Signal Synchronized
+        /// CRC Information extracted from the received packet header (Explicit header mode only)
         /// </summary>
-        SignalSynchronized,
+        /// <remarks>
+        /// false : Header indicates CRC off
+        /// true : Header indicates CRC on
+        /// </remarks>
+        public bool CrcOnPayload { get; }
 
         /// <summary>
-        /// Rx Ongoing
+        /// Current value of frequency hopping channel inuse
         /// </summary>
-        RxOnGoing,
-
-        /// <summary>
-        /// Header Info Valid
-        /// </summary>
-        HeaderInfoValid,
-
-        /// <summary>
-        /// Modem Clear
-        /// </summary>
-        ModemClear
+        public byte Channel { get; }
     }
 }

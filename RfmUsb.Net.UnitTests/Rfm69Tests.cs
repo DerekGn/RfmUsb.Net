@@ -34,19 +34,19 @@ namespace RfmUsb.Net.UnitTests
     [TestClass]
     public class Rfm69Tests : RfmBaseTests
     {
-        private readonly Rfm69 _rfm6x;
+        private readonly Rfm69 _rfmDevice;
 
         public Rfm69Tests()
         {
-            _rfm6x = new Rfm69TestDevice(MockLogger, MockSerialPortFactory.Object);
-            RfmBase = _rfm6x;
+            _rfmDevice = new Rfm69TestDevice(MockLogger, MockSerialPortFactory.Object);
+            RfmBase = _rfmDevice;
         }
 
         [TestMethod]
         public void TestExecuteAfcClear()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteAfcClear(); },
+                () => { _rfmDevice.ExecuteAfcClear(); },
                 Commands.ExecuteAfcClear,
                 RfmBase.ResponseOk);
         }
@@ -55,7 +55,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteAfcStart()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteAfcStart(); },
+                () => { _rfmDevice.ExecuteAfcStart(); },
                 Commands.ExecuteAfcStart,
                 RfmBase.ResponseOk);
         }
@@ -64,7 +64,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestExecuteFeiStart()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteFeiStart(); },
+                () => { _rfmDevice.ExecuteFeiStart(); },
                 Commands.ExecuteFeiStart,
                 RfmBase.ResponseOk);
         }
@@ -73,7 +73,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAesOn()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.AesOn; },
+                () => { return _rfmDevice.AesOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetAesOn,
                 "1");
@@ -83,7 +83,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAfcLowBetaOn()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.AfcLowBetaOn; },
+                () => { return _rfmDevice.AfcLowBetaOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetAfcLowBetaOn,
                 "1");
@@ -93,7 +93,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAutoRxRestartOn()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.AutoRxRestartOn; },
+                () => { return _rfmDevice.AutoRxRestartOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetAutoRxRestartOn,
                 "1");
@@ -106,7 +106,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetContinuousDagc(ContinuousDagc expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ContinuousDagc; },
+                () => { return _rfmDevice.ContinuousDagc; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetContinuousDagc,
                 $"0x{expected:X}");
@@ -123,7 +123,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetCurrentLnaGain(LnaGain expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.CurrentLnaGain; },
+                () => { return _rfmDevice.CurrentLnaGain; },
                 (v) => v.Should().Be(expected),
                 Commands.GetCurrentLnaGain,
                 $"0x{expected:X}");
@@ -141,7 +141,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetDccFreq(DccFreq expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.DccFreq; },
+                () => { return _rfmDevice.DccFreq; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetDccFreq,
                 $"0x{expected:X}");
@@ -159,7 +159,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetDccFreqAfc(DccFreq expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.DccFreqAfc; },
+                () => { return _rfmDevice.DccFreqAfc; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetDccFreqAfc,
                 $"0x{expected:X}");
@@ -169,7 +169,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetDioInterruptMask()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                .SetupSequence(_ => _.ReadLine())
@@ -181,7 +181,7 @@ namespace RfmUsb.Net.UnitTests
                .Returns("0-DIO5");
 
             // Act
-            var result = _rfm6x.DioInterruptMask;
+            var result = _rfmDevice.DioInterruptMask;
 
             // Assert
             result.Should().Be(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4);
@@ -201,7 +201,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetEnterCondition(EnterCondition expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.EnterCondition; },
+                () => { return _rfmDevice.EnterCondition; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetEnterCondition,
                 $"0x{expected:X}");
@@ -220,7 +220,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetExitCondition(ExitCondition expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ExitCondition; },
+                () => { return _rfmDevice.ExitCondition; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetExitCondition,
                 $"0x{expected:X}");
@@ -230,7 +230,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFifoFill()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.FifoFill; },
+                () => { return _rfmDevice.FifoFill; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetFifoFill,
                 "1");
@@ -240,7 +240,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetImpedance()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.Impedance; },
+                () => { return _rfmDevice.Impedance; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetImpedance,
                 "1");
@@ -254,7 +254,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetIntermediateMode(IntermediateMode expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.IntermediateMode; },
+                () => { return _rfmDevice.IntermediateMode; },
                 (v) => v.Should().Be(expected),
                 Commands.GetIntermediateMode,
                 $"0x{expected:X}");
@@ -264,7 +264,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenCoefficentIdle()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenCoefficentIdle; },
+                () => { return _rfmDevice.ListenCoefficentIdle; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetListenCoefficentIdle,
                 "0xAA");
@@ -274,7 +274,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenCoefficentRx()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenCoefficentRx; },
+                () => { return _rfmDevice.ListenCoefficentRx; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetListenCoefficentRx,
                 "0xAA");
@@ -284,7 +284,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenCriteria()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenCriteria; },
+                () => { return _rfmDevice.ListenCriteria; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetListenCriteria,
                 "1");
@@ -299,7 +299,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenEnd(ListenEnd expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenEnd; },
+                () => { return _rfmDevice.ListenEnd; },
                 (v) => v.Should().Be(expected),
                 Commands.GetListenEnd,
                 $"0x{expected:X}");
@@ -309,7 +309,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenerOn()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenerOn; },
+                () => { return _rfmDevice.ListenerOn; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetListenerOn,
                 "1");
@@ -323,7 +323,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenResolutionIdle(ListenResolution expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenResolutionIdle; },
+                () => { return _rfmDevice.ListenResolutionIdle; },
                 (v) => v.Should().Be(expected),
                 Commands.GetListenResolutionIdle,
                 $"0x{expected:X}");
@@ -337,7 +337,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetListenResolutionRx(ListenResolution expected)
         {
             ExecuteGetTest(
-                () => { return _rfm6x.ListenResolutionRx; },
+                () => { return _rfmDevice.ListenResolutionRx; },
                 (v) => v.Should().Be(expected),
                 Commands.GetListenResolutionRx,
                 $"0x{expected:X}");
@@ -347,7 +347,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLowBetaAfcOffset()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.LowBetaAfcOffset; },
+                () => { return _rfmDevice.LowBetaAfcOffset; },
                 (v) => v.Should().Be(0xAA),
                 Commands.GetLowBetaAfcOffset,
                 "0xAA");
@@ -357,7 +357,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetOutputPower()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.OutputPower; },
+                () => { return _rfmDevice.OutputPower; },
                 (v) => v.Should().Be(-2),
                 Commands.GetOutputPower,
                 $"0x{(sbyte)-2:X2}");
@@ -367,7 +367,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRadioConfig()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.RadioConfig; },
+                () => { return _rfmDevice.RadioConfig; },
                 (v) => v.Should().Be(0xA0),
                 Commands.GetRadioConfig,
                 "0xA0");
@@ -377,7 +377,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRadioConfigurations()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.IsOpen)
@@ -391,7 +391,7 @@ namespace RfmUsb.Net.UnitTests
                 .Throws(new TimeoutException());
 
             // Act
-            var result = _rfm6x.GetRadioConfigurations();
+            var result = _rfmDevice.GetRadioConfigurations();
 
             // Assert
             result.Should().NotBeEmpty();
@@ -401,7 +401,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetRssiThreshold()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.RssiThreshold; },
+                () => { return _rfmDevice.RssiThreshold; },
                 (v) => v.Should().Be(-114),
                 Commands.GetRssiThreshold,
                 "0x8E");
@@ -411,7 +411,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetSensitivityBoost()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.SensitivityBoost; },
+                () => { return _rfmDevice.SensitivityBoost; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetSensitivityBoost,
                 "1");
@@ -421,7 +421,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetSequencer()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.Sequencer; },
+                () => { return _rfmDevice.Sequencer; },
                 (v) => v.Should().BeTrue(),
                 Commands.GetSequencer,
                 "1");
@@ -431,7 +431,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetSyncBitErrors()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.SyncBitErrors; },
+                () => { return _rfmDevice.SyncBitErrors; },
                 (v) => v.Should().Be(0xA0),
                 Commands.GetSyncBitErrors,
                 "0xA0");
@@ -441,14 +441,14 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeout()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.ReadTimeout)
                 .Returns(1000);
 
             // Act
-            var result = _rfm6x.Timeout;
+            var result = _rfmDevice.Timeout;
 
             // Assert
             result.Should().Be(1000);
@@ -458,7 +458,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeoutRssiThreshold()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.TimeoutRssiThreshold; },
+                () => { return _rfmDevice.TimeoutRssiThreshold; },
                 (v) => v.Should().Be(0xA0),
                 Commands.GetTimeoutRssiThreshold,
                 "0xA0");
@@ -468,7 +468,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeoutRxStart()
         {
             ExecuteGetTest(
-                () => { return _rfm6x.TimeoutRxStart; },
+                () => { return _rfmDevice.TimeoutRxStart; },
                 (v) => v.Should().Be(0xA0),
                 Commands.GetTimeoutRxStart,
                 "0xA0");
@@ -478,7 +478,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestIrq()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.IsOpen)
@@ -486,34 +486,63 @@ namespace RfmUsb.Net.UnitTests
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
-                .Returns("0:CRC_OK")
+                .Returns("1:CRC_OK")
                 .Returns("1:PAYLOAD_READY")
                 .Returns("1:FIFO_OVERRUN")
-                .Returns("0:FIFO_LEVEL")
+                .Returns("1:FIFO_LEVEL")
                 .Returns("1:FIFO_NOT_EMPTY")
                 .Returns("1:FIFO_FULL")
-                .Returns("0:ADDRESS_MATCH")
+                .Returns("1:ADDRESS_MATCH")
                 .Returns("1:AUTO_MODE")
-                .Returns("0:TIMEOUT")
+                .Returns("1:TIMEOUT")
                 .Returns("1:RSSI")
                 .Returns("1:PLL_LOCK")
-                .Returns("0:MODE_RDY")
+                .Returns("1:MODE_RDY")
                 .Returns("1:RX_RDY");
 
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
             // Act
-            var result = _rfm6x.Irq;
+            var result = _rfmDevice.IrqFlags;
 
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
 
-            result.Should().Be(Irq.PayloadReady | Irq.FifoOverrun | Irq.FifoNotEmpty | Irq.FifoFull | Irq.AutoMode | Irq.Rssi | Irq.PllLock);
+            result.Should().Be(
+                Rfm69IrqFlags.CrcOK |
+                Rfm69IrqFlags.PayloadReady |
+                Rfm69IrqFlags.FifoOverrun |
+                Rfm69IrqFlags.FifoLevel |
+                Rfm69IrqFlags.FifoNotEmpty |
+                Rfm69IrqFlags.FifoFull |
+                Rfm69IrqFlags.AddressMatch |
+                Rfm69IrqFlags.AutoMode |
+                Rfm69IrqFlags.Timeout |
+                Rfm69IrqFlags.Rssi |
+                Rfm69IrqFlags.PllLock |
+                Rfm69IrqFlags.RxReady |
+                Rfm69IrqFlags.ModeReady);
         }
 
         [TestMethod]
         public void TestListenAbort()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteListenAbort(); },
+                () => { _rfmDevice.ExecuteListenAbort(); },
                 Commands.ExecuteListenAbort,
                 RfmBase.ResponseOk);
         }
@@ -522,7 +551,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestMeasureTemperature()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteMeasureTemperature(); },
+                () => { _rfmDevice.ExecuteMeasureTemperature(); },
                 Commands.ExecuteMeasureTemperature,
                 RfmBase.ResponseOk);
         }
@@ -537,7 +566,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestRestartRx()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteRestartRx(); },
+                () => { _rfmDevice.ExecuteRestartRx(); },
                 Commands.ExecuteRestartRx,
                 RfmBase.ResponseOk);
         }
@@ -546,7 +575,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAesKey()
         {
             ExecuteTest(
-                () => { _rfm6x.SetAesKey(new List<byte>() { 0xFF, 0xAA, 0xBB }); },
+                () => { _rfmDevice.SetAesKey(new List<byte>() { 0xFF, 0xAA, 0xBB }); },
                 $"{Commands.ExecuteSetAesKey} FFAABB",
                 RfmBase.ResponseOk);
         }
@@ -555,7 +584,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAesOn()
         {
             ExecuteSetTest(
-                () => { _rfm6x.AesOn = true; },
+                () => { _rfmDevice.AesOn = true; },
                 Commands.SetAesOn,
                 "1");
         }
@@ -564,7 +593,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAfcLowBetaOn()
         {
             ExecuteSetTest(
-                () => { _rfm6x.AfcLowBetaOn = true; },
+                () => { _rfmDevice.AfcLowBetaOn = true; },
                 Commands.SetAfcLowBetaOn,
                 "1");
         }
@@ -573,10 +602,11 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetAutoRxRestartOn()
         {
             ExecuteSetTest(
-                () => { _rfm6x.AutoRxRestartOn = true; },
+                () => { _rfmDevice.AutoRxRestartOn = true; },
                 Commands.SetAutoRxRestartOn,
                 "1");
         }
+
         [TestMethod]
         [DataRow(ContinuousDagc.Normal)]
         [DataRow(ContinuousDagc.ImprovedLowBeta0)]
@@ -584,7 +614,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetContinuousDagc(ContinuousDagc expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.ContinuousDagc = expected; },
+                () => { _rfmDevice.ContinuousDagc = expected; },
                 Commands.SetContinuousDagc,
                 $"0x{expected:X}");
         }
@@ -601,7 +631,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetDccFreq(DccFreq expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.DccFreq = expected; },
+                () => { _rfmDevice.DccFreq = expected; },
                 Commands.SetDccFreq,
                 $"0x{expected:X}");
         }
@@ -618,7 +648,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetDccFreqAfc(DccFreq expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.DccFreqAfc = expected; },
+                () => { _rfmDevice.DccFreqAfc = expected; },
                 Commands.SetDccFreqAfc,
                 $"0x{expected:X}");
         }
@@ -627,7 +657,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetDioInterruptMask()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.IsOpen)
@@ -638,7 +668,7 @@ namespace RfmUsb.Net.UnitTests
                .Returns(RfmBase.ResponseOk);
 
             // Act
-            _rfm6x.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5;
+            _rfmDevice.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5;
 
             // Assert
             MockSerialPort
@@ -658,7 +688,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetEnterCondition(EnterCondition expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.EnterCondition = expected; },
+                () => { _rfmDevice.EnterCondition = expected; },
                 Commands.SetEnterCondition,
                 $"0x{expected:X}");
         }
@@ -675,7 +705,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetExitCondition(ExitCondition expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.ExitCondition = expected; },
+                () => { _rfmDevice.ExitCondition = expected; },
                 Commands.SetExitCondition,
                 $"0x{expected:X}");
         }
@@ -684,7 +714,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFifoFill()
         {
             ExecuteSetTest(
-                () => { _rfm6x.FifoFill = true; },
+                () => { _rfmDevice.FifoFill = true; },
                 Commands.SetFifoFill,
                 "1");
         }
@@ -693,7 +723,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetImpedance()
         {
             ExecuteSetTest(
-                () => { _rfm6x.Impedance = true; },
+                () => { _rfmDevice.Impedance = true; },
                 Commands.SetImpedance,
                 "1");
         }
@@ -706,7 +736,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetIntermediateMode(IntermediateMode expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.IntermediateMode = expected; },
+                () => { _rfmDevice.IntermediateMode = expected; },
                 Commands.SetIntermediateMode,
                 $"0x{expected:X}");
         }
@@ -715,7 +745,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenCoefficentIdle()
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenCoefficentIdle = 0x60; },
+                () => { _rfmDevice.ListenCoefficentIdle = 0x60; },
                 Commands.SetListenCoefficentIdle,
                 "0x60");
         }
@@ -724,7 +754,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenCoefficentRx()
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenCoefficentRx = 0x60; },
+                () => { _rfmDevice.ListenCoefficentRx = 0x60; },
                 Commands.SetListenCoefficentRx,
                 "0x60");
         }
@@ -733,7 +763,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenCriteria()
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenCriteria = true; },
+                () => { _rfmDevice.ListenCriteria = true; },
                 Commands.SetListenCriteria,
                 "1");
         }
@@ -746,7 +776,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenEnd(ListenEnd expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenEnd = expected; },
+                () => { _rfmDevice.ListenEnd = expected; },
                 Commands.SetListenEnd,
                 $"0x{expected:X}");
         }
@@ -755,7 +785,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenerOn()
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenerOn = true; },
+                () => { _rfmDevice.ListenerOn = true; },
                 Commands.SetListenerOn,
                 "1");
         }
@@ -768,7 +798,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenResolutionIdle(ListenResolution expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenResolutionIdle = expected; },
+                () => { _rfmDevice.ListenResolutionIdle = expected; },
                 Commands.SetListenResolutionIdle,
                 $"0x{expected:X}");
         }
@@ -781,7 +811,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetListenResolutionRx(ListenResolution expected)
         {
             ExecuteSetTest(
-                () => { _rfm6x.ListenResolutionRx = expected; },
+                () => { _rfmDevice.ListenResolutionRx = expected; },
                 Commands.SetListenResolutionRx,
                 $"0x{expected:X}");
         }
@@ -790,7 +820,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetLowBetaAfcOffset()
         {
             ExecuteSetTest(
-                () => { _rfm6x.LowBetaAfcOffset = 0x60; },
+                () => { _rfmDevice.LowBetaAfcOffset = 0x60; },
                 Commands.SetLowBetaAfcOffset,
                 "0x60");
         }
@@ -799,15 +829,16 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetOutputPower()
         {
             ExecuteSetTest(
-                () => { _rfm6x.OutputPower = -2; },
+                () => { _rfmDevice.OutputPower = -2; },
                 Commands.SetOutputPower,
                  $"0x{(sbyte)-2:X2}");
         }
+
         [TestMethod]
         public void TestSetRadioConfig()
         {
             ExecuteSetTest(
-                () => { _rfm6x.RadioConfig = 0xB0; },
+                () => { _rfmDevice.RadioConfig = 0xB0; },
                 Commands.SetRadioConfig,
                 "0xB0");
         }
@@ -816,7 +847,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetRssiThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm6x.RssiThreshold = -114; },
+                () => { _rfmDevice.RssiThreshold = -114; },
                 Commands.SetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
@@ -825,7 +856,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetSensitivityBoost()
         {
             ExecuteSetTest(
-                () => { _rfm6x.SensitivityBoost = true; },
+                () => { _rfmDevice.SensitivityBoost = true; },
                 Commands.SetSensitivityBoost,
                 "1");
         }
@@ -834,7 +865,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetSequencer()
         {
             ExecuteSetTest(
-                () => { _rfm6x.Sequencer = true; },
+                () => { _rfmDevice.Sequencer = true; },
                 Commands.SetSequencer,
                 "1");
         }
@@ -843,7 +874,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetSyncBitErrors()
         {
             ExecuteSetTest(
-                () => { _rfm6x.SyncBitErrors = 0xB0; },
+                () => { _rfmDevice.SyncBitErrors = 0xB0; },
                 Commands.SetSyncBitErrors,
                 "0xB0");
         }
@@ -852,10 +883,10 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeout()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             // Act
-            _rfm6x.Timeout = 1000;
+            _rfmDevice.Timeout = 1000;
 
             // Assert
             MockSerialPort.VerifySet(_ => _.ReadTimeout = 1000, Times.Once);
@@ -865,7 +896,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeoutRssiThreshold()
         {
             ExecuteSetTest(
-                () => { _rfm6x.TimeoutRssiThreshold = 0xB0; },
+                () => { _rfmDevice.TimeoutRssiThreshold = 0xB0; },
                 Commands.SetTimeoutRssiThreshold,
                 "0xB0");
         }
@@ -874,7 +905,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeoutRxStart()
         {
             ExecuteSetTest(
-                () => { _rfm6x.TimeoutRxStart = 0xB0; },
+                () => { _rfmDevice.TimeoutRxStart = 0xB0; },
                 Commands.SetTimeoutRxStart,
                 "0xB0");
         }
@@ -883,7 +914,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestStartRssi()
         {
             ExecuteTest(
-                () => { _rfm6x.ExecuteStartRssi(); },
+                () => { _rfmDevice.ExecuteStartRssi(); },
                 Commands.ExecuteStartRssi,
                 RfmBase.ResponseOk);
         }
@@ -892,14 +923,14 @@ namespace RfmUsb.Net.UnitTests
         public void TestWaitForIrq()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("DIO PIN IRQ");
 
             // Act
-            _rfm6x.WaitForIrq();
+            _rfmDevice.WaitForIrq();
 
             // Arrange
             MockSerialPort
@@ -910,14 +941,14 @@ namespace RfmUsb.Net.UnitTests
         public void TestWaitForIrqNoIrqResponse()
         {
             // Arrange
-            _rfm6x.SerialPort = MockSerialPort.Object;
+            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns("");
 
             // Act
-            Action action = () => _rfm6x.WaitForIrq();
+            Action action = () => _rfmDevice.WaitForIrq();
 
             // Arrange
             action

@@ -75,14 +75,14 @@ namespace RfmUsb.Net
         bool BitSyncOn { get; set; }
 
         /// <summary>
-        /// The Error coding rate
-        /// </summary>
-        ErrorCodingRate ErrorCodingRate { get; set; }
-
-        /// <summary>
         /// Selects the CRC and whitening algorithms
         /// </summary>
         CrcWhiteningType CrcWhiteningType { get; set; }
+
+        /// <summary>
+        /// The Error coding rate
+        /// </summary>
+        ErrorCodingRate ErrorCodingRate { get; set; }
 
         /// <summary>
         /// Bypasses the main state machine for a quick frequency hop.
@@ -113,8 +113,6 @@ namespace RfmUsb.Net
         /// Start address (in data buffer) of last packet received
         /// </summary>
         byte FifoRxCurrentAddress { get; }
-
-#warning TODO check accesssharedregisters state in fsk
 
         /// <summary>
         /// Write base address in FIFO data buffer for TX
@@ -179,9 +177,9 @@ namespace RfmUsb.Net
         bool FromTransmit { get; set; }
 
         /// <summary>
-        /// Current value of frequency hopping channel inuse
+        /// FHSS channel information
         /// </summary>
-        byte HopChannel { get; }
+        HopChannel HopChannel { get; }
 
         /// <summary>
         /// Selects the chip mode during the state.
@@ -212,6 +210,16 @@ namespace RfmUsb.Net
         bool IoHomePowerFrame { get; set; }
 
         /// <summary>
+        /// Get the Irq flags
+        /// </summary>
+        Rfm9xIrqFlags IrqFlags { get; }
+
+        /// <summary>
+        /// Estimation of SNR on last packet received.
+        /// </summary>
+        byte LastPacketSnr { get; }
+
+        /// <summary>
         /// Enable Low Frequency (RFI_LF) LNA current adjustment
         /// </summary>
         /// <remarks>
@@ -235,9 +243,23 @@ namespace RfmUsb.Net
         bool LoraAgcAutoOn { get; set; }
 
         /// <summary>
+        /// Get the lora Irq flags
+        /// </summary>
+        Rfm9xLoraIrqFlags LoraIrqFlags { get; }
+#warning TODO check accesssharedregisters state in fsk
+        /// <summary>
         /// Get the lora mode
         /// </summary>
         LoraMode LoraMode { get; set; }
+
+        /// <summary>
+        /// Payload length in bytes.
+        /// <remarks>
+        /// The register needs to be set in implicit header
+        /// mode for the expected packet length. A 0 value is not permitted
+        /// </remarks>
+        /// </summary>
+        byte LoraPayloadLength { get; set; }
 
         /// <summary>
         /// Low Battery detector enable signa
@@ -308,12 +330,6 @@ namespace RfmUsb.Net
         /// RSSI of the latest packet received (dBm)
         /// </summary>
         byte PacketRssi { get; }
-
-        /// <summary>
-        /// Estimation of SNR on last packet received.
-        /// </summary>
-        byte LastPacketSnr { get; }
-
         /// <summary>
         /// Maximum payload length; if header payload length exceeds value a
         /// header CRC error is generated.Allows filtering of packet with a bad size.
@@ -332,7 +348,7 @@ namespace RfmUsb.Net
         bool PreambleDetectorOn { get; set; }
 
         /// <summary>
-        /// Number of Preamble bytes to detect to trigger aninterrupt
+        /// Number of Preamble bytes to detect to trigger an interrupt
         /// </summary>
         PreambleDetectorSize PreambleDetectorSize { get; set; }
 
@@ -340,6 +356,11 @@ namespace RfmUsb.Net
         /// Number or chip errors tolerated overPreambleDetectorSize. 4 chips per bit
         /// </summary>
         byte PreambleDetectorTotalerance { get; set; }
+
+        /// <summary>
+        /// The lora Preamble length
+        /// </summary>
+        ushort PreambleLength { get; set; }
 
         /// <summary>
         /// Sets the polarity of the Preamble

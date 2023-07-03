@@ -22,44 +22,9 @@
 * SOFTWARE.
 */
 
-using System;
-
 namespace RfmUsb.Net
 {
-    /// <summary>
-    /// The modem status
-    /// </summary>
-    [Flags]
-    public enum ModemStatus
+    public enum Rfm9xLoraIrqFlags
     {
-        /// <summary>
-        /// No <see cref="ModemStatus"/> bit is set
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// Signal Detected
-        /// </summary>
-        SignalDetected,
-
-        /// <summary>
-        /// Signal Synchronized
-        /// </summary>
-        SignalSynchronized,
-
-        /// <summary>
-        /// Rx Ongoing
-        /// </summary>
-        RxOnGoing,
-
-        /// <summary>
-        /// Header Info Valid
-        /// </summary>
-        HeaderInfoValid,
-
-        /// <summary>
-        /// Modem Clear
-        /// </summary>
-        ModemClear
     }
 }

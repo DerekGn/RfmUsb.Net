@@ -521,7 +521,14 @@ namespace RfmUsb.Net
 
         internal string SendCommand(string command)
         {
+            return SendCommandListResponse(command).FirstOrDefault(string.Empty);
+        }
+
+        internal List<string> SendCommandListResponse(string command)
+        {
             CheckOpen();
+
+            List<string> lines = new List<string>();
 
             lock (SerialPort)
             {
@@ -529,16 +536,14 @@ namespace RfmUsb.Net
 
                 WaitForSerialPortDataSignal();
 
-                string response;
-
                 do
                 {
-                    response = SerialPort.ReadLine();
-                } while (string.IsNullOrEmpty(response));
+                    lines.Add(SerialPort.ReadLine());
+                } while (SerialPort.BytesToRead != 0);
 
-                Logger.LogDebug($"Command: [{command}] Result: [{response}]");
+                Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(Environment.NewLine, lines));
 
-                return response;
+                return lines;
             }
         }
 
@@ -573,6 +578,7 @@ namespace RfmUsb.Net
                 throw new RfmUsbInvalidDeviceTypeException($"Invalid Device Type firmware value {firmwareVersion}");
             }
         }
+
         private void CheckOpen()
         {
             if (SerialPort != null && !SerialPort.IsOpen)
