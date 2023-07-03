@@ -639,14 +639,43 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(ModemStatus.SignalDetected)]
-        [DataRow(ModemStatus.SignalSynchronized)]
-        [DataRow(ModemStatus.HeaderInfoValid)]
-        [DataRow(ModemStatus.RxOnGoing)]
-        [DataRow(ModemStatus.ModemClear)]
-        public void TestGetModemStatus(ModemStatus expected)
+        public void TestGetModemStatus()
         {
-            throw new System.NotImplementedException();
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:SIGNAL_DETECTED")
+                .Returns("1:SIGNAL_SYNCHRONIZED")
+                .Returns("1:RX_ONGOING")
+                .Returns("1:HEADER_INFO_VALID")
+                .Returns("1:MODEM_CLEAR");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.ModemStatus;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetModemStatus}\n"));
+
+            result.Should().Be(
+                ModemStatus.SignalDetected |
+                ModemStatus.SignalSynchronized |
+                ModemStatus.RxOnGoing |
+                ModemStatus.HeaderInfoValid |
+                ModemStatus.ModemClear);
         }
 
         [TestMethod]

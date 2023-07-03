@@ -258,6 +258,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public Rfm9xLoraIrqFlags LoraIrqFlags => throw new NotImplementedException();
+
+        ///<inheritdoc/>
         public LoraMode LoraMode
         {
             get => (LoraMode)SendCommand(Commands.GetLoraMode).ConvertToInt32();
@@ -499,8 +502,6 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
 
-        public Rfm9xLoraIrqFlags LoraIrqFlags => throw new NotImplementedException();
-
         ///<inheritdoc/>
         public void ClearFifoOverrun()
         {
@@ -593,7 +594,7 @@ namespace RfmUsb.Net
             bool crc = false;
             byte channel = 0;
 
-            lines.ForEach(_ => 
+            lines.ForEach(_ =>
             {
                 var parts = _.Split(':');
 
@@ -605,18 +606,20 @@ namespace RfmUsb.Net
                             pll = true;
                         }
                         break;
+
                     case "CRC_ON_PAYLOAD":
                         if (parts[0] == "1")
                         {
                             crc = true;
                         }
                         break;
+
                     case "FHSS_PRESENT_CHANNEL":
                         channel = parts[0].ConvertToByte();
                         break;
                 }
             });
-            
+
             return new HopChannel(pll, crc, channel);
         }
 
@@ -751,57 +754,54 @@ namespace RfmUsb.Net
 
         private ModemStatus GetModemStatus()
         {
-            lock (SerialPort)
+            ModemStatus status = ModemStatus.None;
+
+            var lines = SendCommandListResponse(Commands.GetModemStatus);
+
+            lines.ForEach(_ =>
             {
-                ModemStatus status = ModemStatus.None;
+                var parts = _.Split(':');
 
-                var lines = SendCommandListResponse(Commands.GetModemStatus);
-
-                lines.ForEach(_ =>
+                switch (parts[1])
                 {
-                    var parts = _.Split(':');
+                    case "SIGNAL_DETECTED":
+                        if (parts[0] == "1")
+                        {
+                            status |= ModemStatus.SignalDetected;
+                        }
+                        break;
 
-                    switch (parts[1])
-                    {
-                        case "SIGNAL_DETECTED":
-                            if (parts[0] == "1")
-                            {
-                                status |= ModemStatus.SignalDetected;
-                            }
-                            break;
+                    case "SIGNAL_SYNCHRONIZED":
+                        if (parts[0] == "1")
+                        {
+                            status |= ModemStatus.SignalSynchronized;
+                        }
+                        break;
 
-                        case "SIGNAL_SYNCHRONIZED":
-                            if (parts[0] == "1")
-                            {
-                                status |= ModemStatus.SignalSynchronized;
-                            }
-                            break;
+                    case "RX_ONGOING":
+                        if (parts[0] == "1")
+                        {
+                            status |= ModemStatus.RxOnGoing;
+                        }
+                        break;
 
-                        case "RX_ONGOING":
-                            if (parts[0] == "1")
-                            {
-                                status |= ModemStatus.RxOnGoing;
-                            }
-                            break;
+                    case "HEADER_INFO_VALID":
+                        if (parts[0] == "1")
+                        {
+                            status |= ModemStatus.HeaderInfoValid;
+                        }
+                        break;
 
-                        case "HEADER_INFO_VALID":
-                            if (parts[0] == "1")
-                            {
-                                status |= ModemStatus.HeaderInfoValid;
-                            }
-                            break;
+                    case "MODEM_CLEAR":
+                        if (parts[0] == "1")
+                        {
+                            status |= ModemStatus.ModemClear;
+                        }
+                        break;
+                }
+            });
 
-                        case "MODEM_CLEAR":
-                            if (parts[0] == "1")
-                            {
-                                status |= ModemStatus.ModemClear;
-                            }
-                            break;
-                    }
-                });
-
-                return status;
-            }
+            return status;
         }
     }
 }
