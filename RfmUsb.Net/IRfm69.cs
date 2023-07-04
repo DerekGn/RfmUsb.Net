@@ -76,6 +76,11 @@ namespace RfmUsb.Net
         DioIrq DioInterruptMask { get; set; }
 
         /// <summary>
+        /// The data processing mode
+        /// </summary>
+        Rfm69DataMode DataMode { get; set; }
+
+        /// <summary>
         /// Interrupt condition for entering the intermediate mode
         /// </summary>
         EnterCondition EnterCondition { get; set; }

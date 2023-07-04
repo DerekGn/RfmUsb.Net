@@ -323,5 +323,7 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
+        public const string GetDataMode = "g-dm";
+        public const string SetDataMode = "s-dm";
     }
 }

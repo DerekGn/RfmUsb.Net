@@ -333,6 +333,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public DioIrq DioInterruptMask
+        {
+            get => GetDioInterruptMask();
+            set => SetDioInterrupMask(value);
+        }
+
+        ///<inheritdoc/>
         public void Close()
         {
             if (SerialPort != null && SerialPort.IsOpen)
@@ -668,6 +675,88 @@ namespace RfmUsb.Net
                 }
 
                 disposedValue = true;
+            }
+        }
+
+        private DioIrq GetDioInterruptMask()
+        {
+            lock (SerialPort)
+            {
+                DioIrq irqMask = DioIrq.None;
+
+                SerialPort.Write($"{Commands.GetDioInterrupt}\n");
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var result = SerialPort.ReadLine();
+
+                    var parts = result.Split('-');
+
+                    switch (parts[1])
+                    {
+                        case "DIO0":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio0;
+                            }
+                            break;
+
+                        case "DIO1":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio1;
+                            }
+                            break;
+
+                        case "DIO2":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio2;
+                            }
+                            break;
+
+                        case "DIO3":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio3;
+                            }
+                            break;
+
+                        case "DIO4":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio4;
+                            }
+                            break;
+
+                        case "DIO5":
+                            if (Convert.ToByte(parts[0], 16) == 1)
+                            {
+                                irqMask |= DioIrq.Dio5;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                return irqMask;
+            }
+        }
+
+        private void SetDioInterrupMask(DioIrq value)
+        {
+            lock (SerialPort)
+            {
+                byte mask = (byte)(((byte)value) >> 1);
+
+                SendCommandWithCheck($"{Commands.SetDio} 0x{mask:X}", ResponseOk);
+
+                if (SerialPort.BytesToRead != 0)
+                {
+                    SerialPort.ReadLine();
+                }
             }
         }
 

@@ -1067,6 +1067,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestLoraFlags()
+        {
+            var x = _rfmDevice.LoraIrqFlags;
+        }
+
+        [TestMethod]
         public void TestOpen()
         {
             TestOpen("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
@@ -1663,6 +1669,17 @@ namespace RfmUsb.Net.UnitTests
                 "0x55");
         }
 
+        [TestMethod]
+        public void TestSetTimerCoefficent()
+        {
+            _rfmDevice.SetTimerCoefficient(Timer.Timer1, 10);
+        }
+
+        [TestMethod]
+        public void TestSetTimerResolution()
+        {
+            _rfmDevice.SetTimerResolution(Timer.Timer1, TimerResolution.Resolution64us);
+        }
         [TestMethod]
         public void TestSetTxContinuousMode()
         {

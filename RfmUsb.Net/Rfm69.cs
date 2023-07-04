@@ -78,6 +78,12 @@ namespace RfmUsb.Net
         public LnaGain CurrentLnaGain => (LnaGain)SendCommand(Commands.GetCurrentLnaGain).ConvertToInt32();
 
         ///<inheritdoc/>
+        public Rfm69DataMode DataMode
+        {
+            get => (Rfm69DataMode)SendCommand(Commands.GetDataMode).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetDataMode} 0x{value:X}", ResponseOk);
+        }
+        ///<inheritdoc/>
         public DccFreq DccFreq
         {
             get => (DccFreq)SendCommand(Commands.GetDccFreq).ConvertToInt32();
@@ -89,13 +95,6 @@ namespace RfmUsb.Net
         {
             get => (DccFreq)SendCommand(Commands.GetDccFreqAfc).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetDccFreqAfc} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public DioIrq DioInterruptMask
-        {
-            get => GetDioInterruptMask();
-            set => SetDioInterrupMask(value);
         }
 
         ///<inheritdoc/>
@@ -321,73 +320,6 @@ namespace RfmUsb.Net
             }
         }
 
-        private DioIrq GetDioInterruptMask()
-        {
-            lock (SerialPort)
-            {
-                DioIrq irqMask = DioIrq.None;
-
-                SerialPort.Write($"{Commands.GetDioInterrupt}\n");
-
-                for (int i = 0; i < 6; i++)
-                {
-                    var result = SerialPort.ReadLine();
-
-                    var parts = result.Split('-');
-
-                    switch (parts[1])
-                    {
-                        case "DIO0":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio0;
-                            }
-                            break;
-
-                        case "DIO1":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio1;
-                            }
-                            break;
-
-                        case "DIO2":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio2;
-                            }
-                            break;
-
-                        case "DIO3":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio3;
-                            }
-                            break;
-
-                        case "DIO4":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio4;
-                            }
-                            break;
-
-                        case "DIO5":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio5;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                return irqMask;
-            }
-        }
-
         private Rfm69IrqFlags GetIrqInternal()
         {
             Rfm69IrqFlags irq = Rfm69IrqFlags.None;
@@ -501,21 +433,6 @@ namespace RfmUsb.Net
             });
 
             return irq;
-        }
-
-        private void SetDioInterrupMask(DioIrq value)
-        {
-            lock (SerialPort)
-            {
-                byte mask = (byte)(((byte)value) >> 1);
-
-                SendCommandWithCheck($"{Commands.SetDio} 0x{mask:X}", ResponseOk);
-
-                if (SerialPort.BytesToRead != 0)
-                {
-                    SerialPort.ReadLine();
-                }
-            }
         }
     }
 }

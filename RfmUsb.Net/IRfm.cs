@@ -265,6 +265,11 @@ namespace RfmUsb.Net
         /// true : FifoNotEmpty (i.e. at least one byte in the FIFO)
         /// </summary>
         bool TxStartCondition { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the Dio Interrupt Mask
+        /// </summary>
+        DioIrq DioInterruptMask { get; set; }
 
         /// <summary>
         /// Close the connection to the RfmUsb device

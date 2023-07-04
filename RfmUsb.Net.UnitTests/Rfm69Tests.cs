@@ -130,6 +130,31 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetDataModed()
+        {
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk);
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(Rfm69DataMode.Packet.ToString("X"));
+
+            // Act
+            var dataMode = _rfmDevice.DataMode;
+
+            // Assert
+            dataMode.Should().Be(Rfm69DataMode.Packet);
+        }
+
+        [TestMethod]
         [DataRow(DccFreq.FreqPercent0_125)]
         [DataRow(DccFreq.FreqPercent0_25)]
         [DataRow(DccFreq.FreqPercent0_5)]
@@ -163,30 +188,6 @@ namespace RfmUsb.Net.UnitTests
                 (v) => { v.Should().Be(expected); },
                 Commands.GetDccFreqAfc,
                 $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestGetDioInterruptMask()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-               .SetupSequence(_ => _.ReadLine())
-               .Returns("1-DIO0")
-               .Returns("0-DIO1")
-               .Returns("1-DIO2")
-               .Returns("0-DIO3")
-               .Returns("1-DIO4")
-               .Returns("0-DIO5");
-
-            // Act
-            var result = _rfmDevice.DioInterruptMask;
-
-            // Assert
-            result.Should().Be(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4);
-
-            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterrupt}\n"), Times.Once);
         }
 
         [TestMethod]
@@ -497,11 +498,13 @@ namespace RfmUsb.Net.UnitTests
                 .Returns("1:TIMEOUT")
                 .Returns("1:RSSI")
                 .Returns("1:PLL_LOCK")
+                .Returns("1:TX_RDY")
                 .Returns("1:MODE_RDY")
                 .Returns("1:RX_RDY");
 
             MockSerialPort
                 .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
                 .Returns(1)
                 .Returns(1)
                 .Returns(1)
@@ -535,6 +538,7 @@ namespace RfmUsb.Net.UnitTests
                 Rfm69IrqFlags.Rssi |
                 Rfm69IrqFlags.PllLock |
                 Rfm69IrqFlags.RxReady |
+                Rfm69IrqFlags.TxReady |
                 Rfm69IrqFlags.ModeReady);
         }
 
@@ -620,6 +624,26 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetDataMode()
+        {
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk);
+
+            // Act
+            _rfmDevice.DataMode = Rfm69DataMode.Packet;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetDataMode} 0x{Rfm69DataMode.Packet:X}\n"), Times.Once);
+        }
+        [TestMethod]
         [DataRow(DccFreq.FreqPercent0_125)]
         [DataRow(DccFreq.FreqPercent0_25)]
         [DataRow(DccFreq.FreqPercent0_5)]
@@ -651,29 +675,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.DccFreqAfc = expected; },
                 Commands.SetDccFreqAfc,
                 $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        public void TestSetDioInterruptMask()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-               .Setup(_ => _.ReadLine())
-               .Returns(RfmBase.ResponseOk);
-
-            // Act
-            _rfmDevice.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5;
-
-            // Assert
-            MockSerialPort
-                .Verify(_ => _.Write($"{Commands.SetDioInterrupt} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
-                Times.Once);
         }
 
         [TestMethod]

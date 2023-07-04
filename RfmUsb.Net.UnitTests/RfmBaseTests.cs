@@ -201,6 +201,30 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetDioInterruptMask()
+        {
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+               .SetupSequence(_ => _.ReadLine())
+               .Returns("1-DIO0")
+               .Returns("0-DIO1")
+               .Returns("1-DIO2")
+               .Returns("0-DIO3")
+               .Returns("1-DIO4")
+               .Returns("0-DIO5");
+
+            // Act
+            var result = RfmBase.DioInterruptMask;
+
+            // Assert
+            result.Should().Be(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4);
+
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterrupt}\n"), Times.Once);
+        }
+
+        [TestMethod]
         [DataRow(Dio.Dio0)]
         [DataRow(Dio.Dio1)]
         [DataRow(Dio.Dio2)]
@@ -753,6 +777,7 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
+        
         [TestMethod]
         [DataRow(DcFree.Manchester)]
         [DataRow(DcFree.None)]
@@ -764,6 +789,29 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.DcFree = expected; },
                 Commands.SetDcFree,
                 $"0x{(byte)expected:X2}");
+        }
+
+        [TestMethod]
+        public void TestSetDioInterruptMask()
+        {
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.ReadLine())
+               .Returns(RfmBase.ResponseOk);
+
+            // Act
+            RfmBase.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5;
+
+            // Assert
+            MockSerialPort
+                .Verify(_ => _.Write($"{Commands.SetDioInterrupt} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
+                Times.Once);
         }
 
         [TestMethod]
