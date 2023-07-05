@@ -26,7 +26,6 @@ using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
 using System;
-using System.Collections.Generic;
 
 namespace RfmUsb.Net
 {
@@ -106,9 +105,6 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetFastHopOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetFastHopOn} {(value ? "1" : "0")}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public override IEnumerable<byte> Fifo { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         ///<inheritdoc/>
         public byte FifoAddressPointer
@@ -231,7 +227,11 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Rfm9xIrqFlags IrqFlags => GetIrqInternal();
+        public Rfm9xIrqFlags IrqFlags 
+        { 
+            get => GetIrqInternal();
+            set => SendCommandWithCheck($"{Commands.SetIrqFlags} 0x{(ushort)value:X4}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public byte LastPacketSnr => SendCommand(Commands.GetLastPacketSnr).ConvertToByte();
@@ -258,7 +258,18 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Rfm9xLoraIrqFlags LoraIrqFlags => throw new NotImplementedException();
+        public LoraIrqFlags LoraIrqFlags
+        {
+            get => GetLoraIrqFlags();
+            set => SendCommandWithCheck($"{Commands.SetLoraIrqFlags} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public LoraIrqFlagsMask LoraIrqFlagsMask
+        { 
+            get => GetLoraIrqFlagsMask();
+            set => SendCommandWithCheck($"{Commands.SetLoraIrqFlagsMask} 0x{(byte)value:X2}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public LoraMode LoraMode
@@ -368,7 +379,7 @@ namespace RfmUsb.Net
         public byte PreambleDetectorTotalerance
         {
             get => SendCommand(Commands.GetPreambleDetectorTotalerance).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{(byte)value:X2}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -503,30 +514,6 @@ namespace RfmUsb.Net
         public byte ValidPacketCount => SendCommand(Commands.GetValidPacketCount).ConvertToByte();
 
         ///<inheritdoc/>
-        public void ClearFifoOverrun()
-        {
-            SendCommandWithCheck(Commands.ExecuteClearFifoOverrun, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ClearLowBattery()
-        {
-            SendCommandWithCheck(Commands.ExecuteClearLowBattery, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ClearPreambleDetect()
-        {
-            SendCommandWithCheck(Commands.ExecuteClearPreambleDetect, ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void ClearSyncAddressMatch()
-        {
-            SendCommandWithCheck(Commands.ExecuteClearSyncAddressMatch, ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public void ExecuteAgcStart()
         {
             SendCommandWithCheck(Commands.ExecuteAgcStart, ResponseOk);
@@ -627,7 +614,7 @@ namespace RfmUsb.Net
         {
             Rfm9xIrqFlags irq = Rfm9xIrqFlags.None;
 
-            var lines = SendCommandListResponse(Commands.GetIrq);
+            var lines = SendCommandListResponse(Commands.GetIrqFlags);
 
             lines.ForEach(_ =>
             {
@@ -694,7 +681,7 @@ namespace RfmUsb.Net
                     case "ADDRESS_MATCH":
                         if (parts[0] == "1")
                         {
-                            irq |= Rfm9xIrqFlags.AddressMatch;
+                            irq |= Rfm9xIrqFlags.SyncAddressMatch;
                         }
                         break;
 
@@ -750,6 +737,140 @@ namespace RfmUsb.Net
             });
 
             return irq;
+        }
+
+        private LoraIrqFlags GetLoraIrqFlags()
+        {
+            LoraIrqFlags irq = LoraIrqFlags.None;
+
+            var lines = SendCommandListResponse(Commands.GetLoraIrqFlags);
+
+            lines.ForEach(_ =>
+            {
+                var parts = _.Split(':');
+
+                switch (parts[1])
+                {
+                    case "CAD_DETECTED":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.CadDetected;
+                        }
+                        break;
+
+                    case "FHSS_CHANGE_CHANNEL":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.FhssChangeChannel;
+                        }
+                        break;
+
+                    case "CAD_DONE":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.CadDone;
+                        }
+                        break;
+
+                    case "TX_DONE":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.TxDone;
+                        }
+                        break;
+
+                    case "VALID_HEADER":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.ValidHeader;
+                        }
+                        break;
+
+                    case "RX_DONE":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.RxDone;
+                        }
+                        break;
+
+                    case "RX_TIMEOUT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= LoraIrqFlags.RxTimeout;
+                        }
+                        break;
+
+                }
+            });
+
+            return irq;
+        }
+
+        private LoraIrqFlagsMask GetLoraIrqFlagsMask()
+        {
+            LoraIrqFlagsMask mask = LoraIrqFlagsMask.None;
+
+            var lines = SendCommandListResponse(Commands.GetLoraIrqFlagsMask);
+
+            lines.ForEach(_ =>
+            {
+                var parts = _.Split(':');
+
+                switch (parts[1])
+                {
+                    case "CAD_DETECTED_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.CadDetectedMask;
+                        }
+                        break;
+
+                    case "FHSS_CHANGE_CHANNEL_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.FhssChangeChannelMask;
+                        }
+                        break;
+
+                    case "CAD_DONE_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.CadDoneMask;
+                        }
+                        break;
+
+                    case "TX_DONE_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.TxDoneMask;
+                        }
+                        break;
+
+                    case "VALID_HEADER_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.ValidHeaderMask;
+                        }
+                        break;
+
+                    case "RX_DONE_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.RxDoneMask;
+                        }
+                        break;
+
+                    case "RX_TIMEOUT_MASK":
+                        if (parts[0] == "1")
+                        {
+                            mask |= LoraIrqFlagsMask.RxTimeoutMask;
+                        }
+                        break;
+
+                }
+            });
+
+            return mask;
         }
 
         private ModemStatus GetModemStatus()

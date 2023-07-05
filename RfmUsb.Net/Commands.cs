@@ -26,16 +26,10 @@ namespace RfmUsb.Net
 {
     internal static class Commands
     {
-        public const string GetPreambleLength = "g-prl";
-        public const string SetPreambleLength = "s-prl";
         public const string ExecuteAfcClear = "e-ac";
         public const string ExecuteAfcStart = "e-a";
         public const string ExecuteAgcStart = "e-as";
         public const string ExecuteBootloader = "e-bl";
-        public const string ExecuteClearFifoOverrun = "e-cfo";
-        public const string ExecuteClearLowBattery = "e-clb";
-        public const string ExecuteClearPreambleDetect = "e-cpd";
-        public const string ExecuteClearSyncAddressMatch = "e-csam";
         public const string ExecuteFeiStart = "e-fei";
         public const string ExecuteImageCalibration = "e-ic";
         public const string ExecuteListenAbort = "e-lma";
@@ -71,6 +65,7 @@ namespace RfmUsb.Net
         public const string GetCrcOn = "g-crc";
         public const string GetCrcWhiteningType = "g-cwt";
         public const string GetCurrentLnaGain = "g-lnag";
+        public const string GetDataMode = "g-dm";
         public const string GetDccFreq = "g-df";
         public const string GetDccFreqAfc = "g-dfa";
         public const string GetDcFree = "g-dfe";
@@ -112,7 +107,7 @@ namespace RfmUsb.Net
         public const string GetInterPacketRxDelay = "g-iprd";
         public const string GetIoHomeOn = "g-iho";
         public const string GetIoHomePowerFrame = "g-ihpf";
-        public const string GetIrq = "g-irq";
+        public const string GetIrqFlags = "g-irq";
         public const string GetLastPacketSnr = "g-lpsnr";
         public const string GetListenCoefficentIdle = "g-lic";
         public const string GetListenCoefficentRx = "g-lrc";
@@ -125,6 +120,8 @@ namespace RfmUsb.Net
         public const string GetLnaGainSelect = "g-lnags";
         public const string GetLongRangeMode = "g-lrm";
         public const string GetLoraAgcAutoOn = "g-lagcao";
+        public const string GetLoraIrqFlags = "g-lirq";
+        public const string GetLoraIrqFlagsMask = "g-lim";
         public const string GetLoraMode = "g-lm";
         public const string GetLoraPayloadLength = "g-lpl";
         public const string GetLowBatteryOn = "g-lbo";
@@ -158,6 +155,7 @@ namespace RfmUsb.Net
         public const string GetPreambleDetectorOn = "g-pdo";
         public const string GetPreambleDetectorSize = "g-pds";
         public const string GetPreambleDetectorTotalerance = "g-pdt";
+        public const string GetPreambleLength = "g-prl";
         public const string GetPreamblePolarity = "g-pp";
         public const string GetPreambleSize = "g-ps";
         public const string GetRadioConfig = "g-rc";
@@ -215,6 +213,7 @@ namespace RfmUsb.Net
         public const string SetCrcAutoClear = "s-caco";
         public const string SetCrcOn = "s-crc";
         public const string SetCrcWhiteningType = "s-cwt";
+        public const string SetDataMode = "s-dm";
         public const string SetDccFreq = "s-df";
         public const string SetDccFreqAfc = "s-dfa";
         public const string SetDcFree = "s-dfe";
@@ -249,6 +248,7 @@ namespace RfmUsb.Net
         public const string SetInterPacketRxDelay = "s-iprd";
         public const string SetIoHomeOn = "s-iho";
         public const string SetIoHomePowerFrame = "s-ihpf";
+        public const string SetIrqFlags = "s-irq";
         public const string SetListenCoefficentIdle = "s-lic";
         public const string SetListenCoefficentRx = "s-lrc";
         public const string SetListenCriteria = "s-lc";
@@ -260,6 +260,8 @@ namespace RfmUsb.Net
         public const string SetLnaGainSelect = "s-lnags";
         public const string SetLongRangeMode = "s-lrm";
         public const string SetLoraAgcAutoOn = "s-lagcao";
+        public const string SetLoraIrqFlags = "s-irq";
+        public const string SetLoraIrqFlagsMask = "s-lim";
         public const string SetLoraMode = "s-lm";
         public const string SetLoraPayloadLength = "s-lpl";
         public const string SetLowBatteryOn = "s-lbo";
@@ -292,6 +294,7 @@ namespace RfmUsb.Net
         public const string SetPreambleDetectorOn = "s-pdo";
         public const string SetPreambleDetectorSize = "s-pds";
         public const string SetPreambleDetectorTotalerance = "s-pdt";
+        public const string SetPreambleLength = "s-prl";
         public const string SetPreamblePolarity = "s-pp";
         public const string SetPreambleSize = "s-ps";
         public const string SetRadioConfig = "s-rc";
@@ -323,7 +326,5 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
-        public const string GetDataMode = "g-dm";
-        public const string SetDataMode = "s-dm";
     }
 }

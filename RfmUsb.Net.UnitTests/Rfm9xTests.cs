@@ -24,6 +24,7 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace RfmUsb.Net.UnitTests
 {
@@ -75,42 +76,6 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().Be(expected),
                 $"{Commands.GetTimerResolution} {(int)timer}",
                 ((int)expected).ToString());
-        }
-
-        [TestMethod]
-        public void TestClearFifoOverrun()
-        {
-            ExecuteTest(
-                () => { _rfmDevice.ClearFifoOverrun(); },
-                Commands.ExecuteClearFifoOverrun,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestClearLowBattery()
-        {
-            ExecuteTest(
-                () => { _rfmDevice.ClearLowBattery(); },
-                Commands.ExecuteClearLowBattery,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestClearPreambleDetect()
-        {
-            ExecuteTest(
-                () => { _rfmDevice.ClearPreambleDetect(); },
-                Commands.ExecuteClearPreambleDetect,
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestClearSyncAddressMatch()
-        {
-            ExecuteTest(
-                () => { _rfmDevice.ClearSyncAddressMatch(); },
-                Commands.ExecuteClearSyncAddressMatch,
-                RfmBase.ResponseOk);
         }
 
         [TestMethod]
@@ -503,6 +468,84 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetIrqFlags()
+        {
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:LOW_BATTERY")
+                .Returns("1:CRC_OK")
+                .Returns("1:PAYLOAD_READY")
+                .Returns("1:PACKET_SENT")
+                .Returns("1:FIFO_OVERRUN")
+                .Returns("1:FIFO_LEVEL")
+                .Returns("1:FIFO_NOT_EMPTY")
+                .Returns("1:FIFO_FULL")
+                .Returns("1:ADDRESS_MATCH")
+                .Returns("1:PREAMBLE_DETECT")
+                .Returns("1:TIMEOUT")
+                .Returns("1:RSSI")
+                .Returns("1:PLL_LOCK")
+                .Returns("1:TX_RDY")
+                .Returns("1:RX_RDY")
+                .Returns("1:MODE_RDY");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.IrqFlags;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrqFlags}\n"));
+
+            result.Should()
+                .Be(Rfm9xIrqFlags.LowBattery |
+                    Rfm9xIrqFlags.CrcOK |
+                    Rfm9xIrqFlags.PayloadReady |
+                    Rfm9xIrqFlags.PacketSent |
+                    Rfm9xIrqFlags.FifoOverrun |
+                    Rfm9xIrqFlags.FifoLevel |
+                    Rfm9xIrqFlags.FifoNotEmpty |
+                    Rfm9xIrqFlags.FifoFull |
+                    Rfm9xIrqFlags.SyncAddressMatch |
+                    Rfm9xIrqFlags.PreambleDetect |
+                    Rfm9xIrqFlags.Timeout |
+                    Rfm9xIrqFlags.Rssi |
+                    Rfm9xIrqFlags.PllLock |
+                    Rfm9xIrqFlags.TxReady |
+                    Rfm9xIrqFlags.RxReady |
+                    Rfm9xIrqFlags.ModeReady);
+        }
+
+        [TestMethod]
+        public void TestGetIrqFlagsMask()
+        {
+        }
+
+        [TestMethod]
         public void TestGetLnaBoostHf()
         {
             ExecuteGetTest(
@@ -530,6 +573,102 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().BeTrue(),
                 Commands.GetLoraAgcAutoOn,
                 "1");
+        }
+
+        [TestMethod]
+        public void TestGetLoraIrqFlags()
+        {
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:CAD_DETECTED")
+                .Returns("1:FHSS_CHANGE_CHANNEL")
+                .Returns("1:CAD_DONE")
+                .Returns("1:TX_DONE")
+                .Returns("1:VALID_HEADER")
+                .Returns("1:PAYLOAD_CRC_ERROR")
+                .Returns("1:RX_DONE")
+                .Returns("1:RX_TIMEOUT");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.LoraIrqFlags;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetLoraIrqFlags}\n"));
+
+            result.Should().Be(
+                LoraIrqFlags.CadDetected |
+                LoraIrqFlags.FhssChangeChannel |
+                LoraIrqFlags.CadDone |
+                LoraIrqFlags.TxDone |
+                LoraIrqFlags.ValidHeader |
+                LoraIrqFlags.RxDone |
+                LoraIrqFlags.RxTimeout);
+        }
+
+        [TestMethod]
+        public void TestGetLoraIrqFlagsMask()
+        {
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:CAD_DETECTED_MASK")
+                .Returns("1:FHSS_CHANGE_CHANNEL_MASK")
+                .Returns("1:CAD_DONE_MASK")
+                .Returns("1:TX_DONE_MASK")
+                .Returns("1:VALID_HEADER_MASK")
+                .Returns("1:PAYLOAD_CRC_ERROR_MASK")
+                .Returns("1:RX_DONE_MASK")
+                .Returns("1:RX_TIMEOUT_MASK");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.LoraIrqFlagsMask;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetLoraIrqFlagsMask}\n"));
+
+            result.Should().Be(
+                LoraIrqFlagsMask.CadDetectedMask |
+                LoraIrqFlagsMask.FhssChangeChannelMask |
+                LoraIrqFlagsMask.CadDoneMask |
+                LoraIrqFlagsMask.TxDoneMask |
+                LoraIrqFlagsMask.ValidHeaderMask |
+                LoraIrqFlagsMask.RxDoneMask |
+                LoraIrqFlagsMask.RxTimeoutMask);
         }
 
         [TestMethod]
@@ -994,90 +1133,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestIrq()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .SetupSequence(_ => _.ReadLine())
-                .Returns("1:LOW_BATTERY")
-                .Returns("1:CRC_OK")
-                .Returns("1:PAYLOAD_READY")
-                .Returns("1:PACKET_SENT")
-                .Returns("1:FIFO_OVERRUN")
-                .Returns("1:FIFO_LEVEL")
-                .Returns("1:FIFO_NOT_EMPTY")
-                .Returns("1:FIFO_FULL")
-                .Returns("1:ADDRESS_MATCH")
-                .Returns("1:PREAMBLE_DETECT")
-                .Returns("1:TIMEOUT")
-                .Returns("1:RSSI")
-                .Returns("1:PLL_LOCK")
-                .Returns("1:TX_RDY")
-                .Returns("1:RX_RDY")
-                .Returns("1:MODE_RDY");
-
-            MockSerialPort
-                .SetupSequence(_ => _.BytesToRead)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(0);
-
-            // Act
-            var result = _rfmDevice.IrqFlags;
-
-            // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
-
-            result.Should()
-                .Be(Rfm9xIrqFlags.LowBattery |
-                    Rfm9xIrqFlags.CrcOK |
-                    Rfm9xIrqFlags.PayloadReady |
-                    Rfm9xIrqFlags.PacketSent |
-                    Rfm9xIrqFlags.FifoOverrun |
-                    Rfm9xIrqFlags.FifoLevel |
-                    Rfm9xIrqFlags.FifoNotEmpty |
-                    Rfm9xIrqFlags.FifoFull |
-                    Rfm9xIrqFlags.AddressMatch |
-                    Rfm9xIrqFlags.PreambleDetect |
-                    Rfm9xIrqFlags.Timeout |
-                    Rfm9xIrqFlags.Rssi |
-                    Rfm9xIrqFlags.PllLock |
-                    Rfm9xIrqFlags.TxReady |
-                    Rfm9xIrqFlags.RxReady |
-                    Rfm9xIrqFlags.ModeReady);
-        }
-
-        [TestMethod]
-        public void TestLoraFlags()
-        {
-            var x = _rfmDevice.LoraIrqFlags;
-        }
-
-        [TestMethod]
         public void TestOpen()
         {
             TestOpen("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
+        //[TestMethod]
+        //public void TestLoraFlags()
+        //{
+        //    var x = _rfmDevice.LoraIrqFlags;
+        //}
         [TestMethod]
         public void TestSetAccessSharedRegisters()
         {
@@ -1332,6 +1397,23 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetIrqFlags()
+        {
+            ExecuteSetTest(
+                () =>
+                {
+                    _rfmDevice.IrqFlags =
+                    Rfm9xIrqFlags.LowBattery |
+                    Rfm9xIrqFlags.FifoOverrun |
+                    Rfm9xIrqFlags.SyncAddressMatch |
+                    Rfm9xIrqFlags.PreambleDetect |
+                    Rfm9xIrqFlags.Rssi;
+                },
+                Commands.SetIrqFlags,
+                "0x0B11");
+        }
+
+        [TestMethod]
         public void TestSetLnaBoostHf()
         {
             ExecuteSetTest(
@@ -1347,6 +1429,48 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.LongRangeMode = true; },
                 Commands.SetLongRangeMode,
                 "1");
+        }
+
+        [TestMethod]
+        public void TestSetLoraIrqFlagMask()
+        {
+            ExecuteSetTest(() =>
+            {
+                _rfmDevice.LoraIrqFlagsMask = 
+                    LoraIrqFlagsMask.CadDetectedMask |
+                    LoraIrqFlagsMask.FhssChangeChannelMask |
+                    LoraIrqFlagsMask.CadDoneMask |
+                    LoraIrqFlagsMask.TxDoneMask |
+                    LoraIrqFlagsMask.ValidHeaderMask |
+                    LoraIrqFlagsMask.PayloadCrcErrorMask |
+                    LoraIrqFlagsMask.RxDoneMask |
+                    LoraIrqFlagsMask.RxTimeoutMask;
+            },
+            Commands.SetLoraIrqFlagsMask,
+            "0xFF");
+        }
+
+        [TestMethod]
+        public void TestSetLoraIrqFlags()
+        {
+            ExecuteSetTest(() =>
+            {
+                _rfmDevice.LoraIrqFlags =
+                    LoraIrqFlags.CadDetected |
+                    LoraIrqFlags.FhssChangeChannel |
+                    LoraIrqFlags.CadDone |
+                    LoraIrqFlags.TxDone |
+                    LoraIrqFlags.ValidHeader |
+                    LoraIrqFlags.PayloadCrcError |
+                    LoraIrqFlags.RxDone |
+                    LoraIrqFlags.RxTimeout;
+            },
+            Commands.SetLoraIrqFlags,
+            "0xFF");
+        }
+        [TestMethod]
+        public void TestSetLoraIrqFlagsMask()
+        {
         }
 
         [TestMethod]
@@ -1670,16 +1794,51 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTimerCoefficent()
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void TestSetTimerCoefficent(Timer expected)
         {
-            _rfmDevice.SetTimerCoefficient(Timer.Timer1, 10);
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk);
+
+            // Act
+            _rfmDevice.SetTimerCoefficient(expected, 10);
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerCoefficient} {(int)expected} 10\n"), Times.Once);
         }
 
         [TestMethod]
-        public void TestSetTimerResolution()
+        [DataRow(Timer.Timer1)]
+        [DataRow(Timer.Timer2)]
+        public void TestSetTimerResolution(Timer expected)
         {
-            _rfmDevice.SetTimerResolution(Timer.Timer1, TimerResolution.Resolution64us);
+            // Arrange
+            RfmBase.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk);
+
+            // Act
+            _rfmDevice.SetTimerResolution(expected, TimerResolution.Resolution64us);
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerCoefficient} {(int)expected} {(int)TimerResolution.Resolution64us}\n"), Times.Once);
         }
+
         [TestMethod]
         public void TestSetTxContinuousMode()
         {

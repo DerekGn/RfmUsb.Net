@@ -65,6 +65,13 @@ namespace RfmUsb.Net.IntTests
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
+        internal static IEnumerable<byte> RandomSequence()
+        {
+            Random r = new Random();
+            while (true)
+                yield return (byte)r.Next(0, 0xFF);
+        }
+
         internal static void TestAssignedValue<T>(T value, Func<T> read, Action<T> write)
         {
             write(value);
@@ -106,6 +113,7 @@ namespace RfmUsb.Net.IntTests
         {
             Logger.Debug($"Function {callerName} Returned: {func()}");
         }
+
         #region IDisposable
 
         private bool disposedValue;

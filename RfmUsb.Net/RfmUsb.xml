@@ -543,8 +543,8 @@
         <member name="P:RfmUsb.IRfmUsb.ListenCriteria">
             <summary>
             Criteria for packet acceptance in Listen mode:
-            false → signal strength is above RssiThreshold
-            true → signal strength is above RssiThreshold and SyncAddress matched
+            false : signal strength is above RssiThreshold
+            true : signal strength is above RssiThreshold and SyncAddress matched
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.ListenEnd">
@@ -590,8 +590,8 @@
         <member name="P:RfmUsb.IRfmUsb.Impedance">
             <summary>
             LNA’s input impedance
-            false → 50 ohms
-            true → 200 ohms
+            false : 50 ohms
+            true : 200 ohms
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.CurrentLnaGain">
@@ -653,14 +653,14 @@
         <member name="P:RfmUsb.IRfmUsb.AfcAutoClear">
             <summary>
             Only valid if AfcAutoOn is set
-            false → AFC register is not cleared before a new AFC phase
-            true → AFC register is cleared before a new AFC phase
+            false : AFC register is not cleared before a new AFC phase
+            true : AFC register is cleared before a new AFC phase
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AfcAutoOn">
             <summary>
-            false → AFC is performed each time AfcStart is set
-            true → AFC is performed each time Rx mode is entered
+            false : AFC is performed each time AfcStart is set
+            true : AFC is performed each time Rx mode is entered
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.Afc">
@@ -715,8 +715,8 @@
         <member name="P:RfmUsb.IRfmUsb.FifoFill">
             <summary>
             FIFO filling condition:
-            false → if SyncAddress interrupt occurs
-            true → as long as FifoFillCondition is set
+            false : if SyncAddress interrupt occurs
+            true : as long as FifoFillCondition is set
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.SyncBitErrors">
@@ -737,8 +737,8 @@
         <member name="P:RfmUsb.IRfmUsb.PacketFormat">
             <summary>
             Defines the packet format used:
-            false → Fixed length
-            true → Variable length
+            false : Fixed length
+            true : Variable length
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.DcFree">
@@ -749,15 +749,15 @@
         <member name="P:RfmUsb.IRfmUsb.CrcOn">
             <summary>
             Enables CRC calculation/check (Tx/Rx)
-            false → Off
-            true → On
+            false : Off
+            true : On
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.CrcAutoClear">
             <summary>
             Defines the behavior of the packet handler when CRC check fails:
-            false → Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
-            true → Do not clear FIFO. PayloadReady interrupt issued.
+            false : Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
+            true : Do not clear FIFO. PayloadReady interrupt issued.
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AddressFiltering">
@@ -799,8 +799,8 @@
         <member name="P:RfmUsb.IRfmUsb.TxStartCondition">
             <summary>
             Defines the condition to start packet transmission :
-            false → FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
-            true → FifoNotEmpty (i.e. at least one byte in the FIFO)
+            false : FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
+            true : FifoNotEmpty (i.e. at least one byte in the FIFO)
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.FifoThreshold">
@@ -819,15 +819,15 @@
         <member name="P:RfmUsb.IRfmUsb.AutoRxRestartOn">
             <summary>
             Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
-            false → Off. RestartRx can be used.
-            true→ On. Rx automatically restarted after InterPacketRxDelay.
+            false : Off. RestartRx can be used.
+            true: On. Rx automatically restarted after InterPacketRxDelay.
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.AesOn">
             <summary>
             Enable the AES encryption/decryption:
-            false → Off
-            true → On (payload limited to 66 bytes maximum)
+            false : Off
+            true : On (payload limited to 66 bytes maximum)
             </summary>
         </member>
         <member name="P:RfmUsb.IRfmUsb.TemperatureValue">

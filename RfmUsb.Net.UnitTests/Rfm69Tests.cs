@@ -262,6 +262,73 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetIrqFlags()
+        {
+            // Arrange
+            _rfmDevice.SerialPort = MockSerialPort.Object;
+
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .SetupSequence(_ => _.ReadLine())
+                .Returns("1:CRC_OK")
+                .Returns("1:PAYLOAD_READY")
+                .Returns("1:FIFO_OVERRUN")
+                .Returns("1:FIFO_LEVEL")
+                .Returns("1:FIFO_NOT_EMPTY")
+                .Returns("1:FIFO_FULL")
+                .Returns("1:ADDRESS_MATCH")
+                .Returns("1:AUTO_MODE")
+                .Returns("1:TIMEOUT")
+                .Returns("1:RSSI")
+                .Returns("1:PLL_LOCK")
+                .Returns("1:TX_RDY")
+                .Returns("1:MODE_RDY")
+                .Returns("1:RX_RDY");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
+
+            // Act
+            var result = _rfmDevice.IrqFlags;
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrqFlags}\n"));
+
+            result.Should().Be(
+                Rfm69IrqFlags.CrcOK |
+                Rfm69IrqFlags.PayloadReady |
+                Rfm69IrqFlags.FifoOverrun |
+                Rfm69IrqFlags.FifoLevel |
+                Rfm69IrqFlags.FifoNotEmpty |
+                Rfm69IrqFlags.FifoFull |
+                Rfm69IrqFlags.SyncAddressMatch |
+                Rfm69IrqFlags.AutoMode |
+                Rfm69IrqFlags.Timeout |
+                Rfm69IrqFlags.Rssi |
+                Rfm69IrqFlags.PllLock |
+                Rfm69IrqFlags.RxReady |
+                Rfm69IrqFlags.TxReady |
+                Rfm69IrqFlags.ModeReady);
+        }
+
+        [TestMethod]
         public void TestGetListenCoefficentIdle()
         {
             ExecuteGetTest(
@@ -476,73 +543,6 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestIrq()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .SetupSequence(_ => _.ReadLine())
-                .Returns("1:CRC_OK")
-                .Returns("1:PAYLOAD_READY")
-                .Returns("1:FIFO_OVERRUN")
-                .Returns("1:FIFO_LEVEL")
-                .Returns("1:FIFO_NOT_EMPTY")
-                .Returns("1:FIFO_FULL")
-                .Returns("1:ADDRESS_MATCH")
-                .Returns("1:AUTO_MODE")
-                .Returns("1:TIMEOUT")
-                .Returns("1:RSSI")
-                .Returns("1:PLL_LOCK")
-                .Returns("1:TX_RDY")
-                .Returns("1:MODE_RDY")
-                .Returns("1:RX_RDY");
-
-            MockSerialPort
-                .SetupSequence(_ => _.BytesToRead)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(1)
-                .Returns(0);
-
-            // Act
-            var result = _rfmDevice.IrqFlags;
-
-            // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrq}\n"));
-
-            result.Should().Be(
-                Rfm69IrqFlags.CrcOK |
-                Rfm69IrqFlags.PayloadReady |
-                Rfm69IrqFlags.FifoOverrun |
-                Rfm69IrqFlags.FifoLevel |
-                Rfm69IrqFlags.FifoNotEmpty |
-                Rfm69IrqFlags.FifoFull |
-                Rfm69IrqFlags.AddressMatch |
-                Rfm69IrqFlags.AutoMode |
-                Rfm69IrqFlags.Timeout |
-                Rfm69IrqFlags.Rssi |
-                Rfm69IrqFlags.PllLock |
-                Rfm69IrqFlags.RxReady |
-                Rfm69IrqFlags.TxReady |
-                Rfm69IrqFlags.ModeReady);
-        }
-
-        [TestMethod]
         public void TestListenAbort()
         {
             ExecuteTest(
@@ -578,10 +578,10 @@ namespace RfmUsb.Net.UnitTests
         [TestMethod]
         public void TestSetAesKey()
         {
-            ExecuteTest(
+            ExecuteSetTest(
                 () => { _rfmDevice.SetAesKey(new List<byte>() { 0xFF, 0xAA, 0xBB }); },
-                $"{Commands.ExecuteSetAesKey} FFAABB",
-                RfmBase.ResponseOk);
+                Commands.ExecuteSetAesKey,
+                "FFAABB");
         }
 
         [TestMethod]
@@ -643,6 +643,7 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.SetDataMode} 0x{Rfm69DataMode.Packet:X}\n"), Times.Once);
         }
+
         [TestMethod]
         [DataRow(DccFreq.FreqPercent0_125)]
         [DataRow(DccFreq.FreqPercent0_25)]
@@ -740,6 +741,15 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.IntermediateMode = expected; },
                 Commands.SetIntermediateMode,
                 $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetIrqFlags()
+        {
+            ExecuteSetTest(
+                () => { _rfmDevice.IrqFlags = Rfm69IrqFlags.FifoOverrun | Rfm69IrqFlags.SyncAddressMatch | Rfm69IrqFlags.Rssi; },
+                Commands.SetIrqFlags,
+                "0x0910");
         }
 
         [TestMethod]

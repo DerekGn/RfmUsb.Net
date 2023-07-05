@@ -83,6 +83,7 @@ namespace RfmUsb.Net
             get => (Rfm69DataMode)SendCommand(Commands.GetDataMode).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetDataMode} 0x{value:X}", ResponseOk);
         }
+
         ///<inheritdoc/>
         public DccFreq DccFreq
         {
@@ -112,13 +113,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public override IEnumerable<byte> Fifo
-        {
-            get => SendCommand(Commands.GetFifo).ToBytes();
-            set => SendCommandWithCheck($"{Commands.SetFifo} {BitConverter.ToString(value.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public bool FifoFill
         {
             get => SendCommand(Commands.GetFifoFill).StartsWith("1");
@@ -140,7 +134,11 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Rfm69IrqFlags IrqFlags => GetIrqInternal();
+        public Rfm69IrqFlags IrqFlags
+        {
+            get => GetIrqInternal();
+            set => SendCommandWithCheck($"{Commands.SetIrqFlags} 0x{(ushort)value:X4}", ResponseOk);
+        }
 
         ///<inheritdoc/>
         public byte ListenCoefficentIdle
@@ -324,7 +322,7 @@ namespace RfmUsb.Net
         {
             Rfm69IrqFlags irq = Rfm69IrqFlags.None;
 
-            var lines = SendCommandListResponse(Commands.GetIrq);
+            var lines = SendCommandListResponse(Commands.GetIrqFlags);
 
             lines.ForEach(_ =>
             {
@@ -377,7 +375,7 @@ namespace RfmUsb.Net
                     case "ADDRESS_MATCH":
                         if (parts[0] == "1")
                         {
-                            irq |= Rfm69IrqFlags.AddressMatch;
+                            irq |= Rfm69IrqFlags.SyncAddressMatch;
                         }
                         break;
 

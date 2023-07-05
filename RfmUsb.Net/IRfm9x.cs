@@ -210,9 +210,9 @@ namespace RfmUsb.Net
         bool IoHomePowerFrame { get; set; }
 
         /// <summary>
-        /// Get the Irq flags
+        /// Get or set the Irq flags
         /// </summary>
-        Rfm9xIrqFlags IrqFlags { get; }
+        Rfm9xIrqFlags IrqFlags { get; set; }
 
         /// <summary>
         /// Estimation of SNR on last packet received.
@@ -245,8 +245,16 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get the lora Irq flags
         /// </summary>
-        Rfm9xLoraIrqFlags LoraIrqFlags { get; }
-#warning TODO check accesssharedregisters state in fsk
+        /// <remarks>
+        /// Setting a specific flag clears the corresponding irq
+        /// </remarks>
+        LoraIrqFlags LoraIrqFlags { get; set; }
+
+        /// <summary>
+        /// Irq flag mask
+        /// </summary>
+        LoraIrqFlagsMask LoraIrqFlagsMask { get; set; }
+
         /// <summary>
         /// Get the lora mode
         /// </summary>
@@ -507,29 +515,6 @@ namespace RfmUsb.Net
         /// Header and packet counters are reset in Sleep mode.
         /// </remarks>
         byte ValidPacketCount { get; }
-
-        /// <summary>
-        /// Clear the fifo over run irq flag
-        /// </summary>
-        void ClearFifoOverrun();
-
-        /// <summary>
-        /// Clear the low battery irq flag
-        /// </summary>
-        void ClearLowBattery();
-
-        /// <summary>
-        /// Clear the preamble detect irq flag
-        /// </summary>
-        void ClearPreambleDetect();
-
-        /// <summary>
-        /// Clear the sync address match irq
-        /// </summary>
-        /// <remarks>
-        /// Only cleared in Continuous mode
-        /// </remarks>
-        void ClearSyncAddressMatch();
 
         /// <summary>
         /// Start an AGC sequence

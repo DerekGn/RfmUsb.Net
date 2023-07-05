@@ -25,8 +25,6 @@
 using System;
 using System.Collections.Generic;
 
-#warning TODO datamode
-
 namespace RfmUsb.Net
 {
     /// <summary>

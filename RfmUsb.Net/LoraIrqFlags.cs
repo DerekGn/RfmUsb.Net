@@ -22,9 +22,58 @@
 * SOFTWARE.
 */
 
+using System;
+
 namespace RfmUsb.Net
 {
-    public enum Rfm9xLoraIrqFlags
+    /// <summary>
+    /// The lora Irq flags
+    /// </summary>
+    [Flags]
+    public enum LoraIrqFlags
     {
+        /// <summary>
+        /// No flags set
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Valid Lora signal detected during CAD operation
+        /// </summary>
+        CadDetected = 0x01,
+
+        /// <summary>
+        /// FHSS change channel interrupt
+        /// </summary>
+        FhssChangeChannel = 0x02,
+
+        /// <summary>
+        /// CAD complete
+        /// </summary>
+        CadDone = 0x04,
+
+        /// <summary>
+        /// FIFO Payload transmission complete interrupt
+        /// </summary>
+        TxDone = 0x08,
+
+        /// <summary>
+        /// Valid header received in Rx
+        /// </summary>
+        ValidHeader = 0x10,
+
+        /// <summary>
+        /// Payload CRC error interrupt
+        /// </summary>
+        PayloadCrcError = 0x20,
+
+        /// <summary>
+        /// Packet reception complete interrupt
+        /// </summary>
+        RxDone = 0x40,
+
+        /// <summary>
+        /// Timeout interrupt
+        /// </summary>
+        RxTimeout = 0x80
     }
 }

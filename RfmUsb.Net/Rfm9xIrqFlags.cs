@@ -83,7 +83,7 @@ namespace RfmUsb.Net
         /// Set when Sync and Address (if enabled) are detected. Cleared when leaving Rx or FIFO is emptied.
         /// This bit is read only in Packet mode, rwc in Continuous mode
         /// </summary>
-        AddressMatch = 0x0100,
+        SyncAddressMatch = 0x0100,
 
         /// <summary>
         /// Set when the Preamble Detector has found valid Preamble.

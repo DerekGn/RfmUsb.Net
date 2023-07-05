@@ -316,7 +316,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestRadioConfig()
         {
-            TestRange<byte>(() => _rfm69.RadioConfig, (v) => _rfm69.RadioConfig = v, 0,26);
+            TestRange<byte>(() => _rfm69.RadioConfig, (v) => _rfm69.RadioConfig = v, 0, 26);
         }
 
         [TestMethod]
@@ -359,14 +359,6 @@ namespace RfmUsb.Net.IntTests
         public void TestTimeoutRxStart()
         {
             TestRange(() => _rfm69.TimeoutRxStart, (v) => _rfm69.TimeoutRxStart = v);
-        }
-
-
-        private static IEnumerable<byte> RandomSequence()
-        {
-            Random r = new Random();
-            while (true)
-                yield return (byte)r.Next(0, 0xFF);
         }
     }
 }

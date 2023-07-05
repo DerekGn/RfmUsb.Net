@@ -611,7 +611,6 @@ namespace RfmUsb.Net.UnitTests
                 "0xA0");
         }
 
-        // Sync
         [TestMethod]
         public void TestGetSync()
         {
@@ -661,6 +660,7 @@ namespace RfmUsb.Net.UnitTests
                 Commands.GetTxStartCondition,
                 "1");
         }
+
         [TestMethod]
         public void TestOpenNotFound()
         {
@@ -777,7 +777,6 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
-        
         [TestMethod]
         [DataRow(DcFree.Manchester)]
         [DataRow(DcFree.None)]

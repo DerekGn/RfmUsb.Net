@@ -52,37 +52,13 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestBitRateFractional()
         {
-            TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = (byte) v, 0, 0x0F);
+            TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = (byte)v, 0, 0x0F);
         }
 
         [TestMethod]
         public void TestBitSyncOn()
         {
             TestRangeBool(() => _rfm9x.BitSyncOn, (v) => _rfm9x.BitSyncOn = v);
-        }
-
-        [TestMethod]
-        public void TestClearFifoOverrun()
-        {
-            _rfm9x.ClearFifoOverrun();
-        }
-
-        [TestMethod]
-        public void TestClearLowBattery()
-        {
-            _rfm9x.ClearLowBattery();
-        }
-
-        [TestMethod]
-        public void TestClearPreambleDetect()
-        {
-            _rfm9x.ClearPreambleDetect();
-        }
-
-        [TestMethod]
-        public void TestClearSyncAddressMatch()
-        {
-            _rfm9x.ClearSyncAddressMatch();
         }
 
         [TestMethod]
@@ -133,6 +109,15 @@ namespace RfmUsb.Net.IntTests
         public void TestFastHopOn()
         {
             TestRangeBool(() => _rfm9x.FastHopOn, (v) => _rfm9x.FastHopOn = v);
+        }
+
+        [TestMethod]
+        public void TestFifo()
+        {
+            var expected = RandomSequence().Take(64).ToList();
+            _rfm9x.Fifo = expected;
+
+            _rfm9x.Fifo.Should().StartWith(expected);
         }
 
         [TestMethod]
@@ -231,7 +216,7 @@ namespace RfmUsb.Net.IntTests
         public void TestIrq()
         {
             _rfm9x.ExecuteReset();
-            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.FifoNotEmpty | Rfm9xIrqFlags.ModeReady);
+            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
         }
 
         [TestMethod]

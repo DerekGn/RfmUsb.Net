@@ -33,8 +33,8 @@ namespace RfmUsb.Net
     {
         /// <summary>
         /// Enable the AES encryption/decryption:
-        /// false → Off
-        /// true → On (payload limited to 66 bytes maximum)
+        /// false : Off
+        /// true : On (payload limited to 66 bytes maximum)
         /// </summary>
         bool AesOn { get; set; }
 
@@ -45,8 +45,8 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
-        /// false → Off. RestartRx can be used.
-        /// true→ On. Rx automatically restarted after InterPacketRxDelay.
+        /// false : Off. RestartRx can be used.
+        /// true: On. Rx automatically restarted after InterPacketRxDelay.
         /// </summary>
         bool AutoRxRestartOn { get; set; }
 
@@ -71,11 +71,6 @@ namespace RfmUsb.Net
         DccFreq DccFreqAfc { get; set; }
 
         /// <summary>
-        /// The Dio interrupt mask
-        /// </summary>
-        DioIrq DioInterruptMask { get; set; }
-
-        /// <summary>
         /// The data processing mode
         /// </summary>
         Rfm69DataMode DataMode { get; set; }
@@ -92,15 +87,15 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// FIFO filling condition:
-        /// false → if SyncAddress interrupt occurs
-        /// true → as long as FifoFillCondition is set
+        /// false : if SyncAddress interrupt occurs
+        /// true : as long as FifoFillCondition is set
         /// </summary>
         bool FifoFill { get; set; }
 
         /// <summary>
         /// LNA’s input impedance
-        /// false → 50 ohms
-        /// true → 200 ohms
+        /// false : 50 ohms
+        /// true : 200 ohms
         /// </summary>
         bool Impedance { get; set; }
 
@@ -110,9 +105,12 @@ namespace RfmUsb.Net
         IntermediateMode IntermediateMode { get; set; }
 
         /// <summary>
-        /// Get the Irq flags
+        /// Get or set the Irq flags
         /// </summary>
-        Rfm69IrqFlags IrqFlags { get; }
+        /// <remarks>
+        /// Setting a specific flag clears the corresponding irq
+        /// </remarks>
+        Rfm69IrqFlags IrqFlags { get; set; }
 
         /// <summary>
         /// Duration of the Idle phase in Listen mode
@@ -126,8 +124,8 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Criteria for packet acceptance in Listen mode:
-        /// false → signal strength is above RssiThreshold
-        /// true → signal strength is above RssiThreshold and SyncAddress matched
+        /// false : signal strength is above RssiThreshold
+        /// true : signal strength is above RssiThreshold and SyncAddress matched
         /// </summary>
         bool ListenCriteria { get; set; }
 
