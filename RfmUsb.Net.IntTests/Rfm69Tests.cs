@@ -219,6 +219,13 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestGetIrq()
+        {
+            _rfm69.ExecuteReset();
+            _rfm69.IrqFlags.Should().Be(Rfm69IrqFlags.ModeReady);
+        }
+
+        [TestMethod]
         public void TestImpedance()
         {
             TestRangeBool(() => _rfm69.Impedance, (v) => _rfm69.Impedance = v);
@@ -233,14 +240,6 @@ namespace RfmUsb.Net.IntTests
         {
             TestAssignedValue(expected, () => _rfm69.IntermediateMode, (v) => _rfm69.IntermediateMode = v);
         }
-
-        [TestMethod]
-        public void TestIrq()
-        {
-            _rfm69.ExecuteReset();
-            _rfm69.IrqFlags.Should().Be(Rfm69IrqFlags.ModeReady);
-        }
-
         [TestMethod]
         public void TestListenCoefficentIdle()
         {
@@ -349,6 +348,12 @@ namespace RfmUsb.Net.IntTests
             _rfm69.Sync = new List<byte> { 0xAA, 0x55, 0xAA, 0x55 };
         }
 
+        [TestMethod]
+        public void TestSetIrq()
+        {
+            _rfm69.ExecuteReset();
+            _rfm69.IrqFlags = Rfm69IrqFlags.FifoOverrun | Rfm69IrqFlags.SyncAddressMatch | Rfm69IrqFlags.Rssi;
+        }
         [TestMethod]
         public void TestSyncBitErrors()
         {

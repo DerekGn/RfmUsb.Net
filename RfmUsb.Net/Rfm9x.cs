@@ -564,13 +564,13 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public void SetTimerCoefficient(Timer timer, byte value)
         {
-            SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} {value}", ResponseOk);
+            SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public void SetTimerResolution(Timer timer, TimerResolution value)
         {
-            SendCommandWithCheck($"{Commands.SetTimerCoefficient} {(int)timer} {(int)value}", ResponseOk);
+            SendCommandWithCheck($"{Commands.SetTimerResolution} {(int)timer} 0x{(byte)value:X2}", ResponseOk);
         }
 
         private HopChannel GetHopChannel()

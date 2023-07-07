@@ -30,9 +30,9 @@ namespace RfmUsb.Net
     public enum TimerResolution
     {
         /// <summary>
-        /// Timer disabled
+        /// Reserved Value
         /// </summary>
-        Disabled,
+        Reserved,
 
         /// <summary>
         /// 64 us

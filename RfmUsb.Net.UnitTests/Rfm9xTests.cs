@@ -61,11 +61,11 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(Timer.Timer1, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer1, TimerResolution.Reserved)]
         [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
         [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
         [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
-        [DataRow(Timer.Timer2, TimerResolution.Disabled)]
+        [DataRow(Timer.Timer2, TimerResolution.Reserved)]
         [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
         [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
         [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]

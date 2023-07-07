@@ -44,6 +44,22 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [DataRow(Timer.Timer1, TimerResolution.Reserved)]
+        [DataRow(Timer.Timer2, TimerResolution.Reserved)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
+        [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
+        [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]
+        public void SetTimerResolution(Timer timer, TimerResolution expected)
+        {
+            _rfm9x.SetTimerResolution(timer, expected);
+
+            _rfm9x.GetTimerResolution(timer).Should().Be(expected);
+        }
+
+        [TestMethod]
         public void TestAutoImageCalibrationOn()
         {
             TestRangeBool(() => _rfm9x.AutoImageCalibrationOn, (v) => _rfm9x.AutoImageCalibrationOn = v);
@@ -201,6 +217,13 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestGetIrq()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
+        }
+
+        [TestMethod]
         public void TestIoHomeOn()
         {
             TestRangeBool(() => _rfm9x.IoHomeOn, (v) => _rfm9x.IoHomeOn = v);
@@ -210,13 +233,6 @@ namespace RfmUsb.Net.IntTests
         public void TestIoHomePowerFrame()
         {
             TestRangeBool(() => _rfm9x.IoHomePowerFrame, (v) => _rfm9x.IoHomePowerFrame = v);
-        }
-
-        [TestMethod]
-        public void TestIrq()
-        {
-            _rfm9x.ExecuteReset();
-            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
         }
 
         [TestMethod]
@@ -341,6 +357,13 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestSetIrq()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.IrqFlags = Rfm9xIrqFlags.LowBattery | Rfm9xIrqFlags.FifoOverrun | Rfm9xIrqFlags.SyncAddressMatch | Rfm9xIrqFlags.PreambleDetect | Rfm9xIrqFlags.Rssi;
+        }
+
+        [TestMethod]
         public void TestTcxoInputOn()
         {
             TestRangeBool(() => _rfm9x.TcxoInputOn, (v) => _rfm9x.TcxoInputOn = v);
@@ -381,11 +404,15 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(Timer.Timer1)]
-        [DataRow(Timer.Timer2)]
-        public void TestTimerCoefficient(Timer expected)
+        [DataRow(Timer.Timer1, 0x00)]
+        [DataRow(Timer.Timer2, 0x00)]
+        [DataRow(Timer.Timer1, 0xFF)]
+        [DataRow(Timer.Timer2, 0xFF)]
+        public void TestTimerCoefficient(Timer timer, int expected)
         {
-            throw new NotImplementedException();
+            _rfm9x.SetTimerCoefficient(timer, (byte)expected);
+
+            _rfm9x.GetTimerCoefficient(timer).Should().Be((byte)expected);
         }
     }
 }
