@@ -199,12 +199,12 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(EnterCondition.PacketSent)]
         [DataRow(EnterCondition.PayloadReady)]
         [DataRow(EnterCondition.SyncAddressMatch)]
-        public void TestGetEnterCondition(EnterCondition expected)
+        public void TestGetAutoModeEnterCondition(EnterCondition expected)
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.EnterCondition; },
+                () => { return _rfmDevice.AutoModeEnterCondition; },
                 (v) => { v.Should().Be(expected); },
-                Commands.GetEnterCondition,
+                Commands.GetAutoModeEnterCondition,
                 $"0x{expected:X}");
         }
 
@@ -218,12 +218,12 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(ExitCondition.PayloadReady)]
         [DataRow(ExitCondition.RxTimeout)]
         [DataRow(ExitCondition.SyncAddressMatch)]
-        public void TestGetExitCondition(ExitCondition expected)
+        public void TestGetAutoModeExitCondition(ExitCondition expected)
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.ExitCondition; },
+                () => { return _rfmDevice.AutoModeExitCondition; },
                 (v) => { v.Should().Be(expected); },
-                Commands.GetExitCondition,
+                Commands.GetAutoModeExitCondition,
                 $"0x{expected:X}");
         }
 
@@ -543,11 +543,11 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestListenAbort()
+        public void TestListenModeAbort()
         {
             ExecuteTest(
-                () => { _rfmDevice.ExecuteListenAbort(); },
-                Commands.ExecuteListenAbort,
+                () => { _rfmDevice.ExecuteListenModeAbort(); },
+                Commands.ExecuteListenModeAbort,
                 RfmBase.ResponseOk);
         }
 
@@ -690,8 +690,8 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetEnterCondition(EnterCondition expected)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.EnterCondition = expected; },
-                Commands.SetEnterCondition,
+                () => { _rfmDevice.AutoModeEnterCondition = expected; },
+                Commands.SetAutoModeEnterCondition,
                 $"0x{expected:X}");
         }
 
@@ -704,11 +704,11 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(ExitCondition.PayloadReady)]
         [DataRow(ExitCondition.RxTimeout)]
         [DataRow(ExitCondition.SyncAddressMatch)]
-        public void TestSetExitCondition(ExitCondition expected)
+        public void TestSetAutoModeExitCondition(ExitCondition expected)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ExitCondition = expected; },
-                Commands.SetExitCondition,
+                () => { _rfmDevice.AutoModeExitCondition = expected; },
+                Commands.SetAutoModeExitCondition,
                 $"0x{expected:X}");
         }
 

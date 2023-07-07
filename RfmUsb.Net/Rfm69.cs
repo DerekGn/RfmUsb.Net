@@ -99,17 +99,17 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public EnterCondition EnterCondition
+        public EnterCondition AutoModeEnterCondition
         {
-            get => (EnterCondition)SendCommand(Commands.GetEnterCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetEnterCondition} 0x{value:X}", ResponseOk);
+            get => (EnterCondition)SendCommand(Commands.GetAutoModeEnterCondition).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetAutoModeEnterCondition} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
-        public ExitCondition ExitCondition
+        public ExitCondition AutoModeExitCondition
         {
-            get => (ExitCondition)SendCommand(Commands.GetExitCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetExitCondition} 0x{value:X}", ResponseOk);
+            get => (ExitCondition)SendCommand(Commands.GetAutoModeExitCondition).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetAutoModeExitCondition} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -275,9 +275,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void ExecuteListenAbort()
+        public void ExecuteListenModeAbort()
         {
-            SendCommandWithCheck(Commands.ExecuteListenAbort, ResponseOk);
+            SendCommandWithCheck(Commands.ExecuteListenModeAbort, ResponseOk);
         }
 
         ///<inheritdoc/>

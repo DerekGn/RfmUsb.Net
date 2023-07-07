@@ -85,6 +85,11 @@ namespace RfmUsb.Net
         DcFree DcFree { get; set; }
 
         /// <summary>
+        /// Gets or sets the Dio Interrupt Mask
+        /// </summary>
+        DioIrq DioInterruptMask { get; set; }
+
+        /// <summary>
         /// The Fei value
         /// </summary>
         short Fei { get; }
@@ -128,6 +133,11 @@ namespace RfmUsb.Net
         byte InterPacketRxDelay { get; set; }
 
         /// <summary>
+        /// Get the Rssi value after last packet recieved
+        /// </summary>
+        byte LastRssi { get; }
+
+        /// <summary>
         /// LNA gain setting
         /// </summary>
         LnaGain LnaGainSelect { get; set; }
@@ -140,7 +150,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get or set the modulation type
         /// </summary>
-        Modulation Modulation { get; set; }
+        ModulationType ModulationType { get; set; }
 
         /// <summary>
         /// Node address used in address filtering
@@ -238,6 +248,11 @@ namespace RfmUsb.Net
         byte RxBwAfc { get; set; }
 
         /// <summary>
+        /// Get the mcu serial number
+        /// </summary>
+        string SerialNumber { get; }
+
+        /// <summary>
         /// The sync bytes
         /// </summary>
         IEnumerable<byte> Sync { get; set; }
@@ -263,11 +278,6 @@ namespace RfmUsb.Net
         /// true : FifoNotEmpty (i.e. at least one byte in the FIFO)
         /// </summary>
         bool TxStartCondition { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the Dio Interrupt Mask
-        /// </summary>
-        DioIrq DioInterruptMask { get; set; }
 
         /// <summary>
         /// Close the connection to the RfmUsb device

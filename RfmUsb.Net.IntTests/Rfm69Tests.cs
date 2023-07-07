@@ -132,7 +132,7 @@ namespace RfmUsb.Net.IntTests
         [DataRow(EnterCondition.SyncAddressMatch)]
         public void TestEnterCondition(EnterCondition expected)
         {
-            TestAssignedValue(expected, () => _rfm69.EnterCondition, (v) => _rfm69.EnterCondition = v);
+            TestAssignedValue(expected, () => _rfm69.AutoModeEnterCondition, (v) => _rfm69.AutoModeEnterCondition = v);
         }
 
         [TestMethod]
@@ -156,7 +156,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestExecuteListenAbort()
         {
-            _rfm69.ExecuteListenAbort();
+            _rfm69.ExecuteListenModeAbort();
         }
 
         [TestMethod]
@@ -194,7 +194,7 @@ namespace RfmUsb.Net.IntTests
         [DataRow(ExitCondition.SyncAddressMatch)]
         public void TestExitCondition(ExitCondition expected)
         {
-            TestAssignedValue(expected, () => _rfm69.ExitCondition, (v) => _rfm69.ExitCondition = v);
+            TestAssignedValue(expected, () => _rfm69.AutoModeExitCondition, (v) => _rfm69.AutoModeExitCondition = v);
         }
 
         [TestMethod]

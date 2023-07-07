@@ -78,12 +78,12 @@ namespace RfmUsb.Net
         /// <summary>
         /// Interrupt condition for entering the intermediate mode
         /// </summary>
-        EnterCondition EnterCondition { get; set; }
+        EnterCondition AutoModeEnterCondition { get; set; }
 
         /// <summary>
         /// Interrupt condition for exiting the intermediate mode
         /// </summary>
-        ExitCondition ExitCondition { get; set; }
+        ExitCondition AutoModeExitCondition { get; set; }
 
         /// <summary>
         /// FIFO filling condition:
@@ -216,7 +216,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Abort listen mode
         /// </summary>
-        void ExecuteListenAbort();
+        void ExecuteListenModeAbort();
 
         /// <summary>
         /// Execute a temperature measurement

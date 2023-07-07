@@ -188,10 +188,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Modulation Modulation
+        public ModulationType ModulationType
         {
-            get => (Modulation)SendCommand(Commands.GetModulation).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetModulation} 0x{value:X}", ResponseOk);
+            get => (ModulationType)SendCommand(Commands.GetModulationType).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetModulationType} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -342,6 +342,13 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
+
+        ///<inheritdoc/>
+        public string SerialNumber => throw new NotImplementedException();
+
+        ///<inheritdoc/>
+        public byte LastRssi => throw new NotImplementedException();
+
         ///<inheritdoc/>
         public void Close()
         {

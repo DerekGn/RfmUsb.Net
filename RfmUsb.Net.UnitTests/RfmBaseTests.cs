@@ -370,14 +370,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(Modulation.Fsk)]
-        [DataRow(Modulation.Ook)]
-        public void TestGetModulation(Modulation expected)
+        [DataRow(ModulationType.Fsk)]
+        [DataRow(ModulationType.Ook)]
+        public void TestGetModulation(ModulationType expected)
         {
             ExecuteGetTest(
-                () => { return RfmBase.Modulation; },
+                () => { return RfmBase.ModulationType; },
                 (v) => v.Should().Be(expected),
-                Commands.GetModulation,
+                Commands.GetModulationType,
                 $"0x{expected:X}");
         }
 
@@ -930,13 +930,13 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(Modulation.Fsk)]
-        [DataRow(Modulation.Ook)]
-        public void TestSetModulation(Modulation expected)
+        [DataRow(ModulationType.Fsk)]
+        [DataRow(ModulationType.Ook)]
+        public void TestSetModulation(ModulationType expected)
         {
             ExecuteSetTest(
-                () => { RfmBase.Modulation = expected; },
-                Commands.SetModulation,
+                () => { RfmBase.ModulationType = expected; },
+                Commands.SetModulationType,
                 $"0x{expected:X}");
         }
 

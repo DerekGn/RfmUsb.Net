@@ -27,7 +27,7 @@ namespace RfmUsb.Net
     /// <summary>
     /// Modulation scheme
     /// </summary>
-    public enum Modulation
+    public enum ModulationType
     {
         /// <summary>
         /// Fsk modulation

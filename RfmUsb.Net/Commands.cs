@@ -32,7 +32,7 @@ namespace RfmUsb.Net
         public const string ExecuteBootloader = "e-bl";
         public const string ExecuteFeiStart = "e-fei";
         public const string ExecuteImageCalibration = "e-ic";
-        public const string ExecuteListenAbort = "e-lma";
+        public const string ExecuteListenModeAbort = "e-lma";
         public const string ExecuteMeasureTemperature = "e-tm";
         public const string ExecuteRcCalibration = "e-rc";
         public const string ExecuteReset = "e-r";
@@ -72,9 +72,9 @@ namespace RfmUsb.Net
         public const string GetDio = "g-di";
         public const string GetDioInterrupt = "g-di";
         public const string GetDioMapping = "g-dio";
-        public const string GetEnterCondition = "g-amec";
+        public const string GetAutoModeEnterCondition = "g-amec";
         public const string GetErrorCodingRate = "g-ecr";
-        public const string GetExitCondition = "g-amexc";
+        public const string GetAutoModeExitCondition = "g-amexc";
         public const string GetFastHopOn = "g-fh";
         public const string GetFei = "g-a";
         public const string GetFifo = "g-fifo";
@@ -134,7 +134,7 @@ namespace RfmUsb.Net
         public const string GetMode = "g-om";
         public const string GetModemBandwidth = "g-bw";
         public const string GetModemStatus = "g-ms";
-        public const string GetModulation = "g-mt";
+        public const string GetModulationType = "g-mt";
         public const string GetNodeAddress = "g-na";
         public const string GetOcpEnable = "g-ocp";
         public const string GetOcpTrim = "g-ocpt";
@@ -220,9 +220,9 @@ namespace RfmUsb.Net
         public const string SetDio = "s-di";
         public const string SetDioInterrupt = "s-di";
         public const string SetDioMapping = "s-dio";
-        public const string SetEnterCondition = "s-amec";
+        public const string SetAutoModeEnterCondition = "s-amec";
         public const string SetErrorCodingRate = "s-ecr";
-        public const string SetExitCondition = "s-amexc";
+        public const string SetAutoModeExitCondition = "s-amexc";
         public const string SetFastHopOn = "s-fh";
         public const string SetFifo = "s-fifo";
         public const string SetFifoAddressPointer = "s-fap";
@@ -273,7 +273,7 @@ namespace RfmUsb.Net
         public const string SetMapPreambleDetect = "s-mpd";
         public const string SetMode = "s-om";
         public const string SetModemBandwidth = "s-";
-        public const string SetModulation = "s-mt";
+        public const string SetModulationType = "s-mt";
         public const string SetNodeAddress = "s-na";
         public const string SetOcpEnable = "s-ocp";
         public const string SetOcpTrim = "s-ocpt";
@@ -326,5 +326,7 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
+#warning Not implemented
+        public const string GetLastRssiAfterRxReady = "g-lrssi";
     }
 }

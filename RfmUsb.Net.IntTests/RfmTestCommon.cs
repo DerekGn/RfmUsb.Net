@@ -137,7 +137,6 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestFrequency()
         {
-#warning Check freq max
             TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 0, 1020000000);
         }
 
@@ -199,11 +198,11 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(Modulation.Fsk)]
-        [DataRow(Modulation.Ook)]
-        public void TestModulation(Modulation expected)
+        [DataRow(ModulationType.Fsk)]
+        [DataRow(ModulationType.Ook)]
+        public void TestModulation(ModulationType expected)
         {
-            TestAssignedValue(expected, () => RfmBase.Modulation, (v) => RfmBase.Modulation = v);
+            TestAssignedValue(expected, () => RfmBase.ModulationType, (v) => RfmBase.ModulationType = v);
         }
 
         [TestMethod]
