@@ -27,7 +27,7 @@ namespace RfmUsb.Net
     /// <summary>
     /// Defines DC-free encoding/decoding
     /// </summary>
-    public enum DcFree
+    public enum DcFreeEncoding
     {
         /// <summary>
         /// None Off

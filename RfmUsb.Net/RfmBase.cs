@@ -98,10 +98,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool CrcAutoClear
+        public bool CrcAutoClearOff
         {
-            get => SendCommand(Commands.GetCrcAutoClear).StartsWith("1");
-            set => SendCommandWithCheck($"{Commands.SetCrcAutoClear} {(value ? "1" : "0")}", ResponseOk);
+            get => SendCommand(Commands.GetCrcAutoClearOff).StartsWith("1");
+            set => SendCommandWithCheck($"{Commands.SetCrcAutoClearOff} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -112,9 +112,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public DcFree DcFree
+        public DcFreeEncoding DcFreeEncoding
         {
-            get => (DcFree)SendCommand(Commands.GetDcFree).ConvertToInt32();
+            get => (DcFreeEncoding)SendCommand(Commands.GetDcFree).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetDcFree} 0x{(byte)value:X2}", ResponseOk);
         }
 
@@ -334,7 +334,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte TemperatureValue => SendCommand(Commands.GetTemperatureValue).ConvertToByte();
+        public byte Temperature => SendCommand(Commands.GetTemperatureValue).ConvertToByte();
 
         ///<inheritdoc/>
         public bool TxStartCondition
@@ -344,7 +344,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public string SerialNumber => throw new NotImplementedException();
+        public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
 
         ///<inheritdoc/>
         public byte LastRssi => throw new NotImplementedException();

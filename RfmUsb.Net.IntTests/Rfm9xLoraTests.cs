@@ -139,15 +139,15 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestGetFrequencyError()
-        {
-            _rfm9x.FrequencyError.Should().Be(0);
-        }
-
-        [TestMethod]
         public void TestFrequencyHoppingPeriod()
         {
             TestRange(() => _rfm9x.FrequencyHoppingPeriod, (v) => _rfm9x.FrequencyHoppingPeriod = v);
+        }
+
+        [TestMethod]
+        public void TestGetFrequencyError()
+        {
+            _rfm9x.FrequencyError.Should().Be(0);
         }
 
         [TestMethod]
@@ -156,6 +156,26 @@ namespace RfmUsb.Net.IntTests
             var hopChannel = _rfm9x.HopChannel;
 
             hopChannel.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void TestGetLoraIrqFlags()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.LoraIrqFlags.Should()
+                .Be(
+                    LoraIrqFlags.CadDetected |
+                    LoraIrqFlags.CadDone |
+                    LoraIrqFlags.ValidHeader);
+        }
+
+        [TestMethod]
+        public void TestGetLoraIrqFlagsMask()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.LoraIrqFlagsMask.Should().Be(
+                LoraIrqFlagsMask.ValidHeaderMask |
+                LoraIrqFlagsMask.RxDoneMask);
         }
 
         [TestMethod]
@@ -198,7 +218,19 @@ namespace RfmUsb.Net.IntTests
             _rfm9x.LoraMode.Should().Be(LoraMode.Standby);
         }
 
-#warning IRQ test
+        [TestMethod]
+        public void TestLoraPayloadLength()
+        {
+            _rfm9x.ImplicitHeaderModeOn = true;
+
+            TestRange<byte>(() => _rfm9x.LoraPayloadLength, (v) => _rfm9x.LoraPayloadLength = v, 1, 0xFF);
+        }
+
+        [TestMethod]
+        public void TestLowDataRateOptimize()
+        {
+            TestRangeBool(() => _rfm9x.LowDataRateOptimize, (v) => _rfm9x.LowDataRateOptimize = v);
+        }
 
         [TestMethod]
         public void TestModemStatus()
@@ -231,6 +263,12 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestPreambleLength()
+        {
+            TestRange(() => _rfm9x.PreambleLength, (v) => _rfm9x.PreambleLength = v);
+        }
+
+        [TestMethod]
         public void TestRssiWideband()
         {
             var x = _rfm9x.RssiWideband;
@@ -246,6 +284,36 @@ namespace RfmUsb.Net.IntTests
         public void TestRxPayloadCrcOn()
         {
             TestRangeBool(() => _rfm9x.RxPayloadCrcOn, (v) => _rfm9x.RxPayloadCrcOn = v);
+        }
+
+        [TestMethod]
+        public void TestSetLoraIrqFlags()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.LoraIrqFlags =
+                LoraIrqFlags.CadDetected |
+                LoraIrqFlags.FhssChangeChannel |
+                LoraIrqFlags.CadDone |
+                LoraIrqFlags.TxDone |
+                LoraIrqFlags.ValidHeader |
+                LoraIrqFlags.PayloadCrcError |
+                LoraIrqFlags.CadDetected |
+                LoraIrqFlags.RxTimeout;
+        }
+
+        [TestMethod]
+        public void TestSetLoraIrqFlagsMask()
+        {
+            _rfm9x.ExecuteReset();
+            _rfm9x.LoraIrqFlagsMask =
+                LoraIrqFlagsMask.CadDetectedMask |
+                LoraIrqFlagsMask.FhssChangeChannelMask |
+                LoraIrqFlagsMask.CadDoneMask |
+                LoraIrqFlagsMask.TxDoneMask |
+                LoraIrqFlagsMask.ValidHeaderMask |
+                LoraIrqFlagsMask.PayloadCrcErrorMask |
+                LoraIrqFlagsMask.CadDetectedMask |
+                LoraIrqFlagsMask.RxTimeoutMask;
         }
 
         [TestMethod]

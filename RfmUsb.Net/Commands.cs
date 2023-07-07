@@ -48,11 +48,14 @@ namespace RfmUsb.Net
         public const string GetAccessSharedRegisters = "g-asr";
         public const string GetAddressFiltering = "g-af";
         public const string GetAesOn = "g-ae";
-        public const string GetAfc = "g-a";
+        public const string GetAfc = "g-afc";
         public const string GetAfcAutoClear = "g-aac";
         public const string GetAfcAutoOn = "g-aao";
         public const string GetAfcLowBetaOn = "g-ab";
+        public const string GetAgcAutoOn = "g-agcao";
         public const string GetAutoImageCalibrationOn = "g-aico";
+        public const string GetAutoModeEnterCondition = "g-amec";
+        public const string GetAutoModeExitCondition = "g-amexc";
         public const string GetAutoRestartRxMode = "g-arrm";
         public const string GetAutoRxRestartOn = "g-arre";
         public const string GetBeaconOn = "g-bo";
@@ -61,7 +64,7 @@ namespace RfmUsb.Net
         public const string GetBitSyncOn = "g-bs";
         public const string GetBroadcastAddress = "g-ba";
         public const string GetContinuousDagc = "g-cd";
-        public const string GetCrcAutoClear = "g-caco";
+        public const string GetCrcAutoClearOff = "g-caco";
         public const string GetCrcOn = "g-crc";
         public const string GetCrcWhiteningType = "g-cwt";
         public const string GetCurrentLnaGain = "g-lnag";
@@ -72,11 +75,9 @@ namespace RfmUsb.Net
         public const string GetDio = "g-di";
         public const string GetDioInterrupt = "g-di";
         public const string GetDioMapping = "g-dio";
-        public const string GetAutoModeEnterCondition = "g-amec";
         public const string GetErrorCodingRate = "g-ecr";
-        public const string GetAutoModeExitCondition = "g-amexc";
         public const string GetFastHopOn = "g-fh";
-        public const string GetFei = "g-a";
+        public const string GetFei = "g-fei";
         public const string GetFifo = "g-fifo";
         public const string GetFifoAddressPointer = "g-fap";
         public const string GetFifoFill = "g-ffc";
@@ -109,6 +110,7 @@ namespace RfmUsb.Net
         public const string GetIoHomePowerFrame = "g-ihpf";
         public const string GetIrqFlags = "g-irq";
         public const string GetLastPacketSnr = "g-lpsnr";
+        public const string GetLastRssiAfterRxReady = "g-lrssi";
         public const string GetListenCoefficentIdle = "g-lic";
         public const string GetListenCoefficentRx = "g-lrc";
         public const string GetListenCriteria = "g-lc";
@@ -174,6 +176,7 @@ namespace RfmUsb.Net
         public const string GetRxPayloadCrcOn = "g-rpc";
         public const string GetSensitivityBoost = "g-sb";
         public const string GetSequencer = "g-so";
+        public const string GetSerialNumber = "g-mcu";
         public const string GetSpreadingFactor = "g-sf";
         public const string GetSymbolTimeout = "g-st";
         public const string GetSync = "g-sync";
@@ -181,6 +184,7 @@ namespace RfmUsb.Net
         public const string GetSyncEnable = "g-se";
         public const string GetSyncSize = "g-ss";
         public const string GetTcxoInputOn = "g-tio";
+        public const string GetTemperatureChange = "g-tpc";
         public const string GetTemperatureThreshold = "g-tt";
         public const string GetTemperatureValue = "g-t";
         public const string GetTempMonitorOff = "g-tm";
@@ -201,7 +205,10 @@ namespace RfmUsb.Net
         public const string SetAfcAutoClear = "s-aac";
         public const string SetAfcAutoOn = "s-aao";
         public const string SetAfcLowBetaOn = "s-ab";
+        public const string SetAgcAutoOn = "s-agcao";
         public const string SetAutoImageCalibrationOn = "s-aico";
+        public const string SetAutoModeEnterCondition = "s-amec";
+        public const string SetAutoModeExitCondition = "s-amexc";
         public const string SetAutoRestartRxMode = "s-arrm";
         public const string SetAutoRxRestartOn = "s-arre";
         public const string SetBeaconOn = "s-bo";
@@ -210,7 +217,7 @@ namespace RfmUsb.Net
         public const string SetBitSyncOn = "s-bs";
         public const string SetBroadcastAddress = "s-ba";
         public const string SetContinuousDagc = "s-cd";
-        public const string SetCrcAutoClear = "s-caco";
+        public const string SetCrcAutoClearOff = "s-caco";
         public const string SetCrcOn = "s-crc";
         public const string SetCrcWhiteningType = "s-cwt";
         public const string SetDataMode = "s-dm";
@@ -220,9 +227,7 @@ namespace RfmUsb.Net
         public const string SetDio = "s-di";
         public const string SetDioInterrupt = "s-di";
         public const string SetDioMapping = "s-dio";
-        public const string SetAutoModeEnterCondition = "s-amec";
         public const string SetErrorCodingRate = "s-ecr";
-        public const string SetAutoModeExitCondition = "s-amexc";
         public const string SetFastHopOn = "s-fh";
         public const string SetFifo = "s-fifo";
         public const string SetFifoAddressPointer = "s-fap";
@@ -267,12 +272,12 @@ namespace RfmUsb.Net
         public const string SetLowBatteryOn = "s-lbo";
         public const string SetLowBatteryTrim = "s-lbt";
         public const string SetLowBetaAfcOffset = "s-lbao";
-        public const string SetLowDataRateOptimize = "";
+        public const string SetLowDataRateOptimize = "s-ldro";
         public const string SetLowFrequencyMode = "s-lfm";
         public const string SetLowPowerSelection = "s-lps";
         public const string SetMapPreambleDetect = "s-mpd";
         public const string SetMode = "s-om";
-        public const string SetModemBandwidth = "s-";
+        public const string SetModemBandwidth = "s-bw";
         public const string SetModulationType = "s-mt";
         public const string SetNodeAddress = "s-na";
         public const string SetOcpEnable = "s-ocp";
@@ -326,7 +331,5 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
-#warning Not implemented
-        public const string GetLastRssiAfterRxReady = "g-lrssi";
     }
 }

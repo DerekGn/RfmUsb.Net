@@ -36,6 +36,7 @@ namespace RfmUsb.Net
         /// No flags set
         /// </summary>
         None = 0,
+
         /// <summary>
         /// Valid Lora signal detected during CAD operation
         /// </summary>

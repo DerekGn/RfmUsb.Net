@@ -60,6 +60,12 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestAgcAutoOn()
+        {
+            TestRangeBool(() => _rfm9x.AgcAutoOn, (v) => _rfm9x.AgcAutoOn = v);
+        }
+
+        [TestMethod]
         public void TestAutoImageCalibrationOn()
         {
             TestRangeBool(() => _rfm9x.AutoImageCalibrationOn, (v) => _rfm9x.AutoImageCalibrationOn = v);
@@ -221,6 +227,12 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x.ExecuteReset();
             _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
+        }
+
+        [TestMethod]
+        public void TestIdleMode()
+        {
+            TestRangeBool(() => _rfm9x.IdleMode, (v) => _rfm9x.IdleMode = v);
         }
 
         [TestMethod]

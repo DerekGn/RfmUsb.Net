@@ -81,7 +81,7 @@ namespace RfmUsb.Net
         public Rfm69DataMode DataMode
         {
             get => (Rfm69DataMode)SendCommand(Commands.GetDataMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetDataMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetDataMode} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

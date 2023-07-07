@@ -81,6 +81,16 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [DataRow(Rfm69DataMode.Reserved)]
+        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
+        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        [DataRow(Rfm69DataMode.Packet)]
+        public void TestDataMode(Rfm69DataMode expected)
+        {
+            TestAssignedValue(expected, () => _rfm69.DataMode, (v) => _rfm69.DataMode = v);
+        }
+
+        [TestMethod]
         [DataRow(DccFreq.FreqPercent0_125)]
         [DataRow(DccFreq.FreqPercent0_25)]
         [DataRow(DccFreq.FreqPercent0_5)]
@@ -219,7 +229,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestGetIrq()
+        public void TestGetIrqFlags()
         {
             _rfm69.ExecuteReset();
             _rfm69.IrqFlags.Should().Be(Rfm69IrqFlags.ModeReady);
@@ -240,6 +250,7 @@ namespace RfmUsb.Net.IntTests
         {
             TestAssignedValue(expected, () => _rfm69.IntermediateMode, (v) => _rfm69.IntermediateMode = v);
         }
+
         [TestMethod]
         public void TestListenCoefficentIdle()
         {
@@ -349,11 +360,12 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestSetIrq()
+        public void TestSetIrqFlags()
         {
             _rfm69.ExecuteReset();
             _rfm69.IrqFlags = Rfm69IrqFlags.FifoOverrun | Rfm69IrqFlags.SyncAddressMatch | Rfm69IrqFlags.Rssi;
         }
+
         [TestMethod]
         public void TestSyncBitErrors()
         {

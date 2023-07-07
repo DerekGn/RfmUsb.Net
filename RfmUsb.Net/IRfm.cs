@@ -70,7 +70,7 @@ namespace RfmUsb.Net
         /// false : Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
         /// true : Do not clear FIFO. PayloadReady interrupt issued.
         /// </summary>
-        bool CrcAutoClear { get; set; }
+        bool CrcAutoClearOff { get; set; }
 
         /// <summary>
         /// Enables CRC calculation/check (Tx/Rx)
@@ -82,7 +82,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Defines DC-free encoding/decoding performed
         /// </summary>
-        DcFree DcFree { get; set; }
+        DcFreeEncoding DcFreeEncoding { get; set; }
 
         /// <summary>
         /// Gets or sets the Dio Interrupt Mask
@@ -270,7 +270,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Measured temperature value
         /// </summary>
-        byte TemperatureValue { get; }
+        byte Temperature { get; }
 
         /// <summary>
         /// Defines the condition to start packet transmission :

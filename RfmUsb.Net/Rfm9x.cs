@@ -25,7 +25,6 @@
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
-using System;
 
 namespace RfmUsb.Net
 {
@@ -48,6 +47,13 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetAccessSharedRegisters).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetAccessSharedRegisters} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public bool AgcAutoOn
+        {
+            get => SendCommand(Commands.GetAgcAutoOn).Substring(0, 1) == "1";
+            set => SendCommandWithCheck($"{Commands.SetAgcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -227,8 +233,8 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public Rfm9xIrqFlags IrqFlags 
-        { 
+        public Rfm9xIrqFlags IrqFlags
+        {
             get => GetIrqInternal();
             set => SendCommandWithCheck($"{Commands.SetIrqFlags} 0x{(ushort)value:X4}", ResponseOk);
         }
@@ -266,7 +272,7 @@ namespace RfmUsb.Net
 
         ///<inheritdoc/>
         public LoraIrqFlagsMask LoraIrqFlagsMask
-        { 
+        {
             get => GetLoraIrqFlagsMask();
             set => SendCommandWithCheck($"{Commands.SetLoraIrqFlagsMask} 0x{(byte)value:X2}", ResponseOk);
         }
@@ -464,6 +470,9 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTcxoInputOn).Substring(0, 1) == "1";
             set => SendCommandWithCheck($"{Commands.SetTcxoInputOn} {(value ? "1" : "0")}", ResponseOk);
         }
+
+        ///<inheritdoc/>
+        public bool TemperatureChange => SendCommand(Commands.GetTemperatureChange).Substring(0, 1) == "1";
 
         ///<inheritdoc/>
         public TemperatureThreshold TemperatureThreshold
@@ -799,7 +808,6 @@ namespace RfmUsb.Net
                             irq |= LoraIrqFlags.RxTimeout;
                         }
                         break;
-
                 }
             });
 
@@ -866,7 +874,6 @@ namespace RfmUsb.Net
                             mask |= LoraIrqFlagsMask.RxTimeoutMask;
                         }
                         break;
-
                 }
             });
 

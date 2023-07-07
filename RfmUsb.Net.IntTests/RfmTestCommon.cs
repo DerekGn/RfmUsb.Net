@@ -70,9 +70,9 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestCrcAutoClear()
+        public void TestCrcAutoClearOff()
         {
-            TestRangeBool(() => RfmBase.CrcAutoClear, (v) => RfmBase.CrcAutoClear = v);
+            TestRangeBool(() => RfmBase.CrcAutoClearOff, (v) => RfmBase.CrcAutoClearOff = v);
         }
 
         [TestMethod]
@@ -82,13 +82,13 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [DataRow(DcFree.Manchester)]
-        [DataRow(DcFree.None)]
-        [DataRow(DcFree.Manchester)]
-        [DataRow(DcFree.Whitening)]
-        public void TestDcFree(DcFree expected)
+        [DataRow(DcFreeEncoding.Manchester)]
+        [DataRow(DcFreeEncoding.None)]
+        [DataRow(DcFreeEncoding.Manchester)]
+        [DataRow(DcFreeEncoding.Whitening)]
+        public void TestDcFreeEncoding(DcFreeEncoding expected)
         {
-            TestAssignedValue(expected, () => RfmBase.DcFree, (v) => RfmBase.DcFree = v);
+            TestAssignedValue(expected, () => RfmBase.DcFreeEncoding, (v) => RfmBase.DcFreeEncoding = v);
         }
 
         [TestMethod]
@@ -352,6 +352,11 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        public void TestSerialNumber()
+        {
+            Read(() => RfmBase.SerialNumber);
+        }
+        [TestMethod]
         public void TestSync()
         {
             var expected = new List<byte>() { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
@@ -375,35 +380,19 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestTemperatureValue()
         {
-            Read(() => RfmBase.TemperatureValue);
+            Read(() => RfmBase.Temperature);
         }
 
         [TestMethod]
         public void TestTransmit()
         {
-            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 });
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
+            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 });
         }
 
         [TestMethod]
         public void TestTransmitReceive()
         {
             Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 });
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
-        }
-
-        [TestMethod]
-        public void TestTransmitReceiveTxTimeout()
-        {
-            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000);
 
             action
                 .Should()
@@ -423,36 +412,31 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestTransmitWithCountAndInterval()
+        public void TestTransmitReceiveTxTimeout()
         {
-            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100);
+            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000);
 
             action
                 .Should()
                 .Throw<RfmUsbTransmitException>()
                 .WithMessage("Packet transmission failed: [TX Timeout]");
+        }
+        [TestMethod]
+        public void TestTransmitWithCountAndInterval()
+        {
+            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100);
         }
 
         [TestMethod]
         public void TestTransmitWithCountAndIntervalAndTimeout()
         {
-            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100, 1000);
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
+            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100, 1000);
         }
 
         [TestMethod]
         public void TestTransmitWithTxCount()
         {
-            Action action = () => RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1);
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
+            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1);
         }
 
         [TestMethod]

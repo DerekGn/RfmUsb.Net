@@ -170,9 +170,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetCrcAutoClear()
         {
             ExecuteGetTest(
-                () => { return RfmBase.CrcAutoClear; },
+                () => { return RfmBase.CrcAutoClearOff; },
                 (v) => v.Should().BeTrue(),
-                Commands.GetCrcAutoClear,
+                Commands.GetCrcAutoClearOff,
                 "1");
         }
 
@@ -187,14 +187,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(DcFree.Manchester)]
-        [DataRow(DcFree.None)]
-        [DataRow(DcFree.Reserved)]
-        [DataRow(DcFree.Whitening)]
-        public void TestGetDcFree(DcFree expected)
+        [DataRow(DcFreeEncoding.Manchester)]
+        [DataRow(DcFreeEncoding.None)]
+        [DataRow(DcFreeEncoding.Reserved)]
+        [DataRow(DcFreeEncoding.Whitening)]
+        public void TestGetDcFreeEncoding(DcFreeEncoding expected)
         {
             ExecuteGetTest(
-                () => { return RfmBase.DcFree; },
+                () => { return RfmBase.DcFreeEncoding; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetDcFree,
                 $"0x{expected:X}");
@@ -612,6 +612,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetSerialNumber()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.SerialNumber; },
+                (v) => v.Should().Be("SERIALNUMBER"),
+                Commands.GetSerialNumber,
+                "SERIALNUMBER");
+        }
+
+        [TestMethod]
         public void TestGetSync()
         {
             ExecuteGetTest(
@@ -645,7 +655,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTemperatureValue()
         {
             ExecuteGetTest(
-                () => { return RfmBase.TemperatureValue; },
+                () => { return RfmBase.Temperature; },
                 (v) => v.Should().Be(0xA0),
                 Commands.GetTemperatureValue,
                 "0xA0");
@@ -763,8 +773,8 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetCrcAutoClear()
         {
             ExecuteSetTest(
-                () => { RfmBase.CrcAutoClear = true; },
-                Commands.SetCrcAutoClear,
+                () => { RfmBase.CrcAutoClearOff = true; },
+                Commands.SetCrcAutoClearOff,
                 "1");
         }
 
@@ -778,14 +788,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(DcFree.Manchester)]
-        [DataRow(DcFree.None)]
-        [DataRow(DcFree.Reserved)]
-        [DataRow(DcFree.Whitening)]
-        public void TestSetDcFree(DcFree expected)
+        [DataRow(DcFreeEncoding.Manchester)]
+        [DataRow(DcFreeEncoding.None)]
+        [DataRow(DcFreeEncoding.Reserved)]
+        [DataRow(DcFreeEncoding.Whitening)]
+        public void TestSetDcFree(DcFreeEncoding expected)
         {
             ExecuteSetTest(
-                () => { RfmBase.DcFree = expected; },
+                () => { RfmBase.DcFreeEncoding = expected; },
                 Commands.SetDcFree,
                 $"0x{(byte)expected:X2}");
         }

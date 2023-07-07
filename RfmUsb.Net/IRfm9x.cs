@@ -41,6 +41,25 @@ namespace RfmUsb.Net
         bool AccessSharedRegisters { get; set; }
 
         /// <summary>
+        /// IRQ flag witnessing a temperature change exceeding
+        /// TempThreshold since the last Image and RSSI calibration:
+        /// <remarks>
+        /// 0 : Temperature change lower than TempThreshold
+        /// 1 : Temperature change greater than TempThreshold
+        /// </remarks>
+        /// </summary>
+        bool TemperatureChange { get; }
+
+        /// <summary>
+        /// The agc value
+        /// </summary>
+        /// <remarks>
+        /// 0 : LNA gain set by register LnaGain
+        /// 1 : LNA gain set by the internal AGC loop
+        /// </remarks>
+        bool AgcAutoOn { get; set; }
+
+        /// <summary>
         /// Controls the Image calibration mechanism
         /// </summary>
         /// <remarks>
@@ -338,6 +357,7 @@ namespace RfmUsb.Net
         /// RSSI of the latest packet received (dBm)
         /// </summary>
         byte PacketRssi { get; }
+
         /// <summary>
         /// Maximum payload length; if header payload length exceeds value a
         /// header CRC error is generated.Allows filtering of packet with a bad size.

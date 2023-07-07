@@ -134,6 +134,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetAgcAutoOn()
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.AgcAutoOn; },
+                (v) => v.Should().BeTrue(),
+                Commands.GetAgcAutoOn,
+                "1");
+        }
+
+        [TestMethod]
         public void TestGetAutoImageCalibrationOn()
         {
             ExecuteGetTest(
@@ -1162,6 +1172,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetAgcAutoOn()
+        {
+            ExecuteSetTest(
+                () => { _rfmDevice.AgcAutoOn = true; },
+                Commands.SetAgcAutoOn,
+                "1");
+        }
+
+        [TestMethod]
         public void TestSetAutoImageCalibrationOn()
         {
             ExecuteSetTest(
@@ -1436,7 +1455,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteSetTest(() =>
             {
-                _rfmDevice.LoraIrqFlagsMask = 
+                _rfmDevice.LoraIrqFlagsMask =
                     LoraIrqFlagsMask.CadDetectedMask |
                     LoraIrqFlagsMask.FhssChangeChannelMask |
                     LoraIrqFlagsMask.CadDoneMask |
@@ -1468,6 +1487,7 @@ namespace RfmUsb.Net.UnitTests
             Commands.SetLoraIrqFlags,
             "0xFF");
         }
+
         [TestMethod]
         public void TestSetLoraIrqFlagsMask()
         {
