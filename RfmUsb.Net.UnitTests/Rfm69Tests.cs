@@ -432,40 +432,6 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetRadioConfig()
-        {
-            ExecuteGetTest(
-                () => { return _rfmDevice.RadioConfig; },
-                (v) => v.Should().Be(0xA0),
-                Commands.GetRadioConfig,
-                "0xA0");
-        }
-
-        [TestMethod]
-        public void TestGetRadioConfigurations()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .SetupSequence(_ => _.ReadLine())
-                .Returns("A")
-                .Returns("B")
-                .Returns("C")
-                .Throws(new TimeoutException());
-
-            // Act
-            var result = _rfmDevice.GetRadioConfigurations();
-
-            // Assert
-            result.Should().NotBeEmpty();
-        }
-
-        [TestMethod]
         public void TestGetRssiThreshold()
         {
             ExecuteGetTest(
@@ -843,15 +809,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.OutputPower = -2; },
                 Commands.SetOutputPower,
                  $"0x{(sbyte)-2:X2}");
-        }
-
-        [TestMethod]
-        public void TestSetRadioConfig()
-        {
-            ExecuteSetTest(
-                () => { _rfmDevice.RadioConfig = 0xB0; },
-                Commands.SetRadioConfig,
-                "0xB0");
         }
 
         [TestMethod]

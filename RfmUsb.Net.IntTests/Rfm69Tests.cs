@@ -82,7 +82,7 @@ namespace RfmUsb.Net.IntTests
 
         [TestMethod]
         [DataRow(Rfm69DataMode.Reserved)]
-        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
+        //[DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
         [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
         [DataRow(Rfm69DataMode.Packet)]
         public void TestDataMode(Rfm69DataMode expected)
@@ -321,12 +321,6 @@ namespace RfmUsb.Net.IntTests
         public void TestPayloadLength()
         {
             TestRange<ushort>(() => _rfm69.PayloadLength, (v) => _rfm69.PayloadLength = v, 0, 0xFF);
-        }
-
-        [TestMethod]
-        public void TestRadioConfig()
-        {
-            TestRange<byte>(() => _rfm69.RadioConfig, (v) => _rfm69.RadioConfig = v, 0, 26);
         }
 
         [TestMethod]

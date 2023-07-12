@@ -223,11 +223,6 @@ namespace RfmUsb.Net
         ushort PreambleSize { get; set; }
 
         /// <summary>
-        /// The current predefined radio configuration
-        /// </summary>
-        byte RadioConfig { get; set; }
-
-        /// <summary>
         /// Get the RfmUsb radio version
         /// </summary>
         byte RadioVersion { get; }
@@ -300,12 +295,6 @@ namespace RfmUsb.Net
         /// <param name="dio">The <see cref="Dio"/></param>
         /// <returns>The <see cref="DioMapping"/></returns>
         DioMapping GetDioMapping(Dio dio);
-
-        /// <summary>
-        /// Get the list of predefined radio configurations.
-        /// </summary>
-        /// <returns>The discriptive list of ratio configurations</returns>
-        IList<string> GetRadioConfigurations();
 
         /// <summary>
         /// Open the RfmUsb device

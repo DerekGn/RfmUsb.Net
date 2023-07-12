@@ -286,13 +286,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte RadioConfig
-        {
-            get => SendCommand(Commands.GetRadioConfig).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetRadioConfig} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
         public byte RadioVersion => SendCommand(Commands.GetRadioVersion).ConvertToByte();
 
         ///<inheritdoc/>
@@ -391,33 +384,6 @@ namespace RfmUsb.Net
             }
 
             throw new RfmUsbCommandExecutionException($"Invalid response [{result}]");
-        }
-
-        ///<inheritdoc/>
-        public IList<string> GetRadioConfigurations()
-        {
-            lock (SerialPort)
-            {
-                List<string> configs = new List<string>();
-
-                var result = SendCommand(Commands.GetRadioConfigList);
-
-                configs.Add(result);
-
-                do
-                {
-                    try
-                    {
-                        configs.Add(SerialPort.ReadLine());
-                    }
-                    catch (TimeoutException)
-                    {
-                        break;
-                    }
-                } while (true);
-
-                return configs.AsReadOnly();
-            }
         }
 
         ///<inheritdoc/>

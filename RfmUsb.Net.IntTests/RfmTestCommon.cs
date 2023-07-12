@@ -157,14 +157,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestGetRadioConfigurations()
-        {
-            var configList = RfmBase.GetRadioConfigurations();
-
-            configList.Should().NotBeEmpty();
-        }
-
-        [TestMethod]
         public void TestInterPacketRxDelay()
         {
             TestRange<byte>(() => RfmBase.InterPacketRxDelay, (v) => RfmBase.InterPacketRxDelay = v, 0, 15);

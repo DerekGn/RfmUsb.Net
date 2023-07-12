@@ -160,8 +160,6 @@ namespace RfmUsb.Net
         public const string GetPreambleLength = "g-prl";
         public const string GetPreamblePolarity = "g-pp";
         public const string GetPreambleSize = "g-ps";
-        public const string GetRadioConfig = "g-rc";
-        public const string GetRadioConfigList = "g-rcl";
         public const string GetRadioVersion = "g-v";
         public const string GetRestartRxOnCollision = "g-rroc";
         public const string GetRssi = "g-r";
@@ -302,7 +300,6 @@ namespace RfmUsb.Net
         public const string SetPreambleLength = "s-prl";
         public const string SetPreamblePolarity = "s-pp";
         public const string SetPreambleSize = "s-ps";
-        public const string SetRadioConfig = "s-rc";
         public const string SetRestartRxOnCollision = "s-rroc";
         public const string SetRssiCollisionThreshold = "s-rct";
         public const string SetRssiOffset = "s-ro";
