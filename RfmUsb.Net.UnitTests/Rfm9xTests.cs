@@ -297,7 +297,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetFormerTemperatureValue()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.FormerTemperatureValue; },
+                () => { return _rfmDevice.FormerTemperature; },
                 (v) => v.Should().Be((sbyte)0xA),
                 Commands.GetFormerTemperatureValue,
                 "0xA");
@@ -1293,7 +1293,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetFormerTemperatureValue()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.FormerTemperatureValue = 0x55; },
+                () => { _rfmDevice.FormerTemperature = 0x55; },
                 Commands.SetFormerTemperatureValue,
                 "0x55");
         }
@@ -1833,7 +1833,7 @@ namespace RfmUsb.Net.UnitTests
             _rfmDevice.SetTimerCoefficient(expected, 10);
 
             // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerCoefficient} {(int)expected} 10\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerCoefficient} {(int)expected} 0x0A\n"), Times.Once);
         }
 
         [TestMethod]
@@ -1856,7 +1856,7 @@ namespace RfmUsb.Net.UnitTests
             _rfmDevice.SetTimerResolution(expected, TimerResolution.Resolution64us);
 
             // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerCoefficient} {(int)expected} {(int)TimerResolution.Resolution64us}\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetTimerResolution} {(int)expected} 0x{(byte)TimerResolution.Resolution64us:X2}\n"), Times.Once);
         }
 
         [TestMethod]

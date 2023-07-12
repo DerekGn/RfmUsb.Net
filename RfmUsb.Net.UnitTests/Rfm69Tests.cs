@@ -607,7 +607,7 @@ namespace RfmUsb.Net.UnitTests
             _rfmDevice.DataMode = Rfm69DataMode.Packet;
 
             // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetDataMode} 0x{Rfm69DataMode.Packet:X}\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.SetDataMode} 0x{(byte)Rfm69DataMode.Packet:X2}\n"), Times.Once);
         }
 
         [TestMethod]

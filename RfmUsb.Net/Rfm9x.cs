@@ -143,7 +143,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public sbyte FormerTemperatureValue
+        public sbyte FormerTemperature
         {
             get => SendCommand(Commands.GetFormerTemperatureValue).ConvertToSByte();
             set => SendCommandWithCheck($"{Commands.SetFormerTemperatureValue} 0x{value:X2}", ResponseOk);

@@ -656,9 +656,9 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return RfmBase.Temperature; },
-                (v) => v.Should().Be(0xA0),
+                (v) => v.Should().Be(-100),
                 Commands.GetTemperatureValue,
-                "0xA0");
+                "0x9C");
         }
 
         [TestMethod]

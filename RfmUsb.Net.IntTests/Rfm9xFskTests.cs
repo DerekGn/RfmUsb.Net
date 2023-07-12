@@ -152,7 +152,7 @@ namespace RfmUsb.Net.IntTests
         [Ignore("not implemented in device")]
         public void TestFormerTemperatureValue()
         {
-            TestRange(() => _rfm9x.FormerTemperatureValue, (v) => _rfm9x.FormerTemperatureValue = v);
+            TestRange(() => _rfm9x.FormerTemperature, (v) => _rfm9x.FormerTemperature = v);
         }
 
         [TestMethod]

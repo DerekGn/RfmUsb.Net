@@ -327,7 +327,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte Temperature => SendCommand(Commands.GetTemperatureValue).ConvertToByte();
+        public sbyte Temperature => SendCommand(Commands.GetTemperatureValue).ConvertToSByte();
 
         ///<inheritdoc/>
         public bool TxStartCondition

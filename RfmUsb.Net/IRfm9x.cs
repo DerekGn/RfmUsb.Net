@@ -141,7 +141,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// The Temperature saved during the latest IQ (RSSI and Image) calibration
         /// </summary>
-        sbyte FormerTemperatureValue { get; set; }
+        sbyte FormerTemperature { get; set; }
 
         /// <summary>
         /// Estimated frequency error from modem

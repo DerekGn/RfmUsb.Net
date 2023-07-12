@@ -265,7 +265,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Measured temperature value
         /// </summary>
-        byte Temperature { get; }
+        sbyte Temperature { get; }
 
         /// <summary>
         /// Defines the condition to start packet transmission :
