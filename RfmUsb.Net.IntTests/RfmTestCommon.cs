@@ -186,7 +186,7 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
 
             // Revert to sleep mode.
-            TestAssignedValue(Mode.Standby, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
+            RfmBase.Mode = Mode.Sleep;
         }
 
         [TestMethod]
