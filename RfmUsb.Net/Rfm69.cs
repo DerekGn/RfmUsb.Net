@@ -275,9 +275,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public void ExecuteListenModeAbort()
+        public void ExecuteListenModeAbort(Mode mode)
         {
-            SendCommandWithCheck(Commands.ExecuteListenModeAbort, ResponseOk);
+            SendCommandWithCheck($"{Commands.ExecuteListenModeAbort} 0x{(byte)mode:X2}",  ResponseOk);
         }
 
         ///<inheritdoc/>

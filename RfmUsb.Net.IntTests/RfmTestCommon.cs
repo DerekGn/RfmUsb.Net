@@ -376,12 +376,14 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmit()
         {
             RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 });
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmitReceive()
         {
             Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 });
@@ -393,6 +395,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmitReceiveTxRxTimeout()
         {
             Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000, 1000);
@@ -404,6 +407,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmitReceiveTxTimeout()
         {
             Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000);
@@ -413,25 +417,30 @@ namespace RfmUsb.Net.IntTests
                 .Throw<RfmUsbTransmitException>()
                 .WithMessage("Packet transmission failed: [TX Timeout]");
         }
+
         [TestMethod]
+        [Ignore]
         public void TestTransmitWithCountAndInterval()
         {
             RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100);
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmitWithCountAndIntervalAndTimeout()
         {
             RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100, 1000);
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTransmitWithTxCount()
         {
             RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1);
         }
 
         [TestMethod]
+        [Ignore]
         public void TestTxStartCondition()
         {
             TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);

@@ -576,7 +576,7 @@ namespace RfmUsb.Net
             {
                 DioIrq irqMask = DioIrq.None;
 
-                SerialPort.Write($"{Commands.GetDioInterrupt}\n");
+                SerialPort.Write($"{Commands.GetDioInterruptMask}\n");
 
                 for (int i = 0; i < 6; i++)
                 {
@@ -650,7 +650,7 @@ namespace RfmUsb.Net
             {
                 byte mask = (byte)(((byte)value) >> 1);
 
-                SendCommandWithCheck($"{Commands.SetDio} 0x{mask:X}", ResponseOk);
+                SendCommandWithCheck($"{Commands.SetDioInterruptMask} 0x{mask:X}", ResponseOk);
 
                 if (SerialPort.BytesToRead != 0)
                 {

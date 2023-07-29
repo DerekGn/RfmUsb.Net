@@ -221,7 +221,7 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             result.Should().Be(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4);
 
-            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterrupt}\n"), Times.Once);
+            MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioInterruptMask}\n"), Times.Once);
         }
 
         [TestMethod]
@@ -819,7 +819,7 @@ namespace RfmUsb.Net.UnitTests
 
             // Assert
             MockSerialPort
-                .Verify(_ => _.Write($"{Commands.SetDioInterrupt} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
+                .Verify(_ => _.Write($"{Commands.SetDioInterruptMask} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
                 Times.Once);
         }
 

@@ -164,9 +164,14 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestExecuteListenAbort()
+        [DataRow(Mode.Rx)]
+        [DataRow(Mode.Sleep)]
+        [DataRow(Mode.Standby)]
+        [DataRow(Mode.Synth)]
+        [DataRow(Mode.Tx)]
+        public void TestExecuteListenAbort(Mode mode)
         {
-            _rfm69.ExecuteListenModeAbort();
+            _rfm69.ExecuteListenModeAbort(mode);
         }
 
         [TestMethod]

@@ -216,7 +216,8 @@ namespace RfmUsb.Net
         /// <summary>
         /// Abort listen mode
         /// </summary>
-        void ExecuteListenModeAbort();
+        /// <param name="mode">The <see cref="Mode"/> to transition to after abort</param>
+        void ExecuteListenModeAbort(Mode mode);
 
         /// <summary>
         /// Execute a temperature measurement

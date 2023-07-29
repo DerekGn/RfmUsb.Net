@@ -72,8 +72,7 @@ namespace RfmUsb.Net
         public const string GetDccFreq = "g-df";
         public const string GetDccFreqAfc = "g-dfa";
         public const string GetDcFree = "g-dfe";
-        public const string GetDio = "g-di";
-        public const string GetDioInterrupt = "g-di";
+        public const string GetDioInterruptMask = "g-dim";
         public const string GetDioMapping = "g-dio";
         public const string GetErrorCodingRate = "g-ecr";
         public const string GetFastHopOn = "g-fh";
@@ -222,8 +221,7 @@ namespace RfmUsb.Net
         public const string SetDccFreq = "s-df";
         public const string SetDccFreqAfc = "s-dfa";
         public const string SetDcFree = "s-dfe";
-        public const string SetDio = "s-di";
-        public const string SetDioInterrupt = "s-di";
+        public const string SetDioInterruptMask = "s-dim";
         public const string SetDioMapping = "s-dio";
         public const string SetErrorCodingRate = "s-ecr";
         public const string SetFastHopOn = "s-fh";

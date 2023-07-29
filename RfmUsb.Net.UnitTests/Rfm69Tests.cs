@@ -509,12 +509,22 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestListenModeAbort()
+        [DataRow(Mode.Rx)]
+        [DataRow(Mode.Sleep)]
+        [DataRow(Mode.Standby)]
+        [DataRow(Mode.Synth)]
+        [DataRow(Mode.Tx)]
+        public void TestListenModeAbort(Mode expected)
         {
-            ExecuteTest(
-                () => { _rfmDevice.ExecuteListenModeAbort(); },
+            ExecuteSetTest(
+                () => { _rfmDevice.ExecuteListenModeAbort(expected); },
                 Commands.ExecuteListenModeAbort,
-                RfmBase.ResponseOk);
+                $"0x{(byte)expected:X2}");
+
+            //ExecuteTest(
+            //    () => { _rfmDevice.ExecuteListenModeAbort(); },
+            //    Commands.ExecuteListenModeAbort,
+            //    RfmBase.ResponseOk);
         }
 
         [TestMethod]
