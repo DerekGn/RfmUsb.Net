@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Fsk data shaping
@@ -33,14 +33,17 @@ namespace RfmUsb
         /// No Shapping
         /// </summary>
         None,
+
         /// <summary>
         /// Gaussian filter, BT = 1.0
         /// </summary>
         GaussianBt1_0,
+
         /// <summary>
         /// Gaussian filter, BT = 0.5
         /// </summary>
         GaussianBt0_5,
+
         /// <summary>
         /// Gaussian filter, BT = 0.3
         /// </summary>

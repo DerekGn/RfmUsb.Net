@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Size of each decrement of the RSSI threshold in the OOKdemodulator
@@ -33,30 +33,37 @@ namespace RfmUsb
         /// 0.5 db
         /// </summary>
         Step0_5db,
+
         /// <summary>
         /// 1 db
         /// </summary>
         Step1db,
+
         /// <summary>
         /// 1.5 db
         /// </summary>
         Step1_5db,
+
         /// <summary>
         /// 2 db
         /// </summary>
         Step2db,
+
         /// <summary>
         /// 3 db
         /// </summary>
         Step3db,
+
         /// <summary>
         /// 4 db
         /// </summary>
         Step4db,
+
         /// <summary>
         /// 5 db
         /// </summary>
         Step5db,
+
         /// <summary>
         /// 6 db
         /// </summary>

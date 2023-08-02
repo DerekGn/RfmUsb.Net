@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Action taken after acceptance of a packet in Listen mode
@@ -33,15 +33,18 @@ namespace RfmUsb
         /// Chip stays in Rx mode. Listen mode stops and must be disabled.
         /// </summary>
         Rx,
+
         /// <summary>
         /// chip stays in Rx mode until PayloadReady orTimeout interrupt occurs. It then goes to the mode defined by Mode.
         /// </summary>
         Mode,
+
         /// <summary>
         /// chip stays in Rx mode until PayloadReady or Timeout interrupt occurs. Listen mode then resumes in Idle state.
         /// FIFO content is lost at next Rx wakeup.
         /// </summary>
         Idle,
+
         /// <summary>
         /// Reserved
         /// </summary>

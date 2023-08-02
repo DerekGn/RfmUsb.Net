@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 using System;
 
-namespace RfmUsb.Exceptions
+namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
     /// Throw when a command execution fails
@@ -35,23 +35,27 @@ namespace RfmUsb.Exceptions
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbCommandExecutionException"/> class.
         /// </summary>
-        public RfmUsbCommandExecutionException() { }
+        public RfmUsbCommandExecutionException()
+        { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbCommandExecutionException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public RfmUsbCommandExecutionException(string message) : base(message) { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbCommandExecutionException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="inner">The exception that is the cause of the current exception, 
+        /// <param name="inner">The exception that is the cause of the current exception,
         /// or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public RfmUsbCommandExecutionException(string message, Exception inner) : base(message, inner) { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RfmUsbCommandExecutionException"/> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="System.Runtime.Serialization.SerializationInfo"/> that holds 
+        /// <param name="info">The <see cref="System.Runtime.Serialization.SerializationInfo"/> that holds
         /// the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="System.Runtime.Serialization.StreamingContext"/> that contains contextual information
         /// about the source or destination.</param>

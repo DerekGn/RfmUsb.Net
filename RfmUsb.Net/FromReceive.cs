@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,50 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Modulation scheme
+    /// Controls the Sequencer transition from the Receivestate
     /// </summary>
-    public enum Modulation
+    public enum FromReceive
     {
         /// <summary>
-        /// Fsk modulation
+        /// Unused state
         /// </summary>
-        Fsk = 0,
+        UnusedA,
         /// <summary>
-        /// Ook modulation
+        /// To PacketReceived On PayloadReady Irq
         /// </summary>
-        Ook = 1
+        ToPacketReceivedOnPayloadReady,
+
+        /// <summary>
+        /// To LowPowerSelection On PayloadReady Irq
+        /// </summary>
+        ToLowPowerSelectionOnPayLoadReady,
+
+        /// <summary>
+        /// To PacketReceived On CrcOk Irq
+        /// </summary>
+        ToPacketReceivedStateOnCrcOk,
+
+        /// <summary>
+        /// To SequencerOff On Rssi Irq
+        /// </summary>
+        ToSequencerOffOnRssi,
+
+        /// <summary>
+        /// To SequencerOff On SyncAddress Irq
+        /// </summary>
+        ToSequencerOffOnSyncAddress,
+
+        /// <summary>
+        /// To SequencerOff On SyncAddress Irq
+        /// </summary>
+        ToSequencerOffOnPreambleDetect,
+        /// <summary>
+        /// Unused state
+        /// </summary>
+        UnusedB
+
     }
 }

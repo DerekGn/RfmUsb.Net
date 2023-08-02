@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,59 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+using System;
+
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Defines DC-free encoding/decoding
+    /// The lora Irq flags
     /// </summary>
-    public enum DcFree
+    [Flags]
+    public enum LoraIrqFlags
     {
         /// <summary>
-        /// None Off
+        /// No flags set
         /// </summary>
-        None,
+        None = 0,
+
         /// <summary>
-        /// Manchester encoding
+        /// Valid Lora signal detected during CAD operation
         /// </summary>
-        Manchester,
+        CadDetected = 0x01,
+
         /// <summary>
-        /// Data whitening
+        /// FHSS change channel interrupt
         /// </summary>
-        Whitening,
+        FhssChangeChannel = 0x02,
+
         /// <summary>
-        /// Reserved
+        /// CAD complete
         /// </summary>
-        Reserved
+        CadDone = 0x04,
+
+        /// <summary>
+        /// FIFO Payload transmission complete interrupt
+        /// </summary>
+        TxDone = 0x08,
+
+        /// <summary>
+        /// Valid header received in Rx
+        /// </summary>
+        ValidHeader = 0x10,
+
+        /// <summary>
+        /// Payload CRC error interrupt
+        /// </summary>
+        PayloadCrcError = 0x20,
+
+        /// <summary>
+        /// Packet reception complete interrupt
+        /// </summary>
+        RxDone = 0x40,
+
+        /// <summary>
+        /// Timeout interrupt
+        /// </summary>
+        RxTimeout = 0x80
     }
 }

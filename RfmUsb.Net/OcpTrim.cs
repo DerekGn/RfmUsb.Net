@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted//free of charge//to any person obtaining a copy
 * of this software and associated documentation files (the "Software")//to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Trimming of OCP current
@@ -33,62 +33,77 @@ namespace RfmUsb
         /// 45ma
         /// </summary>
         OcpTrim45,
+
         /// <summary>
         /// 50 ma
         /// </summary>
         OcpTrim50,
+
         /// <summary>
         /// 55 ma
         /// </summary>
         OcpTrim55,
+
         /// <summary>
         /// 60 ma
         /// </summary>
         OcpTrim60,
+
         /// <summary>
         /// 65 ma
         /// </summary>
         OcpTrim65,
+
         /// <summary>
         /// 70 ma
         /// </summary>
         OcpTrim70,
+
         /// <summary>
         /// 75 ma
         /// </summary>
         OcpTrim75,
+
         /// <summary>
         /// 80 ma
         /// </summary>
         OcpTrim80,
+
         /// <summary>
         /// 85 ma
         /// </summary>
         OcpTrim85,
+
         /// <summary>
         /// 90 ma
         /// </summary>
         OcpTrim90,
+
         /// <summary>
         /// 95 ma
         /// </summary>
         OcpTrim95,
+
         /// <summary>
         /// 100 ma
         /// </summary>
         OcpTrim100,
+
         /// <summary>
         /// 105 ma
         /// </summary>
         OcpTrim105,
+
         /// <summary>
         /// 110 ma
         /// </summary>
         OcpTrim110,
+
         /// <summary>
         /// 115 ma
         /// </summary>
         OcpTrim115,
+
         /// <summary>
         /// 120 ma
         /// </summary>
