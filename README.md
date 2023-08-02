@@ -18,7 +18,7 @@ Install-Package RfmUsb
 
 The RfmUsb package is compatible with the following runtimes:
 
-* .NET Standard 2.0
+* .Net Core 7.0
 
 ## Creating Instance
 
