@@ -24,7 +24,7 @@
     </PackageReleaseNotes>
     <Version>3.0.0</Version>
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
