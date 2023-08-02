@@ -38,7 +38,7 @@ namespace RfmUsb.Net.IntTests
             _rfm69 = _serviceProvider.GetService<IRfm69>();
             RfmBase = _rfm69;
 
-            _rfm69.Open("COM3", 230400);
+            _rfm69.Open((string)TestContext.Properties["Rfm69"], int.Parse((string)TestContext.Properties["BaudRate"]));
         }
 
         [TestMethod]

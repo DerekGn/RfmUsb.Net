@@ -25,6 +25,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RfmUsb.Net.Ports;
 using Serilog;
 using Serilog.Core;
@@ -64,6 +65,8 @@ namespace RfmUsb.Net.IntTests
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
+
+        public TestContext TestContext { get; set; }
 
         internal static IEnumerable<byte> RandomSequence()
         {
