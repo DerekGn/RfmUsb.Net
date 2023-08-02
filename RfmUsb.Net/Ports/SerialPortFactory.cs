@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     [ExcludeFromCodeCoverage]
     internal class SerialPortFactory : ISerialPortFactory
@@ -39,6 +39,7 @@ namespace RfmUsb.Ports
         {
             return new SerialPort(serialPort);
         }
+
         /// <summary>
         /// Get the list of serial ports from the OD
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     [ExcludeFromCodeCoverage]
     internal class SerialPort : ISerialPort
@@ -52,6 +52,7 @@ namespace RfmUsb.Ports
             _serialPort.DataReceived += DataReceivedHandler;
             _serialPort.PinChanged += PinChangedHandler;
         }
+
         public Handshake Handshake { get => _serialPort.Handshake; set => _serialPort.Handshake = value; }
         public Encoding Encoding { get => _serialPort.Encoding; set => _serialPort.Encoding = value; }
         public bool DtrEnable { get => _serialPort.DtrEnable; set => _serialPort.DtrEnable = value; }
@@ -77,8 +78,11 @@ namespace RfmUsb.Ports
         public bool BreakState { get => _serialPort.BreakState; set => _serialPort.BreakState = value; }
         public Stream BaseStream => _serialPort.BaseStream;
         public int BytesToRead => _serialPort.BytesToRead;
+
         public event SerialDataReceivedEventHandler DataReceived;
+
         public event SerialPinChangedEventHandler PinChanged;
+
         public event SerialErrorReceivedEventHandler ErrorReceived;
 
         public void Close()
@@ -180,7 +184,7 @@ namespace RfmUsb.Ports
             {
                 if (disposing)
                 {
-                    if(_serialPort != null)
+                    if (_serialPort != null)
                     {
                         _serialPort.ErrorReceived -= ErrorReceivedHandler;
                         _serialPort.DataReceived -= DataReceivedHandler;

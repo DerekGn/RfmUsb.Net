@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,10 @@
 */
 
 using Microsoft.Extensions.DependencyInjection;
-using RfmUsb.Ports;
+using RfmUsb.Net.Ports;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Extensions for the <see cref="IServiceCollection"/> to enable configuration of rfmusb dependencies
@@ -34,14 +34,14 @@ namespace RfmUsb
     public static class RfmUsbServiceExtensions
     {
         /// <summary>
-        /// Add a singleton instance of an <see cref="IRfmUsb"/> implementation
+        /// Add a singleton instance of an <see cref="IRfm69"/> implementation
         /// </summary>
-        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfmUsb"/> instance</param>
+        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfm69"/> instance</param>
         /// <returns>The <see cref="IServiceCollection"/></returns>
         [ExcludeFromCodeCoverage]
-        public static IServiceCollection AddRfmUsb(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddRfm6x(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IRfmUsb, RfmUsb>();
+            serviceCollection.AddSingleton<IRfm69, Rfm69>();
             serviceCollection.AddSerialPortFactory();
             return serviceCollection;
         }

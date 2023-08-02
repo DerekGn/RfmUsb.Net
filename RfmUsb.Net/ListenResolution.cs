@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
-    /// Resolution of Listen mode Idle time 
+    /// Resolution of Listen mode Idle time
     /// </summary>
     public enum ListenResolution
     {
@@ -33,14 +33,17 @@ namespace RfmUsb
         /// Reserved
         /// </summary>
         Reserved,
+
         /// <summary>
         /// 64 us
         /// </summary>
         Idle64us,
+
         /// <summary>
         /// 4.1 ms
         /// </summary>
         Idle4_1ms,
+
         /// <summary>
         /// 262 ms
         /// </summary>

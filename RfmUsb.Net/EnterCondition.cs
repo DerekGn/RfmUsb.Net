@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// The interrupt condition for entering the intermediate mode
@@ -33,30 +33,37 @@ namespace RfmUsb
         /// None (AutoModes Off)
         /// </summary>
         Off,
+
         /// <summary>
         /// Rising edge of FifoNotEmpty
         /// </summary>
         FifoNotEmpty,
+
         /// <summary>
         /// Rising edge of FifoLevel
         /// </summary>
         FifoLevel,
+
         /// <summary>
         /// Rising edge of CrcOk
         /// </summary>
         CrcOk,
+
         /// <summary>
         /// Rising edge of PayloadReady
         /// </summary>
         PayloadReady,
+
         /// <summary>
         /// Rising edge of SyncAddress
         /// </summary>
         SyncAddressMatch,
+
         /// <summary>
         /// Rising edge of PacketSent
         /// </summary>
         PacketSent,
+
         /// <summary>
         /// Falling edge of FifoNotEmpty (i.e. FIFO empty)
         /// </summary>

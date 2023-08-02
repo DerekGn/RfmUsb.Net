@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 
-namespace RfmUsb.Ports
+namespace RfmUsb.Net.Ports
 {
     /// <summary>
     /// Defines the <see cref="ISerialPortFactory"/> interface
@@ -36,6 +36,7 @@ namespace RfmUsb.Ports
         /// </summary>
         /// <returns></returns>
         IList<string> GetSerialPorts();
+
         /// <summary>
         /// Create an <see cref="ISerialPort"/> instance
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// The Rfm69 digital io pins
@@ -33,22 +33,27 @@ namespace RfmUsb
         /// Dio0 pin
         /// </summary>
         Dio0,
+
         /// <summary>
         /// Dio1 pin
         /// </summary>
         Dio1,
+
         /// <summary>
         /// Dio2 pin
         /// </summary>
         Dio2,
+
         /// <summary>
         /// Dio3 pin
         /// </summary>
         Dio3,
+
         /// <summary>
         /// Dio4 pin
         /// </summary>
         Dio4,
+
         /// <summary>
         /// Dio5 pin
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// The Ook modulation shapping
@@ -33,14 +33,17 @@ namespace RfmUsb
         /// No Shaping
         /// </summary>
         None,
+
         /// <summary>
         /// filtering with fcutoff = BR
         /// </summary>
         FilteringBr,
+
         /// <summary>
         /// filtering with fcutoff = 2*BR
         /// </summary>
         Filtering2Br,
+
         /// <summary>
         /// Reserved
         /// </summary>

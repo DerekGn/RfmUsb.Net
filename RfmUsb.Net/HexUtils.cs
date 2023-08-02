@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2022 Derek Goslin
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace RfmUsb
+namespace RfmUsb.Net
 {
     /// <summary>
     /// Set of hex string extensions
     /// </summary>
     public static class HexUtil
     {
-        private readonly static Dictionary<char, byte> hexmap = new Dictionary<char, byte>()
+        private static readonly Dictionary<char, byte> hexmap = new Dictionary<char, byte>()
         {
             { 'a', 0xA },{ 'b', 0xB },{ 'c', 0xC },{ 'd', 0xD },
             { 'e', 0xE },{ 'f', 0xF },{ 'A', 0xA },{ 'B', 0xB },
@@ -41,6 +41,7 @@ namespace RfmUsb
             { '4', 0x4 },{ '5', 0x5 },{ '6', 0x6 },{ '7', 0x7 },
             { '8', 0x8 },{ '9', 0x9 }
         };
+
         /// <summary>
         /// Convert a hex string to a sequence of bytes
         /// </summary>
@@ -58,7 +59,6 @@ namespace RfmUsb
 
             if (startsWithHexStart && hex.Length == 2)
                 throw new ArgumentException("There are no characters in the hex string");
-
 
             int startIndex = startsWithHexStart ? 2 : 0;
 
