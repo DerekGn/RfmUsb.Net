@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin
+* Copyright (c) 2023 Derek Goslin https://github.com/DerekGn
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,14 @@
 * SOFTWARE.
 */
 
-using Microsoft.Extensions.DependencyInjection;
-using RfmUsb.Net.Ports;
-using System.Diagnostics.CodeAnalysis;
-
-namespace RfmUsb.Net
+namespace RfmUsbConsole.Commands
 {
-    /// <summary>
-    /// Extensions for the <see cref="IServiceCollection"/> to enable configuration of rfmusb dependencies
-    /// </summary>
-    public static class RfmUsbServiceExtensions
+    internal static class Templates
     {
-        /// <summary>
-        /// Add a singleton instance of an <see cref="IRfm69"/> implementation
-        /// </summary>
-        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfm69"/> and <see cref="IRfm9x"/> instance</param>
-        /// <returns>The <see cref="IServiceCollection"/></returns>
-        [ExcludeFromCodeCoverage]
-        public static IServiceCollection AddRfmUsb(this IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IRfm69, Rfm69>();
-            serviceCollection.AddSingleton<IRfm9x, Rfm9x>();
-            serviceCollection.AddSerialPortFactory();
-            return serviceCollection;
-        }
+        public const string BaudRate = "-b|--baudrate";
+        public const string Frequency = "-f|--frequency";
+        public const string Modulation = "-m|--modulation";
+        public const string NumberPings = "-n|--number";
+        public const string SerialPort = "-p|--port";
     }
 }

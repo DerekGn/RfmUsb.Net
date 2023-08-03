@@ -896,43 +896,5 @@ namespace RfmUsb.Net.UnitTests
                 Commands.ExecuteStartRssi,
                 RfmBase.ResponseOk);
         }
-
-        [TestMethod]
-        public void TestWaitForIrq()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns("DIO PIN IRQ");
-
-            // Act
-            _rfmDevice.WaitForIrq();
-
-            // Arrange
-            MockSerialPort
-                .Verify(_ => _.ReadLine());
-        }
-
-        [TestMethod]
-        public void TestWaitForIrqNoIrqResponse()
-        {
-            // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns("");
-
-            // Act
-            Action action = () => _rfmDevice.WaitForIrq();
-
-            // Arrange
-            action
-                .Should()
-                .Throw<RfmUsbCommandExecutionException>()
-                .WithMessage("Invalid response received for IRQ signal: []");
-        }
     }
 }

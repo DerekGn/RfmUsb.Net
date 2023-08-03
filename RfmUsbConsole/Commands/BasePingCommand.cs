@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin
+* Copyright (c) 2022 Derek Goslin https://github.com/DerekGn
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,29 @@
 * SOFTWARE.
 */
 
-using Microsoft.Extensions.DependencyInjection;
-using RfmUsb.Net.Ports;
-using System.Diagnostics.CodeAnalysis;
+using McMaster.Extensions.CommandLineUtils;
+using RfmUsb.Net;
 
-namespace RfmUsb.Net
+namespace RfmUsbConsole.Commands
 {
-    /// <summary>
-    /// Extensions for the <see cref="IServiceCollection"/> to enable configuration of rfmusb dependencies
-    /// </summary>
-    public static class RfmUsbServiceExtensions
+    internal abstract class BasePingCommand : BaseCommand
     {
-        /// <summary>
-        /// Add a singleton instance of an <see cref="IRfm69"/> implementation
-        /// </summary>
-        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add the <see cref="IRfm69"/> and <see cref="IRfm9x"/> instance</param>
-        /// <returns>The <see cref="IServiceCollection"/></returns>
-        [ExcludeFromCodeCoverage]
-        public static IServiceCollection AddRfmUsb(this IServiceCollection serviceCollection)
+        protected AutoResetEvent IrqSignal;
+
+        protected BasePingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            serviceCollection.AddSingleton<IRfm69, Rfm69>();
-            serviceCollection.AddSingleton<IRfm9x, Rfm9x>();
-            serviceCollection.AddSerialPortFactory();
-            return serviceCollection;
+            IrqSignal = new AutoResetEvent(false);
+        }
+
+        [Option(Templates.Frequency, "The radio frequency", CommandOptionType.SingleValue)]
+        public int Frequency { get; set; } = 433920000;
+
+        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
+        public int PingCount { get; set; } = 3;
+
+        protected override void HandleDioInterrupt(DioIrq e)
+        {
+            IrqSignal.Set();
         }
     }
 }

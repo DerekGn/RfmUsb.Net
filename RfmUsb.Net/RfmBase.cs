@@ -60,6 +60,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public event EventHandler<DioIrq> DioInterrupt;
+
+        ///<inheritdoc/>
         public AddressFilter AddressFiltering
         {
             get => (AddressFilter)SendCommand(Commands.GetAddressFiltering).ConvertToInt32();
@@ -172,6 +175,9 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetInterPacketRxDelay).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetInterPacketRxDelay} 0x{value:X}", ResponseOk);
         }
+
+        ///<inheritdoc/>
+        public byte LastRssi => throw new NotImplementedException();
 
         ///<inheritdoc/>
         public LnaGain LnaGainSelect
@@ -306,6 +312,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
+
+        ///<inheritdoc/>
         public IEnumerable<byte> Sync
         {
             get => SendCommand(Commands.GetSync).ToBytes();
@@ -335,12 +344,6 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
-
-        ///<inheritdoc/>
-        public byte LastRssi => throw new NotImplementedException();
 
         ///<inheritdoc/>
         public void Close()
@@ -526,6 +529,17 @@ namespace RfmUsb.Net
 
                 Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(Environment.NewLine, lines));
 
+                var dioIrq = lines.Find(_ => _.StartsWith("DIO PIN IRQ"));
+
+                if (!string.IsNullOrEmpty(dioIrq))
+                {
+                    RaiseDioInterrupt((DioIrq)Convert.ToInt32(
+                        dioIrq.Split(" ")
+                        .Last()
+                        .Replace("[", string.Empty)
+                        .Replace("]", string.Empty), 16));
+                }
+
                 return lines;
             }
         }
@@ -636,6 +650,9 @@ namespace RfmUsb.Net
                 return irqMask;
             }
         }
+
+        private void RaiseDioInterrupt(DioIrq values) =>
+                                                DioInterrupt?.Invoke(this, values);
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {

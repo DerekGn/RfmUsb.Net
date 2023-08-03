@@ -33,6 +33,11 @@ namespace RfmUsb.Net
     public interface IRfm : IDisposable
     {
         /// <summary>
+        /// Event raised when an DIO Irq line interrupt occurs
+        /// </summary>
+        event EventHandler<DioIrq> DioInterrupt;
+
+        /// <summary>
         /// Defines address based filtering in Rx
         /// </summary>
         AddressFilter AddressFiltering { get; set; }

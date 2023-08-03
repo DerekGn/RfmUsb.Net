@@ -102,14 +102,14 @@ namespace RfmUsb.Net
         public EnterCondition AutoModeEnterCondition
         {
             get => (EnterCondition)SendCommand(Commands.GetAutoModeEnterCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAutoModeEnterCondition} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetAutoModeEnterCondition} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public ExitCondition AutoModeExitCondition
         {
             get => (ExitCondition)SendCommand(Commands.GetAutoModeExitCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAutoModeExitCondition} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetAutoModeExitCondition} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -130,7 +130,7 @@ namespace RfmUsb.Net
         public IntermediateMode IntermediateMode
         {
             get => (IntermediateMode)SendCommand(Commands.GetIntermediateMode).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetIntermediateMode} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetIntermediateMode} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -302,20 +302,6 @@ namespace RfmUsb.Net
         public void SetAesKey(IEnumerable<byte> key)
         {
             SendCommandWithCheck($"{Commands.ExecuteSetAesKey} {BitConverter.ToString(key.ToArray()).Replace("-", string.Empty)}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public void WaitForIrq()
-        {
-            lock (SerialPort)
-            {
-                var irq = SerialPort.ReadLine();
-
-                if (!irq.StartsWith("DIO PIN IRQ"))
-                {
-                    throw new RfmUsbCommandExecutionException($"Invalid response received for IRQ signal: [{irq}]");
-                }
-            }
         }
 
         private Rfm69IrqFlags GetIrqInternal()

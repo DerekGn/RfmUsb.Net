@@ -239,10 +239,5 @@ namespace RfmUsb.Net
         /// </summary>
         /// <param name="key"></param>
         void SetAesKey(IEnumerable<byte> key);
-
-        /// <summary>
-        /// Wait for a configured Irq to be signaled
-        /// </summary>
-        void WaitForIrq();
     }
 }
