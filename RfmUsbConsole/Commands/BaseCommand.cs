@@ -32,14 +32,27 @@ namespace RfmUsbConsole.Commands
     internal abstract class BaseCommand
     {
         protected readonly IServiceProvider ServiceProvider;
+        protected AutoResetEvent IrqSignal;
 
         protected BaseCommand(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            IrqSignal = new AutoResetEvent(false);
         }
 
-        [Option(Templates.BaudRate, "The baud rate.", CommandOptionType.SingleValue)]
-        public int BaudRate { get; set; } = 230400;
+        [Range(1200, 300000)]
+        [Option(Templates.BaudRate, "The radio baud rate.", CommandOptionType.SingleValue)]
+        public uint BaudRate { get; set; } = 4800;
+
+        [Option(Templates.Frequency, "The radio frequency.", CommandOptionType.SingleValue)]
+        public uint Frequency { get; set; } = 433920000;
+
+        [Option(Templates.Modulation, "The radio modulation.", CommandOptionType.SingleValue)]
+        public ModulationType Modulation { get; set; } = ModulationType.Fsk;
+
+        [Range(-2, 20)]
+        [Option(Templates.OutputPower, "The radio output power.", CommandOptionType.SingleValue)]
+        public byte OutputPower { get; set; } = 0;
 
         [Required]
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
@@ -59,7 +72,15 @@ namespace RfmUsbConsole.Commands
 
                 if (rfmDevice != null)
                 {
-                    rfmDevice.Open(SerialPort, BaudRate);
+                    rfmDevice.Open(SerialPort, 230400);
+
+                    rfmDevice.ExecuteReset();
+                    rfmDevice.Frequency = Frequency;
+                    rfmDevice.BitRate = BaudRate;
+                    rfmDevice.ModulationType = Modulation;
+                    rfmDevice.LnaGainSelect = LnaGain.Auto;
+                    rfmDevice.AfcAutoOn = true;
+
 
                     rfmDevice.DioInterrupt += RfmDeviceDioInterrupt;
 
@@ -70,7 +91,7 @@ namespace RfmUsbConsole.Commands
                     Console.Error.WriteLine($"Unable to resolve RfmUsb device.");
                 }
             }
-            catch(RfmUsbInvalidDeviceTypeException ex)
+            catch (RfmUsbInvalidDeviceTypeException ex)
             {
                 Console.Error.WriteLine($"Invalid Device Type: {ex.Message}");
             }
@@ -91,19 +112,19 @@ namespace RfmUsbConsole.Commands
             return result;
         }
 
-        private void RfmDeviceDioInterrupt(object? sender, DioIrq e)
-        {
-            HandleDioInterrupt(e);
-        }
-
         protected abstract void HandleDioInterrupt(DioIrq e);
-        
+
         protected virtual int OnExecute(CommandLineApplication app, IConsole console)
         {
             console.Error.WriteLine("You must specify a command. See --help for more details.");
             app.ShowHelp();
 
             return 0;
+        }
+
+        private void RfmDeviceDioInterrupt(object? sender, DioIrq e)
+        {
+            HandleDioInterrupt(e);
         }
     }
 }

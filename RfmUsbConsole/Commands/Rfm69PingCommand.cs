@@ -24,22 +24,34 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
+using Serilog;
+using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
 {
     [Command(Description = "Ping using RfmUsb Rfm9x radio")]
-    internal class Rfm69PingCommand : BasePingCommand
+    internal class Rfm69PingCommand : BaseRfm69Command
     {
         public Rfm69PingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        [Option(Templates.Modulation, "The radio modulation", CommandOptionType.SingleValue)]
-        public ModulationType Modulation { get; set; } = ModulationType.Ook;
+        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
+        public int PingCount { get; set; } = 3;
+
+        [Option(Templates.Timeout, "The ping timeout", CommandOptionType.SingleValue)]
+        public int PingTimeout { get; set; } = 1000;
 
         protected override IRfm? CreatDeviceInstance()
         {
             return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
+        }
+
+        protected override void HandleDioInterrupt(DioIrq e)
+        {
+            IrqSignal.Set();
+
+            Log.Debug("Dio Irq [{e}]", e);
         }
 
         protected override int OnExecute(CommandLineApplication app, IConsole console)
@@ -47,8 +59,6 @@ namespace RfmUsbConsole.Commands
             return ExecuteCommand((device) =>
             {
                 IRfm69 rfm69 = (IRfm69)device;
-
-                rfm69.ExecuteReset();
 
                 rfm69.DataMode = Rfm69DataMode.Packet;
                 rfm69.TxStartCondition = true;
@@ -59,15 +69,34 @@ namespace RfmUsbConsole.Commands
                 rfm69.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm69.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2;
 
+                //rfm69.DioInterruptMask = DioIrq.Dio0;
+
                 console.WriteLine("Ping started");
+
+                Stopwatch sw = new Stopwatch();
 
                 for (int i = 0; i < PingCount; i++)
                 {
                     rfm69.Fifo = new List<byte>() { 0xAA, 0x55 };
 
-                    // Todo timeout
-                    IrqSignal.WaitOne();
+                    rfm69.Mode = Mode.Tx;
+
+                    sw.Restart();
+
+                    if (IrqSignal.WaitOne(PingTimeout))
+                    {
+                        sw.Stop();
+
+                        console.WriteLine(rfm69.IrqFlags);
+                        console.WriteLine($"Ping Received [{sw.Elapsed}] {sw.ElapsedMilliseconds}");
+                    }
+                    else
+                    {
+                        console.WriteLine($"Ping [{i}] Timedout");
+                    }
                 }
+
+                IrqSignal.WaitOne();
 
                 return 0;
             });

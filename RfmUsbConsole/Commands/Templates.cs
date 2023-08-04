@@ -30,6 +30,9 @@ namespace RfmUsbConsole.Commands
         public const string Frequency = "-f|--frequency";
         public const string Modulation = "-m|--modulation";
         public const string NumberPings = "-n|--number";
+        public const string OutputPower = "-o|--output-power";
+        public const string RxBw = "-r|--recieve-bw";
         public const string SerialPort = "-p|--port";
+        public const string Timeout = "-t|--timeout";
     }
 }

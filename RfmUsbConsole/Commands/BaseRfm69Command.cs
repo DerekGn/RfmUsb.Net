@@ -22,32 +22,12 @@
 * SOFTWARE.
 */
 
-using McMaster.Extensions.CommandLineUtils;
-using RfmUsb.Net;
-
 namespace RfmUsbConsole.Commands
 {
-    [Command(Description = "Ping using RfmUsb Rfm9x radio")]
-    internal class Rfm9xPingCommand : BaseRfm9xCommand
+    internal abstract class BaseRfm69Command : BaseCommand
     {
-        public Rfm9xPingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        protected BaseRfm69Command(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-        }
-
-        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
-        public int PingCount { get; set; } = 3;
-
-        [Option(Templates.Timeout, "The ping timeout", CommandOptionType.SingleValue)]
-        public int PingTimeout { get; set; } = 1000;
-
-        protected override IRfm? CreatDeviceInstance()
-        {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm9x));
-        }
-
-        protected override void HandleDioInterrupt(DioIrq e)
-        {
-            IrqSignal.Set();
         }
     }
 }

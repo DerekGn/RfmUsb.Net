@@ -183,7 +183,7 @@ namespace RfmUsb.Net
         public LnaGain LnaGainSelect
         {
             get => (LnaGain)SendCommand(Commands.GetLnaGainSelect).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetLnaGainSelect} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetLnaGainSelect} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -197,7 +197,7 @@ namespace RfmUsb.Net
         public ModulationType ModulationType
         {
             get => (ModulationType)SendCommand(Commands.GetModulationType).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetModulationType} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetModulationType} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -527,17 +527,22 @@ namespace RfmUsb.Net
                     lines.Add(SerialPort.ReadLine());
                 } while (SerialPort.BytesToRead != 0);
 
-                Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(Environment.NewLine, lines));
+                Logger.LogInformation("Command: [{command}] Result: {response}", command, string.Join("-", lines));
 
-                var dioIrq = lines.Find(_ => _.StartsWith("DIO PIN IRQ"));
+                var interrupts = lines.Where(_ => _.StartsWith("DIO PIN IRQ"));
 
-                if (!string.IsNullOrEmpty(dioIrq))
+                if (interrupts.Any())
                 {
-                    RaiseDioInterrupt((DioIrq)Convert.ToInt32(
-                        dioIrq.Split(" ")
-                        .Last()
-                        .Replace("[", string.Empty)
-                        .Replace("]", string.Empty), 16));
+                    interrupts.ToList().ForEach(_ =>
+                    {
+                        lines.Remove(_);
+
+                        RaiseDioInterrupt((DioIrq)Convert.ToInt32(
+                            _.Split(" ")
+                            .Last()
+                            .Replace("[", string.Empty)
+                            .Replace("]", string.Empty), 16));
+                    });
                 }
 
                 return lines;

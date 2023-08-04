@@ -23,28 +23,18 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
-using RfmUsb.Net;
+using System.ComponentModel.DataAnnotations;
 
 namespace RfmUsbConsole.Commands
 {
-    internal abstract class BasePingCommand : BaseCommand
+    internal abstract class BaseRfm9xCommand : BaseCommand
     {
-        protected AutoResetEvent IrqSignal;
-
-        protected BasePingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        protected BaseRfm9xCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            IrqSignal = new AutoResetEvent(false);
         }
 
-        [Option(Templates.Frequency, "The radio frequency", CommandOptionType.SingleValue)]
-        public int Frequency { get; set; } = 433920000;
-
-        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
-        public int PingCount { get; set; } = 3;
-
-        protected override void HandleDioInterrupt(DioIrq e)
-        {
-            IrqSignal.Set();
-        }
+        [Range(0, 20)]
+        [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
+        public byte RxBw { get; set; }
     }
 }
