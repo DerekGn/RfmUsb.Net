@@ -25,6 +25,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
 using RfmUsb.Net.Exceptions;
+using Serilog;
 using System.ComponentModel.DataAnnotations;
 
 namespace RfmUsbConsole.Commands
@@ -34,10 +35,16 @@ namespace RfmUsbConsole.Commands
         protected readonly IServiceProvider ServiceProvider;
         protected AutoResetEvent IrqSignal;
 
+        private AutoResetEvent _consoleSignal;
+        private AutoResetEvent[] waitHandles;
+
         protected BaseCommand(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             IrqSignal = new AutoResetEvent(false);
+            _consoleSignal = new AutoResetEvent(false);
+
+            waitHandles = new List<AutoResetEvent>() { IrqSignal, _consoleSignal }.ToArray();
         }
 
         [Range(1200, 300000)]
@@ -58,9 +65,14 @@ namespace RfmUsbConsole.Commands
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
         public string SerialPort { get; set; }
 
+        internal int WaitForSignal(int timeout = -1)
+        {
+            return AutoResetEvent.WaitAny(waitHandles, timeout);
+        }
+
         protected abstract IRfm? CreatDeviceInstance();
 
-        protected int ExecuteCommand(Func<IRfm, int> action)
+        protected int ExecuteCommand(IConsole console, Func<IRfm, int> action)
         {
             int result = -1;
 
@@ -68,6 +80,8 @@ namespace RfmUsbConsole.Commands
 
             try
             {
+                console.CancelKeyPress += ConsoleCancelKeyPress;
+
                 rfmDevice = CreatDeviceInstance();
 
                 if (rfmDevice != null)
@@ -80,7 +94,6 @@ namespace RfmUsbConsole.Commands
                     rfmDevice.ModulationType = Modulation;
                     rfmDevice.LnaGainSelect = LnaGain.Auto;
                     rfmDevice.AfcAutoOn = true;
-
 
                     rfmDevice.DioInterrupt += RfmDeviceDioInterrupt;
 
@@ -107,12 +120,12 @@ namespace RfmUsbConsole.Commands
                     rfmDevice.Close();
                     rfmDevice.Dispose();
                 }
+
+                console.CancelKeyPress -= ConsoleCancelKeyPress;
             }
 
             return result;
         }
-
-        protected abstract void HandleDioInterrupt(DioIrq e);
 
         protected virtual int OnExecute(CommandLineApplication app, IConsole console)
         {
@@ -122,9 +135,16 @@ namespace RfmUsbConsole.Commands
             return 0;
         }
 
+        private void ConsoleCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+        {
+            _consoleSignal.Set();
+        }
+
         private void RfmDeviceDioInterrupt(object? sender, DioIrq e)
         {
-            HandleDioInterrupt(e);
+            IrqSignal.Set();
+
+            Log.Debug("Dio Irq [{e}]", e);
         }
     }
 }

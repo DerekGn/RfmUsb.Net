@@ -37,7 +37,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Falling edge of FifoNotEmpty (i.e. FIFO empty)
         /// </summary>
-        FifoEmpty,
+        FifoNotEmpty,
 
         /// <summary>
         /// Rising edge of FifoLevel or Timeout

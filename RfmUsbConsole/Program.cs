@@ -34,6 +34,8 @@ namespace RfmUsbConsole
     [Command(Description = "A console application to exchange pings between two RfmUsb devices")]
     [Subcommand(typeof(Rfm69PingCommand))]
     [Subcommand(typeof(Rfm9xPingCommand))]
+    [Subcommand(typeof(Rfm69PingListenCommand))]
+    [Subcommand(typeof(Rfm9xPingListenCommand))]
     class Program
     {
         private static IConfiguration? _configuration;

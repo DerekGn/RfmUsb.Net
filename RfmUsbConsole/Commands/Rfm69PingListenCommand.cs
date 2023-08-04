@@ -22,20 +22,47 @@
 * SOFTWARE.
 */
 
+using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
-using Serilog;
 
 namespace RfmUsbConsole.Commands
 {
-    internal abstract class BaseRfm69Command : BaseCommand
+    internal class Rfm69PingListenCommand : BaseRfm69Command
     {
-        protected BaseRfm69Command(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm69PingListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        protected override IRfm? CreatDeviceInstance()
+        protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
+            return ExecuteCommand(console, (device) =>
+            {
+                IRfm69 rfm69 = (IRfm69)device;
+
+                rfm69.DataMode = Rfm69DataMode.Packet;
+                rfm69.Mode = Mode.Rx;
+                rfm69.IntermediateMode = IntermediateMode.Sleep;
+                rfm69.AutoModeEnterCondition = EnterCondition.CrcOk;
+                rfm69.AutoModeExitCondition = ExitCondition.FifoNotEmpty;
+                rfm69.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
+                rfm69.DioInterruptMask = DioIrq.Dio0;
+
+                do
+                {
+                    int signalSource = WaitForSignal();
+
+                    if (signalSource == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        console.WriteLine("Ping Listen Stop");
+                    }
+                } while (true);
+
+                return 0;
+            });
         }
     }
 }

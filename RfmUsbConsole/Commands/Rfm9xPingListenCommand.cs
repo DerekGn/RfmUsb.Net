@@ -22,20 +22,24 @@
 * SOFTWARE.
 */
 
+using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
-using Serilog;
+using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
 {
-    internal abstract class BaseRfm69Command : BaseCommand
+    internal class Rfm9xPingListenCommand : BaseRfm69Command
     {
-        protected BaseRfm69Command(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm9xPingListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        protected override IRfm? CreatDeviceInstance()
+        protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
+            return ExecuteCommand(console, (device) =>
+            {
+                return 0;
+            });
         }
     }
 }

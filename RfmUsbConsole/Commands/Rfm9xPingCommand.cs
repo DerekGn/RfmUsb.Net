@@ -44,10 +44,5 @@ namespace RfmUsbConsole.Commands
         {
             return (IRfm?)ServiceProvider.GetService(typeof(IRfm9x));
         }
-
-        protected override void HandleDioInterrupt(DioIrq e)
-        {
-            IrqSignal.Set();
-        }
     }
 }

@@ -24,7 +24,6 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
-using Serilog;
 using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
@@ -42,21 +41,9 @@ namespace RfmUsbConsole.Commands
         [Option(Templates.Timeout, "The ping timeout", CommandOptionType.SingleValue)]
         public int PingTimeout { get; set; } = 1000;
 
-        protected override IRfm? CreatDeviceInstance()
-        {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
-        }
-
-        protected override void HandleDioInterrupt(DioIrq e)
-        {
-            IrqSignal.Set();
-
-            Log.Debug("Dio Irq [{e}]", e);
-        }
-
         protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return ExecuteCommand((device) =>
+            return ExecuteCommand(console, (device) =>
             {
                 IRfm69 rfm69 = (IRfm69)device;
 
@@ -67,9 +54,7 @@ namespace RfmUsbConsole.Commands
                 rfm69.AutoModeEnterCondition = EnterCondition.PacketSent;
                 rfm69.AutoModeExitCondition = ExitCondition.CrcOk;
                 rfm69.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
-                rfm69.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio2;
-
-                //rfm69.DioInterruptMask = DioIrq.Dio0;
+                rfm69.DioInterruptMask = DioIrq.Dio0;
 
                 console.WriteLine("Ping started");
 
@@ -83,20 +68,24 @@ namespace RfmUsbConsole.Commands
 
                     sw.Restart();
 
-                    if (IrqSignal.WaitOne(PingTimeout))
+                    int signalSource = WaitForSignal(PingTimeout);
+
+                    if (signalSource == 0)
                     {
                         sw.Stop();
 
                         console.WriteLine(rfm69.IrqFlags);
                         console.WriteLine($"Ping Received [{sw.Elapsed}] {sw.ElapsedMilliseconds}");
                     }
-                    else
+                    else if (signalSource == 1)
                     {
-                        console.WriteLine($"Ping [{i}] Timedout");
+                        console.WriteLine("Ping Cancelled.");
+                    }
+                    else if (signalSource == 0x104)
+                    {
+                        console.WriteLine($"Ping [{i}] Timeout.");
                     }
                 }
-
-                IrqSignal.WaitOne();
 
                 return 0;
             });

@@ -23,6 +23,7 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using RfmUsb.Net;
 using System.ComponentModel.DataAnnotations;
 
 namespace RfmUsbConsole.Commands
@@ -36,5 +37,10 @@ namespace RfmUsbConsole.Commands
         [Range(0, 20)]
         [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
         public byte RxBw { get; set; }
+
+        protected override IRfm? CreatDeviceInstance()
+        {
+            return (IRfm?)ServiceProvider.GetService(typeof(IRfm9x));
+        }
     }
 }

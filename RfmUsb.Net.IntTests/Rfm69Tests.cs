@@ -200,7 +200,7 @@ namespace RfmUsb.Net.IntTests
 
         [TestMethod]
         [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoEmpty)]
+        [DataRow(ExitCondition.FifoNotEmpty)]
         [DataRow(ExitCondition.FifoLevel)]
         [DataRow(ExitCondition.Off)]
         [DataRow(ExitCondition.PacketSent)]
