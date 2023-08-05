@@ -2,7 +2,7 @@
   "profiles": {
     "RfmUsbPinger": {
       "commandName": "Project",
-      "commandLineArgs": "rfm69-openthings-listen -p COM3"
+      "commandLineArgs": "rfm69-openthings-listen -p COM3 -f 434300000 -m fsk"
     }
   }
 }
