@@ -37,11 +37,25 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x = _serviceProvider.GetService<IRfm9x>();
             RfmBase = _rfm9x;
+        }
 
-            _rfm9x.Open((string)TestContext.Properties["Rfm9x"], int.Parse((string)TestContext.Properties["BaudRate"]));
+        [TestInitialize]
+        public void TestInitalise()
+        {
+            _rfm9x.Open("COM3", 230400);
 
             _rfm9x.ExecuteReset();
         }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (_rfm9x != null)
+            {
+                _rfm9x.Close();
+            }
+        }
+
 
         [TestMethod]
         [DataRow(Timer.Timer1, TimerResolution.Reserved)]

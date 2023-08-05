@@ -43,7 +43,7 @@ namespace RfmUsb.Net
         internal const string ResponseOk = "OK";
         internal readonly AutoResetEvent _autoResetEvent;
         internal readonly ILogger<IRfm> Logger;
-        internal ISerialPort? SerialPort;
+        internal ISerialPort SerialPort;
         private readonly ISerialPortFactory SerialPortFactory;
         private List<string> _responses;
 
@@ -522,7 +522,14 @@ namespace RfmUsb.Net
 
                 WaitForSerialPortDataSignal();
 
-                return _responses;
+                Logger.LogInformation("Command: [{command}] Result: {response}", command, string.Join("-", _responses));
+
+                var result = new List<string>();
+                result.AddRange(_responses);
+
+                _responses.Clear();
+
+                return result;
             }
         }
 

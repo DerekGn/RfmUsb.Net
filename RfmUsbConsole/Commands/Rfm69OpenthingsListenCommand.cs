@@ -40,19 +40,16 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.ModulationType = ModulationType.Fsk;
                 rfm.FrequencyDeviation = 0x01EC;
-                rfm.Frequency = 434300000;
                 rfm.RxBw = 14;
-                rfm.BitRate = 4800;
                 rfm.SyncSize = 1;
                 rfm.SyncEnable = true;
                 rfm.SyncBitErrors = 0;
                 rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
                 rfm.PacketFormat = false;
                 rfm.DcFreeEncoding = DcFreeEncoding.Manchester;
-                rfm.CrcOn = false;
-                rfm.CrcAutoClearOff = false;
+                rfm.CrcOn = true;
+                rfm.CrcAutoClearOff = true;
                 rfm.AddressFiltering = AddressFilter.None;
                 rfm.PayloadLength = 66;
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
@@ -65,17 +62,19 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
+                        rfm.Mode = Mode.Standby;
+
                         var fifo = rfm.Fifo;
 
                         console.WriteLine("Packet Recieved");
+
+                        rfm.Mode = Mode.Rx;
                     }
                     else
                     {
                         console.WriteLine("Ping Listen Stop");
                     }
                 } while (true);
-
-                return 0;
             });
         }
     }
