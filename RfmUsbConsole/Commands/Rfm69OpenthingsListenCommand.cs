@@ -48,8 +48,8 @@ namespace RfmUsbConsole.Commands
                 rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
                 rfm.PacketFormat = false;
                 rfm.DcFreeEncoding = DcFreeEncoding.Manchester;
-                rfm.CrcOn = true;
-                rfm.CrcAutoClearOff = true;
+                rfm.CrcOn = false;
+                rfm.CrcAutoClearOff = false;
                 rfm.AddressFiltering = AddressFilter.None;
                 rfm.PayloadLength = 66;
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
