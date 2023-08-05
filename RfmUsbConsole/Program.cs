@@ -36,6 +36,7 @@ namespace RfmUsbConsole
     [Subcommand(typeof(Rfm9xPingCommand))]
     [Subcommand(typeof(Rfm69PingListenCommand))]
     [Subcommand(typeof(Rfm9xPingListenCommand))]
+    [Subcommand(typeof(Rfm69OpenthingsListenCommand))]
     class Program
     {
         private static IConfiguration? _configuration;

@@ -26,6 +26,9 @@ using System;
 
 namespace RfmUsb.Net.Exceptions
 {
+    /// <summary>
+    /// Exception thrown if the attached RfmUsb device is not correct device
+    /// </summary>
     [Serializable]
     public class RfmUsbInvalidDeviceTypeException : Exception
     {

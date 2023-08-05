@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin
+* Copyright (c) 2022 Derek Goslin https://github.com/DerekGn
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,12 @@
 * SOFTWARE.
 */
 
-using Microsoft.Extensions.Logging;
-using RfmUsb.Net.Ports;
-
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsbConsole.Commands
 {
-    internal class Rfm69TestDevice : Rfm69
+    internal enum SignalSource
     {
-        public Rfm69TestDevice(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
-        {
-        }
-
-        internal override void WaitForSerialPortDataSignal()
-        {
-        }
-
-        internal override string GetDeviceName()
-        {
-            return nameof(Rfm69);
-        }
+        None = 0x104,
+        Irq,
+        Console
     }
 }

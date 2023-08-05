@@ -35,7 +35,7 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm9xTests() : base()
         {
-            _rfmDevice = new Rfm9xTestDevice(MockLogger, MockSerialPortFactory.Object);
+            _rfmDevice = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
             RfmBase = _rfmDevice;
         }
 
@@ -407,11 +407,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetHopChannel(bool state, int count)
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -481,11 +483,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetIrqFlags()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -589,11 +593,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLoraIrqFlags()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -637,11 +643,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetLoraIrqFlagsMask()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -791,11 +799,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetModemStatus()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -1819,11 +1829,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimerCoefficent(Timer expected)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -1842,11 +1854,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimerResolution(Timer expected)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())

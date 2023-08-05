@@ -27,9 +27,10 @@ using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
 {
-    internal class Rfm69PingListenCommand : BaseRfm69Command
+    [Command(Description = "Listen for Openthings message transmissions")]
+    internal class Rfm69OpenthingsListenCommand : BaseRfm69Command
     {
-        public Rfm69PingListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm69OpenthingsListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
@@ -39,13 +40,24 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.DataMode = Rfm69DataMode.Packet;
-                rfm.Mode = Mode.Rx;
-                rfm.IntermediateMode = IntermediateMode.Sleep;
-                rfm.AutoModeEnterCondition = EnterCondition.CrcOk;
-                rfm.AutoModeExitCondition = ExitCondition.FifoNotEmpty;
+                rfm.ModulationType = ModulationType.Fsk;
+                rfm.FrequencyDeviation = 0x01EC;
+                rfm.Frequency = 434300000;
+                rfm.RxBw = 14;
+                rfm.BitRate = 4800;
+                rfm.SyncSize = 1;
+                rfm.SyncEnable = true;
+                rfm.SyncBitErrors = 0;
+                rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
+                rfm.PacketFormat = false;
+                rfm.DcFreeEncoding = DcFreeEncoding.Manchester;
+                rfm.CrcOn = false;
+                rfm.CrcAutoClearOff = false;
+                rfm.AddressFiltering = AddressFilter.None;
+                rfm.PayloadLength = 66;
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
+                rfm.Mode = Mode.Rx;
 
                 do
                 {
@@ -53,7 +65,9 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
+                        var fifo = rfm.Fifo;
 
+                        console.WriteLine("Packet Recieved");
                     }
                     else
                     {

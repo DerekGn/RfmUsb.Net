@@ -45,16 +45,16 @@ namespace RfmUsbConsole.Commands
         {
             return ExecuteCommand(console, (device) =>
             {
-                IRfm69 rfm69 = (IRfm69)device;
+                IRfm69 rfm = (IRfm69)device;
 
-                rfm69.DataMode = Rfm69DataMode.Packet;
-                rfm69.TxStartCondition = true;
-                rfm69.Mode = Mode.Tx;
-                rfm69.IntermediateMode = IntermediateMode.Rx;
-                rfm69.AutoModeEnterCondition = EnterCondition.PacketSent;
-                rfm69.AutoModeExitCondition = ExitCondition.CrcOk;
-                rfm69.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
-                rfm69.DioInterruptMask = DioIrq.Dio0;
+                rfm.DataMode = Rfm69DataMode.Packet;
+                rfm.TxStartCondition = true;
+                rfm.Mode = Mode.Tx;
+                rfm.IntermediateMode = IntermediateMode.Rx;
+                rfm.AutoModeEnterCondition = EnterCondition.PacketSent;
+                rfm.AutoModeExitCondition = ExitCondition.CrcOk;
+                rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
+                rfm.DioInterruptMask = DioIrq.Dio0;
 
                 console.WriteLine("Ping started");
 
@@ -62,26 +62,26 @@ namespace RfmUsbConsole.Commands
 
                 for (int i = 0; i < PingCount; i++)
                 {
-                    rfm69.Fifo = new List<byte>() { 0xAA, 0x55 };
+                    rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
 
-                    rfm69.Mode = Mode.Tx;
+                    rfm.Mode = Mode.Tx;
 
                     sw.Restart();
 
-                    int signalSource = WaitForSignal(PingTimeout);
+                    var source = WaitForSignal(PingTimeout);
 
-                    if (signalSource == 0)
+                    if (source == SignalSource.Irq)
                     {
                         sw.Stop();
 
-                        console.WriteLine(rfm69.IrqFlags);
+                        console.WriteLine(rfm.IrqFlags);
                         console.WriteLine($"Ping Received [{sw.Elapsed}] {sw.ElapsedMilliseconds}");
                     }
-                    else if (signalSource == 1)
+                    else if (source == SignalSource.Console)
                     {
                         console.WriteLine("Ping Cancelled.");
                     }
-                    else if (signalSource == 0x104)
+                    else if (source == SignalSource.None)
                     {
                         console.WriteLine($"Ping [{i}] Timeout.");
                     }

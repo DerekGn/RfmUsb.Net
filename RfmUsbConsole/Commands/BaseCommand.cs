@@ -65,9 +65,9 @@ namespace RfmUsbConsole.Commands
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
         public string SerialPort { get; set; }
 
-        internal int WaitForSignal(int timeout = -1)
+        internal SignalSource WaitForSignal(int timeout = -1)
         {
-            return AutoResetEvent.WaitAny(waitHandles, timeout);
+            return (SignalSource)AutoResetEvent.WaitAny(waitHandles, timeout);
         }
 
         protected abstract IRfm? CreatDeviceInstance();
@@ -92,8 +92,6 @@ namespace RfmUsbConsole.Commands
                     rfmDevice.Frequency = Frequency;
                     rfmDevice.BitRate = BaudRate;
                     rfmDevice.ModulationType = Modulation;
-                    rfmDevice.LnaGainSelect = LnaGain.Auto;
-                    rfmDevice.AfcAutoOn = true;
 
                     rfmDevice.DioInterrupt += RfmDeviceDioInterrupt;
 

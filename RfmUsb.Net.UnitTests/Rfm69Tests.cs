@@ -25,8 +25,6 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using RfmUsb.Net.Exceptions;
-using System;
 using System.Collections.Generic;
 
 namespace RfmUsb.Net.UnitTests
@@ -38,7 +36,7 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm69Tests()
         {
-            _rfmDevice = new Rfm69TestDevice(MockLogger, MockSerialPortFactory.Object);
+            _rfmDevice = new Rfm69(MockLogger, MockSerialPortFactory.Object);
             RfmBase = _rfmDevice;
         }
 
@@ -90,6 +88,43 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(EnterCondition.CrcOk)]
+        [DataRow(EnterCondition.FifoEmpty)]
+        [DataRow(EnterCondition.FifoLevel)]
+        [DataRow(EnterCondition.FifoNotEmpty)]
+        [DataRow(EnterCondition.Off)]
+        [DataRow(EnterCondition.PacketSent)]
+        [DataRow(EnterCondition.PayloadReady)]
+        [DataRow(EnterCondition.SyncAddressMatch)]
+        public void TestGetAutoModeEnterCondition(EnterCondition expected)
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.AutoModeEnterCondition; },
+                (v) => { v.Should().Be(expected); },
+                Commands.GetAutoModeEnterCondition,
+                $"0x{expected:X}");
+        }
+
+        // ExitCondition
+        [TestMethod]
+        [DataRow(ExitCondition.CrcOk)]
+        [DataRow(ExitCondition.FifoNotEmpty)]
+        [DataRow(ExitCondition.FifoLevel)]
+        [DataRow(ExitCondition.Off)]
+        [DataRow(ExitCondition.PacketSent)]
+        [DataRow(ExitCondition.PayloadReady)]
+        [DataRow(ExitCondition.RxTimeout)]
+        [DataRow(ExitCondition.SyncAddressMatch)]
+        public void TestGetAutoModeExitCondition(ExitCondition expected)
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.AutoModeExitCondition; },
+                (v) => { v.Should().Be(expected); },
+                Commands.GetAutoModeExitCondition,
+                $"0x{expected:X}");
+        }
+
+        [TestMethod]
         public void TestGetAutoRxRestartOn()
         {
             ExecuteGetTest(
@@ -130,28 +165,17 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetDataModed()
+        [DataRow(Rfm69DataMode.Reserved)]
+        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
+        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        [DataRow(Rfm69DataMode.Packet)]
+        public void TestGetDataMode(Rfm69DataMode expected)
         {
-            // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(Rfm69DataMode.Packet.ToString("X"));
-
-            // Act
-            var dataMode = _rfmDevice.DataMode;
-
-            // Assert
-            dataMode.Should().Be(Rfm69DataMode.Packet);
+            ExecuteGetTest(
+                () => { return _rfmDevice.DataMode; },
+                (v) => { v.Should().Be(expected); },
+                Commands.GetDataMode,
+                expected.ToString("X"));
         }
 
         [TestMethod]
@@ -187,43 +211,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { return _rfmDevice.DccFreqAfc; },
                 (v) => { v.Should().Be(expected); },
                 Commands.GetDccFreqAfc,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoEmpty)]
-        [DataRow(EnterCondition.FifoLevel)]
-        [DataRow(EnterCondition.FifoNotEmpty)]
-        [DataRow(EnterCondition.Off)]
-        [DataRow(EnterCondition.PacketSent)]
-        [DataRow(EnterCondition.PayloadReady)]
-        [DataRow(EnterCondition.SyncAddressMatch)]
-        public void TestGetAutoModeEnterCondition(EnterCondition expected)
-        {
-            ExecuteGetTest(
-                () => { return _rfmDevice.AutoModeEnterCondition; },
-                (v) => { v.Should().Be(expected); },
-                Commands.GetAutoModeEnterCondition,
-                $"0x{expected:X}");
-        }
-
-        // ExitCondition
-        [TestMethod]
-        [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoNotEmpty)]
-        [DataRow(ExitCondition.FifoLevel)]
-        [DataRow(ExitCondition.Off)]
-        [DataRow(ExitCondition.PacketSent)]
-        [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.RxTimeout)]
-        [DataRow(ExitCondition.SyncAddressMatch)]
-        public void TestGetAutoModeExitCondition(ExitCondition expected)
-        {
-            ExecuteGetTest(
-                () => { return _rfmDevice.AutoModeExitCondition; },
-                (v) => { v.Should().Be(expected); },
-                Commands.GetAutoModeExitCondition,
                 $"0x{expected:X}");
         }
 
@@ -265,11 +252,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetIrqFlags()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write(It.IsAny<string>()))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .SetupSequence(_ => _.ReadLine())
@@ -475,8 +464,6 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetTimeout()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.ReadTimeout)
                 .Returns(1000);
@@ -520,11 +507,6 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.ExecuteListenModeAbort(expected); },
                 Commands.ExecuteListenModeAbort,
                 $"0x{(byte)expected:X2}");
-
-            //ExecuteTest(
-            //    () => { _rfmDevice.ExecuteListenModeAbort(); },
-            //    Commands.ExecuteListenModeAbort,
-            //    RfmBase.ResponseOk);
         }
 
         [TestMethod]
@@ -579,6 +561,23 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(ExitCondition.CrcOk)]
+        [DataRow(ExitCondition.FifoNotEmpty)]
+        [DataRow(ExitCondition.FifoLevel)]
+        [DataRow(ExitCondition.Off)]
+        [DataRow(ExitCondition.PacketSent)]
+        [DataRow(ExitCondition.PayloadReady)]
+        [DataRow(ExitCondition.RxTimeout)]
+        [DataRow(ExitCondition.SyncAddressMatch)]
+        public void TestSetAutoModeExitCondition(ExitCondition expected)
+        {
+            ExecuteSetTest(
+                () => { _rfmDevice.AutoModeExitCondition = expected; },
+                Commands.SetAutoModeExitCondition,
+                $"0x{(byte)expected:X2}");
+        }
+
+        [TestMethod]
         public void TestSetAutoRxRestartOn()
         {
             ExecuteSetTest(
@@ -600,24 +599,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetDataMode()
+        [DataRow(Rfm69DataMode.Packet)]
+        [DataRow(Rfm69DataMode.Reserved)]
+        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
+        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        public void TestSetDataMode(Rfm69DataMode expected)
         {
-            // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            // Act
-            _rfmDevice.DataMode = Rfm69DataMode.Packet;
-
-            // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetDataMode} 0x{(byte)Rfm69DataMode.Packet:X2}\n"), Times.Once);
+            ExecuteSetTest(
+                () => { _rfmDevice.DataMode = expected; },
+                Commands.SetDataMode,
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -668,24 +659,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfmDevice.AutoModeEnterCondition = expected; },
                 Commands.SetAutoModeEnterCondition,
-                $"0x{expected:X}");
-        }
-
-        [TestMethod]
-        [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoNotEmpty)]
-        [DataRow(ExitCondition.FifoLevel)]
-        [DataRow(ExitCondition.Off)]
-        [DataRow(ExitCondition.PacketSent)]
-        [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.RxTimeout)]
-        [DataRow(ExitCondition.SyncAddressMatch)]
-        public void TestSetAutoModeExitCondition(ExitCondition expected)
-        {
-            ExecuteSetTest(
-                () => { _rfmDevice.AutoModeExitCondition = expected; },
-                Commands.SetAutoModeExitCondition,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -716,7 +690,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { _rfmDevice.IntermediateMode = expected; },
                 Commands.SetIntermediateMode,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -861,7 +835,6 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetTimeout()
         {
             // Arrange
-            _rfmDevice.SerialPort = MockSerialPort.Object;
 
             // Act
             _rfmDevice.Timeout = 1000;
