@@ -35,8 +35,8 @@ namespace RfmUsb.Net
         /// (0x0D:0x3F) while in LoRa mode
         /// </summary>
         /// <remarks>
-        /// 0 : Access LoRa registers
-        /// 1 : Access FSK registers
+        /// <para><see langword="false"/> Access LoRa registers</para>
+        /// <para><see langword="true"/> Access FSK registers</para>
         /// </remarks>
         bool AccessSharedRegisters { get; set; }
 
@@ -44,8 +44,8 @@ namespace RfmUsb.Net
         /// IRQ flag witnessing a temperature change exceeding
         /// TempThreshold since the last Image and RSSI calibration:
         /// <remarks>
-        /// 0 : Temperature change lower than TempThreshold
-        /// 1 : Temperature change greater than TempThreshold
+        /// <para><see langword="false"/> Temperature change lower than TempThreshold</para>
+        /// <para><see langword="true"/> Temperature change greater than TempThreshold</para>
         /// </remarks>
         /// </summary>
         bool TemperatureChange { get; }
@@ -54,8 +54,8 @@ namespace RfmUsb.Net
         /// The agc value
         /// </summary>
         /// <remarks>
-        /// 0 : LNA gain set by register LnaGain
-        /// 1 : LNA gain set by the internal AGC loop
+        /// <para><see langword="false"/> LNA gain set by register LnaGain</para>
+        /// <para><see langword="true"/> LNA gain set by the internal AGC loop</para>
         /// </remarks>
         bool AgcAutoOn { get; set; }
 
@@ -63,8 +63,8 @@ namespace RfmUsb.Net
         /// Controls the Image calibration mechanism
         /// </summary>
         /// <remarks>
-        /// 0 : Calibration of the receiver depending on the temperature is disabled
-        /// 1 : Calibration of the receiver depending on the temperature enabled.
+        /// <para><see langword="false"/> Calibration of the receiver depending on the temperature is disabled</para>
+        /// <para><see langword="true"/> Calibration of the receiver depending on the temperature enabled</para>
         /// </remarks>
         bool AutoImageCalibrationOn { get; set; }
 
@@ -88,8 +88,8 @@ namespace RfmUsb.Net
         /// Enables the Bit Synchronizer.
         /// </summary>
         /// <remarks>
-        /// 0 : Bit Sync disabled (not possible in Packet mode)
-        /// 1 : Bit Sync enabled
+        /// <para><see langword="false"/> Bit Sync disabled (not possible in Packet mode)</para>
+        /// <para><see langword="true"/> Bit Sync enabled</para>
         /// </remarks>
         bool BitSyncOn { get; set; }
 
@@ -159,8 +159,8 @@ namespace RfmUsb.Net
         /// idle state on a T1 interrupt.
         /// </summary>
         /// <remarks>
-        /// 0 : To transmit state
-        /// 0 : To receive state
+        /// <para><see langword="false"/> To transmit state</para>
+        /// <para><see langword="false"/> To receive state</para>
         /// </remarks>
         bool FromIdle { get; set; }
 
@@ -190,8 +190,8 @@ namespace RfmUsb.Net
         /// Controls the sequencer transition from the transmit state
         /// </summary>
         /// <remarks>
-        /// 0: To lowpowerselection on a packetsent interrupt
-        /// 1: To receive state on a packetsent interrupt
+        /// <para><see langword="false"/> To lowpowerselection on a packetsent interrupt</para>
+        /// <para><see langword="true"/> To receive state on a packetsent interrupt</para>
         /// </remarks>
         bool FromTransmit { get; set; }
 
@@ -204,8 +204,8 @@ namespace RfmUsb.Net
         /// Selects the chip mode during the state.
         /// </summary>
         /// <remarks>
-        /// 0: standby mode
-        /// 1: sleep mode
+        /// <para><see langword="false"/> standby mode</para>
+        /// <para><see langword="true"/> sleep mode</para>
         /// </remarks>
         bool IdleMode { get; set; }
 
@@ -213,8 +213,8 @@ namespace RfmUsb.Net
         /// The implicit header mode
         /// </summary>
         /// <remarks>
-        /// 0: explicit header mode
-        /// 1: implicit header mode
+        /// <para><see langword="false"/> explicit header mode</para>
+        /// <para><see langword="true"/> implicit header mode</para>
         /// </remarks>
         bool ImplicitHeaderModeOn { get; set; }
 
@@ -242,8 +242,8 @@ namespace RfmUsb.Net
         /// Enable Low Frequency (RFI_LF) LNA current adjustment
         /// </summary>
         /// <remarks>
-        /// 0: Default LNA current
-        /// 1: Boost on, 150% LNA current
+        /// <para><see langword="false"/> Default LNA current</para>
+        /// <para><see langword="true"/> Boost on, 150% LNA current</para>
         /// </remarks>
         bool LnaBoostHf { get; set; }
 
@@ -256,8 +256,8 @@ namespace RfmUsb.Net
         /// Enable agc auto on
         /// </summary>
         /// <remarks>
-        /// 0: LNA gain set by register LnaGain
-        /// 1: LNA gain set by the internal AGC loop
+        /// <para><see langword="false"/> LNA gain set by register LnaGain</para>
+        /// <para><see langword="true"/> LNA gain set by the internal AGC loop</para>
         /// </remarks>
         bool LoraAgcAutoOn { get; set; }
 
@@ -281,19 +281,19 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Payload length in bytes.
+        /// </summary>
         /// <remarks>
         /// The register needs to be set in implicit header
         /// mode for the expected packet length. A 0 value is not permitted
         /// </remarks>
-        /// </summary>
         byte LoraPayloadLength { get; set; }
 
         /// <summary>
         /// Low Battery detector enable signa
         /// </summary>
         /// <remarks>
-        /// 0: LowBat detector disabled
-        /// 1: LowBat detector enabled
+        /// <para><see langword="false"/> LowBat detector disabled</para>
+        /// <para><see langword="true"/> LowBat detector enabled</para>
         /// </remarks>
         bool LowBatteryOn { get; set; }
 
@@ -306,8 +306,8 @@ namespace RfmUsb.Net
         /// Low data rate optimize
         /// </summary>
         /// <remarks>
-        /// 0: Disabled
-        /// 1: Enabled; mandated for when the symbol length exceeds 16ms
+        /// <para><see langword="false"/> Disabled</para>
+        /// <para><see langword="true"/> Enabled; mandated for when the symbol length exceeds 16ms</para>
         /// </remarks>
         bool LowDataRateOptimize { get; set; }
 
@@ -315,8 +315,8 @@ namespace RfmUsb.Net
         /// Access Low Frequency Mode registers
         /// </summary>
         /// <remarks>
-        /// 0: High Frequency Mode (access to HF test registers)
-        /// 1: Low Frequency Mode(access to LF test registers)
+        /// <para><see langword="false"/> High Frequency Mode (access to HF test registers)</para>
+        /// <para><see langword="true"/> Low Frequency Mode(access to LF test registers)</para>
         /// </remarks>
         bool LowFrequencyMode { get; set; }
 
@@ -324,8 +324,8 @@ namespace RfmUsb.Net
         /// Selects Sequencer LowPower state after a to LowPowerSelection transition
         /// </summary>
         /// <remarks>
-        /// 0: SequencerOff state with chip on Initial mode
-        /// 1: Idle state with chip on Standby or Sleep mode depending on IdleMode
+        /// <para><see langword="false"/> SequencerOff state with chip on Initial mode</para>
+        /// <para><see langword="true"/> Idle state with chip on Standby or Sleep mode depending on IdleMode</para>
         /// </remarks>
         bool LowPowerSelection { get; set; }
 
@@ -333,8 +333,8 @@ namespace RfmUsb.Net
         /// Allows the mapping of either Rssi Or PreambleDetect to the DIO pins
         /// </summary>
         /// <remarks>
-        /// 0: Rssi interrupt
-        /// 1: PreambleDetect interrupt
+        /// <para><see langword="false"/> Rssi interrupt</para>
+        /// <para><see langword="true"/> PreambleDetect interrupt</para>
         /// </remarks>
         bool MapPreambleDetect { get; set; }
 
@@ -394,8 +394,8 @@ namespace RfmUsb.Net
         /// Sets the polarity of the Preamble
         /// </summary>
         /// <remarks>
-        /// 0 : 0xAA (default)
-        /// 1 : 0x55
+        /// <para><see langword="false"/> 0xAA (default)</para>
+        /// <para><see langword="true"/> 0x55</para>
         /// </remarks>
         bool PreamblePolarity { get; set; }
 
@@ -405,8 +405,8 @@ namespace RfmUsb.Net
         /// collision is detected
         /// </summary>
         /// <remarks>
-        /// 0 : No automatic Restart
-        /// 1 : Automatic restart On
+        /// <para><see langword="false"/> No automatic Restart</para>
+        /// <para><see langword="true"/> Automatic restart On</para>
         /// </remarks>
         bool RestartRxOnCollision { get; set; }
 
@@ -444,8 +444,8 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Enable CRC generation and check on payload
-        /// 0: CRC disable
-        /// 1: CRC enable
+        /// <para><see langword="false"/> CRC disable</para>
+        /// <para><see langword="true"/> CRC enable</para>
         /// </summary>
         bool RxPayloadCrcOn { get; set; }
 
@@ -463,8 +463,8 @@ namespace RfmUsb.Net
         /// Controls the crystal oscillator
         /// </summary>
         /// <remarks>
-        /// 0: Crystal Oscillator with external Crystal
-        /// 1: External clipped sine TCXO AC-connected to XTA pin
+        /// <para><see langword="false"/> Crystal Oscillator with external Crystal</para>
+        /// <para><see langword="true"/> External clipped sine TCXO AC-connected to XTA pin</para>
         /// </remarks>
         bool TcxoInputOn { get; set; }
 
@@ -477,8 +477,8 @@ namespace RfmUsb.Net
         /// Controls the temperature monitoring
         /// </summary>
         /// <remarks>
-        /// false Temperature monitoring done in all modes except Sleep and Standby
-        /// Treu Temperature monitoring stopped.
+        /// <para><see langword="false"/> Temperature monitoring done in all modes except Sleep and Standby</para>
+        /// <para><see langword="true"/> Temperature monitoring stopped</para>
         /// </remarks>
         bool TempMonitorOff { get; set; }
 
@@ -487,7 +487,7 @@ namespace RfmUsb.Net
         /// switching to Rx mode if Preamble interrupt doesn’t occur
         /// </summary>
         /// <remarks>
-        /// 0 Diabled
+        /// 0 Disabled
         /// </remarks>
         byte TimeoutRxPreamble { get; set; }
 
@@ -497,7 +497,7 @@ namespace RfmUsb.Net
         /// (i.e. RssiValue > RssiThreshold)
         /// </summary>
         /// <remarks>
-        /// 0 Diabled
+        /// 0 Disabled
         /// </remarks>
         byte TimeoutRxRssi { get; set; }
 
@@ -505,8 +505,8 @@ namespace RfmUsb.Net
         /// Timeout interrupt is generated TimeoutSignalSync*16*Tbit after
         /// the Rx mode is programmed, if SyncAddress doesn’t occur
         /// </summary>
-        /// /// <remarks>
-        /// 0 Diabled
+        /// <remarks>
+        /// 0 Disabled
         /// </remarks>
         byte TimeoutSignalSync { get; set; }
 
@@ -514,8 +514,8 @@ namespace RfmUsb.Net
         /// Tx continous mode
         /// </summary>
         /// <remarks>
-        /// false : Normal mode, a single packet is sent
-        /// true : Continuous mode, send multiple packets across the FIFO
+        /// <para><see langword="false"/> Normal mode, a single packet is sent</para>
+        /// <para><see langword="true"/> Continuous mode, send multiple packets across the FIFO</para>
         /// (used for spectral analysis)
         /// </remarks>
         bool TxContinuousMode { get; set; }
