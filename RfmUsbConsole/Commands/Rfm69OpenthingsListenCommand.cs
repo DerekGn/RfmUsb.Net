@@ -43,6 +43,7 @@ namespace RfmUsbConsole.Commands
                 rfm.FrequencyDeviation = 0x01EC;
                 rfm.RxBw = 14;
                 rfm.SyncSize = 1;
+                rfm.PreambleSize = 3;
                 rfm.SyncEnable = true;
                 rfm.SyncBitErrors = 0;
                 rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
@@ -66,7 +67,7 @@ namespace RfmUsbConsole.Commands
 
                         var fifo = rfm.Fifo;
 
-                        console.WriteLine("Packet Recieved");
+                        console.WriteLine("Packet Received");
 
                         rfm.Mode = Mode.Rx;
                     }

@@ -673,7 +673,7 @@ namespace RfmUsb.Net
                     }
                 } while (SerialPort.BytesToRead != 0);
 
-                Logger.LogDebug("Recieved Serial Port Data: {type}", e.EventType);
+                Logger.LogDebug("Received Serial Port Data: {type}", e.EventType);
 
                 _autoResetEvent.Set();
             }

@@ -138,7 +138,7 @@ namespace RfmUsb.Net
         byte InterPacketRxDelay { get; set; }
 
         /// <summary>
-        /// Get the Rssi value after last packet recieved
+        /// Get the Rssi value after last packet received
         /// </summary>
         byte LastRssi { get; }
 
