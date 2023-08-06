@@ -34,6 +34,9 @@ namespace RfmUsbConsole.Commands
         {
         }
 
+        [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
+        public sbyte RssiThreshold { get; set; } = -80;
+
         [Range(0, 20)]
         [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
         public byte RxBw { get; set; }

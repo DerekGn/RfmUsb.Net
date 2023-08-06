@@ -26,7 +26,7 @@ namespace RfmUsbConsole.Commands
 {
     internal enum SignalSource
     {
-        None = 0x104,
+        None = 258,
         Irq = 0,
         Console = 1
     }

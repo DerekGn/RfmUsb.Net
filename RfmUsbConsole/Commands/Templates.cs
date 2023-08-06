@@ -29,10 +29,12 @@ namespace RfmUsbConsole.Commands
         public const string BaudRate = "-b|--baudrate";
         public const string Frequency = "-f|--frequency";
         public const string Modulation = "-m|--modulation";
-        public const string NumberPings = "-n|--number";
         public const string OutputPower = "-o|--output-power";
+        public const string PingCount = "-pc|--ping-count";
+        public const string PingInterval = "-pi|--ping-interval";
+        public const string PingTimeout = "-pt|--ping-timeout";
+        public const string RssiThreshold = "-rt|--rssi-threshold";
         public const string RxBw = "-r|--recieve-bw";
         public const string SerialPort = "-p|--port";
-        public const string Timeout = "-t|--timeout";
     }
 }

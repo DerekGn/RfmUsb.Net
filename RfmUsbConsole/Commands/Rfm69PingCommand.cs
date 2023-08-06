@@ -24,7 +24,9 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
+using System;
 using System.Diagnostics;
+using System.Runtime.Intrinsics.Arm;
 
 namespace RfmUsbConsole.Commands
 {
@@ -35,10 +37,13 @@ namespace RfmUsbConsole.Commands
         {
         }
 
-        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
+        [Option(Templates.PingCount, "The number of echo requests to send", CommandOptionType.SingleValue)]
         public int PingCount { get; set; } = 3;
 
-        [Option(Templates.Timeout, "The ping timeout", CommandOptionType.SingleValue)]
+        [Option(Templates.PingInterval, "The interval between pings", CommandOptionType.SingleValue)]
+        public int PingInterval { get; set; } = 1000;
+
+        [Option(Templates.PingTimeout, "The ping timeout", CommandOptionType.SingleValue)]
         public int PingTimeout { get; set; } = 1000;
 
         protected override int OnExecute(CommandLineApplication app, IConsole console)
@@ -47,18 +52,14 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.DataMode = Rfm69DataMode.Packet;
+                rfm.RssiThreshold = RssiThreshold;
                 rfm.TxStartCondition = true;
-                rfm.Mode = Mode.Tx;
-                rfm.IntermediateMode = IntermediateMode.Rx;
-                rfm.AutoModeEnterCondition = EnterCondition.PacketSent;
-                rfm.AutoModeExitCondition = ExitCondition.CrcOk;
-                rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
+                rfm.PacketFormat = true;
+                
+                rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
                 rfm.DioInterruptMask = DioIrq.Dio0;
 
                 console.WriteLine("Ping started");
-
-                Stopwatch sw = new Stopwatch();
 
                 for (int i = 0; i < PingCount; i++)
                 {
@@ -66,16 +67,13 @@ namespace RfmUsbConsole.Commands
 
                     rfm.Mode = Mode.Tx;
 
-                    sw.Restart();
-
                     var source = WaitForSignal(PingTimeout);
 
                     if (source == SignalSource.Irq)
                     {
-                        sw.Stop();
+                        console.WriteLine("Packet Transmitted waiting for response.");
 
-                        console.WriteLine(rfm.IrqFlags);
-                        console.WriteLine($"Ping Received [{sw.Elapsed}] {sw.ElapsedMilliseconds}");
+                        WaitForPingResponse(rfm, i);
                     }
                     else if (source == SignalSource.Console)
                     {
@@ -85,10 +83,43 @@ namespace RfmUsbConsole.Commands
                     {
                         console.WriteLine($"Ping [{i}] Timeout.");
                     }
+
+                    Thread.Sleep(PingInterval);
                 }
 
                 return 0;
             });
+        }
+
+        private void WaitForPingResponse(IRfm69 rfm, int i)
+        {
+            rfm.Mode = Mode.Rx;
+
+            Stopwatch sw = new Stopwatch();
+            
+            sw.Start();
+
+            var source = WaitForSignal(PingTimeout);
+
+            if (source == SignalSource.Irq)
+            {
+                sw.Stop();
+
+                Console.WriteLine(
+                    $"Ping Response Received." + Environment.NewLine +
+                    $"Irq: {rfm.IrqFlags}" + Environment.NewLine +
+                    $"Elapsed: [{sw.Elapsed}]");
+            }
+            else if (source == SignalSource.Console)
+            {
+                Console.WriteLine("Ping Cancelled.");
+            }
+            else if (source == SignalSource.None)
+            {
+                Console.WriteLine($"Ping [{i}] Timeout.");
+            }
+
+            rfm.Mode = Mode.Standby;
         }
     }
 }

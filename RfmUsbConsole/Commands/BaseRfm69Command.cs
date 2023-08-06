@@ -22,8 +22,8 @@
 * SOFTWARE.
 */
 
+using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
-using Serilog;
 
 namespace RfmUsbConsole.Commands
 {
@@ -32,6 +32,9 @@ namespace RfmUsbConsole.Commands
         protected BaseRfm69Command(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
+
+        [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
+        public sbyte RssiThreshold { get; set; } = -80;
 
         protected override IRfm? CreatDeviceInstance()
         {

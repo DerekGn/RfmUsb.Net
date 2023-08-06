@@ -522,7 +522,7 @@ namespace RfmUsb.Net
 
                 WaitForSerialPortDataSignal();
 
-                Logger.LogInformation("Command: [{command}] Result: {response}", command, string.Join("-", _responses));
+                Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(" ", _responses));
 
                 var result = new List<string>();
                 result.AddRange(_responses);

@@ -34,10 +34,13 @@ namespace RfmUsbConsole.Commands
         {
         }
 
-        [Option(Templates.NumberPings, "The number of echo requests to send", CommandOptionType.SingleValue)]
+        [Option(Templates.PingCount, "The number of echo requests to send", CommandOptionType.SingleValue)]
         public int PingCount { get; set; } = 3;
 
-        [Option(Templates.Timeout, "The ping timeout", CommandOptionType.SingleValue)]
+        [Option(Templates.PingInterval, "The interval between pings", CommandOptionType.SingleValue)]
+        public int PingInterval { get; set; } = 1000;
+
+        [Option(Templates.PingTimeout, "The ping timeout", CommandOptionType.SingleValue)]
         public int PingTimeout { get; set; } = 1000;
 
         protected override IRfm? CreatDeviceInstance()

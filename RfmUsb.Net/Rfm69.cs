@@ -330,6 +330,13 @@ namespace RfmUsb.Net
                         }
                         break;
 
+                    case "PACKET_SENT":
+                        if (parts[0] == "1")
+                        {
+                            irq |= Rfm69IrqFlags.PacketSent;
+                        }
+                        break;
+
                     case "FIFO_OVERRUN":
                         if (parts[0] == "1")
                         {
