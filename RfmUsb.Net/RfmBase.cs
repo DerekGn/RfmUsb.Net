@@ -520,7 +520,10 @@ namespace RfmUsb.Net
             {
                 SerialPort.Write($"{command}\n");
 
-                WaitForSerialPortDataSignal();
+                do
+                {
+                    WaitForSerialPortDataSignal();
+                } while (_responses.Count == 0);
 
                 Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(" ", _responses));
 

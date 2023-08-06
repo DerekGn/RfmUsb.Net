@@ -53,8 +53,11 @@ namespace RfmUsbConsole.Commands
                 rfm.CrcAutoClearOff = false;
                 rfm.AddressFiltering = AddressFilter.None;
                 rfm.PayloadLength = 66;
+                rfm.RssiThreshold = RssiThreshold;
+
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
+                
                 rfm.Mode = Mode.Rx;
 
                 do
@@ -63,13 +66,12 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
-                        rfm.Mode = Mode.Standby;
+                        console.WriteLine(
+                            $"Ping Response Received." + Environment.NewLine +
+                            $"Irq: {rfm.IrqFlags}" + Environment.NewLine +
+                            $"Rssi: {rfm.Rssi}");
 
-                        var fifo = rfm.Fifo;
-
-                        console.WriteLine("Packet Received");
-
-                        rfm.Mode = Mode.Rx;
+                        console.WriteLine($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
                     }
                     else
                     {
