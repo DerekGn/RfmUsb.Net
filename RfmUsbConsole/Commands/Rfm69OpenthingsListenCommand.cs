@@ -40,20 +40,20 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.FrequencyDeviation = 0x01EC;
                 rfm.RxBw = 14;
                 rfm.SyncSize = 1;
+                rfm.CrcOn = false;
                 rfm.PreambleSize = 3;
                 rfm.SyncEnable = true;
                 rfm.SyncBitErrors = 0;
-                rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
-                rfm.PacketFormat = false;
-                rfm.DcFreeEncoding = DcFreeEncoding.Manchester;
-                rfm.CrcOn = false;
-                rfm.CrcAutoClearOff = false;
-                rfm.AddressFiltering = AddressFilter.None;
                 rfm.PayloadLength = 66;
+                rfm.PacketFormat = false;
+                rfm.CrcAutoClearOff = false;
+                rfm.FrequencyDeviation = 0x01EC;
                 rfm.RssiThreshold = RssiThreshold;
+                rfm.AddressFiltering = AddressFilter.None;
+                rfm.Sync = new List<byte>() { 0x2D, 0xD4 };
+                rfm.DcFreeEncoding = DcFreeEncoding.Manchester;
 
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
@@ -66,10 +66,13 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
+                        var rssi = rfm.Rssi;
+                        var irq = rfm.IrqFlags;
+
                         console.WriteLine(
                             $"Ping Response Received." + Environment.NewLine +
-                            $"Irq: {rfm.IrqFlags}" + Environment.NewLine +
-                            $"Rssi: {rfm.Rssi}");
+                            $"Irq: {irq}" + Environment.NewLine +
+                            $"Rssi: {rssi}");
 
                         console.WriteLine($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
                     }
