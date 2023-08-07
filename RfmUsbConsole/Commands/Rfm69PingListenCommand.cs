@@ -41,13 +41,12 @@ namespace RfmUsbConsole.Commands
 
                 SetupPingConfiguration(rfm);
 
-                rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
-
-                rfm.Mode = Mode.Rx;
 
                 do
                 {
+                    EnterRxMode(rfm);
+
                     var source = WaitForSignal();
 
                     if (source == SignalSource.Irq)
@@ -56,18 +55,38 @@ namespace RfmUsbConsole.Commands
                         var irq = rfm.IrqFlags;
 
                         console.WriteLine(
-                            $"Ping Response Received." + Environment.NewLine +
+                            $"Ping Received." + Environment.NewLine +
                             $"Irq: {irq}" + Environment.NewLine +
                             $"Rssi: {rssi}");
 
-                        console.WriteLine($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
+                        var fifo = rfm.Fifo.ToList();
+
+                        if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
+                        {
+                            SendPingResponse(console, rfm);
+                        }
                     }
-                    else
+                    else if (source == SignalSource.Console)
                     {
                         console.WriteLine("Ping Listen Stop");
                     }
                 } while (true);
             });
+        }
+
+        private void SendPingResponse(IConsole console, IRfm69 rfm)
+        {
+            rfm.Mode = Mode.Standby;
+
+            rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
+
+            EnterTxMode(rfm);
+
+            if (WaitForSignal() == SignalSource.Irq)
+            {
+                console.WriteLine(rfm.IrqFlags);
+                console.WriteLine("Ping Reply Sent");
+            }
         }
     }
 }

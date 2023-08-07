@@ -65,15 +65,19 @@ namespace RfmUsbConsole.Commands
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
         public string SerialPort { get; set; }
 
-
-        internal SignalSource WaitForSignal(int timeout = -1)
+        internal static void EnterRxMode(IRfm rfm)
         {
-            return (SignalSource)AutoResetEvent.WaitAny(waitHandles, timeout);
+            rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
+            rfm.Mode = Mode.Rx;
         }
 
-        protected abstract IRfm? CreatDeviceInstance();
+        internal static void EnterTxMode(IRfm rfm)
+        {
+            rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
+            rfm.Mode = Mode.Tx;
+        }
 
-        protected int ExecuteCommand(IConsole console, Func<IRfm, int> action)
+        internal int ExecuteCommand(IConsole console, Func<IRfm, int> action)
         {
             int result = -1;
 
@@ -124,6 +128,13 @@ namespace RfmUsbConsole.Commands
 
             return result;
         }
+
+        internal SignalSource WaitForSignal(int timeout = -1)
+        {
+            return (SignalSource)AutoResetEvent.WaitAny(waitHandles, timeout);
+        }
+
+        protected abstract IRfm? CreatDeviceInstance();
 
         protected virtual int OnExecute(CommandLineApplication app, IConsole console)
         {

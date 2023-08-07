@@ -49,12 +49,9 @@ namespace RfmUsbConsole.Commands
             return ExecuteCommand(console, (device) =>
             {
                 IRfm69 rfm = (IRfm69)device;
-
-                rfm.FifoThreshold = 1;
-
+                
                 SetupPingConfiguration(rfm);
 
-                rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
                 rfm.DioInterruptMask = DioIrq.Dio0;
 
                 console.WriteLine("Ping started");
@@ -63,16 +60,12 @@ namespace RfmUsbConsole.Commands
                 {
                     rfm.Fifo = new List<byte>() { 0x55, 0xAA };
 
-                    rfm.Mode = Mode.Tx;
+                    EnterTxMode(rfm);
 
                     var source = WaitForSignal(PingTimeout);
 
-                    console.WriteLine($"Irq: {rfm.IrqFlags}");
-
                     if (source == SignalSource.Irq)
                     {
-                        console.WriteLine("Packet Transmitted waiting for response.");
-
                         WaitForPingResponse(rfm, i);
                     }
                     else if (source == SignalSource.Console)
@@ -93,7 +86,7 @@ namespace RfmUsbConsole.Commands
 
         private void WaitForPingResponse(IRfm69 rfm, int i)
         {
-            rfm.Mode = Mode.Rx;
+            EnterRxMode(rfm);
 
             Stopwatch sw = new Stopwatch();
             

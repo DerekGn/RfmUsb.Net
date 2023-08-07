@@ -51,6 +51,8 @@ namespace RfmUsbConsole.Commands
             rfm.Sync = new List<byte>() { 0xDE, 0xAD };
 
             rfm.RssiThreshold = RssiThreshold;
+
+            rfm.FifoThreshold = 1;
         }
     }
 }
