@@ -39,13 +39,12 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.DataMode = Rfm69DataMode.Packet;
-                rfm.Mode = Mode.Rx;
-                rfm.IntermediateMode = IntermediateMode.Sleep;
-                rfm.AutoModeEnterCondition = EnterCondition.CrcOk;
-                rfm.AutoModeExitCondition = ExitCondition.FifoNotEmpty;
+                SetupPingConfiguration(rfm);
+
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
+
+                rfm.Mode = Mode.Rx;
 
                 do
                 {
@@ -53,15 +52,21 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
+                        var rssi = rfm.Rssi;
+                        var irq = rfm.IrqFlags;
 
+                        console.WriteLine(
+                            $"Ping Response Received." + Environment.NewLine +
+                            $"Irq: {irq}" + Environment.NewLine +
+                            $"Rssi: {rssi}");
+
+                        console.WriteLine($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
                     }
                     else
                     {
                         console.WriteLine("Ping Listen Stop");
                     }
                 } while (true);
-
-                return 0;
             });
         }
     }

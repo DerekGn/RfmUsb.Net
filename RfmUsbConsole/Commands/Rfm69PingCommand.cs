@@ -24,9 +24,7 @@
 
 using McMaster.Extensions.CommandLineUtils;
 using RfmUsb.Net;
-using System;
 using System.Diagnostics;
-using System.Runtime.Intrinsics.Arm;
 
 namespace RfmUsbConsole.Commands
 {
@@ -52,10 +50,10 @@ namespace RfmUsbConsole.Commands
             {
                 IRfm69 rfm = (IRfm69)device;
 
-                rfm.RssiThreshold = RssiThreshold;
-                rfm.TxStartCondition = true;
-                rfm.PacketFormat = true;
-                
+                rfm.FifoThreshold = 1;
+
+                SetupPingConfiguration(rfm);
+
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
                 rfm.DioInterruptMask = DioIrq.Dio0;
 
@@ -63,11 +61,13 @@ namespace RfmUsbConsole.Commands
 
                 for (int i = 0; i < PingCount; i++)
                 {
-                    rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
+                    rfm.Fifo = new List<byte>() { 0x55, 0xAA };
 
                     rfm.Mode = Mode.Tx;
 
                     var source = WaitForSignal(PingTimeout);
+
+                    console.WriteLine($"Irq: {rfm.IrqFlags}");
 
                     if (source == SignalSource.Irq)
                     {

@@ -34,11 +34,23 @@ namespace RfmUsbConsole.Commands
         }
 
         [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
-        public sbyte RssiThreshold { get; set; } = -80;
+        public sbyte RssiThreshold { get; set; } = -40;
 
         protected override IRfm? CreatDeviceInstance()
         {
             return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
+        }
+
+        internal void SetupPingConfiguration(IRfm69 rfm)
+        {
+            rfm.RxBw = 8;
+            rfm.CrcOn = false;
+            rfm.PayloadLength = 2;
+
+            rfm.SyncSize = 1;
+            rfm.Sync = new List<byte>() { 0xDE, 0xAD };
+
+            rfm.RssiThreshold = RssiThreshold;
         }
     }
 }
