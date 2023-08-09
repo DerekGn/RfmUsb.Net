@@ -23,24 +23,28 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 using RfmUsb.Net.Exceptions;
-using Serilog;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
 {
     internal abstract class BaseCommand
     {
-        protected readonly IServiceProvider ServiceProvider;
-        protected AutoResetEvent IrqSignal;
+        internal readonly ILogger Logger;
+        internal AutoResetEvent IrqSignal;
+        internal IRfm Rfm;
 
         private AutoResetEvent _consoleSignal;
         private AutoResetEvent[] waitHandles;
 
-        protected BaseCommand(IServiceProvider serviceProvider)
+        protected BaseCommand(ILogger logger, IRfm rfm)
         {
-            ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Rfm = rfm ?? throw new ArgumentNullException(nameof(rfm));
+
             IrqSignal = new AutoResetEvent(false);
             _consoleSignal = new AutoResetEvent(false);
 
@@ -56,10 +60,6 @@ namespace RfmUsbConsole.Commands
 
         [Option(Templates.Modulation, "The radio modulation.", CommandOptionType.SingleValue)]
         public ModulationType Modulation { get; set; } = ModulationType.Fsk;
-
-        [Range(-2, 20)]
-        [Option(Templates.OutputPower, "The radio output power.", CommandOptionType.SingleValue)]
-        public byte OutputPower { get; set; } = 0;
 
         [Required]
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
@@ -77,50 +77,58 @@ namespace RfmUsbConsole.Commands
             rfm.Mode = Mode.Tx;
         }
 
-        internal int ExecuteCommand(IConsole console, Func<IRfm, int> action)
+        internal static void SetupPingConfiguration(IRfm rfm, byte rxbw)
+        {
+            rfm.RxBw = rxbw;
+            rfm.CrcOn = false;
+            rfm.PayloadLength = 2;
+
+            rfm.SyncSize = 1;
+            rfm.Sync = new List<byte>() { 0xDE, 0xAD };
+
+            rfm.FifoThreshold = 1;
+        }
+
+        internal int ExecuteCommand(IConsole console, Func<int> action)
         {
             int result = -1;
-
-            IRfm? rfmDevice = null;
 
             try
             {
                 console.CancelKeyPress += ConsoleCancelKeyPress;
 
-                rfmDevice = CreatDeviceInstance();
-
-                if (rfmDevice != null)
+                if (Rfm != null)
                 {
-                    rfmDevice.Open(SerialPort, 230400);
+                    Rfm.Open(SerialPort, 230400);
 
-                    rfmDevice.ExecuteReset();
-                    rfmDevice.BitRate = BaudRate;
-                    rfmDevice.Frequency = Frequency;
-                    rfmDevice.ModulationType = Modulation;
-                    rfmDevice.DioInterrupt += RfmDeviceDioInterrupt;
+                    Rfm.ExecuteReset();
+                    Rfm.BitRate = BaudRate;
+                    Rfm.Frequency = Frequency;
+                    Rfm.ModulationType = Modulation;
+                    Rfm.DioInterrupt += RfmDeviceDioInterrupt;
 
-                    action(rfmDevice);
+                    action();
                 }
                 else
                 {
-                    Console.Error.WriteLine($"Unable to resolve RfmUsb device.");
+                    Logger.LogInformation($"Unable to resolve RfmUsb device.");
                 }
             }
             catch (RfmUsbInvalidDeviceTypeException ex)
             {
-                Console.Error.WriteLine($"Invalid Device Type: {ex.Message}");
+                Logger.LogError("Invalid Device Type: {message}", ex.Message);
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"An unhandled exception occurred: {ex}");
+                Logger.LogError("An unhandled exception occurred: {ex}", ex);
             }
             finally
             {
-                if (rfmDevice != null)
+                if (Rfm != null)
                 {
-                    rfmDevice.DioInterrupt -= RfmDeviceDioInterrupt;
-                    rfmDevice.Close();
-                    rfmDevice.Dispose();
+                    Rfm.DioInterrupt -= RfmDeviceDioInterrupt;
+                    Rfm.Close();
+                    Rfm.Dispose();
                 }
 
                 console.CancelKeyPress -= ConsoleCancelKeyPress;
@@ -129,12 +137,75 @@ namespace RfmUsbConsole.Commands
             return result;
         }
 
+        internal int ExecutePing(byte rxbw, int pingCount, int pingTimeout, int pingInterval)
+        {
+            SetupPingConfiguration(Rfm, rxbw);
+
+            Rfm.DioInterruptMask = DioIrq.Dio0;
+
+            Logger.LogInformation("Ping started");
+
+            for (int i = 0; i < pingCount; i++)
+            {
+                Rfm.Fifo = new List<byte>() { 0x55, 0xAA };
+
+                EnterTxMode(Rfm);
+
+                var source = WaitForSignal(pingTimeout);
+
+                if (source == SignalSource.Irq)
+                {
+                    WaitForPingResponse(pingTimeout, i);
+                }
+                else if (source == SignalSource.Console)
+                {
+                    Logger.LogInformation("Ping Cancelled.");
+                }
+                else if (source == SignalSource.None)
+                {
+                    Logger.LogInformation("Ping [{i}] Timeout.", i);
+                }
+
+                Thread.Sleep(pingInterval);
+            }
+
+            return 0;
+        }
+
+        internal int ExecutePingListen(byte rxbw)
+        {
+            SetupPingConfiguration(Rfm, rxbw);
+
+            Rfm.DioInterruptMask = DioIrq.Dio0;
+
+            do
+            {
+                EnterRxMode(Rfm);
+
+                var source = WaitForSignal();
+
+                if (source == SignalSource.Irq)
+                {
+                    Logger.LogInformation("Ping Received. Rssi: {rssi}", Rfm.Rssi);
+
+                    var fifo = Rfm.Fifo.ToList();
+
+                    if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
+                    {
+                        SendPingResponse();
+                    }
+                }
+                else if (source == SignalSource.Console)
+                {
+                    Logger.LogInformation("Ping Listen Stop");
+                }
+            } while (true);
+        }
+
         internal SignalSource WaitForSignal(int timeout = -1)
         {
             return (SignalSource)AutoResetEvent.WaitAny(waitHandles, timeout);
         }
-
-        protected abstract IRfm? CreatDeviceInstance();
 
         protected virtual int OnExecute(CommandLineApplication app, IConsole console)
         {
@@ -153,7 +224,51 @@ namespace RfmUsbConsole.Commands
         {
             IrqSignal.Set();
 
-            Log.Debug("Dio Irq [{e}]", e);
+            Logger.LogDebug("Dio Irq [{e}]", e);
+        }
+
+        private void SendPingResponse()
+        {
+            Rfm.Mode = Mode.Standby;
+
+            Rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
+
+            EnterTxMode(Rfm);
+
+            if (WaitForSignal() == SignalSource.Irq)
+            {
+                Logger.LogInformation("Ping Reply Sent");
+            }
+        }
+
+        private void WaitForPingResponse(int pingTimeout, int pingNumber)
+        {
+            EnterRxMode(Rfm);
+
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            var source = WaitForSignal(pingTimeout);
+
+            if (source == SignalSource.Irq)
+            {
+                sw.Stop();
+
+                Logger.LogInformation(
+                    "Ping Response Received. Elapsed: [{elapsed}]",
+                    sw.Elapsed);
+            }
+            else if (source == SignalSource.Console)
+            {
+                Console.WriteLine("Ping Cancelled.");
+            }
+            else if (source == SignalSource.None)
+            {
+                Console.WriteLine($"Ping [{pingNumber}] Timeout.");
+            }
+
+            Rfm.Mode = Mode.Standby;
         }
     }
 }

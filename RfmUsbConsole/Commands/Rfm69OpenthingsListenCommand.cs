@@ -23,6 +23,7 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
@@ -30,15 +31,15 @@ namespace RfmUsbConsole.Commands
     [Command(Description = "Listen for Openthings message transmissions")]
     internal class Rfm69OpenthingsListenCommand : BaseRfm69Command
     {
-        public Rfm69OpenthingsListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm69OpenthingsListenCommand(ILogger<Rfm69OpenthingsListenCommand> logger, IRfm69 rfm) : base(logger, rfm)
         {
         }
 
         protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return ExecuteCommand(console, (device) =>
+            return ExecuteCommand(console, () =>
             {
-                IRfm69 rfm = (IRfm69)device;
+                IRfm69 rfm = (IRfm69)Rfm;
 
                 rfm.RxBw = 14;
                 rfm.SyncSize = 1;

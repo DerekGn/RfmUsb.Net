@@ -23,70 +23,28 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
 {
     internal class Rfm69PingListenCommand : BaseRfm69Command
     {
-        public Rfm69PingListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm69PingListenCommand(ILogger<Rfm69PingListenCommand> logger, IRfm69 rfm) : base(logger, rfm)
         {
         }
 
         protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return ExecuteCommand(console, (device) =>
+            return ExecuteCommand(console, () =>
             {
-                IRfm69 rfm = (IRfm69)device;
+                var rfm69 = (IRfm69)Rfm;
 
-                SetupPingConfiguration(rfm);
+                rfm69.RssiThreshold = RssiThreshold;
+                rfm69.OutputPower = OutputPower;
 
-                rfm.DioInterruptMask = DioIrq.Dio0;
-
-                do
-                {
-                    EnterRxMode(rfm);
-
-                    var source = WaitForSignal();
-
-                    if (source == SignalSource.Irq)
-                    {
-                        var rssi = rfm.Rssi;
-                        var irq = rfm.IrqFlags;
-
-                        console.WriteLine(
-                            $"Ping Received." + Environment.NewLine +
-                            $"Irq: {irq}" + Environment.NewLine +
-                            $"Rssi: {rssi}");
-
-                        var fifo = rfm.Fifo.ToList();
-
-                        if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
-                        {
-                            SendPingResponse(console, rfm);
-                        }
-                    }
-                    else if (source == SignalSource.Console)
-                    {
-                        console.WriteLine("Ping Listen Stop");
-                    }
-                } while (true);
+                return ExecutePingListen(RxBw);
             });
-        }
-
-        private void SendPingResponse(IConsole console, IRfm69 rfm)
-        {
-            rfm.Mode = Mode.Standby;
-
-            rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
-
-            EnterTxMode(rfm);
-
-            if (WaitForSignal() == SignalSource.Irq)
-            {
-                console.WriteLine(rfm.IrqFlags);
-                console.WriteLine("Ping Reply Sent");
-            }
         }
     }
 }

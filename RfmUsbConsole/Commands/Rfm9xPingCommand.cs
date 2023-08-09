@@ -23,6 +23,7 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
@@ -30,7 +31,7 @@ namespace RfmUsbConsole.Commands
     [Command(Description = "Ping using RfmUsb Rfm9x radio")]
     internal class Rfm9xPingCommand : BaseRfm9xCommand
     {
-        public Rfm9xPingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm9xPingCommand(ILogger<Rfm9xPingCommand> logger, IRfm9x rfm) : base(logger,rfm)
         {
         }
 
@@ -42,10 +43,5 @@ namespace RfmUsbConsole.Commands
 
         [Option(Templates.PingTimeout, "The ping timeout", CommandOptionType.SingleValue)]
         public int PingTimeout { get; set; } = 1000;
-
-        protected override IRfm? CreatDeviceInstance()
-        {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm9x));
-        }
     }
 }

@@ -22,24 +22,15 @@
 * SOFTWARE.
 */
 
-using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
-using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
 {
-    internal class Rfm9xPingListenCommand : BaseRfm69Command
+    internal class Rfm9xPingListenCommand : BaseRfm9xCommand
     {
-        public Rfm9xPingListenCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm9xPingListenCommand(ILogger<Rfm9xPingListenCommand> logger, IRfm9x rfm) : base(logger, rfm)
         {
-        }
-
-        protected override int OnExecute(CommandLineApplication app, IConsole console)
-        {
-            return ExecuteCommand(console, (device) =>
-            {
-                return 0;
-            });
         }
     }
 }

@@ -23,36 +23,28 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
+using System.ComponentModel.DataAnnotations;
 
 namespace RfmUsbConsole.Commands
 {
     internal abstract class BaseRfm69Command : BaseCommand
     {
-        protected BaseRfm69Command(IServiceProvider serviceProvider) : base(serviceProvider)
+        protected BaseRfm69Command(ILogger logger, IRfm69 rfm) : base(logger, rfm)
         {
         }
 
+        [Range(-2, 20)]
+        [Option(Templates.OutputPower, "The radio output power.", CommandOptionType.SingleValue)]
+        public sbyte OutputPower { get; set; } = 0;
+
+        [Range(-115, 0)]
         [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
         public sbyte RssiThreshold { get; set; } = -40;
 
-        protected override IRfm? CreatDeviceInstance()
-        {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm69));
-        }
-
-        internal void SetupPingConfiguration(IRfm69 rfm)
-        {
-            rfm.RxBw = 8;
-            rfm.CrcOn = false;
-            rfm.PayloadLength = 2;
-
-            rfm.SyncSize = 1;
-            rfm.Sync = new List<byte>() { 0xDE, 0xAD };
-
-            rfm.RssiThreshold = RssiThreshold;
-
-            rfm.FifoThreshold = 1;
-        }
+        [Range(0, 23)]
+        [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
+        public byte RxBw { get; set; } = 0;
     }
 }

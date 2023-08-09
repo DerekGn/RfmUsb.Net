@@ -23,15 +23,15 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
-using System.Diagnostics;
 
 namespace RfmUsbConsole.Commands
 {
     [Command(Description = "Ping using RfmUsb Rfm9x radio")]
     internal class Rfm69PingCommand : BaseRfm69Command
     {
-        public Rfm69PingCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        public Rfm69PingCommand(ILogger<Rfm69PingCommand> logger, IRfm69 rfm) : base(logger, rfm)
         {
         }
 
@@ -46,73 +46,14 @@ namespace RfmUsbConsole.Commands
 
         protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-            return ExecuteCommand(console, (device) =>
+            return ExecuteCommand(console, () =>
             {
-                IRfm69 rfm = (IRfm69)device;
-                
-                SetupPingConfiguration(rfm);
+                var rfm69 = (IRfm69)Rfm;
+                rfm69.RssiThreshold = RssiThreshold;
+                rfm69.OutputPower = OutputPower;
 
-                rfm.DioInterruptMask = DioIrq.Dio0;
-
-                console.WriteLine("Ping started");
-
-                for (int i = 0; i < PingCount; i++)
-                {
-                    rfm.Fifo = new List<byte>() { 0x55, 0xAA };
-
-                    EnterTxMode(rfm);
-
-                    var source = WaitForSignal(PingTimeout);
-
-                    if (source == SignalSource.Irq)
-                    {
-                        WaitForPingResponse(rfm, i);
-                    }
-                    else if (source == SignalSource.Console)
-                    {
-                        console.WriteLine("Ping Cancelled.");
-                    }
-                    else if (source == SignalSource.None)
-                    {
-                        console.WriteLine($"Ping [{i}] Timeout.");
-                    }
-
-                    Thread.Sleep(PingInterval);
-                }
-
-                return 0;
+                return ExecutePing(RxBw, PingCount, PingTimeout, PingInterval);
             });
-        }
-
-        private void WaitForPingResponse(IRfm69 rfm, int i)
-        {
-            EnterRxMode(rfm);
-
-            Stopwatch sw = new Stopwatch();
-            
-            sw.Start();
-
-            var source = WaitForSignal(PingTimeout);
-
-            if (source == SignalSource.Irq)
-            {
-                sw.Stop();
-
-                Console.WriteLine(
-                    $"Ping Response Received." + Environment.NewLine +
-                    $"Irq: {rfm.IrqFlags}" + Environment.NewLine +
-                    $"Elapsed: [{sw.Elapsed}]");
-            }
-            else if (source == SignalSource.Console)
-            {
-                Console.WriteLine("Ping Cancelled.");
-            }
-            else if (source == SignalSource.None)
-            {
-                Console.WriteLine($"Ping [{i}] Timeout.");
-            }
-
-            rfm.Mode = Mode.Standby;
         }
     }
 }

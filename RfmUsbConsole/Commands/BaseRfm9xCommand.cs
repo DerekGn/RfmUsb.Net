@@ -23,6 +23,7 @@
 */
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,20 +31,20 @@ namespace RfmUsbConsole.Commands
 {
     internal abstract class BaseRfm9xCommand : BaseCommand
     {
-        protected BaseRfm9xCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+        protected BaseRfm9xCommand(ILogger logger, IRfm9x rfm) : base(logger, rfm)
         {
         }
 
+        [Range(2, 20)]
+        [Option(Templates.OutputPower, "The radio output power.", CommandOptionType.SingleValue)]
+        public byte OutputPower { get; set; } = 0;
+
+        [Range(-127, 0)]
         [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
-        public sbyte RssiThreshold { get; set; } = -80;
+        public sbyte RssiThreshold { get; set; } = -40;
 
         [Range(0, 20)]
         [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
-        public byte RxBw { get; set; }
-
-        protected override IRfm? CreatDeviceInstance()
-        {
-            return (IRfm?)ServiceProvider.GetService(typeof(IRfm9x));
-        }
+        public byte RxBw { get; set; } = 0;
     }
 }

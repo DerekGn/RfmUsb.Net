@@ -2,7 +2,7 @@
   "profiles": {
     "RfmUsbPinger": {
       "commandName": "Project",
-      "commandLineArgs": "rfm69-ping -p COM3"
+      "commandLineArgs": "rfm9x-ping -p COM3"
     }
   }
 }
