@@ -56,7 +56,7 @@ namespace RfmUsbConsole.Commands
         public uint BaudRate { get; set; } = 4800;
 
         [Option(Templates.Frequency, "The radio frequency.", CommandOptionType.SingleValue)]
-        public uint? Frequency { get; set; };
+        public uint? Frequency { get; set; }
 
         [Option(Templates.Modulation, "The radio modulation.", CommandOptionType.SingleValue)]
         public ModulationType Modulation { get; set; } = ModulationType.Fsk;
