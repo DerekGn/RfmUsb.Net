@@ -43,5 +43,22 @@ namespace RfmUsbConsole.Commands
 
         [Option(Templates.PingTimeout, "The ping timeout", CommandOptionType.SingleValue)]
         public int PingTimeout { get; set; } = 1000;
+
+        protected override int OnExecute(CommandLineApplication app, IConsole console)
+        {
+            return ExecuteCommand(console, () =>
+            {
+                var rfm9x = (IRfm9x)Rfm;
+
+                if (OutputPower.HasValue)
+                {
+                    rfm9x.OutputPower = OutputPower.Value;
+                }
+
+                rfm9x.RssiThreshold = RssiThreshold;
+
+                return ExecutePing(RxBw, PingCount, PingTimeout, PingInterval);
+            });
+        }
     }
 }

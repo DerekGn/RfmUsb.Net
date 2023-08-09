@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
 
@@ -31,6 +32,23 @@ namespace RfmUsbConsole.Commands
     {
         public Rfm9xPingListenCommand(ILogger<Rfm9xPingListenCommand> logger, IRfm9x rfm) : base(logger, rfm)
         {
+        }
+
+        protected override int OnExecute(CommandLineApplication app, IConsole console)
+        {
+            return ExecuteCommand(console, () =>
+            {
+                var rfm = (IRfm9x)Rfm;
+
+                if (OutputPower.HasValue)
+                {
+                }
+
+                rfm.RssiThreshold = RssiThreshold;
+
+
+                return ExecutePingListen(RxBw);
+            });
         }
     }
 }
