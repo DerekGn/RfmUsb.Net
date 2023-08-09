@@ -37,7 +37,7 @@ namespace RfmUsbConsole.Commands
 
         [Range(-2, 20)]
         [Option(Templates.OutputPower, "The radio output power.", CommandOptionType.SingleValue)]
-        public sbyte OutputPower { get; set; } = 0;
+        public sbyte? OutputPower { get; set; }
 
         [Range(-115, 0)]
         [Option(Templates.RssiThreshold, "The Rssi Threshold", CommandOptionType.SingleValue)]
@@ -45,6 +45,6 @@ namespace RfmUsbConsole.Commands
 
         [Range(0, 23)]
         [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
-        public byte RxBw { get; set; } = 0;
+        public byte? RxBw { get; set; }
     }
 }

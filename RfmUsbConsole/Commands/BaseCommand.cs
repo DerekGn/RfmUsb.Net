@@ -53,13 +53,13 @@ namespace RfmUsbConsole.Commands
 
         [Range(1200, 300000)]
         [Option(Templates.BaudRate, "The radio baud rate.", CommandOptionType.SingleValue)]
-        public uint BaudRate { get; set; } = 4800;
+        public uint? BaudRate { get; set; }
 
         [Option(Templates.Frequency, "The radio frequency.", CommandOptionType.SingleValue)]
         public uint? Frequency { get; set; }
 
         [Option(Templates.Modulation, "The radio modulation.", CommandOptionType.SingleValue)]
-        public ModulationType Modulation { get; set; } = ModulationType.Fsk;
+        public ModulationType? Modulation { get; set; }
 
         [Required]
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
@@ -77,9 +77,13 @@ namespace RfmUsbConsole.Commands
             rfm.Mode = Mode.Tx;
         }
 
-        internal static void SetupPingConfiguration(IRfm rfm, byte rxbw)
+        internal static void SetupPingConfiguration(IRfm rfm, byte? rxbw)
         {
-            rfm.RxBw = rxbw;
+            if (rxbw.HasValue)
+            {
+                rfm.RxBw = rxbw.Value;
+            }
+
             rfm.CrcOn = false;
             rfm.PayloadLength = 2;
 
@@ -101,14 +105,23 @@ namespace RfmUsbConsole.Commands
                 {
                     Rfm.Open(SerialPort, 230400);
 
+                    Rfm.ExecuteReset();
+
                     if (Frequency.HasValue)
                     {
                         Rfm.Frequency = Frequency.Value;
                     }
 
-                    Rfm.ExecuteReset();
-                    Rfm.BitRate = BaudRate;
-                    Rfm.ModulationType = Modulation;
+                    if(BaudRate.HasValue)
+                    {
+                        Rfm.BitRate = BaudRate.Value;
+                    }
+
+                    if(Modulation.HasValue)
+                    {
+                        Rfm.ModulationType = Modulation.Value;
+                    }
+                    
                     Rfm.DioInterrupt += RfmDeviceDioInterrupt;
 
                     action();
@@ -141,7 +154,7 @@ namespace RfmUsbConsole.Commands
             return result;
         }
 
-        internal int ExecutePing(byte rxbw, int pingCount, int pingTimeout, int pingInterval)
+        internal int ExecutePing(byte? rxbw, int pingCount, int pingTimeout, int pingInterval)
         {
             SetupPingConfiguration(Rfm, rxbw);
 
@@ -176,7 +189,7 @@ namespace RfmUsbConsole.Commands
             return 0;
         }
 
-        internal int ExecutePingListen(byte rxbw)
+        internal int ExecutePingListen(byte? rxbw)
         {
             SetupPingConfiguration(Rfm, rxbw);
 

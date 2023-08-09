@@ -40,8 +40,13 @@ namespace RfmUsbConsole.Commands
             {
                 var rfm69 = (IRfm69)Rfm;
 
+                if (OutputPower.HasValue)
+                {
+                    rfm69.OutputPower = OutputPower.Value;
+                }
+
                 rfm69.RssiThreshold = RssiThreshold;
-                rfm69.OutputPower = OutputPower;
+                
 
                 return ExecutePingListen(RxBw);
             });
