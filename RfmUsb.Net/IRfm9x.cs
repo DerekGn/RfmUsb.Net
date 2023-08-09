@@ -41,16 +41,6 @@ namespace RfmUsb.Net
         bool AccessSharedRegisters { get; set; }
 
         /// <summary>
-        /// IRQ flag witnessing a temperature change exceeding
-        /// TempThreshold since the last Image and RSSI calibration:
-        /// <remarks>
-        /// <para><see langword="false"/> Temperature change lower than TempThreshold</para>
-        /// <para><see langword="true"/> Temperature change greater than TempThreshold</para>
-        /// </remarks>
-        /// </summary>
-        bool TemperatureChange { get; }
-
-        /// <summary>
         /// The agc value
         /// </summary>
         /// <remarks>
@@ -354,6 +344,10 @@ namespace RfmUsb.Net
         OokAverageOffset OokAverageOffset { get; set; }
 
         /// <summary>
+        /// Get or set the output power in dbm
+        /// </summary>
+        byte OutputPower { get; set; }
+        /// <summary>
         /// RSSI of the latest packet received (dBm)
         /// </summary>
         byte PacketRssi { get; }
@@ -468,6 +462,15 @@ namespace RfmUsb.Net
         /// </remarks>
         bool TcxoInputOn { get; set; }
 
+        /// <summary>
+        /// IRQ flag witnessing a temperature change exceeding
+        /// TempThreshold since the last Image and RSSI calibration:
+        /// <remarks>
+        /// <para><see langword="false"/> Temperature change lower than TempThreshold</para>
+        /// <para><see langword="true"/> Temperature change greater than TempThreshold</para>
+        /// </remarks>
+        /// </summary>
+        bool TemperatureChange { get; }
         /// <summary>
         /// Temperature change threshold to trigger a new I/Q calibration
         /// </summary>

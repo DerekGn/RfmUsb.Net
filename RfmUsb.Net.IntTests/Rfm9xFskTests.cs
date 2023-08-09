@@ -39,24 +39,6 @@ namespace RfmUsb.Net.IntTests
             RfmBase = _rfm9x;
         }
 
-        [TestInitialize]
-        public void TestInitalise()
-        {
-            _rfm9x.Open("COM3", 230400);
-
-            _rfm9x.ExecuteReset();
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            if (_rfm9x != null)
-            {
-                _rfm9x.Close();
-            }
-        }
-
-
         [TestMethod]
         [DataRow(Timer.Timer1, TimerResolution.Reserved)]
         [DataRow(Timer.Timer2, TimerResolution.Reserved)]
@@ -95,6 +77,15 @@ namespace RfmUsb.Net.IntTests
         public void TestBitSyncOn()
         {
             TestRangeBool(() => _rfm9x.BitSyncOn, (v) => _rfm9x.BitSyncOn = v);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (_rfm9x != null)
+            {
+                _rfm9x.Close();
+            }
         }
 
         [TestMethod]
@@ -249,6 +240,14 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.IdleMode, (v) => _rfm9x.IdleMode = v);
         }
 
+        [TestInitialize]
+        public void TestInitalise()
+        {
+            _rfm9x.Open("COM3", 230400);
+
+            _rfm9x.ExecuteReset();
+        }
+
         [TestMethod]
         public void TestIoHomeOn()
         {
@@ -305,6 +304,11 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.MapPreambleDetect, (v) => _rfm9x.MapPreambleDetect = v);
         }
 
+        [TestMethod]
+        public void TestOutputPower()
+        {
+            TestRange<byte>(() => _rfm9x.OutputPower, (v) => _rfm9x.OutputPower = v, 2, 20);
+        }
         [TestMethod]
         public void TestPreambleDetectorOn()
         {

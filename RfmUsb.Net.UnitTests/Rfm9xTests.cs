@@ -852,6 +852,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetOutputPower()
+        {
+            ExecuteGetTest(
+                () => { return _rfmDevice.OutputPower; },
+                (v) => v.Should().Be(2),
+                Commands.GetOutputPower,
+                $"0x{(byte)2:X2}");
+        }
+
+        [TestMethod]
         public void TestGetPacketRssi()
         {
             ExecuteGetTest(
@@ -1611,6 +1621,15 @@ namespace RfmUsb.Net.UnitTests
                 () => { _rfmDevice.OokAverageOffset = expected; },
                 Commands.SetOokAverageOffset,
                 $"0x{expected:X}");
+        }
+
+        [TestMethod]
+        public void TestSetOutputPower()
+        {
+            ExecuteSetTest(
+                () => { _rfmDevice.OutputPower = 2; },
+                Commands.SetOutputPower,
+                 $"0x{(byte)2:X2}");
         }
 
         [TestMethod]
