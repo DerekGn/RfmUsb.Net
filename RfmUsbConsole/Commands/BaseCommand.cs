@@ -56,7 +56,7 @@ namespace RfmUsbConsole.Commands
         public uint BaudRate { get; set; } = 4800;
 
         [Option(Templates.Frequency, "The radio frequency.", CommandOptionType.SingleValue)]
-        public uint Frequency { get; set; } = 433920000;
+        public uint? Frequency { get; set; };
 
         [Option(Templates.Modulation, "The radio modulation.", CommandOptionType.SingleValue)]
         public ModulationType Modulation { get; set; } = ModulationType.Fsk;
@@ -101,9 +101,13 @@ namespace RfmUsbConsole.Commands
                 {
                     Rfm.Open(SerialPort, 230400);
 
+                    if (Frequency.HasValue)
+                    {
+                        Rfm.Frequency = Frequency.Value;
+                    }
+
                     Rfm.ExecuteReset();
                     Rfm.BitRate = BaudRate;
-                    Rfm.Frequency = Frequency;
                     Rfm.ModulationType = Modulation;
                     Rfm.DioInterrupt += RfmDeviceDioInterrupt;
 
