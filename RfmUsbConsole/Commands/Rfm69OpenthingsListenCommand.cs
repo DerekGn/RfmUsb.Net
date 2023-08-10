@@ -67,19 +67,16 @@ namespace RfmUsbConsole.Commands
 
                     if (source == SignalSource.Irq)
                     {
-                        var rssi = rfm.Rssi;
-                        var irq = rfm.IrqFlags;
+                        Logger.LogInformation(
+                            "Ping Response Received." + Environment.NewLine +
+                            "Irq: {irq}" + Environment.NewLine +
+                            "Rssi: {rssi}", rfm.IrqFlags, rfm.Rssi);
 
-                        console.WriteLine(
-                            $"Ping Response Received." + Environment.NewLine +
-                            $"Irq: {irq}" + Environment.NewLine +
-                            $"Rssi: {rssi}");
-
-                        console.WriteLine($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
+                        Logger.LogInformation($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
                     }
                     else
                     {
-                        console.WriteLine("Ping Listen Stop");
+                        Logger.LogInformation("Ping Listen Stop");
                     }
                 } while (true);
             });
