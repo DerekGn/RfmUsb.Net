@@ -33,6 +33,7 @@ namespace RfmUsbConsole.Commands
 {
     internal abstract class BaseCommand
     {
+        //private readonly List<byte> ping = new() { 0x50, 0x49 };
         internal readonly ILogger Logger;
         internal AutoResetEvent IrqSignal;
         internal IRfm Rfm;
@@ -84,7 +85,7 @@ namespace RfmUsbConsole.Commands
                 rfm.RxBw = rxbw.Value;
             }
 
-            rfm.CrcOn = false;
+            rfm.CrcOn = true;
             rfm.PayloadLength = 2;
 
             rfm.SyncSize = 1;
@@ -112,16 +113,16 @@ namespace RfmUsbConsole.Commands
                         Rfm.Frequency = Frequency.Value;
                     }
 
-                    if(BaudRate.HasValue)
+                    if (BaudRate.HasValue)
                     {
                         Rfm.BitRate = BaudRate.Value;
                     }
 
-                    if(Modulation.HasValue)
+                    if (Modulation.HasValue)
                     {
                         Rfm.ModulationType = Modulation.Value;
                     }
-                    
+
                     Rfm.DioInterrupt += RfmDeviceDioInterrupt;
 
                     action();
@@ -170,6 +171,8 @@ namespace RfmUsbConsole.Commands
 
                 var source = WaitForSignal(pingTimeout);
 
+                PrintIrqFlags();
+
                 if (source == SignalSource.Irq)
                 {
                     WaitForPingResponse(pingTimeout, i);
@@ -203,13 +206,27 @@ namespace RfmUsbConsole.Commands
 
                 if (source == SignalSource.Irq)
                 {
-                    Logger.LogInformation("Ping Received. Rssi: {rssi}", Rfm.Rssi);
-
-                    var fifo = Rfm.Fifo.ToList();
-
-                    if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
+                    if (CheckPacketReceived())
                     {
-                        SendPingResponse();
+                        Rfm.Mode = Mode.Standby;
+
+                        var fifo = Rfm.Fifo.ToList();
+
+                        if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
+                        {
+                            Logger.LogInformation("Ping Received. Rssi: {rssi}", Rfm.Rssi);
+
+                            SendPingResponse();
+                        }
+                        else
+                        {
+                            Logger.LogWarning("Invalid Packet Received. Packet:[{packet}] Rssi: {rssi}",
+                                BitConverter.ToString(fifo.Take(2).ToArray()), Rfm.Rssi);
+                        }
+                    }
+                    else
+                    {
+                        Logger.LogWarning("No Packet Recieved.");
                     }
                 }
                 else if (source == SignalSource.Console)
@@ -232,6 +249,10 @@ namespace RfmUsbConsole.Commands
             return 0;
         }
 
+        protected abstract void PrintIrqFlags();
+
+        protected abstract bool CheckPacketReceived();
+
         private void ConsoleCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
             _consoleSignal.Set();
@@ -246,14 +267,14 @@ namespace RfmUsbConsole.Commands
 
         private void SendPingResponse()
         {
-            Rfm.Mode = Mode.Standby;
-
             Rfm.Fifo = new List<byte>() { 0xAA, 0x55 };
 
             EnterTxMode(Rfm);
 
             if (WaitForSignal() == SignalSource.Irq)
             {
+                PrintIrqFlags();
+
                 Logger.LogInformation("Ping Reply Sent");
             }
         }
@@ -267,6 +288,8 @@ namespace RfmUsbConsole.Commands
             sw.Start();
 
             var source = WaitForSignal(pingTimeout);
+
+            PrintIrqFlags();
 
             if (source == SignalSource.Irq)
             {

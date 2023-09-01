@@ -46,5 +46,15 @@ namespace RfmUsbConsole.Commands
         [Range(0, 23)]
         [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
         public byte? RxBw { get; set; }
+
+        protected override void PrintIrqFlags()
+        {
+            Logger.LogDebug("Irq Falgs [{flags}]",((IRfm69)Rfm).IrqFlags.ToString());
+        }
+
+        protected override bool CheckPacketReceived()
+        {
+            return (((IRfm69)Rfm).IrqFlags & Rfm69IrqFlags.PayloadReady) == Rfm69IrqFlags.PayloadReady;
+        }
     }
 }
