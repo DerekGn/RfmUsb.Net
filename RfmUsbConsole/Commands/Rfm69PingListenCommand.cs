@@ -28,6 +28,7 @@ using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
 {
+    [Command(Description = "Ping listen using RfmUsb Rfm69 radio")]
     internal class Rfm69PingListenCommand : BaseRfm69Command
     {
         public Rfm69PingListenCommand(ILogger<Rfm69PingListenCommand> logger, IRfm69 rfm) : base(logger, rfm)
@@ -46,7 +47,6 @@ namespace RfmUsbConsole.Commands
                 }
 
                 rfm69.RssiThreshold = RssiThreshold;
-                
 
                 return ExecutePingListen(RxBw);
             });

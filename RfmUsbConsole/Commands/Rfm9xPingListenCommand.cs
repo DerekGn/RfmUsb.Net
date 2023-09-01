@@ -28,6 +28,7 @@ using RfmUsb.Net;
 
 namespace RfmUsbConsole.Commands
 {
+    [Command(Description = "Ping listen using RfmUsb Rfm9x radio")]
     internal class Rfm9xPingListenCommand : BaseRfm9xCommand
     {
         public Rfm9xPingListenCommand(ILogger<Rfm9xPingListenCommand> logger, IRfm9x rfm) : base(logger, rfm)
