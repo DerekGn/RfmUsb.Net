@@ -278,11 +278,11 @@ namespace RfmUsbConsole.Commands
             }
             else if (source == SignalSource.Console)
             {
-                Console.WriteLine("Ping Cancelled.");
+                Logger.LogInformation("Ping Cancelled.");
             }
             else if (source == SignalSource.None)
             {
-                Console.WriteLine($"Ping [{pingNumber}] Timeout.");
+                Logger.LogInformation("Ping [{pingNumber}] Timeout.", pingNumber);
             }
 
             Rfm.Mode = Mode.Standby;
