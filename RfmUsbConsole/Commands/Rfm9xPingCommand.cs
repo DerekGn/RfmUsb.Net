@@ -31,7 +31,7 @@ namespace RfmUsbConsole.Commands
     [Command(Description = "Ping using RfmUsb Rfm9x radio")]
     internal class Rfm9xPingCommand : BaseRfm9xCommand
     {
-        public Rfm9xPingCommand(ILogger<Rfm9xPingCommand> logger, IRfm9x rfm) : base(logger,rfm)
+        public Rfm9xPingCommand(ILogger<Rfm9xPingCommand> logger, IRfm9x rfm) : base(logger, rfm)
         {
         }
 

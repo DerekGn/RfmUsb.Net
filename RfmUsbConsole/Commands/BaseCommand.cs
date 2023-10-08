@@ -33,13 +33,12 @@ namespace RfmUsbConsole.Commands
 {
     internal abstract class BaseCommand
     {
-        //private readonly List<byte> ping = new() { 0x50, 0x49 };
         internal readonly ILogger Logger;
         internal AutoResetEvent IrqSignal;
         internal IRfm Rfm;
 
         private AutoResetEvent _consoleSignal;
-        private AutoResetEvent[] waitHandles;
+        private AutoResetEvent[] _waitHandles;
 
         protected BaseCommand(ILogger logger, IRfm rfm)
         {
@@ -49,7 +48,7 @@ namespace RfmUsbConsole.Commands
             IrqSignal = new AutoResetEvent(false);
             _consoleSignal = new AutoResetEvent(false);
 
-            waitHandles = new List<AutoResetEvent>() { IrqSignal, _consoleSignal }.ToArray();
+            _waitHandles = new List<AutoResetEvent>() { IrqSignal, _consoleSignal }.ToArray();
         }
 
         [Range(1200, 300000)]
@@ -159,19 +158,19 @@ namespace RfmUsbConsole.Commands
         {
             SetupPingConfiguration(Rfm, rxbw);
 
-            Rfm.DioInterruptMask = DioIrq.Dio0;
-
             Logger.LogInformation("Ping started");
+
+            Rfm.SetDioMapping(Dio.Dio3, DioMapping.DioMapping1);
 
             for (int i = 0; i < pingCount; i++)
             {
+                Rfm.DioInterruptMask = DioIrq.Dio0;
+
                 Rfm.Fifo = new List<byte>() { 0x55, 0xAA };
 
                 EnterTxMode(Rfm);
 
                 var source = WaitForSignal(pingTimeout);
-
-                PrintIrqFlags();
 
                 if (source == SignalSource.Irq)
                 {
@@ -189,6 +188,8 @@ namespace RfmUsbConsole.Commands
                 Thread.Sleep(pingInterval);
             }
 
+            ExitTxMode();
+
             return 0;
         }
 
@@ -196,7 +197,8 @@ namespace RfmUsbConsole.Commands
         {
             SetupPingConfiguration(Rfm, rxbw);
 
-            Rfm.DioInterruptMask = DioIrq.Dio0;
+            Rfm.SetDioMapping(Dio.Dio3, DioMapping.DioMapping1);
+            Rfm.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio3;
 
             do
             {
@@ -210,18 +212,20 @@ namespace RfmUsbConsole.Commands
                     {
                         Rfm.Mode = Mode.Standby;
 
+                        Logger.LogInformation("Packet Received.");
+
                         var fifo = Rfm.Fifo.ToList();
 
                         if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
                         {
-                            Logger.LogInformation("Ping Received. Rssi: {rssi}", Rfm.Rssi);
+                            Logger.LogInformation("Ping Received. Packet Rssi: {rssi}", Rfm.LastRssi);
 
                             SendPingResponse();
                         }
                         else
                         {
-                            Logger.LogWarning("Invalid Packet Received. Packet:[{packet}] Rssi: {rssi}",
-                                BitConverter.ToString(fifo.Take(2).ToArray()), Rfm.Rssi);
+                            Logger.LogWarning("Invalid Packet Received. Packet:[{packet}] Packet Rssi: {rssi}",
+                                BitConverter.ToString(fifo.Take(2).ToArray()), Rfm.LastRssi);
                         }
                     }
                     else
@@ -238,8 +242,12 @@ namespace RfmUsbConsole.Commands
 
         internal SignalSource WaitForSignal(int timeout = -1)
         {
-            return (SignalSource)AutoResetEvent.WaitAny(waitHandles, timeout);
+            return (SignalSource)AutoResetEvent.WaitAny(_waitHandles, timeout);
         }
+
+        protected abstract bool CheckPacketReceived();
+
+        protected abstract bool CheckPacketSent();
 
         protected virtual int OnExecute(CommandLineApplication app, IConsole console)
         {
@@ -251,18 +259,25 @@ namespace RfmUsbConsole.Commands
 
         protected abstract void PrintIrqFlags();
 
-        protected abstract bool CheckPacketReceived();
-
         private void ConsoleCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
             _consoleSignal.Set();
         }
 
+        private void ExitTxMode()
+        {
+            Rfm.Mode = Mode.Standby;
+            Rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
+        }
+
         private void RfmDeviceDioInterrupt(object? sender, DioIrq e)
         {
-            IrqSignal.Set();
-
             Logger.LogDebug("Dio Irq [{e}]", e);
+
+            if ((e & DioIrq.Dio0) == DioIrq.Dio0)
+            {
+                IrqSignal.Set();
+            }
         }
 
         private void SendPingResponse()
@@ -271,16 +286,25 @@ namespace RfmUsbConsole.Commands
 
             EnterTxMode(Rfm);
 
-            if (WaitForSignal() == SignalSource.Irq)
-            {
-                PrintIrqFlags();
+            var source = WaitForSignal();
 
-                Logger.LogInformation("Ping Reply Sent");
+            if (source == SignalSource.Irq)
+            {
+                if (CheckPacketSent())
+                {
+                    Logger.LogInformation("Ping Reply Sent");
+                }
+                else
+                {
+                    Logger.LogWarning("Packet Not Sent");
+                }
             }
         }
 
         private void WaitForPingResponse(int pingTimeout, int pingNumber)
         {
+            Rfm.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio3;
+
             EnterRxMode(Rfm);
 
             Stopwatch sw = new Stopwatch();
@@ -289,15 +313,16 @@ namespace RfmUsbConsole.Commands
 
             var source = WaitForSignal(pingTimeout);
 
-            PrintIrqFlags();
-
             if (source == SignalSource.Irq)
             {
                 sw.Stop();
 
-                Logger.LogInformation(
-                    "Ping Response Received. Elapsed: [{elapsed}]",
-                    sw.Elapsed);
+                if (CheckPacketReceived())
+                {
+                    Logger.LogInformation(
+                        "Ping Response Received. Elapsed: [{elapsed}]",
+                        sw.Elapsed);
+                }
             }
             else if (source == SignalSource.Console)
             {

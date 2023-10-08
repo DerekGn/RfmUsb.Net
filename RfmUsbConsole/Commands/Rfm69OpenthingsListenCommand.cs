@@ -58,7 +58,7 @@ namespace RfmUsbConsole.Commands
 
                 rfm.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
                 rfm.DioInterruptMask = DioIrq.Dio0;
-                
+
                 rfm.Mode = Mode.Rx;
 
                 do

@@ -149,7 +149,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Get the Rssi value after last packet received
         /// </summary>
-        byte LastRssi { get; }
+        sbyte LastRssi { get; }
 
         /// <summary>
         /// LNA gain setting

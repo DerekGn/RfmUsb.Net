@@ -47,7 +47,6 @@ namespace RfmUsbConsole.Commands
 
                 rfm.RssiThreshold = RssiThreshold;
 
-
                 return ExecutePingListen(RxBw);
             });
         }

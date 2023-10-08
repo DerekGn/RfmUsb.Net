@@ -342,6 +342,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetLastRssi()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.LastRssi; },
+                (v) => v.Should().Be(-18),
+                Commands.GetLastRssi,
+                "0xFFFFFFEE");
+        }
+
+        [TestMethod]
         [DataRow(LnaGain.Auto)]
         [DataRow(LnaGain.Max)]
         [DataRow(LnaGain.MaxMinus12db)]

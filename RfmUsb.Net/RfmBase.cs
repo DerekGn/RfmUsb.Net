@@ -179,7 +179,7 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte LastRssi => throw new NotImplementedException();
+        public sbyte LastRssi => (sbyte)SendCommand(Commands.GetLastRssi).ConvertToInt32();
 
         ///<inheritdoc/>
         public LnaGain LnaGainSelect
@@ -676,7 +676,7 @@ namespace RfmUsb.Net
                     }
                 } while (SerialPort.BytesToRead != 0);
 
-                Logger.LogDebug("Received Serial Port Data: {type}", e.EventType);
+                Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
 
                 _autoResetEvent.Set();
             }
