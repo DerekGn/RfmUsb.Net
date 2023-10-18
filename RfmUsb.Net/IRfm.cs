@@ -33,6 +33,11 @@ namespace RfmUsb.Net
     public interface IRfm : IDisposable
     {
         /// <summary>
+        /// Event raised when an DIO Irq line interrupt occurs
+        /// </summary>
+        event EventHandler<DioIrq> DioInterrupt;
+
+        /// <summary>
         /// Defines address based filtering in Rx
         /// </summary>
         AddressFilter AddressFiltering { get; set; }
@@ -44,15 +49,20 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Only valid if AfcAutoOn is set
-        /// false : AFC register is not cleared before a new AFC phase
-        /// true : AFC register is cleared before a new AFC phase
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> AFC register is not cleared before a new AFC phase</para>
+        /// <para><see langword="true"/> AFC register is cleared before a new AFC phase</para>
+        /// </remarks>
         bool AfcAutoClear { get; set; }
 
         /// <summary>
-        /// false : AFC is performed each time AfcStart is set
-        /// true : AFC is performed each time Rx mode is entered
+        /// Enable Afc auto on
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> AFC is performed each time AfcStart is set</para>
+        /// <para><see langword="true"/> AFC is performed each time Rx mode is entered</para>
+        /// </remarks>
         bool AfcAutoOn { get; set; }
 
         /// <summary>
@@ -67,16 +77,20 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Defines the behavior of the packet handler when CRC check fails:
-        /// false : Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued.
-        /// true : Do not clear FIFO. PayloadReady interrupt issued.
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Clear FIFO and restart new packet reception. NoPayloadReady interrupt issued</para>
+        /// <para><see langword="true"/> Do not clear FIFO. PayloadReady interrupt issued</para>
+        /// </remarks>
         bool CrcAutoClearOff { get; set; }
 
         /// <summary>
         /// Enables CRC calculation/check (Tx/Rx)
-        /// false : Off
-        /// true : On
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Off</para>
+        /// <para><see langword="true"/> On</para>
+        /// </remarks>
         bool CrcOn { get; set; }
 
         /// <summary>
@@ -133,9 +147,9 @@ namespace RfmUsb.Net
         byte InterPacketRxDelay { get; set; }
 
         /// <summary>
-        /// Get the Rssi value after last packet recieved
+        /// Get the Rssi value after last packet received
         /// </summary>
-        byte LastRssi { get; }
+        sbyte LastRssi { get; }
 
         /// <summary>
         /// LNA gain setting
@@ -200,9 +214,11 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Defines the packet format used:
-        /// false : Fixed length
-        /// true : Variable length
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Fixed length</para>
+        /// <para><see langword="true"/> Variable length</para>
+        /// </remarks>
         bool PacketFormat { get; set; }
 
         /// <summary>
@@ -212,9 +228,11 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// The payload length
-        /// If PacketFormat = false (fixed), payload length.
-        /// If PacketFormat = true (variable), max length in Rx, not used in Tx.
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> fixed payload length</para>
+        /// <para><see langword="true"/> variable max length in Rx, not used in Tx</para>
+        /// </remarks>
         ushort PayloadLength { get; set; }
 
         /// <summary>
@@ -268,10 +286,12 @@ namespace RfmUsb.Net
         sbyte Temperature { get; }
 
         /// <summary>
-        /// Defines the condition to start packet transmission :
-        /// false : FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)
-        /// true : FifoNotEmpty (i.e. at least one byte in the FIFO)
+        /// Defines the condition to start packet transmission
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)</para>
+        /// <para><see langword="true"/> FifoNotEmpty (i.e. at least one byte in the FIFO)</para>
+        /// </remarks>
         bool TxStartCondition { get; set; }
 
         /// <summary>
