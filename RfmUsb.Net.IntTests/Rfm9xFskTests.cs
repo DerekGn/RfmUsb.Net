@@ -82,10 +82,8 @@ namespace RfmUsb.Net.IntTests
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_rfm9x != null)
-            {
-                _rfm9x.Close();
-            }
+            _rfm9x?.Close();
+            _rfm9x?.Dispose();
         }
 
         [TestMethod]
@@ -243,7 +241,7 @@ namespace RfmUsb.Net.IntTests
         [TestInitialize]
         public void TestInitalise()
         {
-            _rfm9x.Open("COM3", 230400);
+            _rfm9x.Open((string)TestContext.Properties["Rfm9xComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
 
             _rfm9x.ExecuteReset();
         }
