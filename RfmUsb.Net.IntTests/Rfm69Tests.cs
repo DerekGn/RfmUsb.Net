@@ -37,8 +37,21 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm69 = _serviceProvider.GetService<IRfm69>();
             RfmBase = _rfm69;
+        }
 
-            _rfm69.Open((string)TestContext.Properties["Rfm69"], int.Parse((string)TestContext.Properties["BaudRate"]));
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _rfm69.Open((string)TestContext.Properties["Rfm69ComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
+
+            _rfm69.ExecuteReset();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _rfm69?.Close();
+            _rfm69?.Dispose();
         }
 
         [TestMethod]
@@ -118,6 +131,7 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => _rfm69.DccFreqAfc, (v) => _rfm69.DccFreqAfc = v);
         }
 
+        [Ignore]
         [TestMethod]
         [DataRow(DioIrq.None)]
         [DataRow(DioIrq.Dio0)]

@@ -37,7 +37,11 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x = _serviceProvider.GetService<IRfm9x>();
             RfmBase = _rfm9x;
+        }
 
+        [TestInitialize]
+        public void TestInitialize()
+        {
             _rfm9x.Open((string)TestContext.Properties["Rfm9x"], int.Parse((string)TestContext.Properties["BaudRate"]));
 
             _rfm9x.ExecuteReset();
@@ -46,6 +50,7 @@ namespace RfmUsb.Net.IntTests
 
             _rfm9x.LongRangeMode = true;
         }
+
 
         [TestMethod]
         public void TestAccessSharedRegisters()
