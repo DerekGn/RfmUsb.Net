@@ -93,10 +93,8 @@ namespace RfmUsb.Net.IntTests
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_rfm9x != null)
-            {
-                _rfm9x.Close();
-            }
+            _rfm9x?.Close();
+            _rfm9x?.Dispose();
         }
 
         [TestMethod]
