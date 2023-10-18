@@ -31,6 +31,8 @@ using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
+using System.Reflection;
 
 namespace RfmUsb.Net.UnitTests
 {
@@ -54,8 +56,6 @@ namespace RfmUsb.Net.UnitTests
         public void TestClose()
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
@@ -80,11 +80,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetAddressFilter()
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -104,26 +106,11 @@ namespace RfmUsb.Net.UnitTests
         [TestMethod]
         public void TestGetAfc()
         {
-            // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns("0x100");
-
-            // Act
-            var afc = RfmBase.Afc;
-
-            // Assert
-            afc.Should().Be(0x100);
+            ExecuteGetTest(
+                () => { return RfmBase.Afc; },
+                (v) => v.Should().Be(0x100),
+                Commands.GetAfc,
+                "0x100");
         }
 
         [TestMethod]
@@ -204,7 +191,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetDioInterruptMask()
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
+            MockSerialPort
+               .Setup(_ => _.IsOpen)
+               .Returns(true);
+
+            MockSerialPort
+               .Setup(_ => _.Write($"{Commands.GetDioInterruptMask}\n"))
+               .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                .SetupSequence(_ => _.ReadLine())
@@ -214,6 +207,15 @@ namespace RfmUsb.Net.UnitTests
                .Returns("0-DIO3")
                .Returns("1-DIO4")
                .Returns("0-DIO5");
+
+            MockSerialPort
+                .SetupSequence(_ => _.BytesToRead)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(1)
+                .Returns(0);
 
             // Act
             var result = RfmBase.DioInterruptMask;
@@ -234,11 +236,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetDioMapping(Dio dio)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -335,6 +339,16 @@ namespace RfmUsb.Net.UnitTests
                 (v) => v.Should().Be(0xAA),
                 Commands.GetInterPacketRxDelay,
                 "0xAA");
+        }
+
+        [TestMethod]
+        public void TestGetLastRssi()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.LastRssi; },
+                (v) => v.Should().Be(-18),
+                Commands.GetLastRssi,
+                "0xFFFFFFEE");
         }
 
         [TestMethod]
@@ -671,6 +685,12 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            RfmBase.SetupSerialPort(MockSerialPort.Object);
+        }
+
         [TestMethod]
         public void TestOpenNotFound()
         {
@@ -686,6 +706,8 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort
                 .Setup(_ => _.Open())
                 .Throws<FileNotFoundException>();
+
+            RfmBase.ResetSerialPort(MockSerialPort.Object);
 
             // Act
             Action action = () => RfmBase.Open("ComPort", 9600);
@@ -713,24 +735,16 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAddressFilter()
+        [DataRow(AddressFilter.None)]
+        [DataRow(AddressFilter.Node)]
+        [DataRow(AddressFilter.Reserved)]
+        [DataRow(AddressFilter.NodeBroaddcast)]
+        public void TestSetAddressFilter(AddressFilter expected)
         {
-            // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
-            MockSerialPort
-                .Setup(_ => _.IsOpen)
-                .Returns(true);
-
-            MockSerialPort
-                .Setup(_ => _.ReadLine())
-                .Returns(RfmBase.ResponseOk);
-
-            // Act
-            RfmBase.AddressFiltering = AddressFilter.Node;
-
-            // Assert
-            MockSerialPort.Verify(_ => _.Write($"{Commands.SetAddressFiltering} 0x{AddressFilter.Node:X}\n"), Times.Once);
+            ExecuteSetTest(
+                () => { RfmBase.AddressFiltering = expected; },
+                Commands.SetAddressFiltering,
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -804,11 +818,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetDioInterruptMask()
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                .Setup(_ => _.ReadLine())
@@ -819,7 +835,7 @@ namespace RfmUsb.Net.UnitTests
 
             // Assert
             MockSerialPort
-                .Verify(_ => _.Write($"{Commands.SetDioInterruptMask} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5) >> 1:X}\n"),
+                .Verify(_ => _.Write($"{Commands.SetDioInterruptMask} 0x{(byte)(DioIrq.Dio0 | DioIrq.Dio2 | DioIrq.Dio4 | DioIrq.Dio5):X}\n"),
                 Times.Once);
         }
 
@@ -833,11 +849,13 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetDioMapping(Dio dio, DioMapping mapping)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                .Setup(_ => _.ReadLine())
@@ -922,7 +940,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { RfmBase.LnaGainSelect = expected; },
                 Commands.SetLnaGainSelect,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -947,7 +965,7 @@ namespace RfmUsb.Net.UnitTests
             ExecuteSetTest(
                 () => { RfmBase.ModulationType = expected; },
                 Commands.SetModulationType,
-                $"0x{expected:X}");
+                $"0x{(byte)expected:X2}");
         }
 
         [TestMethod]
@@ -1229,11 +1247,13 @@ namespace RfmUsb.Net.UnitTests
         internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, string value)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -1251,11 +1271,13 @@ namespace RfmUsb.Net.UnitTests
         internal void ExecuteSetTest(Action action, string command, string value)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
                 .Setup(_ => _.ReadLine())
@@ -1271,11 +1293,13 @@ namespace RfmUsb.Net.UnitTests
         internal void ExecuteTest(Action action, string command, string? response = null)
         {
             // Arrange
-            RfmBase.SerialPort = MockSerialPort.Object;
-
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             if (response != null)
             {
@@ -1303,8 +1327,14 @@ namespace RfmUsb.Net.UnitTests
                 .Returns(true);
 
             MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
+
+            MockSerialPort
             .Setup(_ => _.ReadLine())
                 .Returns(version);
+
+            RfmBase.ResetSerialPort(MockSerialPort.Object);
 
             // Act
             RfmBase.Open("ComPort", 9600);
@@ -1314,6 +1344,16 @@ namespace RfmUsb.Net.UnitTests
                 .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
 
             MockSerialPort.Verify(_ => _.Open(), Times.Once);
+        }
+
+        internal static EventArgs CreateSerialDataReceivedEventArgs()
+        {
+            ConstructorInfo? constructor = typeof(SerialDataReceivedEventArgs)
+                .GetConstructor(
+                BindingFlags.NonPublic |
+                BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
+
+            return constructor?.Invoke(new object[] { SerialData.Chars }) as SerialDataReceivedEventArgs;
         }
     }
 }

@@ -40,31 +40,31 @@ namespace RfmUsb.Net
         /// <summary>
         /// Dio0 set
         /// </summary>
-        Dio0 = 2,
+        Dio0 = 1,
 
         /// <summary>
         /// Dio1 set
         /// </summary>
-        Dio1 = 4,
+        Dio1 = 2,
 
         /// <summary>
         /// Dio1 set
         /// </summary>
-        Dio2 = 8,
+        Dio2 = 4,
 
         /// <summary>
         /// Dio3 set
         /// </summary>
-        Dio3 = 16,
+        Dio3 = 8,
 
         /// <summary>
         /// Dio3 set
         /// </summary>
-        Dio4 = 32,
+        Dio4 = 16,
 
         /// <summary>
         /// Dio5 set
         /// </summary>
-        Dio5 = 64
+        Dio5 = 32
     }
 }

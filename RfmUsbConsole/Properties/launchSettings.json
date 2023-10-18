@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RfmUsbPinger": {
+      "commandName": "Project",
+      "commandLineArgs": "rfm69-ping -p COM3 -r 20"
+    }
+  }
+}

@@ -2,21 +2,21 @@
 
 [![Build Status](https://dev.azure.com/DerekGn/GitHub/_apis/build/status/DerekGn.RfmUsb.Net?branchName=main)](https://dev.azure.com/DerekGn/GitHub/_build/latest?definitionId=3&branchName=main)
 
-[![NuGet Badge](https://buildstats.info/nuget/RfmUsb)](https://www.nuget.org/packages/RfmUsb/)
+[![NuGet Badge](https://buildstats.info/nuget/RfmUsb.Net)](https://www.nuget.org/packages/RfmUsb.Net/)
 
-Api for the usb rfm69 usb serial device. The api allows for all configuration parameters of the Rfm69HW to be configured via a command line interface.
+Api for the USB Rfm69 and Rfm9x serial device. The api allows for all configuration parameters of the Rfm69 and Rfm9x radio module to be configured via a command line interface.
 
 ## Installing RfmUsb
 
 Install the RfmUsb package via nuget package manager console:
 
 ```
-Install-Package RfmUsb
+Install-Package RfmUsb.Net
 ```
 
 ## Supported .Net Runtimes
 
-The RfmUsb package is compatible with the following runtimes:
+The RfmUsb.Net package is compatible with the following runtimes:
 
 * .Net Core 7.0
 
@@ -29,7 +29,7 @@ var logger = GetLogger();
 
 var serialPortFactory = GetSerialPortFactory();
 
-var rfmUsbDevice = RfmUsb(logger, serialPortFactory);
+var rfmUsbDevice = Rfm69(logger, serialPortFactory);
 ```
 
 Alternatively an instance can be configured using the standard microsoft DI framework.
@@ -114,20 +114,6 @@ Transmit a packet and wait for a response with a specified transmit and receive 
 ```csharp
 // Transmit data and wait for
 var response = rfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA }, 1000, 1000 );
-```
-
-## Radio Configurations
-
-The RfmUsb device has a number of predefined radio configurations that can be assigned to the Rfm device.
-
-```csharp
-// Get the list of radio configurations
-var radioConfigs = rfmUsbDevice.GetRadioConfigurations();
-```
-
-```csharp
-// Set the radio configuration
-rfmUsbDevice.RadioConfig = 20;
 ```
 
 ## Irqs

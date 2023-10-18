@@ -33,9 +33,11 @@ namespace RfmUsb.Net
     {
         /// <summary>
         /// Enable the AES encryption/decryption:
-        /// false : Off
-        /// true : On (payload limited to 66 bytes maximum)
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Off</para>
+        /// <para><see langword="true"/> On (payload limited to 66 bytes maximum)</para>
+        /// </remarks>
         bool AesOn { get; set; }
 
         /// <summary>
@@ -45,9 +47,11 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
-        /// false : Off. RestartRx can be used.
-        /// true: On. Rx automatically restarted after InterPacketRxDelay.
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Off. RestartRx can be used.</para>
+        /// <para><see langword="true"/> On. Rx automatically restarted after InterPacketRxDelay.</para>
+        /// </remarks>
         bool AutoRxRestartOn { get; set; }
 
         /// <summary>
@@ -87,16 +91,20 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// FIFO filling condition:
-        /// false : if SyncAddress interrupt occurs
-        /// true : as long as FifoFillCondition is set
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> If SyncAddress interrupt occurs</para>
+        /// <para><see langword="true"/> As long as FifoFillCondition is set</para>
+        /// </remarks>
         bool FifoFill { get; set; }
 
         /// <summary>
         /// LNA’s input impedance
-        /// false : 50 ohms
-        /// true : 200 ohms
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> 50 ohms</para>
+        /// <para><see langword="true"/> 200 ohms</para>
+        /// </remarks>
         bool Impedance { get; set; }
 
         /// <summary>
@@ -124,9 +132,11 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Criteria for packet acceptance in Listen mode:
-        /// false : signal strength is above RssiThreshold
-        /// true : signal strength is above RssiThreshold and SyncAddress matched
         /// </summary>
+        /// <remarks>
+        /// <para><see langword="false"/> Signal strength is above RssiThreshold</para>
+        /// <para><see langword="true"/> Signal strength is above RssiThreshold and SyncAddress matched</para>
+        /// </remarks>
         bool ListenCriteria { get; set; }
 
         /// <summary>
@@ -239,10 +249,5 @@ namespace RfmUsb.Net
         /// </summary>
         /// <param name="key"></param>
         void SetAesKey(IEnumerable<byte> key);
-
-        /// <summary>
-        /// Wait for a configured Irq to be signaled
-        /// </summary>
-        void WaitForIrq();
     }
 }

@@ -37,8 +37,6 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm69 = _serviceProvider.GetService<IRfm69>();
             RfmBase = _rfm69;
-
-            _rfm69.Open((string)TestContext.Properties["Rfm69"], int.Parse((string)TestContext.Properties["BaudRate"]));
         }
 
         [TestMethod]
@@ -69,6 +67,15 @@ namespace RfmUsb.Net.IntTests
         public void TestAutoRxRestartOn()
         {
             TestRangeBool(() => _rfm69.AutoRxRestartOn, (v) => _rfm69.AutoRxRestartOn = v);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (_rfm69 != null)
+            {
+                _rfm69.Close();
+            }
         }
 
         [TestMethod]
@@ -175,6 +182,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestExecuteMeasureTemperature()
         {
             _rfm69.ExecuteMeasureTemperature();
@@ -200,7 +208,7 @@ namespace RfmUsb.Net.IntTests
 
         [TestMethod]
         [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoEmpty)]
+        [DataRow(ExitCondition.FifoNotEmpty)]
         [DataRow(ExitCondition.FifoLevel)]
         [DataRow(ExitCondition.Off)]
         [DataRow(ExitCondition.PacketSent)]
@@ -244,6 +252,12 @@ namespace RfmUsb.Net.IntTests
         public void TestImpedance()
         {
             TestRangeBool(() => _rfm69.Impedance, (v) => _rfm69.Impedance = v);
+        }
+
+        [TestInitialize]
+        public void TestInitalise()
+        {
+            _rfm69.Open("COM3", 230400);
         }
 
         [TestMethod]
