@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin
+* Copyright (c) 2023 Derek Goslin https://github.com/DerekGn
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,19 @@
 * SOFTWARE.
 */
 
-using Microsoft.Extensions.Logging;
-using RfmUsb.Net.Ports;
-
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsbConsole.Commands
 {
-    internal class Rfm69TestDevice : Rfm69
+    internal static class Templates
     {
-        public Rfm69TestDevice(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
-        {
-        }
-
-        internal override void WaitForSerialPortDataSignal()
-        {
-        }
-
-        internal override string GetDeviceName()
-        {
-            return nameof(Rfm69);
-        }
+        public const string BaudRate = "-b|--baudrate";
+        public const string Frequency = "-f|--frequency";
+        public const string Modulation = "-m|--modulation";
+        public const string OutputPower = "-o|--output-power";
+        public const string PingCount = "-pc|--ping-count";
+        public const string PingInterval = "-pi|--ping-interval";
+        public const string PingTimeout = "-pt|--ping-timeout";
+        public const string RssiThreshold = "-rt|--rssi-threshold";
+        public const string RxBw = "-r|--recieve-bw";
+        public const string SerialPort = "-p|--port";
     }
 }

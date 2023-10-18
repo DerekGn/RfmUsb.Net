@@ -37,14 +37,6 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x = _serviceProvider.GetService<IRfm9x>();
             RfmBase = _rfm9x;
-
-            _rfm9x.Open((string)TestContext.Properties["Rfm9x"], int.Parse((string)TestContext.Properties["BaudRate"]));
-
-            _rfm9x.ExecuteReset();
-
-            _rfm9x.Mode = Mode.Sleep;
-
-            _rfm9x.LongRangeMode = true;
         }
 
         [TestMethod]
@@ -96,6 +88,15 @@ namespace RfmUsb.Net.IntTests
         public void TestBeaconOn()
         {
             TestRangeBool(() => _rfm9x.BeaconOn, (v) => _rfm9x.BeaconOn = v);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (_rfm9x != null)
+            {
+                _rfm9x.Close();
+            }
         }
 
         [TestMethod]
@@ -182,6 +183,18 @@ namespace RfmUsb.Net.IntTests
         public void TestImplicitHeaderModeOn()
         {
             TestRangeBool(() => _rfm9x.ImplicitHeaderModeOn, (v) => _rfm9x.ImplicitHeaderModeOn = v);
+        }
+
+        [TestInitialize]
+        public void TestInitalise()
+        {
+            _rfm9x.Open("COM3", 230400);
+
+            _rfm9x.ExecuteReset();
+
+            _rfm9x.Mode = Mode.Sleep;
+
+            _rfm9x.LongRangeMode = true;
         }
 
         [TestMethod]

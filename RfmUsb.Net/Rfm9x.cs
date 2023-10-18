@@ -351,6 +351,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public byte OutputPower
+        {
+            get => (byte)SendCommand(Commands.GetOutputPower).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
         public byte PacketRssi => SendCommand(Commands.GetPacketRssi).ConvertToByte();
 
         ///<inheritdoc/>

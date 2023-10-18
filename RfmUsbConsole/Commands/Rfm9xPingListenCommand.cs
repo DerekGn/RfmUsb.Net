@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin
+* Copyright (c) 2022 Derek Goslin https://github.com/DerekGn
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,33 @@
 * SOFTWARE.
 */
 
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using RfmUsb.Net.Ports;
+using RfmUsb.Net;
 
-namespace RfmUsb.Net.UnitTests
+namespace RfmUsbConsole.Commands
 {
-    internal class Rfm9xTestDevice : Rfm9x
+    [Command(Description = "Ping listen using RfmUsb Rfm9x radio")]
+    internal class Rfm9xPingListenCommand : BaseRfm9xCommand
     {
-        public Rfm9xTestDevice(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
+        public Rfm9xPingListenCommand(ILogger<Rfm9xPingListenCommand> logger, IRfm9x rfm) : base(logger, rfm)
         {
         }
 
-        internal override void WaitForSerialPortDataSignal()
+        protected override int OnExecute(CommandLineApplication app, IConsole console)
         {
-        }
+            return ExecuteCommand(console, () =>
+            {
+                var rfm = (IRfm9x)Rfm;
 
-        internal override string GetDeviceName()
-        {
-            return nameof(Rfm9x);
+                if (OutputPower.HasValue)
+                {
+                }
+
+                rfm.RssiThreshold = RssiThreshold;
+
+                return ExecutePingListen(RxBw);
+            });
         }
     }
 }

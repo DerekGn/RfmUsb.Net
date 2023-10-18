@@ -109,7 +109,7 @@ namespace RfmUsb.Net
         public const string GetIoHomePowerFrame = "g-ihpf";
         public const string GetIrqFlags = "g-irq";
         public const string GetLastPacketSnr = "g-lpsnr";
-        public const string GetLastRssiAfterRxReady = "g-lrssi";
+        public const string GetLastRssi = "g-lrssi";
         public const string GetListenCoefficentIdle = "g-lic";
         public const string GetListenCoefficentRx = "g-lrc";
         public const string GetListenCriteria = "g-lc";

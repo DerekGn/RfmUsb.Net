@@ -43,8 +43,9 @@ namespace RfmUsb.Net
         internal const string ResponseOk = "OK";
         internal readonly AutoResetEvent _autoResetEvent;
         internal readonly ILogger<IRfm> Logger;
-        internal readonly ISerialPortFactory SerialPortFactory;
         internal ISerialPort SerialPort;
+        private readonly ISerialPortFactory SerialPortFactory;
+        private List<string> _responses;
 
         /// <summary>
         /// Create an instance of an <see cref="RfmBase"/> derived type.
@@ -57,13 +58,17 @@ namespace RfmUsb.Net
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
             _autoResetEvent = new AutoResetEvent(false);
+            _responses = new List<string>();
         }
+
+        ///<inheritdoc/>
+        public event EventHandler<DioIrq> DioInterrupt;
 
         ///<inheritdoc/>
         public AddressFilter AddressFiltering
         {
             get => (AddressFilter)SendCommand(Commands.GetAddressFiltering).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAddressFiltering} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetAddressFiltering} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -174,10 +179,13 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public sbyte LastRssi => (sbyte)SendCommand(Commands.GetLastRssi).ConvertToInt32();
+
+        ///<inheritdoc/>
         public LnaGain LnaGainSelect
         {
             get => (LnaGain)SendCommand(Commands.GetLnaGainSelect).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetLnaGainSelect} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetLnaGainSelect} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -191,7 +199,7 @@ namespace RfmUsb.Net
         public ModulationType ModulationType
         {
             get => (ModulationType)SendCommand(Commands.GetModulationType).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetModulationType} 0x{value:X}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetModulationType} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -306,6 +314,9 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
+
+        ///<inheritdoc/>
         public IEnumerable<byte> Sync
         {
             get => SendCommand(Commands.GetSync).ToBytes();
@@ -335,12 +346,6 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
-
-        ///<inheritdoc/>
-        public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
-
-        ///<inheritdoc/>
-        public byte LastRssi => throw new NotImplementedException();
 
         ///<inheritdoc/>
         public void Close()
@@ -403,7 +408,7 @@ namespace RfmUsb.Net
                     SerialPort.WriteTimeout = 500;
                     SerialPort.Open();
 
-                    SerialPort.DataReceived += SerialPort_DataReceived;
+                    SerialPort.DataReceived += SerialPortDataReceived;
                 }
 
                 CheckDeviceVersion(FirmwareVersion);
@@ -511,22 +516,23 @@ namespace RfmUsb.Net
         {
             CheckOpen();
 
-            List<string> lines = new List<string>();
-
             lock (SerialPort)
             {
                 SerialPort.Write($"{command}\n");
 
-                WaitForSerialPortDataSignal();
-
                 do
                 {
-                    lines.Add(SerialPort.ReadLine());
-                } while (SerialPort.BytesToRead != 0);
+                    WaitForSerialPortDataSignal();
+                } while (_responses.Count == 0);
 
-                Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(Environment.NewLine, lines));
+                Logger.LogDebug("Command: [{command}] Result: {response}", command, string.Join(" ", _responses));
 
-                return lines;
+                var result = new List<string>();
+                result.AddRange(_responses);
+
+                _responses.Clear();
+
+                return result;
             }
         }
 
@@ -538,6 +544,18 @@ namespace RfmUsb.Net
             {
                 throw new RfmUsbCommandExecutionException($"Command: [{command}] Execution Failed Reason: [{result}]");
             }
+        }
+
+        internal void SetupSerialPort(ISerialPort serialPort)
+        {
+            SerialPort = serialPort;
+            serialPort.DataReceived += SerialPortDataReceived;
+        }
+
+        internal void ResetSerialPort(ISerialPort serialPort)
+        {
+            serialPort.DataReceived -= SerialPortDataReceived;
+            SerialPort = null;
         }
 
         internal virtual void WaitForSerialPortDataSignal()
@@ -572,137 +590,123 @@ namespace RfmUsb.Net
 
         private DioIrq GetDioInterruptMask()
         {
-            lock (SerialPort)
+            DioIrq irqMask = DioIrq.None;
+
+            var responses = SendCommandListResponse(Commands.GetDioInterruptMask);
+
+            responses.ForEach(_ =>
             {
-                DioIrq irqMask = DioIrq.None;
+                var parts = _.Split('-');
 
-                SerialPort.Write($"{Commands.GetDioInterruptMask}\n");
-
-                for (int i = 0; i < 6; i++)
+                switch (parts[1])
                 {
-                    var result = SerialPort.ReadLine();
+                    case "DIO0":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio0;
+                        }
+                        break;
 
-                    var parts = result.Split('-');
+                    case "DIO1":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio1;
+                        }
+                        break;
 
-                    switch (parts[1])
-                    {
-                        case "DIO0":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio0;
-                            }
-                            break;
+                    case "DIO2":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio2;
+                        }
+                        break;
 
-                        case "DIO1":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio1;
-                            }
-                            break;
+                    case "DIO3":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio3;
+                        }
+                        break;
 
-                        case "DIO2":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio2;
-                            }
-                            break;
+                    case "DIO4":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio4;
+                        }
+                        break;
 
-                        case "DIO3":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio3;
-                            }
-                            break;
+                    case "DIO5":
+                        if (Convert.ToByte(parts[0], 16) == 1)
+                        {
+                            irqMask |= DioIrq.Dio5;
+                        }
+                        break;
 
-                        case "DIO4":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio4;
-                            }
-                            break;
-
-                        case "DIO5":
-                            if (Convert.ToByte(parts[0], 16) == 1)
-                            {
-                                irqMask |= DioIrq.Dio5;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
+            });
 
-                return irqMask;
-            }
+            return irqMask;
         }
 
-        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            Logger.LogDebug("Recieved Serial Port Data: {type}", e.EventType);
+        private void RaiseDioInterrupt(DioIrq values) =>
+                                                DioInterrupt?.Invoke(this, values);
 
-            _autoResetEvent.Set();
+        private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (e.EventType == SerialData.Chars)
+            {
+                do
+                {
+                    var response = SerialPort.ReadLine();
+
+                    if (response.StartsWith("DIO PIN IRQ"))
+                    {
+                        RaiseDioInterrupt((DioIrq)
+                            Convert.ToInt32(
+                                    response.Split(" ")
+                                    .Last()
+                                    .Replace("[", string.Empty)
+                                    .Replace("]", string.Empty), 16));
+                    }
+                    else
+                    {
+                        _responses.Add(response);
+                    }
+                } while (SerialPort.BytesToRead != 0);
+
+                Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
+
+                _autoResetEvent.Set();
+            }
         }
 
         private void SetDioInterrupMask(DioIrq value)
         {
-            lock (SerialPort)
-            {
-                byte mask = (byte)(((byte)value) >> 1);
-
-                SendCommandWithCheck($"{Commands.SetDioInterruptMask} 0x{mask:X}", ResponseOk);
-
-                if (SerialPort.BytesToRead != 0)
-                {
-                    SerialPort.ReadLine();
-                }
-            }
+            SendCommandWithCheck($"{Commands.SetDioInterruptMask} 0x{value:X}", ResponseOk);
         }
 
         private void TransmitInternal(string command)
         {
-            lock (SerialPort)
+            var response = SendCommand(command);
+
+            if (!response.Contains("Ok", StringComparison.InvariantCultureIgnoreCase))
             {
-                var response = SendCommand(command);
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = SerialPort.ReadLine();
-                    Logger.LogDebug("Response: [{response}]", response);
-                }
-
-                if (!response.Contains("Ok", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
+                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
             }
         }
 
         private IList<byte> TransmitReceiveInternal(string command)
         {
-            lock (SerialPort)
+            var response = SendCommand(command);
+
+            if (response.Contains("TX") || response.Contains("RX"))
             {
-                var response = SendCommand(command);
-
-                if (response.StartsWith("DIO"))
-                {
-                    Logger.LogDebug("Response: [{response}]", response);
-                    response = SerialPort.ReadLine();
-                }
-
-                if (response.Contains("TX") || response.Contains("RX"))
-                {
-                    throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-                }
-
-                if (response.StartsWith("DIO"))
-                {
-                    response = SerialPort.ReadLine();
-                    Logger.LogDebug($"Response: [{response}]");
-                }
-
-                return response.ToBytes();
+                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
             }
+
+            return response.ToBytes();
         }
 
         #region IDisposible
