@@ -121,15 +121,28 @@ var response = rfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55,
 Set the Dio pin Irq mask.
 
 ```csharp
+AutoResetEvent IrqSignal;
+
+void RfmDeviceDioInterrupt(object? sender, DioIrq e)
+{
+    Console.WriteLine("Dio Irq [{e}]", e);
+
+    if ((e & DioIrq.Dio0) == DioIrq.Dio0)
+    {
+        IrqSignal.Set();
+    }
+}
+
 // Setup the radio irq pin enables
 rfmUsbDevice.DioInterruptMask = DioIrq.Dio0;
+
+rfmUsbDevice.DioInterrupt += RfmDeviceDioInterrupt;
 ```
 
 Wait for an IRQ to occur
 
 ```csharp
-// Wait for an Irq
-rfmUsbDevice.WaitForIrq();
+IrqSignal.WaitOne(timeout);
 
 // Check the irq
 if ((rfmUsbDevice.Irq & Irq.PayloadReady) == Irq.PayloadReady)
