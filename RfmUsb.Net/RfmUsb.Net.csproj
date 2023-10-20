@@ -13,18 +13,19 @@
     <PackageTags>Rfm69 Rfm95 Usb Serial</PackageTags>
     <Description>An API for interacting with an RFMUSB adapter</Description>
     <PackageReleaseNotes>
-      1.0.0 Initial Version
-      1.0.6 Bug fixes
-      1.0.13 Added strong name key
-      1.0.14 Prevent operation being called when device not open
-      1.0.15 Added package xml document
-      1.0.18 Updated open check
-      1.0.19 Updated reset operation
-      2.0.0 Added support for Rfm95
-    </PackageReleaseNotes>
-    <Version>2.0.0</Version>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+		1.0.0 Initial Version
+		1.0.6 Bug fixes
+		1.0.13 Added strong name key
+		1.0.14 Prevent operation being called when device not open
+		1.0.15 Added package xml document
+		1.0.18 Updated open check
+		1.0.19 Updated reset operation
+		2.0.0 Added support for Rfm95
+		2.0.1 Updated Irq handling
+	</PackageReleaseNotes>
+    <Version>2.0.1</Version>
+    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+    <FileVersion>2.0.1.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
