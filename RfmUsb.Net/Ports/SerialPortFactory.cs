@@ -22,8 +22,10 @@
 * SOFTWARE.
 */
 
+using RfmUsb.Net.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace RfmUsb.Net.Ports
 {
@@ -37,6 +39,13 @@ namespace RfmUsb.Net.Ports
         /// <returns>An instance of the <see cref="ISerialPort"/></returns>
         public ISerialPort CreateSerialPortInstance(string serialPort)
         {
+            if(!GetSerialPorts().Any(x => x == serialPort))
+            {
+                throw new RfmUsbSerialPortNotFoundException(
+                    $"Serial port [{serialPort}] not found. " +
+                    $"Available Serial Ports: [{string.Join(", ", GetSerialPorts())}]");
+            }
+
             return new SerialPort(serialPort);
         }
 

@@ -415,11 +415,11 @@ namespace RfmUsb.Net
 
                 SendCommand($"{Commands.SetOutputbase} 0");
             }
-            catch (FileNotFoundException ex)
+            catch (Exception ex)
             {
                 Logger.LogDebug(ex, "Exception occurred opening serial port");
 
-                throw new RfmUsbSerialPortNotFoundException(
+                throw new RfmUsbSerialPortOpenFailedException(
                     $"Unable to open serial port [{serialPort}] Reason: [{ex.Message}]. " +
                     $"Available Serial Ports: [{string.Join(", ", SerialPortFactory.GetSerialPorts())}]");
             }
