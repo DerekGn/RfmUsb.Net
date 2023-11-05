@@ -26,9 +26,9 @@
         2.0.2 Refactored open
         2.0.3 Set default timeout 
     </PackageReleaseNotes>
-    <Version>2.0.2</Version>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
+    <Version>2.0.3</Version>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <FileVersion>2.0.3.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
