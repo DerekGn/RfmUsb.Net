@@ -24,6 +24,7 @@
         2.0.0 Added support for Rfm95
         2.0.1 Updated Irq handling
         2.0.2 Refactored open
+        2.0.3 Set default timeout 
     </PackageReleaseNotes>
     <Version>2.0.2</Version>
     <AssemblyVersion>2.0.2.0</AssemblyVersion>
@@ -46,6 +47,6 @@
   </ItemGroup>
 
     <ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
