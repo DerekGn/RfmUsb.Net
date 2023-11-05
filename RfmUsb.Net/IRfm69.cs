@@ -46,6 +46,16 @@ namespace RfmUsb.Net
         bool AfcLowBetaOn { get; set; }
 
         /// <summary>
+        /// Interrupt condition for entering the intermediate mode
+        /// </summary>
+        EnterCondition AutoModeEnterCondition { get; set; }
+
+        /// <summary>
+        /// Interrupt condition for exiting the intermediate mode
+        /// </summary>
+        ExitCondition AutoModeExitCondition { get; set; }
+
+        /// <summary>
         /// Enables automatic Rx restart (RSSI phase) after PayloadReady occurred and packet has been completely read from FIFO:
         /// </summary>
         /// <remarks>
@@ -65,6 +75,11 @@ namespace RfmUsb.Net
         LnaGain CurrentLnaGain { get; }
 
         /// <summary>
+        /// The data processing mode
+        /// </summary>
+        Rfm69DataMode DataMode { get; set; }
+
+        /// <summary>
         /// Cut-off frequency of the DC offset canceller (DCC)
         /// </summary>
         DccFreq DccFreq { get; set; }
@@ -73,21 +88,6 @@ namespace RfmUsb.Net
         /// Cut-off frequency of the DC offset canceller (DCC)
         /// </summary>
         DccFreq DccFreqAfc { get; set; }
-
-        /// <summary>
-        /// The data processing mode
-        /// </summary>
-        Rfm69DataMode DataMode { get; set; }
-
-        /// <summary>
-        /// Interrupt condition for entering the intermediate mode
-        /// </summary>
-        EnterCondition AutoModeEnterCondition { get; set; }
-
-        /// <summary>
-        /// Interrupt condition for exiting the intermediate mode
-        /// </summary>
-        ExitCondition AutoModeExitCondition { get; set; }
 
         /// <summary>
         /// FIFO filling condition:
@@ -188,11 +188,6 @@ namespace RfmUsb.Net
         /// Get or set the number of tolerated bit errors in Sync word
         /// </summary>
         byte SyncBitErrors { get; set; }
-
-        /// <summary>
-        /// Get or set the serial port timeout
-        /// </summary>
-        int Timeout { get; set; }
 
         /// <summary>
         /// Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode

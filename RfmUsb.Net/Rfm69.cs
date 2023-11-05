@@ -23,7 +23,6 @@
 */
 
 using Microsoft.Extensions.Logging;
-using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
 using System;
@@ -58,6 +57,20 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetAfcLowBetaOn).StartsWith("1");
             set => SendCommandWithCheck($"{Commands.SetAfcLowBetaOn} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public EnterCondition AutoModeEnterCondition
+        {
+            get => (EnterCondition)SendCommand(Commands.GetAutoModeEnterCondition).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetAutoModeEnterCondition} 0x{(byte)value:X2}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public ExitCondition AutoModeExitCondition
+        {
+            get => (ExitCondition)SendCommand(Commands.GetAutoModeExitCondition).ConvertToInt32();
+            set => SendCommandWithCheck($"{Commands.SetAutoModeExitCondition} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -96,20 +109,6 @@ namespace RfmUsb.Net
         {
             get => (DccFreq)SendCommand(Commands.GetDccFreqAfc).ConvertToInt32();
             set => SendCommandWithCheck($"{Commands.SetDccFreqAfc} 0x{value:X}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public EnterCondition AutoModeEnterCondition
-        {
-            get => (EnterCondition)SendCommand(Commands.GetAutoModeEnterCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAutoModeEnterCondition} 0x{(byte)value:X2}", ResponseOk);
-        }
-
-        ///<inheritdoc/>
-        public ExitCondition AutoModeExitCondition
-        {
-            get => (ExitCondition)SendCommand(Commands.GetAutoModeExitCondition).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetAutoModeExitCondition} 0x{(byte)value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -232,17 +231,6 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public int Timeout
-        {
-            get => SerialPort.ReadTimeout;
-            set
-            {
-                SerialPort.ReadTimeout = value;
-                SerialPort.WriteTimeout = value;
-            }
-        }
-
-        ///<inheritdoc/>
         public byte TimeoutRssiThreshold
         {
             get => SendCommand(Commands.GetTimeoutRssiThreshold).ConvertToByte();
@@ -277,7 +265,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public void ExecuteListenModeAbort(Mode mode)
         {
-            SendCommandWithCheck($"{Commands.ExecuteListenModeAbort} 0x{(byte)mode:X2}",  ResponseOk);
+            SendCommandWithCheck($"{Commands.ExecuteListenModeAbort} 0x{(byte)mode:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
