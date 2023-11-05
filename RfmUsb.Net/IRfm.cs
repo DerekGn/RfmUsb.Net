@@ -286,6 +286,11 @@ namespace RfmUsb.Net
         sbyte Temperature { get; }
 
         /// <summary>
+        /// Get or set the serial port timeout
+        /// </summary>
+        int Timeout { get; set; }
+
+        /// <summary>
         /// Defines the condition to start packet transmission
         /// </summary>
         /// <remarks>

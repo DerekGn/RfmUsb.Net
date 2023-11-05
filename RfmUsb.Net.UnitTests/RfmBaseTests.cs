@@ -713,7 +713,7 @@ namespace RfmUsb.Net.UnitTests
             Action action = () => RfmBase.Open("ComPort", 9600);
 
             // Assert
-            action.Should().Throw<RfmUsbSerialPortNotFoundException>();
+            action.Should().Throw<RfmUsbSerialPortOpenFailedException>();
         }
 
         [TestMethod]

@@ -53,37 +53,37 @@ namespace RfmUsb.Net.Ports
             _serialPort.PinChanged += PinChangedHandler;
         }
 
-        public Handshake Handshake { get => _serialPort.Handshake; set => _serialPort.Handshake = value; }
-        public Encoding Encoding { get => _serialPort.Encoding; set => _serialPort.Encoding = value; }
-        public bool DtrEnable { get => _serialPort.DtrEnable; set => _serialPort.DtrEnable = value; }
+        public event SerialDataReceivedEventHandler DataReceived;
+
+        public event SerialErrorReceivedEventHandler ErrorReceived;
+
+        public event SerialPinChangedEventHandler PinChanged;
+
+        public Stream BaseStream => _serialPort.BaseStream;
+        public int BaudRate { get => _serialPort.BaudRate; set => _serialPort.BaudRate = value; }
+        public bool BreakState { get => _serialPort.BreakState; set => _serialPort.BreakState = value; }
+        public int BytesToRead => _serialPort.BytesToRead;
+        public int BytesToWrite => _serialPort.BytesToWrite;
+        public bool CDHolding => _serialPort.CDHolding;
         public bool CtsHolding => _serialPort.CtsHolding;
-        public bool DiscardNull { get => _serialPort.DiscardNull; set => _serialPort.DiscardNull = value; }
         public int DataBits { get => _serialPort.DataBits; set => _serialPort.DataBits = value; }
-        public bool IsOpen => _serialPort.IsOpen;
+        public bool DiscardNull { get => _serialPort.DiscardNull; set => _serialPort.DiscardNull = value; }
         public bool DsrHolding => _serialPort.DsrHolding;
+        public bool DtrEnable { get => _serialPort.DtrEnable; set => _serialPort.DtrEnable = value; }
+        public Encoding Encoding { get => _serialPort.Encoding; set => _serialPort.Encoding = value; }
+        public Handshake Handshake { get => _serialPort.Handshake; set => _serialPort.Handshake = value; }
+        public bool IsOpen => _serialPort.IsOpen;
         public string NewLine { get => _serialPort.NewLine; set => _serialPort.NewLine = value; }
-        public int ReadBufferSize { get => _serialPort.ReadBufferSize; set => _serialPort.ReadBufferSize = value; }
+        public Parity Parity { get => _serialPort.Parity; set => _serialPort.Parity = value; }
         public byte ParityReplace { get => _serialPort.ParityReplace; set => _serialPort.ParityReplace = value; }
         public string PortName { get => _serialPort.PortName; set => _serialPort.PortName = value; }
-        public bool CDHolding => _serialPort.CDHolding;
+        public int ReadBufferSize { get => _serialPort.ReadBufferSize; set => _serialPort.ReadBufferSize = value; }
         public int ReadTimeout { get => _serialPort.ReadTimeout; set => _serialPort.ReadTimeout = value; }
         public int ReceivedBytesThreshold { get => _serialPort.ReceivedBytesThreshold; set => _serialPort.ReceivedBytesThreshold = value; }
         public bool RtsEnable { get => _serialPort.RtsEnable; set => _serialPort.RtsEnable = value; }
         public StopBits StopBits { get => _serialPort.StopBits; set => _serialPort.StopBits = value; }
         public int WriteBufferSize { get => _serialPort.WriteBufferSize; set => _serialPort.WriteBufferSize = value; }
         public int WriteTimeout { get => _serialPort.WriteTimeout; set => _serialPort.WriteTimeout = value; }
-        public Parity Parity { get => _serialPort.Parity; set => _serialPort.Parity = value; }
-        public int BytesToWrite => _serialPort.BytesToWrite;
-        public int BaudRate { get => _serialPort.BaudRate; set => _serialPort.BaudRate = value; }
-        public bool BreakState { get => _serialPort.BreakState; set => _serialPort.BreakState = value; }
-        public Stream BaseStream => _serialPort.BaseStream;
-        public int BytesToRead => _serialPort.BytesToRead;
-
-        public event SerialDataReceivedEventHandler DataReceived;
-
-        public event SerialPinChangedEventHandler PinChanged;
-
-        public event SerialErrorReceivedEventHandler ErrorReceived;
 
         public void Close()
         {
@@ -98,6 +98,13 @@ namespace RfmUsb.Net.Ports
         public void DiscardOutBuffer()
         {
             _serialPort.DiscardOutBuffer();
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
         public void Open()
@@ -160,24 +167,6 @@ namespace RfmUsb.Net.Ports
             _serialPort.WriteLine(text);
         }
 
-        private void PinChangedHandler(object sender, SerialPinChangedEventArgs e)
-        {
-            SerialPinChangedEventHandler handler = PinChanged;
-            handler?.Invoke(this, e);
-        }
-
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialDataReceivedEventHandler handler = DataReceived;
-            handler?.Invoke(this, e);
-        }
-
-        private void ErrorReceivedHandler(object sender, SerialErrorReceivedEventArgs e)
-        {
-            SerialErrorReceivedEventHandler handler = ErrorReceived;
-            handler?.Invoke(this, e);
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -197,11 +186,22 @@ namespace RfmUsb.Net.Ports
             }
         }
 
-        public void Dispose()
+        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            SerialDataReceivedEventHandler handler = DataReceived;
+            handler?.Invoke(this, e);
+        }
+
+        private void ErrorReceivedHandler(object sender, SerialErrorReceivedEventArgs e)
+        {
+            SerialErrorReceivedEventHandler handler = ErrorReceived;
+            handler?.Invoke(this, e);
+        }
+
+        private void PinChangedHandler(object sender, SerialPinChangedEventArgs e)
+        {
+            SerialPinChangedEventHandler handler = PinChanged;
+            handler?.Invoke(this, e);
         }
     }
 }

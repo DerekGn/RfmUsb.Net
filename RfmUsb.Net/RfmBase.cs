@@ -28,7 +28,6 @@ using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
@@ -41,11 +40,12 @@ namespace RfmUsb.Net
     public abstract class RfmBase : IRfm
     {
         internal const string ResponseOk = "OK";
-        internal readonly AutoResetEvent _autoResetEvent;
+        internal readonly AutoResetEvent _signal;
         internal readonly ILogger<IRfm> Logger;
         internal ISerialPort SerialPort;
         private readonly ISerialPortFactory SerialPortFactory;
         private List<string> _responses;
+        private int _signalTimeout;
 
         /// <summary>
         /// Create an instance of an <see cref="RfmBase"/> derived type.
@@ -57,7 +57,7 @@ namespace RfmUsb.Net
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
-            _autoResetEvent = new AutoResetEvent(false);
+            _signal = new AutoResetEvent(false);
             _responses = new List<string>();
         }
 
@@ -341,6 +341,18 @@ namespace RfmUsb.Net
         public sbyte Temperature => SendCommand(Commands.GetTemperatureValue).ConvertToSByte();
 
         ///<inheritdoc/>
+        public int Timeout
+        {
+            get => SerialPort.ReadTimeout;
+            set
+            {
+                _signalTimeout = value;
+                SerialPort.ReadTimeout = value;
+                SerialPort.WriteTimeout = value;
+            }
+        }
+
+        ///<inheritdoc/>
         public bool TxStartCondition
         {
             get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
@@ -415,11 +427,11 @@ namespace RfmUsb.Net
 
                 SendCommand($"{Commands.SetOutputbase} 0");
             }
-            catch (FileNotFoundException ex)
+            catch (Exception ex)
             {
                 Logger.LogDebug(ex, "Exception occurred opening serial port");
 
-                throw new RfmUsbSerialPortNotFoundException(
+                throw new RfmUsbSerialPortOpenFailedException(
                     $"Unable to open serial port [{serialPort}] Reason: [{ex.Message}]. " +
                     $"Available Serial Ports: [{string.Join(", ", SerialPortFactory.GetSerialPorts())}]");
             }
@@ -507,6 +519,12 @@ namespace RfmUsb.Net
             return GetType().Name;
         }
 
+        internal void ResetSerialPort(ISerialPort serialPort)
+        {
+            serialPort.DataReceived -= SerialPortDataReceived;
+            SerialPort = null;
+        }
+
         internal string SendCommand(string command)
         {
             return SendCommandListResponse(command).FirstOrDefault(string.Empty);
@@ -552,15 +570,12 @@ namespace RfmUsb.Net
             serialPort.DataReceived += SerialPortDataReceived;
         }
 
-        internal void ResetSerialPort(ISerialPort serialPort)
-        {
-            serialPort.DataReceived -= SerialPortDataReceived;
-            SerialPort = null;
-        }
-
         internal virtual void WaitForSerialPortDataSignal()
         {
-            _autoResetEvent.WaitOne();
+            if(!_signal.WaitOne(_signalTimeout))
+            {
+                throw new RfmUsbTimeoutException($"No response received from Rfm device within [{_signalTimeout}]");
+            }
         }
 
         /// <summary>
@@ -678,7 +693,7 @@ namespace RfmUsb.Net
 
                 Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
 
-                _autoResetEvent.Set();
+                _signal.Set();
             }
         }
 
