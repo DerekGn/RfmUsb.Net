@@ -59,6 +59,7 @@ namespace RfmUsb.Net
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
             _signal = new AutoResetEvent(false);
             _responses = new List<string>();
+            _signalTimeout = 500;
         }
 
         ///<inheritdoc/>
@@ -416,8 +417,8 @@ namespace RfmUsb.Net
                     SerialPort.NewLine = "\r\n";
                     SerialPort.DtrEnable = true;
                     SerialPort.RtsEnable = true;
-                    SerialPort.ReadTimeout = 500;
-                    SerialPort.WriteTimeout = 500;
+                    SerialPort.ReadTimeout = _signalTimeout;
+                    SerialPort.WriteTimeout = _signalTimeout;
                     SerialPort.Open();
 
                     SerialPort.DataReceived += SerialPortDataReceived;
