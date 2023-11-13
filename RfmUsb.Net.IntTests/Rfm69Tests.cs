@@ -139,12 +139,12 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         [DataRow(EnterCondition.Off)]
         [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoEmpty)]
         [DataRow(EnterCondition.FifoLevel)]
         [DataRow(EnterCondition.FifoNotEmpty)]
         [DataRow(EnterCondition.PacketSent)]
         [DataRow(EnterCondition.PayloadReady)]
         [DataRow(EnterCondition.SyncAddressMatch)]
+        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestEnterCondition(EnterCondition expected)
         {
             TestAssignedValue(expected, () => _rfm69.AutoModeEnterCondition, (v) => _rfm69.AutoModeEnterCondition = v);
@@ -211,7 +211,7 @@ namespace RfmUsb.Net.IntTests
         [DataRow(ExitCondition.Off)]
         [DataRow(ExitCondition.PacketSent)]
         [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.RxTimeout)]
+        [DataRow(ExitCondition.Timeout)]
         [DataRow(ExitCondition.SyncAddressMatch)]
         public void TestExitCondition(ExitCondition expected)
         {

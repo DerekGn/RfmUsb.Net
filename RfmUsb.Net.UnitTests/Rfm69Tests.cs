@@ -89,13 +89,13 @@ namespace RfmUsb.Net.UnitTests
 
         [TestMethod]
         [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoEmpty)]
         [DataRow(EnterCondition.FifoLevel)]
         [DataRow(EnterCondition.FifoNotEmpty)]
         [DataRow(EnterCondition.Off)]
         [DataRow(EnterCondition.PacketSent)]
         [DataRow(EnterCondition.PayloadReady)]
         [DataRow(EnterCondition.SyncAddressMatch)]
+        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestGetAutoModeEnterCondition(EnterCondition expected)
         {
             ExecuteGetTest(
@@ -113,7 +113,7 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(ExitCondition.Off)]
         [DataRow(ExitCondition.PacketSent)]
         [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.RxTimeout)]
+        [DataRow(ExitCondition.Timeout)]
         [DataRow(ExitCondition.SyncAddressMatch)]
         public void TestGetAutoModeExitCondition(ExitCondition expected)
         {
@@ -567,7 +567,7 @@ namespace RfmUsb.Net.UnitTests
         [DataRow(ExitCondition.Off)]
         [DataRow(ExitCondition.PacketSent)]
         [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.RxTimeout)]
+        [DataRow(ExitCondition.Timeout)]
         [DataRow(ExitCondition.SyncAddressMatch)]
         public void TestSetAutoModeExitCondition(ExitCondition expected)
         {
@@ -647,13 +647,13 @@ namespace RfmUsb.Net.UnitTests
 
         [TestMethod]
         [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoEmpty)]
         [DataRow(EnterCondition.FifoLevel)]
         [DataRow(EnterCondition.FifoNotEmpty)]
         [DataRow(EnterCondition.Off)]
         [DataRow(EnterCondition.PacketSent)]
         [DataRow(EnterCondition.PayloadReady)]
         [DataRow(EnterCondition.SyncAddressMatch)]
+        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestSetEnterCondition(EnterCondition expected)
         {
             ExecuteSetTest(
