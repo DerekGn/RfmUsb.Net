@@ -67,6 +67,6 @@ namespace RfmUsb.Net
         /// <summary>
         /// Rising edge of Timeout
         /// </summary>
-        RxTimeout
+        Timeout
     }
 }

@@ -325,7 +325,7 @@
             Rising edge of PacketSent
             </summary>
         </member>
-        <member name="F:RfmUsb.Net.EnterCondition.FifoEmpty">
+        <member name="F:RfmUsb.Net.EnterCondition.FallingEdgeFifoNotEmpty">
             <summary>
             Falling edge of FifoNotEmpty (i.e. FIFO empty)
             </summary>
@@ -499,7 +499,7 @@
             Rising edge of PacketSent
             </summary>
         </member>
-        <member name="F:RfmUsb.Net.ExitCondition.RxTimeout">
+        <member name="F:RfmUsb.Net.ExitCondition.Timeout">
             <summary>
             Rising edge of Timeout
             </summary>

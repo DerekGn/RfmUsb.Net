@@ -26,10 +26,11 @@
 		2.0.2 Refactored open
 		2.0.3 Set default timeout
 		2.0.4 Updated logging
+		2.0.5 Updated enter and exit conditions
 	</PackageReleaseNotes>
-    <Version>2.0.4</Version>
-    <AssemblyVersion>2.0.4.0</AssemblyVersion>
-    <FileVersion>2.0.4.0</FileVersion>
+    <Version>2.0.5</Version>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <FileVersion>2.0.6.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
