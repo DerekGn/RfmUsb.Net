@@ -1199,51 +1199,6 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
-        [TestMethod]
-        public void TestTransmit()
-        {
-            ExecuteTest(
-                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }); },
-                $"{Commands.ExecuteTransmit} AADDFFCC",
-                RfmBase.ResponseOk);
-        }
-
-        [TestMethod]
-        public void TestTransmitReceive()
-        {
-            ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }); },
-                $"{Commands.ExecuteTransmitReceive} AA55",
-                "0xFEED");
-        }
-
-        [TestMethod]
-        public void TestTransmitReceiveTimeout()
-        {
-            ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100); },
-                $"{Commands.ExecuteTransmitReceive} AA55 100",
-                "0xFEED");
-        }
-
-        [TestMethod]
-        public void TestTransmitReceiveTransmitTimeout()
-        {
-            ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100, 200); },
-                $"{Commands.ExecuteTransmitReceive} AA55 100 200",
-                "0xFEED");
-        }
-
-        [TestMethod]
-        public void TestTransmitWithTimeout()
-        {
-            ExecuteTest(
-                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200); },
-                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8",
-                RfmBase.ResponseOk);
-        }
-
         internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, string value)
         {
             // Arrange

@@ -450,62 +450,6 @@ namespace RfmUsb.Net
             SendCommandWithCheck($"{Commands.SetDioMapping} {(int)dio} {(int)mapping}", ResponseOk);
         }
 
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data, int txCount, int txInterval)
-        {
-            TransmitInternal(
-                $"{Commands.ExecuteTransmit} " +
-                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
-                $"0x{txCount:X} " +
-                $"0x{txInterval:X}");
-        }
-
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout)
-        {
-            TransmitInternal(
-                $"{Commands.ExecuteTransmit} " +
-                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
-                $"0x{txCount:X} " +
-                $"0x{txInterval:X} " +
-                $"0x{txTimeout:X}");
-        }
-
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data)
-        {
-            TransmitInternal(
-                $"{Commands.ExecuteTransmit} " +
-                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-        }
-
-        ///<inheritdoc/>
-        public void Transmit(IList<byte> data, int txCount)
-        {
-            TransmitInternal(
-                $"{Commands.ExecuteTransmit} " +
-                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
-                $"0x{txCount:X}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
-        }
-
         internal void FlushSerialPort()
         {
             if (SerialPort != null)

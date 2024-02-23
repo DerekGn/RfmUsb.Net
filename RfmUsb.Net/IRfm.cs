@@ -339,57 +339,5 @@ namespace RfmUsb.Net
         /// <param name="dio">The <see cref="Dio"/> configuration</param>
         /// <param name="mapping">The <see cref="DioMapping"/></param>
         void SetDioMapping(Dio dio, DioMapping mapping);
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        void Transmit(IList<byte> data);
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txCount">The number of transmissions</param>
-        void Transmit(IList<byte> data, int txCount);
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txCount">The number of transmissions</param>
-        /// <param name="txInterval">The interval between transmissions</param>
-        void Transmit(IList<byte> data, int txCount, int txInterval);
-
-        /// <summary>
-        /// Transmit a packet of data bytes
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txCount">The number of transmissions</param>
-        /// <param name="txInterval">The interval between transmissions</param>
-        /// <param name="txTimeout">The tx timeout</param>
-        void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        IList<byte> TransmitReceive(IList<byte> data);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The timeout in milliseconds </param>
-        /// <returns>The received packet bytes</returns>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
-        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
     }
 }
