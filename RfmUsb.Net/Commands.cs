@@ -61,6 +61,7 @@ namespace RfmUsb.Net
         public const string GetBitRateFractional = "g-brf";
         public const string GetBitSyncOn = "g-bs";
         public const string GetBroadcastAddress = "g-ba";
+        public const string GetBufferEnable = "g-be";
         public const string GetContinuousDagc = "g-cd";
         public const string GetCrcAutoClearOff = "g-caco";
         public const string GetCrcOn = "g-crc";
@@ -103,6 +104,7 @@ namespace RfmUsb.Net
         public const string GetImplicitHeaderModeOn = "g-ihm";
         public const string GetIntermediateMode = "g-im";
         public const string GetInterPacketRxDelay = "g-iprd";
+        public const string GetIoBufferInfo = "g-bi";
         public const string GetIoHomeOn = "g-iho";
         public const string GetIoHomePowerFrame = "g-ihpf";
         public const string GetIrqFlags = "g-irq";
@@ -194,6 +196,7 @@ namespace RfmUsb.Net
         public const string GetTxStartCondition = "g-tsc";
         public const string GetValidHeaderCount = "g-vhc";
         public const string GetValidPacketCount = "g-vpc";
+        public const string ReadBuffer = "r-b";
         public const string SetAccessSharedRegisters = "s-asr";
         public const string SetAddressFiltering = "s-af";
         public const string SetAesOn = "s-ae";
@@ -211,6 +214,7 @@ namespace RfmUsb.Net
         public const string SetBitRateFractional = "s-brf";
         public const string SetBitSyncOn = "s-bs";
         public const string SetBroadcastAddress = "s-ba";
+        public const string SetBufferEnable = "s-be";
         public const string SetContinuousDagc = "s-cd";
         public const string SetCrcAutoClearOff = "s-caco";
         public const string SetCrcOn = "s-crc";
@@ -324,5 +328,7 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
+        public const string TransmitBuffer = "e-btx";
+        public const string WriteBuffer = "w-b";
     }
 }

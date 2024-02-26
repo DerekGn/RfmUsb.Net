@@ -25,6 +25,7 @@
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Extensions;
+using RfmUsb.Net.Io;
 using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,7 @@ namespace RfmUsb.Net
         private readonly ISerialPortFactory SerialPortFactory;
         private List<string> _responses;
         private int _signalTimeout;
+        private RfmUsbStream _stream;
 
         /// <summary>
         /// Create an instance of an <see cref="RfmBase"/> derived type.
@@ -59,6 +61,7 @@ namespace RfmUsb.Net
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
             _signal = new AutoResetEvent(false);
             _responses = new List<string>();
+            _stream = new RfmUsbStream(this);
             _signalTimeout = 500;
         }
 
@@ -101,6 +104,13 @@ namespace RfmUsb.Net
         {
             get => SendCommand(Commands.GetBroadcastAddress).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetBroadcastAddress} 0x{value:X}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public bool BufferedIoEnable 
+        { 
+            get => SendCommand(Commands.GetBufferEnable).StartsWith("1"); 
+            set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk); 
         }
 
         ///<inheritdoc/>
@@ -178,6 +188,9 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetInterPacketRxDelay).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetInterPacketRxDelay} 0x{value:X}", ResponseOk);
         }
+
+        ///<inheritdoc/>
+        public IoBufferInfo IoBufferInfo => GetIoBufferInfo();
 
         ///<inheritdoc/>
         public sbyte LastRssi => (sbyte)SendCommand(Commands.GetLastRssi).ConvertToInt32();
@@ -318,6 +331,9 @@ namespace RfmUsb.Net
         public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
 
         ///<inheritdoc/>
+        public RfmUsbStream Stream => _stream;
+
+        ///<inheritdoc/>
         public IEnumerable<byte> Sync
         {
             get => SendCommand(Commands.GetSync).ToBytes();
@@ -424,6 +440,8 @@ namespace RfmUsb.Net
                     SerialPort.DataReceived += SerialPortDataReceived;
                 }
 
+                ExecuteReset();
+
                 CheckDeviceVersion(FirmwareVersion);
 
                 SendCommand($"{Commands.SetOutputbase} 0");
@@ -488,7 +506,7 @@ namespace RfmUsb.Net
                     WaitForSerialPortDataSignal();
                 } while (_responses.Count == 0);
 
-                Logger.LogDebug("Command: [{command}]", command );
+                Logger.LogDebug("Command: [{command}]", command);
                 Logger.LogDebug("Result: [{response}]", string.Join(" ", _responses));
 
                 var result = new List<string>();
@@ -516,11 +534,31 @@ namespace RfmUsb.Net
             serialPort.DataReceived += SerialPortDataReceived;
         }
 
+        internal void TransmitBuffer()
+        {
+            SendCommandWithCheck($"{Commands.TransmitBuffer}", ResponseOk);
+        }
+
         internal virtual void WaitForSerialPortDataSignal()
         {
-            if(!_signal.WaitOne(_signalTimeout))
+            if (!_signal.WaitOne(_signalTimeout))
             {
                 throw new RfmUsbTimeoutException($"No response received from Rfm device within [{_signalTimeout}]");
+            }
+        }
+
+        internal void WriteToBuffer(IEnumerable<byte> chunk)
+        {
+            var response = SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(chunk.ToArray()).Replace("-", string.Empty)}");
+
+            switch (response)
+            {
+                case ResponseOk:
+                    break;
+                case "ERROR:IO_BUFFER_NOT_ENABLED":
+                    throw new RfmUsbBufferedIoNotEnabledException();
+                case "ERROR:OVERFLOW":
+                    throw new RfmUsbBufferedIoOverflowException();
             }
         }
 
@@ -611,6 +649,32 @@ namespace RfmUsb.Net
             return irqMask;
         }
 
+        private IoBufferInfo GetIoBufferInfo()
+        {
+            var lines = SendCommandListResponse(Commands.GetIoBufferInfo);
+
+            int capacity = 0;
+            int count = 0;
+
+            lines.ForEach(_ =>
+            {
+                var parts = _.Split(':');
+
+                switch (parts[0].ToUpper())
+                {
+                    case "CAPACITY":
+                        capacity = parts[1].ConvertToInt32();
+                        break;
+
+                    case "COUNT":
+                        count = parts[1].ConvertToInt32();
+                        break;
+                }
+            });
+
+            return new IoBufferInfo(capacity, count);
+        }
+
         private void RaiseDioInterrupt(DioIrq values) =>
                                                 DioInterrupt?.Invoke(this, values);
 
@@ -646,28 +710,6 @@ namespace RfmUsb.Net
         private void SetDioInterrupMask(DioIrq value)
         {
             SendCommandWithCheck($"{Commands.SetDioInterruptMask} 0x{value:X}", ResponseOk);
-        }
-
-        private void TransmitInternal(string command)
-        {
-            var response = SendCommand(command);
-
-            if (!response.Contains("Ok", StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-            }
-        }
-
-        private IList<byte> TransmitReceiveInternal(string command)
-        {
-            var response = SendCommand(command);
-
-            if (response.Contains("TX") || response.Contains("RX"))
-            {
-                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-            }
-
-            return response.ToBytes();
         }
 
         #region IDisposible

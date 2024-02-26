@@ -55,6 +55,28 @@
             Reserved
             </summary>
         </member>
+        <member name="T:RfmUsb.Net.IoBufferInfo">
+            <summary>
+            The Io buffer information
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.IoBufferInfo.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Create an instance of an <see cref="T:RfmUsb.Net.IoBufferInfo"/>
+            </summary>
+            <param name="capacity">The capacity</param>
+            <param name="count">The count</param>
+        </member>
+        <member name="P:RfmUsb.Net.IoBufferInfo.Capacity">
+            <summary>
+            The Io buffer capacity
+            </summary>
+        </member>
+        <member name="P:RfmUsb.Net.IoBufferInfo.Count">
+            <summary>
+            The Io buffer count
+            </summary>
+        </member>
         <member name="T:RfmUsb.Net.ContinuousDagc">
             <summary>
             Continuous adjust of the digital gain
@@ -811,7 +833,7 @@
         </member>
         <member name="P:RfmUsb.Net.IRfm.Fifo">
             <summary>
-            Get or set the fifo data
+            Get or set the FIFO data
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm.FifoThreshold">
@@ -845,6 +867,11 @@
             start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
             - Tdelay = 0 if InterpacketRxDelay >= 12
             - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
+            </summary>
+        </member>
+        <member name="P:RfmUsb.Net.IRfm.IoBufferInfo">
+            <summary>
+            Get the <see cref="P:RfmUsb.Net.IRfm.IoBufferInfo"/> 
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm.LastRssi">
@@ -966,6 +993,11 @@
             Get the mcu serial number
             </summary>
         </member>
+        <member name="P:RfmUsb.Net.IRfm.Stream">
+            <summary>
+            The <see cref="T:RfmUsb.Net.Io.RfmUsbStream"/>
+            </summary>
+        </member>
         <member name="P:RfmUsb.Net.IRfm.Sync">
             <summary>
             The sync bytes
@@ -1040,6 +1072,11 @@
             </summary>
             <param name="dio">The <see cref="T:RfmUsb.Net.Dio"/> configuration</param>
             <param name="mapping">The <see cref="T:RfmUsb.Net.DioMapping"/></param>
+        </member>
+        <member name="P:RfmUsb.Net.IRfm.BufferedIoEnable">
+            <summary>
+            Enable or disable buffered packet IO
+            </summary>
         </member>
         <member name="T:RfmUsb.Net.IRfm69">
             <summary>
@@ -3530,6 +3567,9 @@
         <member name="P:RfmUsb.Net.RfmBase.BroadcastAddress">
             <inheritdoc/>
         </member>
+        <member name="P:RfmUsb.Net.RfmBase.BufferedIoEnable">
+            <inheritdoc/>
+        </member>
         <member name="P:RfmUsb.Net.RfmBase.CrcAutoClearOff">
             <inheritdoc/>
         </member>
@@ -3564,6 +3604,9 @@
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.InterPacketRxDelay">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.RfmBase.IoBufferInfo">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.LastRssi">
@@ -3630,6 +3673,9 @@
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.SerialNumber">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.RfmBase.Stream">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.Sync">

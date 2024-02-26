@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using RfmUsb.Net.Io;
 using System;
 using System.Collections.Generic;
 
@@ -109,7 +110,7 @@ namespace RfmUsb.Net
         short Fei { get; }
 
         /// <summary>
-        /// Get or set the fifo data
+        /// Get or set the FIFO data
         /// </summary>
         IEnumerable<byte> Fifo { get; set; }
 
@@ -146,6 +147,10 @@ namespace RfmUsb.Net
         /// </summary>
         byte InterPacketRxDelay { get; set; }
 
+        /// <summary>
+        /// Get the <see cref="IoBufferInfo"/> 
+        /// </summary>
+        IoBufferInfo IoBufferInfo { get; }
         /// <summary>
         /// Get the Rssi value after last packet received
         /// </summary>
@@ -266,6 +271,11 @@ namespace RfmUsb.Net
         string SerialNumber { get; }
 
         /// <summary>
+        /// The <see cref="RfmUsbStream"/>
+        /// </summary>
+        RfmUsbStream Stream { get; }
+
+        /// <summary>
         /// The sync bytes
         /// </summary>
         IEnumerable<byte> Sync { get; set; }
@@ -339,5 +349,10 @@ namespace RfmUsb.Net
         /// <param name="dio">The <see cref="Dio"/> configuration</param>
         /// <param name="mapping">The <see cref="DioMapping"/></param>
         void SetDioMapping(Dio dio, DioMapping mapping);
+
+        /// <summary>
+        /// Enable or disable buffered packet IO
+        /// </summary>
+        bool BufferedIoEnable { get; set; }
     }
 }

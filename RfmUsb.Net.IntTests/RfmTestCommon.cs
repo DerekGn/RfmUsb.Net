@@ -24,7 +24,6 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RfmUsb.Net.Exceptions;
 
 namespace RfmUsb.Net.IntTests
 {
@@ -67,6 +66,12 @@ namespace RfmUsb.Net.IntTests
         public void TestBroadcastAddress()
         {
             TestRange(() => RfmBase.BroadcastAddress, (v) => RfmBase.BroadcastAddress = v);
+        }
+
+        [TestMethod]
+        public void TestBufferedIoEnable()
+        {
+            TestRangeBool(() => RfmBase.BufferedIoEnable, (v) => RfmBase.BufferedIoEnable = v);
         }
 
         [TestMethod]
@@ -348,6 +353,7 @@ namespace RfmUsb.Net.IntTests
         {
             Read(() => RfmBase.SerialNumber);
         }
+
         [TestMethod]
         public void TestSync()
         {

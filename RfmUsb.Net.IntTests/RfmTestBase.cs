@@ -26,6 +26,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using Serilog;
 using Serilog.Core;
@@ -115,6 +116,45 @@ namespace RfmUsb.Net.IntTests
         internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
         {
             Logger.Debug($"Function {callerName} Returned: {func()}");
+        }
+
+        [TestMethod]
+        public void TestReadStream()
+        { 
+
+        }
+
+        [TestMethod]
+        public void TestWriteStreamDisabled()
+        {
+            // Arrange
+            var bytes = new byte[1];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = false;
+
+            // Act
+            Action action = () =>  RfmBase.Stream.Write(bytes);
+
+            // Assert
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteStreamEnabled()
+        {
+            // Arrange
+            var bytes = new byte[100];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = true;
+
+            // Act
+            RfmBase.Stream.Write(bytes);
         }
 
         #region IDisposable

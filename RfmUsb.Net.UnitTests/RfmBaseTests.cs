@@ -26,6 +26,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json.Linq;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using System;
@@ -151,6 +152,30 @@ namespace RfmUsb.Net.UnitTests
                 (v) => { v.Should().Be(0x55); },
                 Commands.GetBroadcastAddress,
                 "0x55");
+        }
+
+        [TestMethod]
+        public void TestGetBufferEnable()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.BufferedIoEnable; },
+                (v) => v.Should().BeTrue(),
+                Commands.GetBufferEnable,
+                "1");
+        }
+
+        [TestMethod]
+        public void TestGetBufferIoInfo()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.IoBufferInfo; },
+                (v) => v.Capacity.Should().Be(160),
+                Commands.GetIoBufferInfo,
+                new List<string>()
+                {
+                    "CAPACITY:0xA0",
+                    "COUNT:0x00"
+                });
         }
 
         [TestMethod]
@@ -784,6 +809,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestSetBufferedIoEnable()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.BufferedIoEnable = true; },
+                Commands.SetBufferEnable,
+                "1");
+        }
+
+        [TestMethod]
         public void TestSetCrcAutoClear()
         {
             ExecuteSetTest(
@@ -1199,6 +1233,16 @@ namespace RfmUsb.Net.UnitTests
                 "1");
         }
 
+        internal static EventArgs CreateSerialDataReceivedEventArgs()
+        {
+            ConstructorInfo? constructor = typeof(SerialDataReceivedEventArgs)
+                .GetConstructor(
+                BindingFlags.NonPublic |
+                BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
+
+            return constructor?.Invoke(new object[] { SerialData.Chars }) as SerialDataReceivedEventArgs;
+        }
+
         internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, string value)
         {
             // Arrange
@@ -1213,6 +1257,43 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(value);
+
+            // Act
+            var result = action();
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{command}\n"));
+
+            validation(result);
+        }
+
+        internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, IList<string> values)
+        {
+            // Arrange
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
+
+            var serialPortBytesToReadSequence = MockSerialPort
+                    .SetupSequence(_ => _.BytesToRead);
+
+            var serialPortReadLineSequence = MockSerialPort
+                .SetupSequence(_ => _.ReadLine());
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                serialPortReadLineSequence = serialPortReadLineSequence.Returns(values[i]);
+                if (i > 0)
+                {
+                    serialPortBytesToReadSequence = serialPortBytesToReadSequence.Returns(values[i].Length);
+                }
+            }
+
+            serialPortBytesToReadSequence = serialPortBytesToReadSequence.Returns(0);
 
             // Act
             var result = action();
@@ -1286,8 +1367,10 @@ namespace RfmUsb.Net.UnitTests
                 .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
-            .Setup(_ => _.ReadLine())
-                .Returns(version);
+            .SetupSequence(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk)
+                .Returns(version)
+                .Returns(RfmBase.ResponseOk);
 
             RfmBase.ResetSerialPort(MockSerialPort.Object);
 
@@ -1299,16 +1382,6 @@ namespace RfmUsb.Net.UnitTests
                 .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
 
             MockSerialPort.Verify(_ => _.Open(), Times.Once);
-        }
-
-        internal static EventArgs CreateSerialDataReceivedEventArgs()
-        {
-            ConstructorInfo? constructor = typeof(SerialDataReceivedEventArgs)
-                .GetConstructor(
-                BindingFlags.NonPublic |
-                BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
-
-            return constructor?.Invoke(new object[] { SerialData.Chars }) as SerialDataReceivedEventArgs;
         }
     }
 }
