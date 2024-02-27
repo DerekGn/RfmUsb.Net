@@ -31,9 +31,9 @@ namespace RfmUsb.Net.Io
 {
     public class RfmUsbStream : Stream
     {
-        private RfmBase _rfm;
+        private IRfm _rfm;
 
-        public RfmUsbStream(RfmBase rfm)
+        internal RfmUsbStream(IRfm rfm)
         {
             _rfm = rfm ?? throw new ArgumentNullException(nameof(rfm));
         }
@@ -54,6 +54,8 @@ namespace RfmUsb.Net.Io
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            int availableBytes = _rfm.IoBufferInfo.Count;
+
             return 0;
         }
 

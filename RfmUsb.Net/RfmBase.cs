@@ -107,10 +107,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public bool BufferedIoEnable 
-        { 
-            get => SendCommand(Commands.GetBufferEnable).StartsWith("1"); 
-            set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk); 
+        public bool BufferedIoEnable
+        {
+            get => SendCommand(Commands.GetBufferEnable).StartsWith("1");
+            set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -468,6 +468,29 @@ namespace RfmUsb.Net
             SendCommandWithCheck($"{Commands.SetDioMapping} {(int)dio} {(int)mapping}", ResponseOk);
         }
 
+        ///<inheritdoc/>
+        public void TransmitBuffer()
+        {
+            SendCommandWithCheck($"{Commands.TransmitBuffer}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public void WriteToBuffer(IEnumerable<byte> bytes)
+        {
+            var response = SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}");
+
+            switch (response)
+            {
+                case ResponseOk:
+                    break;
+
+                case "ERROR:IO_BUFFER_NOT_ENABLED":
+                    throw new RfmUsbBufferedIoNotEnabledException();
+                case "ERROR:OVERFLOW":
+                    throw new RfmUsbBufferedIoOverflowException();
+            }
+        }
+
         internal void FlushSerialPort()
         {
             if (SerialPort != null)
@@ -534,31 +557,11 @@ namespace RfmUsb.Net
             serialPort.DataReceived += SerialPortDataReceived;
         }
 
-        internal void TransmitBuffer()
-        {
-            SendCommandWithCheck($"{Commands.TransmitBuffer}", ResponseOk);
-        }
-
         internal virtual void WaitForSerialPortDataSignal()
         {
             if (!_signal.WaitOne(_signalTimeout))
             {
                 throw new RfmUsbTimeoutException($"No response received from Rfm device within [{_signalTimeout}]");
-            }
-        }
-
-        internal void WriteToBuffer(IEnumerable<byte> chunk)
-        {
-            var response = SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(chunk.ToArray()).Replace("-", string.Empty)}");
-
-            switch (response)
-            {
-                case ResponseOk:
-                    break;
-                case "ERROR:IO_BUFFER_NOT_ENABLED":
-                    throw new RfmUsbBufferedIoNotEnabledException();
-                case "ERROR:OVERFLOW":
-                    throw new RfmUsbBufferedIoOverflowException();
             }
         }
 

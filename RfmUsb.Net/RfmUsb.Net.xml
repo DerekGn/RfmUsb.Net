@@ -798,6 +798,11 @@
             Broadcast address used in address filtering
             </summary>
         </member>
+        <member name="P:RfmUsb.Net.IRfm.BufferedIoEnable">
+            <summary>
+            Enable or disable buffered packet IO
+            </summary>
+        </member>
         <member name="P:RfmUsb.Net.IRfm.CrcAutoClearOff">
             <summary>
             Defines the behavior of the packet handler when CRC check fails:
@@ -871,7 +876,7 @@
         </member>
         <member name="P:RfmUsb.Net.IRfm.IoBufferInfo">
             <summary>
-            Get the <see cref="P:RfmUsb.Net.IRfm.IoBufferInfo"/> 
+            Get the <see cref="P:RfmUsb.Net.IRfm.IoBufferInfo"/>
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm.LastRssi">
@@ -1073,10 +1078,16 @@
             <param name="dio">The <see cref="T:RfmUsb.Net.Dio"/> configuration</param>
             <param name="mapping">The <see cref="T:RfmUsb.Net.DioMapping"/></param>
         </member>
-        <member name="P:RfmUsb.Net.IRfm.BufferedIoEnable">
+        <member name="M:RfmUsb.Net.IRfm.TransmitBuffer">
             <summary>
-            Enable or disable buffered packet IO
+            Transmit the IO buffer
             </summary>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.WriteToBuffer(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            Write a sequence of bytes to the IO buffer
+            </summary>
+            <param name="bytes"></param>
         </member>
         <member name="T:RfmUsb.Net.IRfm69">
             <summary>
@@ -3715,6 +3726,12 @@
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.Net.RfmBase.SetDioMapping(RfmUsb.Net.Dio,RfmUsb.Net.DioMapping)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.TransmitBuffer">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.WriteToBuffer(System.Collections.Generic.IEnumerable{System.Byte})">
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.Net.RfmBase.CheckDeviceVersion(System.String)">

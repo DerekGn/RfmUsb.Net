@@ -77,6 +77,11 @@ namespace RfmUsb.Net
         byte BroadcastAddress { get; set; }
 
         /// <summary>
+        /// Enable or disable buffered packet IO
+        /// </summary>
+        bool BufferedIoEnable { get; set; }
+
+        /// <summary>
         /// Defines the behavior of the packet handler when CRC check fails:
         /// </summary>
         /// <remarks>
@@ -148,9 +153,10 @@ namespace RfmUsb.Net
         byte InterPacketRxDelay { get; set; }
 
         /// <summary>
-        /// Get the <see cref="IoBufferInfo"/> 
+        /// Get the <see cref="IoBufferInfo"/>
         /// </summary>
         IoBufferInfo IoBufferInfo { get; }
+
         /// <summary>
         /// Get the Rssi value after last packet received
         /// </summary>
@@ -351,8 +357,14 @@ namespace RfmUsb.Net
         void SetDioMapping(Dio dio, DioMapping mapping);
 
         /// <summary>
-        /// Enable or disable buffered packet IO
+        /// Transmit the IO buffer
         /// </summary>
-        bool BufferedIoEnable { get; set; }
+        void TransmitBuffer();
+        
+        /// <summary>
+        /// Write a sequence of bytes to the IO buffer
+        /// </summary>
+        /// <param name="bytes"></param>
+        void WriteToBuffer(IEnumerable<byte> bytes);
     }
 }
