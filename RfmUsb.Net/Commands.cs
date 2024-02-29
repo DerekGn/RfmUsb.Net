@@ -43,6 +43,7 @@ namespace RfmUsb.Net
         public const string ExecuteSequencerStop = "e-sst";
         public const string ExecuteSetAesKey = "s-aes";
         public const string ExecuteStartRssi = "e-rssi";
+        public const string ExecuteTransmit = "e-tx";
         public const string GetAccessSharedRegisters = "g-asr";
         public const string GetAddressFiltering = "g-af";
         public const string GetAesOn = "g-ae";

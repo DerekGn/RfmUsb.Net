@@ -963,10 +963,6 @@
             <summary>
             The payload length
             </summary>
-            <remarks>
-            <para><see langword="false"/> fixed payload length</para>
-            <para><see langword="true"/> variable max length in Rx, not used in Tx</para>
-            </remarks>
         </member>
         <member name="P:RfmUsb.Net.IRfm.PreambleSize">
             <summary>
@@ -1071,12 +1067,49 @@
             Triggers the calibration of the RC oscillator
             </summary>
         </member>
+        <member name="M:RfmUsb.Net.IRfm.ReadFromBuffer(System.Int32)">
+            <summary>
+            Read the bytes from the buffer
+            </summary>
+            <param name="count">The number of bytes to read from the buffer</param>
+            <returns>The <see cref="T:System.Collections.Generic.IList`1"/> </returns>
+        </member>
         <member name="M:RfmUsb.Net.IRfm.SetDioMapping(RfmUsb.Net.Dio,RfmUsb.Net.DioMapping)">
             <summary>
             Set the <see cref="T:RfmUsb.Net.Dio"/> mapping configuration <see cref="T:RfmUsb.Net.DioMapping"/>
             </summary>
             <param name="dio">The <see cref="T:RfmUsb.Net.Dio"/> configuration</param>
             <param name="mapping">The <see cref="T:RfmUsb.Net.DioMapping"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.Transmit(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Transmit a packet of data bytes
+            </summary>
+            <param name="data">The data to transmit</param>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32)">
+            <summary>
+            Transmit a packet of data bytes
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="txCount">The number of transmissions</param>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Transmit a packet of data bytes
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="txCount">The number of transmissions</param>
+            <param name="txInterval">The interval between transmissions</param>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Transmit a packet of data bytes
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="txCount">The number of transmissions</param>
+            <param name="txInterval">The interval between transmissions</param>
+            <param name="txTimeout">The tx timeout</param>
         </member>
         <member name="M:RfmUsb.Net.IRfm.TransmitBuffer">
             <summary>
@@ -3725,7 +3758,22 @@
         <member name="M:RfmUsb.Net.RfmBase.RcCalibration">
             <inheritdoc/>
         </member>
+        <member name="M:RfmUsb.Net.RfmBase.ReadFromBuffer(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:RfmUsb.Net.RfmBase.SetDioMapping(RfmUsb.Net.Dio,RfmUsb.Net.DioMapping)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.Transmit(System.Collections.Generic.IList{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.Transmit(System.Collections.Generic.IList{System.Byte},System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.Net.RfmBase.TransmitBuffer">

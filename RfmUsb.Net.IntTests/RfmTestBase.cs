@@ -69,6 +69,68 @@ namespace RfmUsb.Net.IntTests
 
         public TestContext TestContext { get; set; }
 
+        [TestMethod]
+        public void TestReadStreamDisabled()
+        {
+            // Arrange
+            var bytes = new byte[1];
+
+            RfmBase.BufferedIoEnable = false;
+
+            // Act
+            Action action = () => RfmBase.Stream.Read(bytes);
+
+            // Assert
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestReadStreamEnabled()
+        {
+            // Arrange
+            var bytes = new byte[10];
+
+            RfmBase.BufferedIoEnable = true;
+
+            // Act
+            int x = RfmBase.Stream.Read(bytes);
+
+            x.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void TestWriteStreamDisabled()
+        {
+            // Arrange
+            var bytes = new byte[1];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = false;
+
+            // Act
+            Action action = () => RfmBase.Stream.Write(bytes);
+
+            // Assert
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteStreamEnabled()
+        {
+            // Arrange
+            var bytes = new byte[100];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = true;
+
+            // Act
+            RfmBase.Stream.Write(bytes);
+        }
+
         internal static IEnumerable<byte> RandomSequence()
         {
             Random r = new Random();
@@ -116,45 +178,6 @@ namespace RfmUsb.Net.IntTests
         internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
         {
             Logger.Debug($"Function {callerName} Returned: {func()}");
-        }
-
-        [TestMethod]
-        public void TestReadStream()
-        { 
-
-        }
-
-        [TestMethod]
-        public void TestWriteStreamDisabled()
-        {
-            // Arrange
-            var bytes = new byte[1];
-            var rand = new Random();
-
-            rand.NextBytes(bytes);
-
-            RfmBase.BufferedIoEnable = false;
-
-            // Act
-            Action action = () =>  RfmBase.Stream.Write(bytes);
-
-            // Assert
-            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
-        }
-
-        [TestMethod]
-        public void TestWriteStreamEnabled()
-        {
-            // Arrange
-            var bytes = new byte[100];
-            var rand = new Random();
-
-            rand.NextBytes(bytes);
-
-            RfmBase.BufferedIoEnable = true;
-
-            // Act
-            RfmBase.Stream.Write(bytes);
         }
 
         #region IDisposable

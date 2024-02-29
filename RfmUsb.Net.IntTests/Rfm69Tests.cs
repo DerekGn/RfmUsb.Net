@@ -367,7 +367,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestSetAesKey()
         {
-            _rfm69.Sync = new List<byte> { 0xAA, 0x55, 0xAA, 0x55 };
+            _rfm69.SetAesKey(new List<byte> { 0xAA, 0x55, 0xAA, 0x55 });
         }
 
         [TestMethod]

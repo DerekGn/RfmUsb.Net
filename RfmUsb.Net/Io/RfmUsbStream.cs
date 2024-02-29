@@ -31,7 +31,7 @@ namespace RfmUsb.Net.Io
 {
     public class RfmUsbStream : Stream
     {
-        private IRfm _rfm;
+        private readonly IRfm _rfm;
 
         internal RfmUsbStream(IRfm rfm)
         {
@@ -54,9 +54,22 @@ namespace RfmUsb.Net.Io
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int availableBytes = _rfm.IoBufferInfo.Count;
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException(nameof(offset), "value must not be negative");
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count), "value must not be negative");
+            if (buffer.Length - offset < count)
+                throw new ArgumentException("invalid value", nameof(offset));
 
-            return 0;
+            int bytesAvailable = _rfm.IoBufferInfo.Count;
+            int bytesToRead = Math.Min(bytesAvailable, count);
+            var bytes = _rfm.ReadFromBuffer(bytesToRead);
+
+            Buffer.BlockCopy(bytes.ToArray(), 0, buffer, offset, bytesToRead);
+
+            return bytesToRead;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -88,7 +101,7 @@ namespace RfmUsb.Net.Io
 
             var chunks = buffer.Skip(offset).Take(count).Split(64).ToList();
 
-            foreach ( var chunk in chunks )
+            foreach (var chunk in chunks)
             {
                 _rfm.WriteToBuffer(chunk);
             }

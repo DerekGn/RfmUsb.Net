@@ -41,14 +41,14 @@ namespace RfmUsb.Net
     public abstract class RfmBase : IRfm
     {
         internal const string ResponseOk = "OK";
+
         internal readonly AutoResetEvent _signal;
         internal readonly ILogger<IRfm> Logger;
         internal ISerialPort SerialPort;
+        private readonly List<string> _responses;
+        private readonly RfmUsbStream _stream;
         private readonly ISerialPortFactory SerialPortFactory;
-        private List<string> _responses;
         private int _signalTimeout;
-        private RfmUsbStream _stream;
-
         /// <summary>
         /// Create an instance of an <see cref="RfmBase"/> derived type.
         /// </summary>
@@ -463,32 +463,72 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public IList<byte> ReadFromBuffer(int count)
+        {
+            var countArg = count == 0 ? "" : " " + count.ToString();
+            var response = SendCommand($"{Commands.ReadBuffer}{countArg}");
+
+            CheckBufferedIoCommand(response);
+
+            return response.ToBytes();
+        }
+
+        ///<inheritdoc/>
         public void SetDioMapping(Dio dio, DioMapping mapping)
         {
             SendCommandWithCheck($"{Commands.SetDioMapping} {(int)dio} {(int)mapping}", ResponseOk);
         }
 
         ///<inheritdoc/>
+        public void Transmit(IList<byte> data, int txCount, int txInterval)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X} " +
+                $"0x{txInterval:X}");
+        }
+
+        ///<inheritdoc/>
+        public void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X} " +
+                $"0x{txInterval:X} " +
+                $"0x{txTimeout:X}");
+        }
+
+        ///<inheritdoc/>
+        public void Transmit(IList<byte> data)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+        }
+
+        ///<inheritdoc/>
+        public void Transmit(IList<byte> data, int txCount)
+        {
+            TransmitInternal(
+                $"{Commands.ExecuteTransmit} " +
+                $"{BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} " +
+                $"0x{txCount:X}");
+        }
+
+        ///<inheritdoc/>
         public void TransmitBuffer()
         {
-            SendCommandWithCheck($"{Commands.TransmitBuffer}", ResponseOk);
+            CheckBufferedIoCommand(
+                SendCommand($"{Commands.TransmitBuffer}"));
         }
 
         ///<inheritdoc/>
         public void WriteToBuffer(IEnumerable<byte> bytes)
         {
-            var response = SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}");
-
-            switch (response)
-            {
-                case ResponseOk:
-                    break;
-
-                case "ERROR:IO_BUFFER_NOT_ENABLED":
-                    throw new RfmUsbBufferedIoNotEnabledException();
-                case "ERROR:OVERFLOW":
-                    throw new RfmUsbBufferedIoOverflowException();
-            }
+            CheckBufferedIoCommand(
+                SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}"));
         }
 
         internal void FlushSerialPort()
@@ -562,6 +602,21 @@ namespace RfmUsb.Net
             if (!_signal.WaitOne(_signalTimeout))
             {
                 throw new RfmUsbTimeoutException($"No response received from Rfm device within [{_signalTimeout}]");
+            }
+        }
+
+        private static void CheckBufferedIoCommand(string response)
+        {
+            switch (response)
+            {
+                case ResponseOk:
+                    break;
+                case "ERROR:NOT_TX":
+                    throw new RfmUsbTransmitNotEnabledException();
+                case "ERROR:BUFFERED_IO_NOT_ENABLED":
+                    throw new RfmUsbBufferedIoNotEnabledException();
+                case "ERROR:OVERFLOW":
+                    throw new RfmUsbBufferedIoOverflowException();
             }
         }
 
@@ -715,6 +770,15 @@ namespace RfmUsb.Net
             SendCommandWithCheck($"{Commands.SetDioInterruptMask} 0x{value:X}", ResponseOk);
         }
 
+        private void TransmitInternal(string command)
+        {
+            var response = SendCommand(command);
+
+            if (!response.Contains("Ok", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+            }
+        }
         #region IDisposible
 
         private bool disposedValue;

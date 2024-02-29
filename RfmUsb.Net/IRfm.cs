@@ -240,10 +240,6 @@ namespace RfmUsb.Net
         /// <summary>
         /// The payload length
         /// </summary>
-        /// <remarks>
-        /// <para><see langword="false"/> fixed payload length</para>
-        /// <para><see langword="true"/> variable max length in Rx, not used in Tx</para>
-        /// </remarks>
         ushort PayloadLength { get; set; }
 
         /// <summary>
@@ -350,6 +346,13 @@ namespace RfmUsb.Net
         void RcCalibration();
 
         /// <summary>
+        /// Read the bytes from the buffer
+        /// </summary>
+        /// <param name="count">The number of bytes to read from the buffer</param>
+        /// <returns>The <see cref="IList{T}"/> </returns>
+        IList<byte> ReadFromBuffer(int count);
+
+        /// <summary>
         /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/> configuration</param>
@@ -357,10 +360,40 @@ namespace RfmUsb.Net
         void SetDioMapping(Dio dio, DioMapping mapping);
 
         /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        void Transmit(IList<byte> data);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txCount">The number of transmissions</param>
+        void Transmit(IList<byte> data, int txCount);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txCount">The number of transmissions</param>
+        /// <param name="txInterval">The interval between transmissions</param>
+        void Transmit(IList<byte> data, int txCount, int txInterval);
+
+        /// <summary>
+        /// Transmit a packet of data bytes
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txCount">The number of transmissions</param>
+        /// <param name="txInterval">The interval between transmissions</param>
+        /// <param name="txTimeout">The tx timeout</param>
+        void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout);
+
+        /// <summary>
         /// Transmit the IO buffer
         /// </summary>
         void TransmitBuffer();
-        
+
         /// <summary>
         /// Write a sequence of bytes to the IO buffer
         /// </summary>

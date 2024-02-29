@@ -26,7 +26,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json.Linq;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using System;
@@ -282,7 +281,6 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioMapping} 0x{(byte)dio:X}\n"));
         }
 
-        // Fei
         [TestMethod]
         public void TestGetFei()
         {
@@ -1231,6 +1229,15 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.TxStartCondition = true; },
                 Commands.SetTxStartCondition,
                 "1");
+        }
+
+        [TestMethod]
+        public void TestTransmit()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }); },
+                $"{Commands.ExecuteTransmit} AADDFFCC",
+                RfmBase.ResponseOk);
         }
 
         internal static EventArgs CreateSerialDataReceivedEventArgs()
