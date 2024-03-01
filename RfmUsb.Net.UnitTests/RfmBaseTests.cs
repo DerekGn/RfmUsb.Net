@@ -168,12 +168,16 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return RfmBase.IoBufferInfo; },
-                (v) => v.Capacity.Should().Be(160),
+                (v) =>
+                {
+                    v.Capacity.Should().Be(160);
+                    v.Count.Should().Be(16);
+                },
                 Commands.GetIoBufferInfo,
                 new List<string>()
                 {
                     "CAPACITY:0xA0",
-                    "COUNT:0x00"
+                    "COUNT:0x10"
                 });
         }
 
@@ -771,21 +775,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAfcAutoClear()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAfcAutoClear(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.AfcAutoClear = true; },
+                () => { RfmBase.AfcAutoClear = value; },
                 Commands.SetAfcAutoClear,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAfcAutoOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAfcAutoOn(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.AfcAutoOn = true; },
+                () => { RfmBase.AfcAutoOn = value; },
                 Commands.SetAfcAutoOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -807,30 +815,36 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetBufferedIoEnable()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetBufferedIoEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.BufferedIoEnable = true; },
+                () => { RfmBase.BufferedIoEnable = value; },
                 Commands.SetBufferEnable,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetCrcAutoClear()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetCrcAutoClear(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.CrcAutoClearOff = true; },
+                () => { RfmBase.CrcAutoClearOff = value; },
                 Commands.SetCrcAutoClearOff,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetCrcOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetCrcOn(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.CrcOn = true; },
+                () => { RfmBase.CrcOn = value; },
                 Commands.SetCrcOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1010,12 +1024,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetOcpEnable()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetOcpEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.OcpEnable = true; },
+                () => { RfmBase.OcpEnable = value; },
                 Commands.SetOcpEnable,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1126,12 +1142,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetPacketFormat()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetPacketFormat(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.PacketFormat = true; },
+                () => { RfmBase.PacketFormat = value; },
                 Commands.SetPacketFormat,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1205,12 +1223,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetSyncEnable()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetSyncEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.SyncEnable = true; },
+                () => { RfmBase.SyncEnable = value; },
                 Commands.SetSyncEnable,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1223,12 +1243,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTxStartCondition()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetTxStartCondition(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.TxStartCondition = true; },
+                () => { RfmBase.TxStartCondition = value; },
                 Commands.SetTxStartCondition,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]

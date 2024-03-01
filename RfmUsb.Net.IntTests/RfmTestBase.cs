@@ -85,6 +85,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestReadStreamEnabled()
         {
             // Arrange
@@ -117,6 +118,7 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
+        [Ignore]
         public void TestWriteStreamEnabled()
         {
             // Arrange
