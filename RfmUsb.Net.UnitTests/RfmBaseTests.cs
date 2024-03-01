@@ -753,6 +753,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestReadFromBuffer()
+        {
+            ExecuteTest(
+                () => { RfmBase.ReadFromBuffer(10); },
+                $"{Commands.ReadIoBuffer} 0x0A",
+                "AA55AA");
+        }
+
+        [TestMethod]
         public void TestReset()
         {
             ExecuteTest(
@@ -1260,6 +1269,84 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }); },
                 $"{Commands.ExecuteTransmit} AADDFFCC",
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitBufferOk()
+        {
+            ExecuteTest(
+                () => { RfmBase.TransmitBuffer(); },
+                $"{Commands.ExecuteTransmitBuffer}",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTimeout()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200); },
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTimeoutAndInterval()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200, 100); },
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8 0x64",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTimeoutAndIntervalAndTimeout()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200, 100, 50); },
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8 0x64 0x32",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestWriteBuffer()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "AA55DEAD");
+        }
+
+        [TestMethod]
+        public void TestWriteBufferNotEnabled()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:BUFFERED_IO_NOT_ENABLED");
+
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteBufferNotInTx()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:NOT_TX");
+
+            action.Should().Throw<RfmUsbTransmitNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteBufferOverflow()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:OVERFLOW");
+
+            action.Should().Throw<RfmUsbBufferedIoOverflowException>();
         }
 
         internal static EventArgs CreateSerialDataReceivedEventArgs()

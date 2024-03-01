@@ -465,8 +465,8 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public IList<byte> ReadFromBuffer(int count)
         {
-            var countArg = count == 0 ? "" : " " + count.ToString();
-            var response = SendCommand($"{Commands.ReadBuffer}{countArg}");
+            var countArg = count == 0 ? "" : " 0x" + count.ToString("X2");
+            var response = SendCommand($"{Commands.ReadIoBuffer}{countArg}");
 
             CheckBufferedIoCommand(response);
 
@@ -521,14 +521,14 @@ namespace RfmUsb.Net
         public void TransmitBuffer()
         {
             CheckBufferedIoCommand(
-                SendCommand($"{Commands.TransmitBuffer}"));
+                SendCommand($"{Commands.ExecuteTransmitBuffer}"));
         }
 
         ///<inheritdoc/>
         public void WriteToBuffer(IEnumerable<byte> bytes)
         {
             CheckBufferedIoCommand(
-                SendCommand($"{Commands.WriteBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}"));
+                SendCommand($"{Commands.WriteIoBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}"));
         }
 
         internal void FlushSerialPort()

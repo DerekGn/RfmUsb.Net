@@ -44,6 +44,7 @@ namespace RfmUsb.Net
         public const string ExecuteSetAesKey = "s-aes";
         public const string ExecuteStartRssi = "e-rssi";
         public const string ExecuteTransmit = "e-tx";
+        public const string ExecuteTransmitBuffer = "e-btx";
         public const string GetAccessSharedRegisters = "g-asr";
         public const string GetAddressFiltering = "g-af";
         public const string GetAesOn = "g-ae";
@@ -197,7 +198,7 @@ namespace RfmUsb.Net
         public const string GetTxStartCondition = "g-tsc";
         public const string GetValidHeaderCount = "g-vhc";
         public const string GetValidPacketCount = "g-vpc";
-        public const string ReadBuffer = "r-b";
+        public const string ReadIoBuffer = "r-b";
         public const string SetAccessSharedRegisters = "s-asr";
         public const string SetAddressFiltering = "s-af";
         public const string SetAesOn = "s-ae";
@@ -329,7 +330,6 @@ namespace RfmUsb.Net
         public const string SetTimerResolution = "s-tr";
         public const string SetTxContinuousMode = "s-tcm";
         public const string SetTxStartCondition = "s-tsc";
-        public const string TransmitBuffer = "e-btx";
-        public const string WriteBuffer = "w-b";
+        public const string WriteIoBuffer = "w-b";
     }
 }
