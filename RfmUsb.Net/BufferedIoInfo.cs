@@ -27,14 +27,14 @@ namespace RfmUsb.Net
     /// <summary>
     /// The Io buffer information
     /// </summary>
-    public class IoBufferInfo
+    public class BufferedIoInfo
     {
         /// <summary>
-        /// Create an instance of an <see cref="IoBufferInfo"/>
+        /// Create an instance of an <see cref="BufferedIoInfo"/>
         /// </summary>
         /// <param name="capacity">The capacity</param>
         /// <param name="count">The count</param>
-        public IoBufferInfo(int capacity, int count)
+        public BufferedIoInfo(int capacity, int count)
         {
             Capacity = capacity;
             Count = count;

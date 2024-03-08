@@ -33,7 +33,7 @@ namespace RfmUsb.Net
     public enum Rfm69IrqFlags
     {
         /// <summary>
-        /// No Irq bit is sey
+        /// No Irq bit is set
         /// </summary>
         None = 0,
 

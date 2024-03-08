@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RfmUsb.Net": {
+      "commandName": "Project",
+      "commandLineArgs": "listen -s COM3"
+    }
+  }
+}

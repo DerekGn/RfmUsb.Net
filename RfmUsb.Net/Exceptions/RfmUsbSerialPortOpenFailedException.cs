@@ -23,18 +23,46 @@
 */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
+    /// <summary>
+    /// Exception thrown when the serial port fails to open
+    /// </summary>
+    [Serializable]
+    public class RfmUsbSerialPortOpenFailedException : Exception
+    {
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// </summary>
+        public RfmUsbSerialPortOpenFailedException()
+        { }
 
-	[Serializable]
-	public class RfmUsbSerialPortOpenFailedException : Exception
-	{
-		public RfmUsbSerialPortOpenFailedException() { }
-		public RfmUsbSerialPortOpenFailedException(string message) : base(message) { }
-		public RfmUsbSerialPortOpenFailedException(string message, Exception inner) : base(message, inner) { }
-		protected RfmUsbSerialPortOpenFailedException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// </summary>
+        /// <param name="message">The exception message</param>
+        public RfmUsbSerialPortOpenFailedException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="inner">The inner <see cref="Exception"/></param>
+        public RfmUsbSerialPortOpenFailedException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/></param>
+        /// <param name="context">The <see cref="StreamingContext"/></param>
+        protected RfmUsbSerialPortOpenFailedException(
+          SerializationInfo info,
+          StreamingContext context) : base(info, context) { }
+    }
 }

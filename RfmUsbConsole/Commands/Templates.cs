@@ -22,11 +22,14 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Rssi Bw
+
 namespace RfmUsbConsole.Commands
 {
     internal static class Templates
     {
-        public const string BaudRate = "-b|--baudrate";
+        public const string BaudRate = "-b|--baud-rate";
         public const string Frequency = "-f|--frequency";
         public const string Modulation = "-m|--modulation";
         public const string OutputPower = "-o|--output-power";
@@ -34,7 +37,7 @@ namespace RfmUsbConsole.Commands
         public const string PingInterval = "-pi|--ping-interval";
         public const string PingTimeout = "-pt|--ping-timeout";
         public const string RssiThreshold = "-rt|--rssi-threshold";
-        public const string RxBw = "-r|--recieve-bw";
+        public const string RxBw = "-r|--receive-bw";
         public const string SerialPort = "-p|--port";
     }
 }

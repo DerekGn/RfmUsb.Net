@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Agc Wideband Tcxo Bw Bootloader Fei Pll Aes Dio Dcc Rssi Dagc Lna Irq Ocp Ook Fsk Snr
+
 namespace RfmUsb.Net
 {
     internal static class Commands
@@ -112,8 +115,8 @@ namespace RfmUsb.Net
         public const string GetIrqFlags = "g-irq";
         public const string GetLastPacketSnr = "g-lpsnr";
         public const string GetLastRssi = "g-lrssi";
-        public const string GetListenCoefficentIdle = "g-lic";
-        public const string GetListenCoefficentRx = "g-lrc";
+        public const string GetListenCoefficientIdle = "g-lic";
+        public const string GetListenCoefficientRx = "g-lrc";
         public const string GetListenCriteria = "g-lc";
         public const string GetListenEnd = "g-lem";
         public const string GetListenerOn = "g-lo";
@@ -157,7 +160,7 @@ namespace RfmUsb.Net
         public const string GetPpmCorrection = "g-ppm";
         public const string GetPreambleDetectorOn = "g-pdo";
         public const string GetPreambleDetectorSize = "g-pds";
-        public const string GetPreambleDetectorTotalerance = "g-pdt";
+        public const string GetPreambleDetectorTolerance = "g-pdt";
         public const string GetPreambleLength = "g-prl";
         public const string GetPreamblePolarity = "g-pp";
         public const string GetPreambleSize = "g-ps";
@@ -254,8 +257,8 @@ namespace RfmUsb.Net
         public const string SetIoHomeOn = "s-iho";
         public const string SetIoHomePowerFrame = "s-ihpf";
         public const string SetIrqFlags = "s-irq";
-        public const string SetListenCoefficentIdle = "s-lic";
-        public const string SetListenCoefficentRx = "s-lrc";
+        public const string SetListenCoefficientIdle = "s-lic";
+        public const string SetListenCoefficientRx = "s-lrc";
         public const string SetListenCriteria = "s-lc";
         public const string SetListenEnd = "s-lem";
         public const string SetListenerOn = "s-lo";
@@ -289,7 +292,7 @@ namespace RfmUsb.Net
         public const string SetOokPeakThresholdDec = "s-optd";
         public const string SetOokPeakThresholdStep = "s-opts";
         public const string SetOokThresholdType = "s-ott";
-        public const string SetOutputbase = "s-ob";
+        public const string SetOutputBase = "s-ob";
         public const string SetOutputPower = "s-op";
         public const string SetPacketFormat = "s-pf";
         public const string SetPaRamp = "s-par";
@@ -298,7 +301,7 @@ namespace RfmUsb.Net
         public const string SetPpmCorrection = "s-ppm";
         public const string SetPreambleDetectorOn = "s-pdo";
         public const string SetPreambleDetectorSize = "s-pds";
-        public const string SetPreambleDetectorTotalerance = "s-pdt";
+        public const string SetPreambleDetectorTolerance = "s-pdt";
         public const string SetPreambleLength = "s-prl";
         public const string SetPreamblePolarity = "s-pp";
         public const string SetPreambleSize = "s-ps";

@@ -23,18 +23,47 @@
 */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
+    /// <summary>
+    /// Exception thrown if the IO buffering is not enabled
+    /// </summary>
+    [Serializable]
+    public class RfmUsbBufferedIoNotEnabledException : Exception
+    {
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoNotEnabledException"/>
+        /// </summary>
+        public RfmUsbBufferedIoNotEnabledException()
+        {
+        }
 
-	[Serializable]
-	public class RfmUsbBufferedIoNotEnabledException : Exception
-	{
-		public RfmUsbBufferedIoNotEnabledException() { }
-		public RfmUsbBufferedIoNotEnabledException(string message) : base(message) { }
-		public RfmUsbBufferedIoNotEnabledException(string message, Exception inner) : base(message, inner) { }
-		protected RfmUsbBufferedIoNotEnabledException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoNotEnabledException"/>
+        /// </summary>
+        /// <param name="message">The exception message</param>
+        public RfmUsbBufferedIoNotEnabledException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoNotEnabledException"/>
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="inner">The inner <see cref="Exception"/></param>
+        public RfmUsbBufferedIoNotEnabledException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoNotEnabledException"/>
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/></param>
+        /// <param name="context">The <see cref="StreamingContext"/></param>
+        protected RfmUsbBufferedIoNotEnabledException(
+            SerializationInfo info,
+            StreamingContext context) : base(info, context) { }
+    }
 }

@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc
+
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -328,22 +331,22 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetListenCoefficentIdle()
+        public void TestGetListenCoefficientIdle()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.ListenCoefficentIdle; },
+                () => { return _rfmDevice.ListenCoefficientIdle; },
                 (v) => v.Should().Be(0xAA),
-                Commands.GetListenCoefficentIdle,
+                Commands.GetListenCoefficientIdle,
                 "0xAA");
         }
 
         [TestMethod]
-        public void TestGetListenCoefficentRx()
+        public void TestGetListenCoefficientRx()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.ListenCoefficentRx; },
+                () => { return _rfmDevice.ListenCoefficientRx; },
                 (v) => v.Should().Be(0xAA),
-                Commands.GetListenCoefficentRx,
+                Commands.GetListenCoefficientRx,
                 "0xAA");
         }
 
@@ -731,20 +734,20 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetListenCoefficentIdle()
+        public void TestSetListenCoefficientIdle()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenCoefficentIdle = 0x60; },
-                Commands.SetListenCoefficentIdle,
+                () => { _rfmDevice.ListenCoefficientIdle = 0x60; },
+                Commands.SetListenCoefficientIdle,
                 "0x60");
         }
 
         [TestMethod]
-        public void TestSetListenCoefficentRx()
+        public void TestSetListenCoefficientRx()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenCoefficentRx = 0x60; },
-                Commands.SetListenCoefficentRx,
+                () => { _rfmDevice.ListenCoefficientRx = 0x60; },
+                Commands.SetListenCoefficientRx,
                 "0x60");
         }
 

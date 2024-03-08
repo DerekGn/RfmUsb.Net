@@ -29,6 +29,9 @@ using System.Linq;
 
 namespace RfmUsb.Net.Io
 {
+    /// <summary>
+    /// The stream for reading and writing to the RfmUsb buffered IO
+    /// </summary>
     public class RfmUsbStream : Stream
     {
         private readonly IRfm _rfm;
@@ -38,20 +41,27 @@ namespace RfmUsb.Net.Io
             _rfm = rfm ?? throw new ArgumentNullException(nameof(rfm));
         }
 
+        ///<inheritdoc/>
         public override bool CanRead => true;
 
+        ///<inheritdoc/>
         public override bool CanSeek => false;
 
+        ///<inheritdoc/>
         public override bool CanWrite => true;
 
-        public override long Length => throw new NotSupportedException();
+        ///<inheritdoc/>
+        public override long Length => _rfm.BufferedIoInfo.Count;
 
+        ///<inheritdoc/>
         public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
+        ///<inheritdoc/>
         public override void Flush()
         {
         }
 
+        ///<inheritdoc/>
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
@@ -63,7 +73,7 @@ namespace RfmUsb.Net.Io
             if (buffer.Length - offset < count)
                 throw new ArgumentException("invalid value", nameof(offset));
 
-            int bytesAvailable = _rfm.IoBufferInfo.Count;
+            int bytesAvailable = _rfm.BufferedIoInfo.Count;
             int bytesToRead = Math.Min(bytesAvailable, count);
             var bytes = _rfm.ReadFromBuffer(bytesToRead);
 
@@ -72,16 +82,19 @@ namespace RfmUsb.Net.Io
             return bytesToRead;
         }
 
+        ///<inheritdoc/>
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotSupportedException();
         }
 
+        ///<inheritdoc/>
         public override void SetLength(long value)
         {
             throw new NotSupportedException();
         }
 
+        ///<inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
@@ -93,7 +106,7 @@ namespace RfmUsb.Net.Io
             if (buffer.Length - offset < count)
                 throw new ArgumentException("invalid value", nameof(offset));
 
-            var ioBufferInfo = _rfm.IoBufferInfo;
+            var ioBufferInfo = _rfm.BufferedIoInfo;
             var capacity = ioBufferInfo.Capacity - ioBufferInfo.Count;
 
             if (count > capacity)

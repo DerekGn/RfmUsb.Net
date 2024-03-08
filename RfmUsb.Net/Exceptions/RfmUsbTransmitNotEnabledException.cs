@@ -23,25 +23,46 @@
 */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
-    [System.Serializable]
+    /// <summary>
+    /// Exception thrown if the attached RfmUsb device is not in transmit mode
+    /// </summary>
+    [Serializable]
     public class RfmUsbTransmitNotEnabledException : Exception
     {
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbTransmitNotEnabledException"/>
+        /// </summary>
         public RfmUsbTransmitNotEnabledException()
         { }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbTransmitNotEnabledException"/>
+        /// </summary>
+        /// <param name="message">The exception message</param>
         public RfmUsbTransmitNotEnabledException(string message) : base(message)
         {
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbTransmitNotEnabledException"/>
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="inner">The inner <see cref="Exception"/></param>
         public RfmUsbTransmitNotEnabledException(string message, Exception inner) : base(message, inner)
         {
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbTransmitNotEnabledException"/>
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/></param>
+        /// <param name="context">The <see cref="StreamingContext"/></param>
         protected RfmUsbTransmitNotEnabledException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+          SerializationInfo info,
+          StreamingContext context) : base(info, context) { }
     }
 }

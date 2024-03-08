@@ -23,6 +23,7 @@
 */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
@@ -32,19 +33,36 @@ namespace RfmUsb.Net.Exceptions
     [Serializable]
     public class RfmUsbInvalidDeviceTypeException : Exception
     {
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbInvalidDeviceTypeException"/>
+        /// </summary>
         public RfmUsbInvalidDeviceTypeException()
         { }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbInvalidDeviceTypeException"/>
+        /// </summary>
+        /// <param name="message">The exception message</param>
         public RfmUsbInvalidDeviceTypeException(string message) : base(message)
         {
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbInvalidDeviceTypeException"/>
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="inner">The inner <see cref="Exception"/></param>
         public RfmUsbInvalidDeviceTypeException(string message, Exception inner) : base(message, inner)
         {
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbInvalidDeviceTypeException"/>
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/></param>
+        /// <param name="context">The <see cref="StreamingContext"/></param>
         protected RfmUsbInvalidDeviceTypeException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+            SerializationInfo info,
+            StreamingContext context) : base(info, context) { }
     }
 }

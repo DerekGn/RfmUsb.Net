@@ -928,9 +928,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleDetectorTotalerance()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.PreambleDetectorTotalerance; },
+                () => { return _rfmDevice.PreambleDetectorTolerance; },
                 (v) => v.Should().Be(30),
-                Commands.GetPreambleDetectorTotalerance,
+                Commands.GetPreambleDetectorTolerance,
                 $"0x{(sbyte)30:X2}");
         }
 
@@ -1718,8 +1718,8 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleDetectorTotalerance()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.PreambleDetectorTotalerance = 55; },
-                Commands.SetPreambleDetectorTotalerance,
+                () => { _rfmDevice.PreambleDetectorTolerance = 55; },
+                Commands.SetPreambleDetectorTolerance,
                 $"0x{(sbyte)55:X2}");
         }
 

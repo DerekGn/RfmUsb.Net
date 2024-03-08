@@ -377,7 +377,7 @@ namespace RfmUsb.Net
         /// <summary>
         /// Number or chip errors tolerated overPreambleDetectorSize. 4 chips per bit
         /// </summary>
-        byte PreambleDetectorTotalerance { get; set; }
+        byte PreambleDetectorTolerance { get; set; }
 
         /// <summary>
         /// The lora Preamble length

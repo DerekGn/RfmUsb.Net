@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Usb Dio Ook Ocp Bw Fei Bootloader Fsk Rssi Lna
+
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -167,7 +170,7 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetBufferIoInfo()
         {
             ExecuteGetTest(
-                () => { return RfmBase.IoBufferInfo; },
+                () => { return RfmBase.BufferedIoInfo; },
                 (v) =>
                 {
                     v.Capacity.Should().Be(160);

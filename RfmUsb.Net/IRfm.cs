@@ -82,6 +82,11 @@ namespace RfmUsb.Net
         bool BufferedIoEnable { get; set; }
 
         /// <summary>
+        /// Get the <see cref="BufferedIoInfo"/>
+        /// </summary>
+        BufferedIoInfo BufferedIoInfo { get; }
+
+        /// <summary>
         /// Defines the behavior of the packet handler when CRC check fails:
         /// </summary>
         /// <remarks>
@@ -151,11 +156,6 @@ namespace RfmUsb.Net
         /// - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
         /// </summary>
         byte InterPacketRxDelay { get; set; }
-
-        /// <summary>
-        /// Get the <see cref="IoBufferInfo"/>
-        /// </summary>
-        IoBufferInfo IoBufferInfo { get; }
 
         /// <summary>
         /// Get the Rssi value after last packet received

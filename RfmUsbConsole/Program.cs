@@ -39,7 +39,7 @@ namespace RfmUsbConsole
     [Subcommand(typeof(Rfm69OpenthingsListenCommand))]
     class Program
     {
-        private static IConfiguration? _configuration;
+        private static IConfiguration _configuration;
 
         public static int Main(string[] args)
         {

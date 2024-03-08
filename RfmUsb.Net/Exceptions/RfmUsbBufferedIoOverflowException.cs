@@ -23,18 +23,46 @@
 */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
+    /// <summary>
+    /// Exception thrown if the IO buffer overflows
+    /// </summary>
+    [Serializable]
+    public class RfmUsbBufferedIoOverflowException : Exception
+    {
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
+        /// </summary>
+        public RfmUsbBufferedIoOverflowException()
+        { }
 
-	[Serializable]
-	public class RfmUsbBufferedIoOverflowException : Exception
-	{
-		public RfmUsbBufferedIoOverflowException() { }
-		public RfmUsbBufferedIoOverflowException(string message) : base(message) { }
-		public RfmUsbBufferedIoOverflowException(string message, Exception inner) : base(message, inner) { }
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
+        /// </summary>
+        /// <param name="message">The exception message</param>
+        public RfmUsbBufferedIoOverflowException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="inner">The inner <see cref="Exception"/></param>
+        public RfmUsbBufferedIoOverflowException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/></param>
+        /// <param name="context">The <see cref="StreamingContext"/></param>
 		protected RfmUsbBufferedIoOverflowException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
+          SerializationInfo info,
+          StreamingContext context) : base(info, context) { }
+    }
 }

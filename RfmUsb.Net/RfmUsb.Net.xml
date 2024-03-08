@@ -55,24 +55,24 @@
             Reserved
             </summary>
         </member>
-        <member name="T:RfmUsb.Net.IoBufferInfo">
+        <member name="T:RfmUsb.Net.BufferedIoInfo">
             <summary>
             The Io buffer information
             </summary>
         </member>
-        <member name="M:RfmUsb.Net.IoBufferInfo.#ctor(System.Int32,System.Int32)">
+        <member name="M:RfmUsb.Net.BufferedIoInfo.#ctor(System.Int32,System.Int32)">
             <summary>
-            Create an instance of an <see cref="T:RfmUsb.Net.IoBufferInfo"/>
+            Create an instance of an <see cref="T:RfmUsb.Net.BufferedIoInfo"/>
             </summary>
             <param name="capacity">The capacity</param>
             <param name="count">The count</param>
         </member>
-        <member name="P:RfmUsb.Net.IoBufferInfo.Capacity">
+        <member name="P:RfmUsb.Net.BufferedIoInfo.Capacity">
             <summary>
             The Io buffer capacity
             </summary>
         </member>
-        <member name="P:RfmUsb.Net.IoBufferInfo.Count">
+        <member name="P:RfmUsb.Net.BufferedIoInfo.Count">
             <summary>
             The Io buffer count
             </summary>
@@ -377,6 +377,66 @@
             4/8
             </summary>
         </member>
+        <member name="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException">
+            <summary>
+            Exception thrown if the IO buffering is not enabled
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
+        </member>
+        <member name="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException">
+            <summary>
+            Exception thrown if the IO buffer overflows
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
+        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbCommandExecutionException">
             <summary>
             Throw when a command execution fails
@@ -415,6 +475,31 @@
             Exception thrown if the attached RfmUsb device is not correct device
             </summary>
         </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
+        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortNotFoundException">
             <summary>
             Throw when the specified serial port is not found
@@ -448,6 +533,66 @@
             <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
             about the source or destination.</param>
         </member>
+        <member name="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException">
+            <summary>
+            Exception thrown when the serial port fails to open
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
+        </member>
+        <member name="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException">
+            <summary>
+            Exception thrown when the serial port receive timeout
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTimeoutException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTimeoutException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTimeoutException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTimeoutException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
+        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbTransmitException">
             <summary>
             Throw when a error occurs during transmission
@@ -480,6 +625,36 @@
             the serialized object data about the exception being thrown.</param>
             <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
             about the source or destination.</param>
+        </member>
+        <member name="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException">
+            <summary>
+            Exception thrown if the attached RfmUsb device is not in transmit mode
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException.#ctor">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException.#ctor(System.String)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException"/>
+            </summary>
+            <param name="message">The message</param>
+            <param name="inner">The inner <see cref="T:System.Exception"/></param>
+        </member>
+        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException"/>
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
         </member>
         <member name="T:RfmUsb.Net.ExitCondition">
             <summary>
@@ -750,6 +925,41 @@
             Transmitter mode (TX)
             </summary>
         </member>
+        <member name="T:RfmUsb.Net.Io.RfmUsbStream">
+            <summary>
+            The stream for reading and writing to the RfmUsb buffered IO
+            </summary>
+        </member>
+        <member name="P:RfmUsb.Net.Io.RfmUsbStream.CanRead">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.Io.RfmUsbStream.CanSeek">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.Io.RfmUsbStream.CanWrite">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.Io.RfmUsbStream.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:RfmUsb.Net.Io.RfmUsbStream.Position">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.Io.RfmUsbStream.Flush">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.Io.RfmUsbStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.Io.RfmUsbStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.Io.RfmUsbStream.SetLength(System.Int64)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.Io.RfmUsbStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="T:RfmUsb.Net.IRfm">
             <summary>
             An Rfm device
@@ -801,6 +1011,11 @@
         <member name="P:RfmUsb.Net.IRfm.BufferedIoEnable">
             <summary>
             Enable or disable buffered packet IO
+            </summary>
+        </member>
+        <member name="P:RfmUsb.Net.IRfm.BufferedIoInfo">
+            <summary>
+            Get the <see cref="P:RfmUsb.Net.IRfm.BufferedIoInfo"/>
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm.CrcAutoClearOff">
@@ -872,11 +1087,6 @@
             start of a new RSSI phase for next packet. Must match the transmitter’s PA ramp-down time.
             - Tdelay = 0 if InterpacketRxDelay >= 12
             - Tdelay = (2^InterpacketRxDelay) / BitRate otherwise
-            </summary>
-        </member>
-        <member name="P:RfmUsb.Net.IRfm.IoBufferInfo">
-            <summary>
-            Get the <see cref="P:RfmUsb.Net.IRfm.IoBufferInfo"/>
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm.LastRssi">
@@ -1216,12 +1426,12 @@
             Setting a specific flag clears the corresponding irq
             </remarks>
         </member>
-        <member name="P:RfmUsb.Net.IRfm69.ListenCoefficentIdle">
+        <member name="P:RfmUsb.Net.IRfm69.ListenCoefficientIdle">
             <summary>
             Duration of the Idle phase in Listen mode
             </summary>
         </member>
-        <member name="P:RfmUsb.Net.IRfm69.ListenCoefficentRx">
+        <member name="P:RfmUsb.Net.IRfm69.ListenCoefficientRx">
             <summary>
             Duration of the Idle phase in Rx phase
             </summary>
@@ -1692,7 +1902,7 @@
             Number of Preamble bytes to detect to trigger an interrupt
             </summary>
         </member>
-        <member name="P:RfmUsb.Net.IRfm9x.PreambleDetectorTotalerance">
+        <member name="P:RfmUsb.Net.IRfm9x.PreambleDetectorTolerance">
             <summary>
             Number or chip errors tolerated overPreambleDetectorSize. 4 chips per bit
             </summary>
@@ -2787,7 +2997,7 @@
         </member>
         <member name="P:RfmUsb.Net.Ports.ISerialPort.StopBits">
             <summary>
-            Gets or sets the standard number of stopbits per byte.
+            Gets or sets the standard number of stop-bits per byte.
             </summary>
         </member>
         <member name="P:RfmUsb.Net.Ports.ISerialPort.WriteBufferSize">
@@ -3039,10 +3249,10 @@
         <member name="P:RfmUsb.Net.Rfm69.IrqFlags">
             <inheritdoc/>
         </member>
-        <member name="P:RfmUsb.Net.Rfm69.ListenCoefficentIdle">
+        <member name="P:RfmUsb.Net.Rfm69.ListenCoefficientIdle">
             <inheritdoc/>
         </member>
-        <member name="P:RfmUsb.Net.Rfm69.ListenCoefficentRx">
+        <member name="P:RfmUsb.Net.Rfm69.ListenCoefficientRx">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.Rfm69.ListenCriteria">
@@ -3379,7 +3589,7 @@
         <member name="P:RfmUsb.Net.Rfm9x.PreambleDetectorSize">
             <inheritdoc/>
         </member>
-        <member name="P:RfmUsb.Net.Rfm9x.PreambleDetectorTotalerance">
+        <member name="P:RfmUsb.Net.Rfm9x.PreambleDetectorTolerance">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.Rfm9x.PreambleLength">
@@ -3614,6 +3824,9 @@
         <member name="P:RfmUsb.Net.RfmBase.BufferedIoEnable">
             <inheritdoc/>
         </member>
+        <member name="P:RfmUsb.Net.RfmBase.BufferedIoInfo">
+            <inheritdoc/>
+        </member>
         <member name="P:RfmUsb.Net.RfmBase.CrcAutoClearOff">
             <inheritdoc/>
         </member>
@@ -3648,9 +3861,6 @@
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.InterPacketRxDelay">
-            <inheritdoc/>
-        </member>
-        <member name="P:RfmUsb.Net.RfmBase.IoBufferInfo">
             <inheritdoc/>
         </member>
         <member name="P:RfmUsb.Net.RfmBase.LastRssi">
