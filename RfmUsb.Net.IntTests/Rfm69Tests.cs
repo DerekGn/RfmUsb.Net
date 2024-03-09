@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise
+
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +38,7 @@ namespace RfmUsb.Net.IntTests
 
         public Rfm69Tests()
         {
-            _rfm69 = _serviceProvider.GetService<IRfm69>();
+            _rfm69 = _serviceProvider.GetService<IRfm69>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm69)}");
             RfmBase = _rfm69;
         }
 
@@ -131,7 +134,7 @@ namespace RfmUsb.Net.IntTests
         [DataRow(DioIrq.Dio3)]
         [DataRow(DioIrq.Dio4)]
         [DataRow(DioIrq.Dio5)]
-        public void TestDioInterrupMask(DioIrq expected)
+        public void TestDioInterruptMask(DioIrq expected)
         {
             TestAssignedValue(expected, () => _rfm69.DioInterruptMask, (v) => _rfm69.DioInterruptMask = v);
         }
@@ -269,15 +272,15 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        public void TestListenCoefficentIdle()
+        public void TestListenCoefficientIdle()
         {
-            TestRange(() => _rfm69.ListenCoefficentIdle, (v) => _rfm69.ListenCoefficentIdle = v);
+            TestRange(() => _rfm69.ListenCoefficientIdle, (v) => _rfm69.ListenCoefficientIdle = v);
         }
 
         [TestMethod]
-        public void TestListenCoefficentRx()
+        public void TestListenCoefficientRx()
         {
-            TestRange(() => _rfm69.ListenCoefficentRx, (v) => _rfm69.ListenCoefficentRx = v);
+            TestRange(() => _rfm69.ListenCoefficientRx, (v) => _rfm69.ListenCoefficientRx = v);
         }
 
         [TestMethod]
@@ -367,7 +370,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestSetAesKey()
         {
-            _rfm69.Sync = new List<byte> { 0xAA, 0x55, 0xAA, 0x55 };
+            _rfm69.SetAesKey(new List<byte> { 0xAA, 0x55, 0xAA, 0x55 });
         }
 
         [TestMethod]

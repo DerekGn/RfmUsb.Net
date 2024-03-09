@@ -48,7 +48,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AesOn
         {
-            get => SendCommand(Commands.GetAesOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetAesOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetAesOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -140,17 +140,17 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte ListenCoefficentIdle
+        public byte ListenCoefficientIdle
         {
-            get => SendCommand(Commands.GetListenCoefficentIdle).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetListenCoefficentIdle} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetListenCoefficientIdle).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetListenCoefficientIdle} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
-        public byte ListenCoefficentRx
+        public byte ListenCoefficientRx
         {
-            get => SendCommand(Commands.GetListenCoefficentRx).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetListenCoefficentRx} 0x{value:X}", ResponseOk);
+            get => SendCommand(Commands.GetListenCoefficientRx).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetListenCoefficientRx} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>

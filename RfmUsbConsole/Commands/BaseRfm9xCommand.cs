@@ -44,7 +44,7 @@ namespace RfmUsbConsole.Commands
         public sbyte RssiThreshold { get; set; } = -40;
 
         [Range(0, 20)]
-        [Option(Templates.RxBw, "The recieve filter bandwidth.", CommandOptionType.SingleValue)]
+        [Option(Templates.RxBw, "The receive filter bandwidth.", CommandOptionType.SingleValue)]
         public byte? RxBw { get; set; }
 
         protected override bool CheckPacketReceived()

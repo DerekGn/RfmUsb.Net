@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Usb Dio Ook Ocp Bw Fei Bootloader Fsk Rssi Lna
+
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -154,6 +157,34 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestGetBufferEnable()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.BufferedIoEnable; },
+                (v) => v.Should().BeTrue(),
+                Commands.GetBufferEnable,
+                "1");
+        }
+
+        [TestMethod]
+        public void TestGetBufferIoInfo()
+        {
+            ExecuteGetTest(
+                () => { return RfmBase.BufferedIoInfo; },
+                (v) =>
+                {
+                    v.Capacity.Should().Be(160);
+                    v.Count.Should().Be(16);
+                },
+                Commands.GetIoBufferInfo,
+                new List<string>()
+                {
+                    "CAPACITY:0xA0",
+                    "COUNT:0x10"
+                });
+        }
+
+        [TestMethod]
         public void TestGetCrcAutoClear()
         {
             ExecuteGetTest(
@@ -257,7 +288,6 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetDioMapping} 0x{(byte)dio:X}\n"));
         }
 
-        // Fei
         [TestMethod]
         public void TestGetFei()
         {
@@ -726,6 +756,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
+        public void TestReadFromBuffer()
+        {
+            ExecuteTest(
+                () => { RfmBase.ReadFromBuffer(10); },
+                $"{Commands.ReadIoBuffer} 0x0A",
+                "AA55AA");
+        }
+
+        [TestMethod]
         public void TestReset()
         {
             ExecuteTest(
@@ -748,21 +787,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAfcAutoClear()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAfcAutoClear(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.AfcAutoClear = true; },
+                () => { RfmBase.AfcAutoClear = value; },
                 Commands.SetAfcAutoClear,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAfcAutoOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAfcAutoOn(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.AfcAutoOn = true; },
+                () => { RfmBase.AfcAutoOn = value; },
                 Commands.SetAfcAutoOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -784,21 +827,36 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetCrcAutoClear()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetBufferedIoEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.CrcAutoClearOff = true; },
-                Commands.SetCrcAutoClearOff,
-                "1");
+                () => { RfmBase.BufferedIoEnable = value; },
+                Commands.SetBufferEnable,
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetCrcOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetCrcAutoClear(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.CrcOn = true; },
+                () => { RfmBase.CrcAutoClearOff = value; },
+                Commands.SetCrcAutoClearOff,
+                value ? "1" : "0");
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetCrcOn(bool value)
+        {
+            ExecuteSetTest(
+                () => { RfmBase.CrcOn = value; },
                 Commands.SetCrcOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -978,12 +1036,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetOcpEnable()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetOcpEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.OcpEnable = true; },
+                () => { RfmBase.OcpEnable = value; },
                 Commands.SetOcpEnable,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1094,12 +1154,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetPacketFormat()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetPacketFormat(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.PacketFormat = true; },
+                () => { RfmBase.PacketFormat = value; },
                 Commands.SetPacketFormat,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1173,12 +1235,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetSyncEnable()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetSyncEnable(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.SyncEnable = true; },
+                () => { RfmBase.SyncEnable = value; },
                 Commands.SetSyncEnable,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1191,12 +1255,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTxStartCondition()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetTxStartCondition(bool value)
         {
             ExecuteSetTest(
-                () => { RfmBase.TxStartCondition = true; },
+                () => { RfmBase.TxStartCondition = value; },
                 Commands.SetTxStartCondition,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1209,30 +1275,12 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestTransmitReceive()
+        public void TestTransmitBufferOk()
         {
             ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }); },
-                $"{Commands.ExecuteTransmitReceive} AA55",
-                "0xFEED");
-        }
-
-        [TestMethod]
-        public void TestTransmitReceiveTimeout()
-        {
-            ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100); },
-                $"{Commands.ExecuteTransmitReceive} AA55 100",
-                "0xFEED");
-        }
-
-        [TestMethod]
-        public void TestTransmitReceiveTransmitTimeout()
-        {
-            ExecuteTest(
-                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100, 200); },
-                $"{Commands.ExecuteTransmitReceive} AA55 100 200",
-                "0xFEED");
+                () => { RfmBase.TransmitBuffer(); },
+                $"{Commands.ExecuteTransmitBuffer}",
+                RfmBase.ResponseOk);
         }
 
         [TestMethod]
@@ -1242,6 +1290,76 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200); },
                 $"{Commands.ExecuteTransmit} AADDFFCC 0xC8",
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTimeoutAndInterval()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200, 100); },
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8 0x64",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitWithTimeoutAndIntervalAndTimeout()
+        {
+            ExecuteTest(
+                () => { RfmBase.Transmit(new List<byte>() { 0xAA, 0xDD, 0xFF, 0xCC }, 200, 100, 50); },
+                $"{Commands.ExecuteTransmit} AADDFFCC 0xC8 0x64 0x32",
+                RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestWriteBuffer()
+        {
+            ExecuteSetTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "AA55DEAD");
+        }
+
+        [TestMethod]
+        public void TestWriteBufferNotEnabled()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:BUFFERED_IO_NOT_ENABLED");
+
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteBufferNotInTx()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:NOT_TX");
+
+            action.Should().Throw<RfmUsbTransmitNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestWriteBufferOverflow()
+        {
+            Action action = () => ExecuteTest(
+                () => { RfmBase.WriteToBuffer(new List<byte>() { 0xAA, 0x55, 0xDE, 0xAD }); },
+                Commands.WriteIoBuffer,
+                "ERROR:OVERFLOW");
+
+            action.Should().Throw<RfmUsbBufferedIoOverflowException>();
+        }
+
+        internal static EventArgs CreateSerialDataReceivedEventArgs()
+        {
+            ConstructorInfo? constructor = typeof(SerialDataReceivedEventArgs)
+                .GetConstructor(
+                BindingFlags.NonPublic |
+                BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
+
+            return constructor?.Invoke(new object[] { SerialData.Chars }) as SerialDataReceivedEventArgs;
         }
 
         internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, string value)
@@ -1258,6 +1376,43 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort
                 .Setup(_ => _.ReadLine())
                 .Returns(value);
+
+            // Act
+            var result = action();
+
+            // Assert
+            MockSerialPort.Verify(_ => _.Write($"{command}\n"));
+
+            validation(result);
+        }
+
+        internal void ExecuteGetTest<T>(Func<T> action, Action<T> validation, string command, IList<string> values)
+        {
+            // Arrange
+            MockSerialPort
+                .Setup(_ => _.IsOpen)
+                .Returns(true);
+
+            MockSerialPort
+                .Setup(_ => _.Write(It.IsAny<string>()))
+                .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
+
+            var serialPortBytesToReadSequence = MockSerialPort
+                    .SetupSequence(_ => _.BytesToRead);
+
+            var serialPortReadLineSequence = MockSerialPort
+                .SetupSequence(_ => _.ReadLine());
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                serialPortReadLineSequence = serialPortReadLineSequence.Returns(values[i]);
+                if (i > 0)
+                {
+                    serialPortBytesToReadSequence = serialPortBytesToReadSequence.Returns(values[i].Length);
+                }
+            }
+
+            serialPortBytesToReadSequence = serialPortBytesToReadSequence.Returns(0);
 
             // Act
             var result = action();
@@ -1331,8 +1486,10 @@ namespace RfmUsb.Net.UnitTests
                 .Raises(_ => _.DataReceived += null, CreateSerialDataReceivedEventArgs());
 
             MockSerialPort
-            .Setup(_ => _.ReadLine())
-                .Returns(version);
+            .SetupSequence(_ => _.ReadLine())
+                .Returns(RfmBase.ResponseOk)
+                .Returns(version)
+                .Returns(RfmBase.ResponseOk);
 
             RfmBase.ResetSerialPort(MockSerialPort.Object);
 
@@ -1344,16 +1501,6 @@ namespace RfmUsb.Net.UnitTests
                 .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
 
             MockSerialPort.Verify(_ => _.Open(), Times.Once);
-        }
-
-        internal static EventArgs CreateSerialDataReceivedEventArgs()
-        {
-            ConstructorInfo? constructor = typeof(SerialDataReceivedEventArgs)
-                .GetConstructor(
-                BindingFlags.NonPublic |
-                BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
-
-            return constructor?.Invoke(new object[] { SerialData.Chars }) as SerialDataReceivedEventArgs;
         }
     }
 }

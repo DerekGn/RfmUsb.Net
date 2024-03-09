@@ -24,7 +24,6 @@
 
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RfmUsb.Net.Exceptions;
 
 namespace RfmUsb.Net.IntTests
 {
@@ -67,6 +66,12 @@ namespace RfmUsb.Net.IntTests
         public void TestBroadcastAddress()
         {
             TestRange(() => RfmBase.BroadcastAddress, (v) => RfmBase.BroadcastAddress = v);
+        }
+
+        [TestMethod]
+        public void TestBufferedIoEnable()
+        {
+            TestRangeBool(() => RfmBase.BufferedIoEnable, (v) => RfmBase.BufferedIoEnable = v);
         }
 
         [TestMethod]
@@ -348,6 +353,7 @@ namespace RfmUsb.Net.IntTests
         {
             Read(() => RfmBase.SerialNumber);
         }
+
         [TestMethod]
         public void TestSync()
         {
@@ -376,71 +382,6 @@ namespace RfmUsb.Net.IntTests
         }
 
         [TestMethod]
-        [Ignore]
-        public void TestTransmit()
-        {
-            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 });
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitReceive()
-        {
-            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 });
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitReceiveTxRxTimeout()
-        {
-            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000, 1000);
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitReceiveTxTimeout()
-        {
-            Action action = () => RfmBase.TransmitReceive(new List<byte>() { 0x00, 0x01, 0x02 }, 1000);
-
-            action
-                .Should()
-                .Throw<RfmUsbTransmitException>()
-                .WithMessage("Packet transmission failed: [TX Timeout]");
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitWithCountAndInterval()
-        {
-            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100);
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitWithCountAndIntervalAndTimeout()
-        {
-            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1, 100, 1000);
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestTransmitWithTxCount()
-        {
-            RfmBase.Transmit(new List<byte>() { 0x00, 0x01, 0x02 }, 1);
-        }
-
-        [TestMethod]
-        [Ignore]
         public void TestTxStartCondition()
         {
             TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);

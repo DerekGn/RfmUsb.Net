@@ -35,7 +35,7 @@ namespace RfmUsb.Net.IntTests
 
         public Rfm9xFskTests()
         {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>();
+            _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
             RfmBase = _rfm9x;
         }
 
@@ -325,7 +325,7 @@ namespace RfmUsb.Net.IntTests
         [TestMethod]
         public void TestPreambleDetectorTotal()
         {
-            TestRange<byte>(() => _rfm9x.PreambleDetectorTotalerance, (v) => _rfm9x.PreambleDetectorTotalerance = v, 0, 0x0F);
+            TestRange<byte>(() => _rfm9x.PreambleDetectorTolerance, (v) => _rfm9x.PreambleDetectorTolerance = v, 0, 0x0F);
         }
 
         [TestMethod]

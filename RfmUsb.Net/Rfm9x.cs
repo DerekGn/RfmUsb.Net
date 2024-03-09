@@ -45,21 +45,21 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AccessSharedRegisters
         {
-            get => SendCommand(Commands.GetAccessSharedRegisters).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetAccessSharedRegisters)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetAccessSharedRegisters} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool AgcAutoOn
         {
-            get => SendCommand(Commands.GetAgcAutoOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetAgcAutoOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetAgcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool AutoImageCalibrationOn
         {
-            get => SendCommand(Commands.GetAutoImageCalibrationOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetAutoImageCalibrationOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetAutoImageCalibrationOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -73,7 +73,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool BeaconOn
         {
-            get => SendCommand(Commands.GetBeaconOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetBeaconOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetBeaconOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -87,7 +87,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool BitSyncOn
         {
-            get => SendCommand(Commands.GetBitSyncOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetBitSyncOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetBitSyncOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -108,7 +108,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool FastHopOn
         {
-            get => SendCommand(Commands.GetFastHopOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetFastHopOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetFastHopOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -162,7 +162,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool FromIdle
         {
-            get => SendCommand(Commands.GetFromIdle).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetFromIdle)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetFromIdle} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -197,7 +197,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool FromTransmit
         {
-            get => SendCommand(Commands.GetFromTransmit).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetFromTransmit)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetFromTransmit} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -207,28 +207,28 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool IdleMode
         {
-            get => SendCommand(Commands.GetIdleMode).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetIdleMode)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetIdleMode} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool ImplicitHeaderModeOn
         {
-            get => SendCommand(Commands.GetImplicitHeaderModeOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetImplicitHeaderModeOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetImplicitHeaderModeOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool IoHomeOn
         {
-            get => SendCommand(Commands.GetIoHomeOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetIoHomeOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetIoHomeOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool IoHomePowerFrame
         {
-            get => SendCommand(Commands.GetIoHomePowerFrame).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetIoHomePowerFrame)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetIoHomePowerFrame} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -245,21 +245,21 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool LnaBoostHf
         {
-            get => SendCommand(Commands.GetLnaBoostHf).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLnaBoostHf)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLnaBoostHf} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool LongRangeMode
         {
-            get => SendCommand(Commands.GetLongRangeMode).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLongRangeMode)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLongRangeMode} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool LoraAgcAutoOn
         {
-            get => SendCommand(Commands.GetLoraAgcAutoOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLoraAgcAutoOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLoraAgcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -294,7 +294,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool LowBatteryOn
         {
-            get => SendCommand(Commands.GetLowBatteryOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLowBatteryOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLowBatteryOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -308,28 +308,28 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool LowDataRateOptimize
         {
-            get => SendCommand(Commands.GetLowDataRateOptimize).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLowDataRateOptimize)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLowDataRateOptimize} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool LowFrequencyMode
         {
-            get => SendCommand(Commands.GetLowFrequencyMode).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLowFrequencyMode)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLowFrequencyMode} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool LowPowerSelection
         {
-            get => SendCommand(Commands.GetLowPowerSelection).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetLowPowerSelection)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetLowPowerSelection} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool MapPreambleDetect
         {
-            get => SendCommand(Commands.GetMapPreambleDetect).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetMapPreambleDetect)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetMapPreambleDetect} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -377,7 +377,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool PreambleDetectorOn
         {
-            get => SendCommand(Commands.GetPreambleDetectorOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetPreambleDetectorOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetPreambleDetectorOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -389,10 +389,10 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public byte PreambleDetectorTotalerance
+        public byte PreambleDetectorTolerance
         {
-            get => SendCommand(Commands.GetPreambleDetectorTotalerance).ConvertToByte();
-            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTotalerance} 0x{value:X2}", ResponseOk);
+            get => SendCommand(Commands.GetPreambleDetectorTolerance).ConvertToByte();
+            set => SendCommandWithCheck($"{Commands.SetPreambleDetectorTolerance} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
@@ -405,14 +405,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool PreamblePolarity
         {
-            get => SendCommand(Commands.GetPreamblePolarity).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetPreamblePolarity)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetPreamblePolarity} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool RestartRxOnCollision
         {
-            get => SendCommand(Commands.GetRestartRxOnCollision).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetRestartRxOnCollision)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetRestartRxOnCollision} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -453,7 +453,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool RxPayloadCrcOn
         {
-            get => SendCommand(Commands.GetRxPayloadCrcOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetRxPayloadCrcOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetRxPayloadCrcOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -474,12 +474,12 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool TcxoInputOn
         {
-            get => SendCommand(Commands.GetTcxoInputOn).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetTcxoInputOn)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetTcxoInputOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
-        public bool TemperatureChange => SendCommand(Commands.GetTemperatureChange).Substring(0, 1) == "1";
+        public bool TemperatureChange => SendCommand(Commands.GetTemperatureChange)[..1] == "1";
 
         ///<inheritdoc/>
         public TemperatureThreshold TemperatureThreshold
@@ -491,7 +491,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool TempMonitorOff
         {
-            get => SendCommand(Commands.GetTempMonitorOff).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetTempMonitorOff)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetTempMonitorOff} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -519,7 +519,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool TxContinuousMode
         {
-            get => SendCommand(Commands.GetTxContinuousMode).Substring(0, 1) == "1";
+            get => SendCommand(Commands.GetTxContinuousMode)[..1] == "1";
             set => SendCommandWithCheck($"{Commands.SetTxContinuousMode} {(value ? "1" : "0")}", ResponseOk);
         }
 

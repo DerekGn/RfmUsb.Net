@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin https://github.com/DerekGn
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,20 @@
 * SOFTWARE.
 */
 
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
-// Ignore Spelling: Rssi Bw
-
-namespace RfmUsbConsole.Commands
+namespace RfmUsb.Net.Extensions
 {
-    internal static class Templates
+    internal static class EnumerableExtensions
     {
-        public const string BaudRate = "-b|--baud-rate";
-        public const string Frequency = "-f|--frequency";
-        public const string Modulation = "-m|--modulation";
-        public const string OutputPower = "-o|--output-power";
-        public const string PingCount = "-pc|--ping-count";
-        public const string PingInterval = "-pi|--ping-interval";
-        public const string PingTimeout = "-pt|--ping-timeout";
-        public const string RssiThreshold = "-rt|--rssi-threshold";
-        public const string RxBw = "-r|--receive-bw";
-        public const string SerialPort = "-p|--port";
+        public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> values, int size)
+        {
+            for (int i = 0; i < values.Count(); i += size)
+            {
+                yield return values.Skip(i).Take(Math.Min(size, values.Count() - i));
+            }
+        }
     }
 }
