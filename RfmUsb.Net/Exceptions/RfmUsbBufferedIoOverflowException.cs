@@ -28,40 +28,40 @@ using System.Runtime.Serialization;
 namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
-    /// Exception thrown when the serial port fails to open
+    /// Exception thrown if the IO buffer overflows
     /// </summary>
     [Serializable]
-    public class RfmUsbSerialPortOpenFailedException : Exception
+    public class RfmUsbBufferedIoOverflowException : Exception
     {
         /// <summary>
-        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
         /// </summary>
-        public RfmUsbSerialPortOpenFailedException()
+        public RfmUsbBufferedIoOverflowException()
         { }
 
         /// <summary>
-        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
         /// </summary>
         /// <param name="message">The exception message</param>
-        public RfmUsbSerialPortOpenFailedException(string message) : base(message)
+        public RfmUsbBufferedIoOverflowException(string message) : base(message)
         {
         }
 
         /// <summary>
-        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
         /// </summary>
         /// <param name="message">The message</param>
         /// <param name="inner">The inner <see cref="Exception"/></param>
-        public RfmUsbSerialPortOpenFailedException(string message, Exception inner) : base(message, inner)
+        public RfmUsbBufferedIoOverflowException(string message, Exception inner) : base(message, inner)
         {
         }
 
         /// <summary>
-        /// Create an instance of <see cref="RfmUsbSerialPortOpenFailedException"/>
+        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/></param>
         /// <param name="context">The <see cref="StreamingContext"/></param>
-        protected RfmUsbSerialPortOpenFailedException(
+		protected RfmUsbBufferedIoOverflowException(
           SerializationInfo info,
           StreamingContext context) : base(info, context) { }
     }

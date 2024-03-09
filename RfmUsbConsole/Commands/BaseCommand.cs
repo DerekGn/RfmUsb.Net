@@ -37,8 +37,8 @@ namespace RfmUsbConsole.Commands
         internal AutoResetEvent IrqSignal;
         internal IRfm Rfm;
 
-        private AutoResetEvent _consoleSignal;
-        private AutoResetEvent[] _waitHandles;
+        private readonly AutoResetEvent _consoleSignal;
+        private readonly AutoResetEvent[] _waitHandles;
 
         protected BaseCommand(ILogger logger, IRfm rfm)
         {
@@ -63,7 +63,7 @@ namespace RfmUsbConsole.Commands
 
         [Required]
         [Option(Templates.SerialPort, "The serial port the RfmUsb device is connected.", CommandOptionType.SingleValue)]
-        public string SerialPort { get; set; }
+        public string SerialPort { get; set; } = "COM1";
 
         internal static void EnterRxMode(IRfm rfm)
         {
@@ -230,7 +230,7 @@ namespace RfmUsbConsole.Commands
                     }
                     else
                     {
-                        Logger.LogWarning("No Packet Recieved.");
+                        Logger.LogWarning("No Packet Received.");
                     }
                 }
                 else if (source == SignalSource.Console)
@@ -326,7 +326,7 @@ namespace RfmUsbConsole.Commands
             }
             else if (source == SignalSource.Console)
             {
-                Logger.LogInformation("Ping Cancelled.");
+                Logger.LogInformation("Ping Canceled.");
             }
             else if (source == SignalSource.None)
             {

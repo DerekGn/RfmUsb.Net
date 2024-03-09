@@ -1,7 +1,7 @@
 ﻿/*
 * MIT License
 *
-* Copyright (c) 2023 Derek Goslin https://github.com/DerekGn
+* Copyright (c) 2023 Derek Goslin
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,32 @@
 * SOFTWARE.
 */
 
-
-// Ignore Spelling: Rssi Bw
-
-namespace RfmUsbConsole.Commands
+namespace RfmUsb.Net
 {
-    internal static class Templates
+    /// <summary>
+    /// The Io buffer information
+    /// </summary>
+    public class BufferedIoInfo
     {
-        public const string BaudRate = "-b|--baud-rate";
-        public const string Frequency = "-f|--frequency";
-        public const string Modulation = "-m|--modulation";
-        public const string OutputPower = "-o|--output-power";
-        public const string PingCount = "-pc|--ping-count";
-        public const string PingInterval = "-pi|--ping-interval";
-        public const string PingTimeout = "-pt|--ping-timeout";
-        public const string RssiThreshold = "-rt|--rssi-threshold";
-        public const string RxBw = "-r|--receive-bw";
-        public const string SerialPort = "-p|--port";
+        /// <summary>
+        /// Create an instance of an <see cref="BufferedIoInfo"/>
+        /// </summary>
+        /// <param name="capacity">The capacity</param>
+        /// <param name="count">The count</param>
+        public BufferedIoInfo(int capacity, int count)
+        {
+            Capacity = capacity;
+            Count = count;
+        }
+
+        /// <summary>
+        /// The Io buffer capacity
+        /// </summary>
+        public int Capacity { get; }
+
+        /// <summary>
+        /// The Io buffer count
+        /// </summary>
+        public int Count { get; }
     }
 }

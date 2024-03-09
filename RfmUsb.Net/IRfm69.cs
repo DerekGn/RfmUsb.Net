@@ -123,12 +123,12 @@ namespace RfmUsb.Net
         /// <summary>
         /// Duration of the Idle phase in Listen mode
         /// </summary>
-        byte ListenCoefficentIdle { get; set; }
+        byte ListenCoefficientIdle { get; set; }
 
         /// <summary>
         /// Duration of the Idle phase in Rx phase
         /// </summary>
-        byte ListenCoefficentRx { get; set; }
+        byte ListenCoefficientRx { get; set; }
 
         /// <summary>
         /// Criteria for packet acceptance in Listen mode:

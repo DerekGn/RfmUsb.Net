@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc
+
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -68,23 +71,27 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetAesOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetAesOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AesOn; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetAesOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestGetAfcLowBetaOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetAfcLowBetaOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AfcLowBetaOn; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetAfcLowBetaOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -125,13 +132,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetAutoRxRestartOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetAutoRxRestartOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AutoRxRestartOn; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetAutoRxRestartOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -215,23 +224,27 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetFifoFill()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetFifoFill(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.FifoFill; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetFifoFill,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestGetImpedance()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetImpedance(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.Impedance; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetImpedance,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -318,33 +331,35 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetListenCoefficentIdle()
+        public void TestGetListenCoefficientIdle()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.ListenCoefficentIdle; },
+                () => { return _rfmDevice.ListenCoefficientIdle; },
                 (v) => v.Should().Be(0xAA),
-                Commands.GetListenCoefficentIdle,
+                Commands.GetListenCoefficientIdle,
                 "0xAA");
         }
 
         [TestMethod]
-        public void TestGetListenCoefficentRx()
+        public void TestGetListenCoefficientRx()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.ListenCoefficentRx; },
+                () => { return _rfmDevice.ListenCoefficientRx; },
                 (v) => v.Should().Be(0xAA),
-                Commands.GetListenCoefficentRx,
+                Commands.GetListenCoefficientRx,
                 "0xAA");
         }
 
         [TestMethod]
-        public void TestGetListenCriteria()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetListenCriteria(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenCriteria; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetListenCriteria,
-                "1");
+                value ? "1" : "0");
         }
 
         // ListenEnd
@@ -363,13 +378,15 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetListenerOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetListenerOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenerOn; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetListenerOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -431,23 +448,27 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetSensitivityBoost()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetSensitivityBoost(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.SensitivityBoost; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetSensitivityBoost,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestGetSequencer()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestGetSequencer(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.Sequencer; },
-                (v) => v.Should().BeTrue(),
+                (v) => v.Should().Be(value),
                 Commands.GetSequencer,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -543,21 +564,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAesOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAesOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AesOn = true; },
+                () => { _rfmDevice.AesOn = value; },
                 Commands.SetAesOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAfcLowBetaOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAfcLowBetaOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AfcLowBetaOn = true; },
+                () => { _rfmDevice.AfcLowBetaOn = value; },
                 Commands.SetAfcLowBetaOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -578,12 +603,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetAutoRxRestartOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAutoRxRestartOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AutoRxRestartOn = true; },
+                () => { _rfmDevice.AutoRxRestartOn = value; },
                 Commands.SetAutoRxRestartOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -663,21 +690,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetFifoFill()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetFifoFill(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.FifoFill = true; },
+                () => { _rfmDevice.FifoFill = value; },
                 Commands.SetFifoFill,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetImpedance()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetImpedance(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.Impedance = true; },
+                () => { _rfmDevice.Impedance = value; },
                 Commands.SetImpedance,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -703,30 +734,32 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetListenCoefficentIdle()
+        public void TestSetListenCoefficientIdle()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenCoefficentIdle = 0x60; },
-                Commands.SetListenCoefficentIdle,
+                () => { _rfmDevice.ListenCoefficientIdle = 0x60; },
+                Commands.SetListenCoefficientIdle,
                 "0x60");
         }
 
         [TestMethod]
-        public void TestSetListenCoefficentRx()
+        public void TestSetListenCoefficientRx()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenCoefficentRx = 0x60; },
-                Commands.SetListenCoefficentRx,
+                () => { _rfmDevice.ListenCoefficientRx = 0x60; },
+                Commands.SetListenCoefficientRx,
                 "0x60");
         }
 
         [TestMethod]
-        public void TestSetListenCriteria()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetListenCriteria(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenCriteria = true; },
+                () => { _rfmDevice.ListenCriteria = value; },
                 Commands.SetListenCriteria,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -743,12 +776,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetListenerOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetListenerOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ListenerOn = true; },
+                () => { _rfmDevice.ListenerOn = value; },
                 Commands.SetListenerOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -805,21 +840,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetSensitivityBoost()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetSensitivityBoost(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.SensitivityBoost = true; },
+                () => { _rfmDevice.SensitivityBoost = value; },
                 Commands.SetSensitivityBoost,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetSequencer()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetSequencer(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.Sequencer = true; },
+                () => { _rfmDevice.Sequencer = value; },
                 Commands.SetSequencer,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]

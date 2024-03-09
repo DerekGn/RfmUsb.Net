@@ -26,6 +26,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using Serilog;
 using Serilog.Core;
@@ -67,6 +68,67 @@ namespace RfmUsb.Net.IntTests
         }
 
         public TestContext TestContext { get; set; }
+
+        [TestMethod]
+        public void TestReadStreamDisabled()
+        {
+            // Arrange
+            var bytes = new byte[1];
+
+            RfmBase.BufferedIoEnable = false;
+
+            // Act
+            Action action = () => RfmBase.Stream.Read(bytes);
+
+            // Assert
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        public void TestReadStreamEnabled()
+        {
+            // Arrange
+            var bytes = new byte[10];
+
+            RfmBase.BufferedIoEnable = true;
+
+            // Act
+            RfmBase.Stream.Read(bytes);
+        }
+
+        [TestMethod]
+        public void TestWriteStreamDisabled()
+        {
+            // Arrange
+            var bytes = new byte[1];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = false;
+
+            // Act
+            Action action = () => RfmBase.Stream.Write(bytes);
+
+            // Assert
+            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+        }
+
+        [TestMethod]
+        [Ignore]
+        public void TestWriteStreamEnabled()
+        {
+            // Arrange
+            var bytes = new byte[100];
+            var rand = new Random();
+
+            rand.NextBytes(bytes);
+
+            RfmBase.BufferedIoEnable = true;
+
+            // Act
+            RfmBase.Stream.Write(bytes);
+        }
 
         internal static IEnumerable<byte> RandomSequence()
         {

@@ -93,30 +93,7 @@ Transmit a packet of data with a specific transmit timeout. The transmit control
 rfmUsbDevice.Transmit(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA }, 1000);
 ```
 
-## Transmit And Receive
-
-Transmit a packet and wait for a response with the default transmit and receive timeouts.
-
-```csharp
-// Transmit data and wait for a response with the default 
-var response = rfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA });
-```
-
-Transmit a packet and wait for a response with the default receive timeouts and a specified transmit timeout.
-
-```csharp
-// Transmit data and wait for
-var response = rfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA }, 1000);
-```
-
-Transmit a packet and wait for a response with a specified transmit and receive timeouts.
-
-```csharp
-// Transmit data and wait for
-var response = rfmUsbDevice.TransmitReceive(new List<byte>() { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA }, 1000, 1000 );
-```
-
-## Irqs
+## Interrupts
 
 Set the Dio pin Irq mask.
 
@@ -149,4 +126,95 @@ if ((rfmUsbDevice.Irq & Irq.PayloadReady) == Irq.PayloadReady)
 {
     // Process packet
 }
+```
+
+## Buffered Read And Writes
+
+The maximum message size supported by direct read and write of the FIFO is limited to 64 bytes. To support message transmission and reception up to a maximum size of X bytes the RfmUsb IO buffer must be used.
+
+### Receive IO Buffer
+
+The steps required to receive a message via the IO buffer.
+
+* Configure the RfmUsb radio
+* Set the Dio mapping for **Dio0** to **DioMapping1** to capture the **PayloadReady** Irq
+* Set the Dio mapping for **Dio1** to **DioMapping2** to capture the **FifoNotEmpty** Irq
+* Setup the **PacketFormat** to either fixed or variable length
+* Set **PayloadLength** to 0xFF
+* Enable the IO buffer via the **BufferedIoEnable** setting
+* Set the radio **Mode** to **RX**
+* Wait for the **PayloadReady** Irq
+* Read the message bytes to the IO buffer via the **Stream**
+
+```csharp
+// Configure the radio
+InitialiseRadioOpenThings(SerialPort, BaudRate);
+
+// Attach event handlers
+AttachEventHandlers(console);
+
+// Enable DIO0 to capture payload ready IRQ 
+rfmUsbDevice.SetDioMapping(Dio.Dio0, DioMapping.DioMapping1);
+// Enable DIO1 to capture fifo level IRQ for buffered read
+rfmUsbDevice.SetDioMapping(Dio.Dio1, DioMapping.DioMapping2);
+// Set the Irq mask
+rfmUsbDevice.DioInterruptMask = DioIrq.Dio0 | DioIrq.Dio1;
+// Enable the Buffered Io
+rfmUsbDevice.BufferedIoEnable = true;
+// Set the the payload length to 0xFF
+rfmUsbDevice.PayloadLength = 0xFF;
+// Set the mode to rx
+rfmUsbDevice.Mode = Mode.Rx;
+
+// Wait for Irq signal
+SignalSource signalSource = WaitForSignal();
+
+if (signalSource == SignalSource.Irq)
+{
+    if ((rfmUsbDevice.IrqFlags & Rfm69IrqFlags.PayloadReady) == Rfm69IrqFlags.PayloadReady)
+    {
+        rfmUsbDevice.Mode = Mode.Standby;
+
+        byte[] payload = new byte[rfmUsbDevice.Stream.Length];
+
+        // Read the stream
+        rfmUsbDevice.Stream.Read(payload, 0, payload.Length);
+
+        // Process the payload
+        // .............
+```
+
+### Transmit IO Buffer
+
+The steps required to transmit a message via the IO buffer.
+
+* Configure the RfmUsb radio
+* Setup the **PacketFormat** to either fixed or variable length
+* Enable the IO buffer via the **BufferedIoEnable** setting
+* Set the radio **Mode** to **TX**
+* Write the message bytes to the IO buffer via the **Stream**
+
+```csharp
+// Configure the radio
+InitialiseRadioOpenThings(SerialPort, BaudRate);
+
+// Attach event handlers
+AttachEventHandlers(console);
+
+// Enable DIO0 to capture payload ready IRQ 
+rfmUsbDevice.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
+// Set the Irq mask
+rfmUsbDevice.DioInterruptMask = DioIrq.Dio0;
+// Enable the Buffered Io
+rfmUsbDevice.BufferedIoEnable = true;
+// Set the the payload length to 0xFF
+rfmUsbDevice.PayloadLength = 0xFF;
+// Set the mode to TX
+rfmUsbDevice.Mode = Mode.Tx;
+
+// Prepare payload
+byte[] payload = new byte[10];
+
+// Write the stream
+rfmUsbDevice.Stream.Write(payload, 0, payload.Length);
 ```

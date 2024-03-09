@@ -25,6 +25,7 @@
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Extensions;
+using RfmUsb.Net.Io;
 using RfmUsb.Net.Ports;
 using System;
 using System.Collections.Generic;
@@ -40,11 +41,13 @@ namespace RfmUsb.Net
     public abstract class RfmBase : IRfm
     {
         internal const string ResponseOk = "OK";
+
         internal readonly AutoResetEvent _signal;
         internal readonly ILogger<IRfm> Logger;
-        internal ISerialPort SerialPort;
+        internal ISerialPort? SerialPort;
+        private readonly List<string> _responses;
+        private readonly RfmUsbStream _stream;
         private readonly ISerialPortFactory SerialPortFactory;
-        private List<string> _responses;
         private int _signalTimeout;
 
         /// <summary>
@@ -59,6 +62,7 @@ namespace RfmUsb.Net
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
             _signal = new AutoResetEvent(false);
             _responses = new List<string>();
+            _stream = new RfmUsbStream(this);
             _signalTimeout = 500;
         }
 
@@ -102,6 +106,16 @@ namespace RfmUsb.Net
             get => SendCommand(Commands.GetBroadcastAddress).ConvertToByte();
             set => SendCommandWithCheck($"{Commands.SetBroadcastAddress} 0x{value:X}", ResponseOk);
         }
+
+        ///<inheritdoc/>
+        public bool BufferedIoEnable
+        {
+            get => SendCommand(Commands.GetBufferEnable).StartsWith("1");
+            set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public BufferedIoInfo BufferedIoInfo => GetIoBufferInfo();
 
         ///<inheritdoc/>
         public bool CrcAutoClearOff
@@ -303,19 +317,22 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public byte RxBw
         {
-            get => Convert.ToByte(SendCommand(Commands.GetRxBw).Substring(0, 4), 16);
+            get => Convert.ToByte(SendCommand(Commands.GetRxBw)[..4], 16);
             set => SendCommandWithCheck($"{Commands.SetRxBw} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public byte RxBwAfc
         {
-            get => Convert.ToByte(SendCommand(Commands.GetRxBwAfc).Substring(0, 4), 16);
+            get => Convert.ToByte(SendCommand(Commands.GetRxBwAfc)[..4], 16);
             set => SendCommandWithCheck($"{Commands.SetRxBwAfc} 0x{value:X}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public string SerialNumber => SendCommand(Commands.GetSerialNumber).Replace(Environment.NewLine, string.Empty);
+
+        ///<inheritdoc/>
+        public RfmUsbStream Stream => _stream;
 
         ///<inheritdoc/>
         public IEnumerable<byte> Sync
@@ -344,12 +361,15 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public int Timeout
         {
-            get => SerialPort.ReadTimeout;
+            get => SerialPort != null ? SerialPort.ReadTimeout : 0;
             set
             {
                 _signalTimeout = value;
-                SerialPort.ReadTimeout = value;
-                SerialPort.WriteTimeout = value;
+                if (SerialPort != null)
+                {
+                    SerialPort.ReadTimeout = value;
+                    SerialPort.WriteTimeout = value;
+                }
             }
         }
 
@@ -424,9 +444,11 @@ namespace RfmUsb.Net
                     SerialPort.DataReceived += SerialPortDataReceived;
                 }
 
+                ExecuteReset();
+
                 CheckDeviceVersion(FirmwareVersion);
 
-                SendCommand($"{Commands.SetOutputbase} 0");
+                SendCommand($"{Commands.SetOutputBase} 0");
             }
             catch (Exception ex)
             {
@@ -442,6 +464,17 @@ namespace RfmUsb.Net
         public void RcCalibration()
         {
             SendCommandWithCheck(Commands.ExecuteRcCalibration, ResponseOk);
+        }
+
+        ///<inheritdoc/>
+        public IList<byte> ReadFromBuffer(int count)
+        {
+            var countArg = count == 0 ? "" : " 0x" + count.ToString("X2");
+            var response = SendCommand($"{Commands.ReadIoBuffer}{countArg}");
+
+            CheckBufferedIoCommand(response);
+
+            return string.IsNullOrWhiteSpace(response) ? new List<byte>() : response.ToBytes();
         }
 
         ///<inheritdoc/>
@@ -489,21 +522,17 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data)
+        public void TransmitBuffer()
         {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+            CheckBufferedIoCommand(
+                SendCommand($"{Commands.ExecuteTransmitBuffer}"));
         }
 
         ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
+        public void WriteToBuffer(IEnumerable<byte> bytes)
         {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
-        }
-
-        ///<inheritdoc/>
-        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
-        {
-            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
+            CheckBufferedIoCommand(
+                SendCommand($"{Commands.WriteIoBuffer} {BitConverter.ToString(bytes.ToArray()).Replace("-", string.Empty)}"));
         }
 
         internal void FlushSerialPort()
@@ -533,26 +562,31 @@ namespace RfmUsb.Net
 
         internal List<string> SendCommandListResponse(string command)
         {
-            CheckOpen();
-
-            lock (SerialPort)
+            if (SerialPort != null && SerialPort.IsOpen)
             {
-                SerialPort.Write($"{command}\n");
-
-                do
+                lock (SerialPort)
                 {
-                    WaitForSerialPortDataSignal();
-                } while (_responses.Count == 0);
+                    SerialPort.Write($"{command}\n");
 
-                Logger.LogDebug("Command: [{command}]", command );
-                Logger.LogDebug("Result: [{response}]", string.Join(" ", _responses));
+                    do
+                    {
+                        WaitForSerialPortDataSignal();
+                    } while (_responses.Count == 0);
 
-                var result = new List<string>();
-                result.AddRange(_responses);
+                    Logger.LogDebug("Command: [{command}]", command);
+                    Logger.LogDebug("Result: [{response}]", string.Join(" ", _responses));
 
-                _responses.Clear();
+                    var result = new List<string>();
+                    result.AddRange(_responses);
 
-                return result;
+                    _responses.Clear();
+
+                    return result;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Instance not open");
             }
         }
 
@@ -574,9 +608,25 @@ namespace RfmUsb.Net
 
         internal virtual void WaitForSerialPortDataSignal()
         {
-            if(!_signal.WaitOne(_signalTimeout))
+            if (!_signal.WaitOne(_signalTimeout))
             {
                 throw new RfmUsbTimeoutException($"No response received from Rfm device within [{_signalTimeout}]");
+            }
+        }
+
+        private static void CheckBufferedIoCommand(string response)
+        {
+            switch (response)
+            {
+                case ResponseOk:
+                    break;
+
+                case "ERROR:NOT_TX":
+                    throw new RfmUsbTransmitNotEnabledException();
+                case "ERROR:BUFFERED_IO_NOT_ENABLED":
+                    throw new RfmUsbBufferedIoNotEnabledException();
+                case "ERROR:OVERFLOW":
+                    throw new RfmUsbBufferedIoOverflowException();
             }
         }
 
@@ -594,14 +644,6 @@ namespace RfmUsb.Net
             if (!firmwareVersion.Contains(GetDeviceName(), StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new RfmUsbInvalidDeviceTypeException($"Invalid Device Type firmware value {firmwareVersion}");
-            }
-        }
-
-        private void CheckOpen()
-        {
-            if (SerialPort != null && !SerialPort.IsOpen)
-            {
-                throw new InvalidOperationException("Instance not open");
             }
         }
 
@@ -667,35 +709,67 @@ namespace RfmUsb.Net
             return irqMask;
         }
 
-        private void RaiseDioInterrupt(DioIrq values) =>
-                                                DioInterrupt?.Invoke(this, values);
+        private BufferedIoInfo GetIoBufferInfo()
+        {
+            var lines = SendCommandListResponse(Commands.GetIoBufferInfo);
+
+            int capacity = 0;
+            int count = 0;
+
+            lines.ForEach(_ =>
+            {
+                var parts = _.Split(':');
+
+                switch (parts[0].ToUpper())
+                {
+                    case "CAPACITY":
+                        capacity = parts[1].ConvertToInt32();
+                        break;
+
+                    case "COUNT":
+                        count = parts[1].ConvertToInt32();
+                        break;
+                }
+            });
+
+            return new BufferedIoInfo(capacity, count);
+        }
+
+        private void RaiseDioInterrupt(DioIrq values)
+        {
+            Logger.LogDebug("Raising Dio Irq: {values}", values);
+            DioInterrupt?.Invoke(this, values);
+        }
 
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (e.EventType == SerialData.Chars)
             {
-                do
+                if (SerialPort != null)
                 {
-                    var response = SerialPort.ReadLine();
-
-                    if (response.StartsWith("DIO PIN IRQ"))
+                    do
                     {
-                        RaiseDioInterrupt((DioIrq)
-                            Convert.ToInt32(
-                                    response.Split(" ")
-                                    .Last()
-                                    .Replace("[", string.Empty)
-                                    .Replace("]", string.Empty), 16));
-                    }
-                    else
-                    {
-                        _responses.Add(response);
-                    }
-                } while (SerialPort.BytesToRead != 0);
+                        var response = SerialPort.ReadLine();
 
-                Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
+                        if (response.StartsWith("DIO PIN IRQ"))
+                        {
+                            RaiseDioInterrupt((DioIrq)
+                                Convert.ToInt32(
+                                        response.Split(" ")
+                                        .Last()
+                                        .Replace("[", string.Empty)
+                                        .Replace("]", string.Empty), 16));
+                        }
+                        else
+                        {
+                            _responses.Add(response);
+                        }
+                    } while (SerialPort.BytesToRead != 0);
 
-                _signal.Set();
+                    Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
+
+                    _signal.Set();
+                }
             }
         }
 
@@ -712,18 +786,6 @@ namespace RfmUsb.Net
             {
                 throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
             }
-        }
-
-        private IList<byte> TransmitReceiveInternal(string command)
-        {
-            var response = SendCommand(command);
-
-            if (response.Contains("TX") || response.Contains("RX"))
-            {
-                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
-            }
-
-            return response.ToBytes();
         }
 
         #region IDisposible

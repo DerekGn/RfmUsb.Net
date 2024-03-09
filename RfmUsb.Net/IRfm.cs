@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+using RfmUsb.Net.Io;
 using System;
 using System.Collections.Generic;
 
@@ -76,6 +77,16 @@ namespace RfmUsb.Net
         byte BroadcastAddress { get; set; }
 
         /// <summary>
+        /// Enable or disable buffered packet IO
+        /// </summary>
+        bool BufferedIoEnable { get; set; }
+
+        /// <summary>
+        /// Get the <see cref="BufferedIoInfo"/>
+        /// </summary>
+        BufferedIoInfo BufferedIoInfo { get; }
+
+        /// <summary>
         /// Defines the behavior of the packet handler when CRC check fails:
         /// </summary>
         /// <remarks>
@@ -109,7 +120,7 @@ namespace RfmUsb.Net
         short Fei { get; }
 
         /// <summary>
-        /// Get or set the fifo data
+        /// Get or set the FIFO data
         /// </summary>
         IEnumerable<byte> Fifo { get; set; }
 
@@ -229,10 +240,6 @@ namespace RfmUsb.Net
         /// <summary>
         /// The payload length
         /// </summary>
-        /// <remarks>
-        /// <para><see langword="false"/> fixed payload length</para>
-        /// <para><see langword="true"/> variable max length in Rx, not used in Tx</para>
-        /// </remarks>
         ushort PayloadLength { get; set; }
 
         /// <summary>
@@ -264,6 +271,11 @@ namespace RfmUsb.Net
         /// Get the mcu serial number
         /// </summary>
         string SerialNumber { get; }
+
+        /// <summary>
+        /// The <see cref="RfmUsbStream"/>
+        /// </summary>
+        RfmUsbStream Stream { get; }
 
         /// <summary>
         /// The sync bytes
@@ -334,6 +346,13 @@ namespace RfmUsb.Net
         void RcCalibration();
 
         /// <summary>
+        /// Read the bytes from the buffer
+        /// </summary>
+        /// <param name="count">The number of bytes to read from the buffer</param>
+        /// <returns>The <see cref="IList{T}"/> </returns>
+        IList<byte> ReadFromBuffer(int count);
+
+        /// <summary>
         /// Set the <see cref="Dio"/> mapping configuration <see cref="DioMapping"/>
         /// </summary>
         /// <param name="dio">The <see cref="Dio"/> configuration</param>
@@ -371,25 +390,14 @@ namespace RfmUsb.Net
         void Transmit(IList<byte> data, int txCount, int txInterval, int txTimeout);
 
         /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
+        /// Transmit the IO buffer
         /// </summary>
-        /// <param name="data">The data to transmit</param>
-        IList<byte> TransmitReceive(IList<byte> data);
+        void TransmitBuffer();
 
         /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
+        /// Write a sequence of bytes to the IO buffer
         /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The timeout in milliseconds </param>
-        /// <returns>The received packet bytes</returns>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
-
-        /// <summary>
-        /// Transmit a packet of data bytes and wait for a response
-        /// </summary>
-        /// <param name="data">The data to transmit</param>
-        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
-        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
-        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
+        /// <param name="bytes"></param>
+        void WriteToBuffer(IEnumerable<byte> bytes);
     }
 }

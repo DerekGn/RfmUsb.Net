@@ -928,9 +928,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestGetPreambleDetectorTotalerance()
         {
             ExecuteGetTest(
-                () => { return _rfmDevice.PreambleDetectorTotalerance; },
+                () => { return _rfmDevice.PreambleDetectorTolerance; },
                 (v) => v.Should().Be(30),
-                Commands.GetPreambleDetectorTotalerance,
+                Commands.GetPreambleDetectorTolerance,
                 $"0x{(sbyte)30:X2}");
         }
 
@@ -1173,40 +1173,49 @@ namespace RfmUsb.Net.UnitTests
         //{
         //    var x = _rfmDevice.LoraIrqFlags;
         //}
+
         [TestMethod]
-        public void TestSetAccessSharedRegisters()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAccessSharedRegisters(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AccessSharedRegisters = true; },
+                () => { _rfmDevice.AccessSharedRegisters = value; },
                 Commands.SetAccessSharedRegisters,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAesOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAesOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LoraAgcAutoOn = true; },
+                () => { _rfmDevice.LoraAgcAutoOn = value; },
                 Commands.SetLoraAgcAutoOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAgcAutoOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAgcAutoOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AgcAutoOn = true; },
+                () => { _rfmDevice.AgcAutoOn = value; },
                 Commands.SetAgcAutoOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetAutoImageCalibrationOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetAutoImageCalibrationOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.AutoImageCalibrationOn = true; },
+                () => { _rfmDevice.AutoImageCalibrationOn = value; },
                 Commands.SetAutoImageCalibrationOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1223,12 +1232,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetBeaconOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetBeaconOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.BeaconOn = true; },
+                () => { _rfmDevice.BeaconOn = value; },
                 Commands.SetBeaconOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1241,12 +1252,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetBitSyncOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetBitSyncOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.BitSyncOn = true; },
+                () => { _rfmDevice.BitSyncOn = value; },
                 Commands.SetBitSyncOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1274,12 +1287,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetFastHopOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetFastHopOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.FastHopOn = true; },
+                () => { _rfmDevice.FastHopOn = value; },
                 Commands.SetFastHopOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1328,12 +1343,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetFromIdle()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetFromIdle(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.FromIdle = true; },
+                () => { _rfmDevice.FromIdle = value; },
                 Commands.SetFromIdle,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1391,48 +1408,58 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetFromTransmit()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetFromTransmit(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.FromTransmit = true; },
+                () => { _rfmDevice.FromTransmit = value; },
                 Commands.SetFromTransmit,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetIdleMode()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetIdleMode(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.IdleMode = true; },
+                () => { _rfmDevice.IdleMode = value; },
                 Commands.SetIdleMode,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetImplicitHeaderModeOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetImplicitHeaderModeOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.ImplicitHeaderModeOn = true; },
+                () => { _rfmDevice.ImplicitHeaderModeOn = value; },
                 Commands.SetImplicitHeaderModeOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetIoHomeOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetIoHomeOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.IoHomeOn = true; },
+                () => { _rfmDevice.IoHomeOn = value; },
                 Commands.SetIoHomeOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetIoHomePowerFrame()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetIoHomePowerFrame(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.IoHomePowerFrame = true; },
+                () => { _rfmDevice.IoHomePowerFrame = value; },
                 Commands.SetIoHomePowerFrame,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1453,21 +1480,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetLnaBoostHf()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLnaBoostHf(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LnaBoostHf = true; },
+                () => { _rfmDevice.LnaBoostHf = value; },
                 Commands.SetLnaBoostHf,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetLongRangeMode()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLongRangeMode(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LongRangeMode = true; },
+                () => { _rfmDevice.LongRangeMode = value; },
                 Commands.SetLongRangeMode,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1539,12 +1570,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetLowBatteryOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLowBatteryOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LowBatteryOn = true; },
+                () => { _rfmDevice.LowBatteryOn = value; },
                 Commands.SetLowBatteryOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1565,39 +1598,47 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetLowDataRateOptimize()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLowDataRateOptimize(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LowDataRateOptimize = true; },
+                () => { _rfmDevice.LowDataRateOptimize = value; },
                 Commands.SetLowDataRateOptimize,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetLowFrequencyMode()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLowFrequencyMode(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LowFrequencyMode = true; },
+                () => { _rfmDevice.LowFrequencyMode = value; },
                 Commands.SetLowFrequencyMode,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetLowPowerSelection()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetLowPowerSelection(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.LowPowerSelection = true; },
+                () => { _rfmDevice.LowPowerSelection = value; },
                 Commands.SetLowPowerSelection,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetMapPreambleDetect()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetMapPreambleDetect(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.MapPreambleDetect = true; },
+                () => { _rfmDevice.MapPreambleDetect = value; },
                 Commands.SetMapPreambleDetect,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1605,9 +1646,9 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetModemBandwidth(ModemBandwidth expected)
         {
             ExecuteSetTest(
-    () => { _rfmDevice.ModemBandwidth = expected; },
-    Commands.SetModemBandwidth,
-    $"0x{expected:X}");
+                () => { _rfmDevice.ModemBandwidth = expected; },
+                Commands.SetModemBandwidth,
+                $"0x{expected:X}");
         }
 
         [TestMethod]
@@ -1651,12 +1692,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetPreambleDetectorOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetPreambleDetectorOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.PreambleDetectorOn = true; },
+                () => { _rfmDevice.PreambleDetectorOn = value; },
                 Commands.SetPreambleDetectorOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1675,8 +1718,8 @@ namespace RfmUsb.Net.UnitTests
         public void TestSetPreambleDetectorTotalerance()
         {
             ExecuteSetTest(
-                () => { _rfmDevice.PreambleDetectorTotalerance = 55; },
-                Commands.SetPreambleDetectorTotalerance,
+                () => { _rfmDevice.PreambleDetectorTolerance = 55; },
+                Commands.SetPreambleDetectorTolerance,
                 $"0x{(sbyte)55:X2}");
         }
 
@@ -1690,21 +1733,25 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetPreamblePolarity()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetPreamblePolarity(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.PreamblePolarity = true; },
+                () => { _rfmDevice.PreamblePolarity = value; },
                 Commands.SetPreamblePolarity,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
-        public void TestSetRestartRxOnCollision()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetRestartRxOnCollision(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.RestartRxOnCollision = true; },
+                () => { _rfmDevice.RestartRxOnCollision = value; },
                 Commands.SetRestartRxOnCollision,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1752,12 +1799,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetRxPayloadCrcOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetRxPayloadCrcOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.RxPayloadCrcOn = true; },
+                () => { _rfmDevice.RxPayloadCrcOn = value; },
                 Commands.SetRxPayloadCrcOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1785,12 +1834,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTcxoInputOn()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetTcxoInputOn(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.TcxoInputOn = true; },
+                () => { _rfmDevice.TcxoInputOn = value; },
                 Commands.SetTcxoInputOn,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1807,12 +1858,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTempMonitorOff()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetTempMonitorOff(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.TempMonitorOff = true; },
+                () => { _rfmDevice.TempMonitorOff = value; },
                 Commands.SetTempMonitorOff,
-                "1");
+                value ? "1" : "0");
         }
 
         [TestMethod]
@@ -1893,12 +1946,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestSetTxContinuousMode()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TestSetTxContinuousMode(bool value)
         {
             ExecuteSetTest(
-                () => { _rfmDevice.TxContinuousMode = true; },
+                () => { _rfmDevice.TxContinuousMode = value; },
                 Commands.SetTxContinuousMode,
-                "1");
+                value ? "1" : "0");
         }
     }
 }
