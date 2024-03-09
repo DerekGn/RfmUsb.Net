@@ -6,6 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <StartupObject>RfmUsbConsole.Program</StartupObject>
+    <Authors>Derek Goslin</Authors>
+    <Company>Derek Goslin</Company>
+    <Copyright>Copyright © Derek Goslin 2022</Copyright>
+    <Version>2.1.0</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3325,7 +3325,7 @@
         </member>
         <member name="F:RfmUsb.Net.Rfm69IrqFlags.None">
             <summary>
-            No Irq bit is sey
+            No Irq bit is set
             </summary>
         </member>
         <member name="F:RfmUsb.Net.Rfm69IrqFlags.CrcOK">
