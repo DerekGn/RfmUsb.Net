@@ -189,18 +189,32 @@ if (signalSource == SignalSource.Irq)
 The steps required to transmit a message via the IO buffer.
 
 * Configure the RfmUsb radio
-* Setup the packet format either fixed or variable length
+* Setup the **PacketFormat** to either fixed or variable length
 * Enable the IO buffer via the **BufferedIoEnable** setting
-* Set the Dio mapping for Dio0 to 
-* Set the radio mode to TX
+* Set the radio **Mode** to **TX**
 * Write the message bytes to the IO buffer via the **Stream**
 
 ```csharp
-IrqSignal.WaitOne(timeout);
+// Configure the radio
+InitialiseRadioOpenThings(SerialPort, BaudRate);
 
-// Check the irq
-if ((rfmUsbDevice.Irq & Irq.PayloadReady) == Irq.PayloadReady)
-{
-    // Process packet
-}
+// Attach event handlers
+AttachEventHandlers(console);
+
+// Enable DIO0 to capture payload ready IRQ 
+rfmUsbDevice.SetDioMapping(Dio.Dio0, DioMapping.DioMapping0);
+// Set the Irq mask
+rfmUsbDevice.DioInterruptMask = DioIrq.Dio0;
+// Enable the Buffered Io
+rfmUsbDevice.BufferedIoEnable = true;
+// Set the the payload length to 0xFF
+rfmUsbDevice.PayloadLength = 0xFF;
+// Set the mode to TX
+rfmUsbDevice.Mode = Mode.Tx;
+
+// Prepare payload
+byte[] payload = new byte[10];
+
+// Write the stream
+rfmUsbDevice.Stream.Write(payload, 0, payload.Length);
 ```
