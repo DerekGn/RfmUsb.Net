@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Authors>Derek Goslin</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -28,10 +28,11 @@
 		2.0.4 Updated logging
 		2.0.5 Updated enter and exit conditions
 		2.1.0 Added stream function and removed TxRx functions
+		3.0.0 Updated .Net Core 8
 	</PackageReleaseNotes>
-    <Version>2.1.0</Version>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>RfmUsb.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
