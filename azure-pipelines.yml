@@ -1,6 +1,8 @@
 variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
+- name: TestProject
+  value: '**/*UnitTests.csproj'
 
 name: $(Major).$(Minor).$(Patch).$(Build)
 
@@ -17,6 +19,16 @@ steps:
       command: 'build'
       projects: $(BuildParameters.solution)
       configuration: $(BuildConfiguration)
+  - task: DotNetCoreCLI@2
+    displayName: "Run Unit Tests"
+    inputs:
+      command: 'test'
+      projects: $(TestProject)
+      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'
+  - task: PublishCodeCoverageResults@2
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: $(Agent.TempDirectory)/*/coverage.cobertura.xml # using ** instead of * finds duplicate coverage
   # Workaraound for the pack command not accepting arguments
 # https://github.com/microsoft/azure-pipelines-tasks/issues/11640
   - task: DotNetCoreCLI@2
