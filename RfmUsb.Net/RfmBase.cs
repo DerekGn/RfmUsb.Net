@@ -529,6 +529,24 @@ namespace RfmUsb.Net
         }
 
         ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data)
+        {
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)}");
+        }
+
+        ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout)
+        {
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout}");
+        }
+
+        ///<inheritdoc/>
+        public IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout)
+        {
+            return TransmitReceiveInternal($"{Commands.ExecuteTransmitReceive} {BitConverter.ToString(data.ToArray()).Replace("-", string.Empty)} {txTimeout} {rxTimeout}");
+        }
+
+        ///<inheritdoc/>
         public void WriteToBuffer(IEnumerable<byte> bytes)
         {
             CheckBufferedIoCommand(
@@ -786,6 +804,18 @@ namespace RfmUsb.Net
             {
                 throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
             }
+        }
+
+        private IList<byte> TransmitReceiveInternal(string command)
+        {
+            var response = SendCommand(command);
+
+            if (response.Contains("TX") || response.Contains("RX"))
+            {
+                throw new RfmUsbTransmitException($"Packet transmission failed: [{response}]");
+            }
+
+            return response.ToBytes();
         }
 
         #region IDisposible

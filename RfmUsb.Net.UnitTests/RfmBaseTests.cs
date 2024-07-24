@@ -22,7 +22,6 @@
 * SOFTWARE.
 */
 
-
 // Ignore Spelling: Usb Dio Ook Ocp Bw Fei Bootloader Fsk Rssi Lna
 
 using FluentAssertions;
@@ -1281,6 +1280,33 @@ namespace RfmUsb.Net.UnitTests
                 () => { RfmBase.TransmitBuffer(); },
                 $"{Commands.ExecuteTransmitBuffer}",
                 RfmBase.ResponseOk);
+        }
+
+        [TestMethod]
+        public void TestTransmitReceive()
+        {
+            ExecuteTest(
+                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }); },
+                $"{Commands.ExecuteTransmitReceive} AA55",
+                "0xFEED");
+        }
+
+        [TestMethod]
+        public void TestTransmitReceiveTimeout()
+        {
+            ExecuteTest(
+                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100); },
+                $"{Commands.ExecuteTransmitReceive} AA55 100",
+                "0xFEED");
+        }
+
+        [TestMethod]
+        public void TestTransmitReceiveTransmitTimeout()
+        {
+            ExecuteTest(
+                () => { RfmBase.TransmitReceive(new List<byte>() { 0xAA, 0x55 }, 100, 200); },
+                $"{Commands.ExecuteTransmitReceive} AA55 100 200",
+                "0xFEED");
         }
 
         [TestMethod]

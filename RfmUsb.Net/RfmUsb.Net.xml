@@ -1326,6 +1326,28 @@
             Transmit the IO buffer
             </summary>
         </member>
+        <member name="M:RfmUsb.Net.IRfm.TransmitReceive(System.Collections.Generic.IList{System.Byte})">
+            <summary>
+            Transmit a packet of data bytes and wait for a response
+            </summary>
+            <param name="data">The data to transmit</param>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32)">
+            <summary>
+            Transmit a packet of data bytes and wait for a response
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="txTimeout">The timeout in milliseconds </param>
+            <returns>The received packet bytes</returns>
+        </member>
+        <member name="M:RfmUsb.Net.IRfm.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Transmit a packet of data bytes and wait for a response
+            </summary>
+            <param name="data">The data to transmit</param>
+            <param name="txTimeout">The transmit timeout in milliseconds</param>
+            <param name="rxTimeout">The receive timeout in milliseconds</param>
+        </member>
         <member name="M:RfmUsb.Net.IRfm.WriteToBuffer(System.Collections.Generic.IEnumerable{System.Byte})">
             <summary>
             Write a sequence of bytes to the IO buffer
@@ -3987,6 +4009,15 @@
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.Net.RfmBase.TransmitBuffer">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.TransmitReceive(System.Collections.Generic.IList{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:RfmUsb.Net.RfmBase.TransmitReceive(System.Collections.Generic.IList{System.Byte},System.Int32,System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:RfmUsb.Net.RfmBase.WriteToBuffer(System.Collections.Generic.IEnumerable{System.Byte})">

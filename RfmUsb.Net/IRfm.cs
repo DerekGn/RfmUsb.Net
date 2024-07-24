@@ -395,6 +395,28 @@ namespace RfmUsb.Net
         void TransmitBuffer();
 
         /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        IList<byte> TransmitReceive(IList<byte> data);
+
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The timeout in milliseconds </param>
+        /// <returns>The received packet bytes</returns>
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout);
+
+        /// <summary>
+        /// Transmit a packet of data bytes and wait for a response
+        /// </summary>
+        /// <param name="data">The data to transmit</param>
+        /// <param name="txTimeout">The transmit timeout in milliseconds</param>
+        /// <param name="rxTimeout">The receive timeout in milliseconds</param>
+        IList<byte> TransmitReceive(IList<byte> data, int txTimeout, int rxTimeout);
+
+        /// <summary>
         /// Write a sequence of bytes to the IO buffer
         /// </summary>
         /// <param name="bytes"></param>
