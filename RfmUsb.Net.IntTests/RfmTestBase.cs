@@ -22,10 +22,8 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Ports;
 using Serilog;
@@ -68,8 +66,6 @@ namespace RfmUsb.Net.IntTests
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        public TestContext TestContext { get; set; }
-
         [Fact]
         public void TestReadStreamDisabled()
         {
@@ -82,7 +78,7 @@ namespace RfmUsb.Net.IntTests
             Action action = () => RfmBase.Stream.Read(bytes);
 
             // Assert
-            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+            Assert.Throws<ArgumentException>(action);
         }
 
         [Fact]
@@ -112,11 +108,10 @@ namespace RfmUsb.Net.IntTests
             Action action = () => RfmBase.Stream.Write(bytes);
 
             // Assert
-            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+            Assert.Throws<RfmUsbBufferedIoNotEnabledException>(action);
         }
 
-        [Fact]
-        [Ignore]
+        [Fact(Skip = "ignore")]
         public void TestWriteStreamEnabled()
         {
             // Arrange
@@ -141,7 +136,7 @@ namespace RfmUsb.Net.IntTests
         internal static void TestAssignedValue<T>(T value, Func<T> read, Action<T> write)
         {
             write(value);
-            read().Should().Be(value);
+            Assert.Equal(value, read());
         }
 
         internal static void TestRange<T>(Func<T> read, Action<T> write) where T : IMinMaxValue<T>
@@ -159,9 +154,9 @@ namespace RfmUsb.Net.IntTests
 
             var max = read();
 
-            min.Should().Be(expectedMin);
+            Assert.Equal(expectedMin, min);
 
-            max.Should().Be(expectedMax);
+            Assert.Equal(expectedMax, max);
         }
 
         internal static void TestRangeBool(Func<bool> read, Action<bool> write)
@@ -172,7 +167,7 @@ namespace RfmUsb.Net.IntTests
 
             var changed = read();
 
-            changed.Should().Be(!current);
+            Assert.Equal(!current, changed);
         }
 
         internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")

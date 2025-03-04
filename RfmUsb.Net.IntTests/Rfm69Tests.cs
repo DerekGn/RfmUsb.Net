@@ -72,7 +72,7 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm69.AutoRxRestartOn, (v) => _rfm69.AutoRxRestartOn = v);
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             _rfm69?.Close();
             _rfm69?.Dispose();

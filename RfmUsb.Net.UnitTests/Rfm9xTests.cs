@@ -71,7 +71,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.GetTimerResolution(timer); },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 $"{Commands.GetTimerResolution} {(int)timer}",
                 ((int)expected).ToString());
         }
@@ -296,7 +296,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.FormerTemperature; },
-                (v) => v.Should().Be((sbyte)0xA),
+                (v) => Assert.Equal(0xA, v),
                 Commands.GetFormerTemperatureValue,
                 "0xA");
         }
@@ -532,8 +532,8 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrqFlags}\n"));
 
-            result.Should()
-                .Be(Rfm9xIrqFlags.LowBattery |
+            Assert.Equal(
+                    Rfm9xIrqFlags.LowBattery |
                     Rfm9xIrqFlags.CrcOK |
                     Rfm9xIrqFlags.PayloadReady |
                     Rfm9xIrqFlags.PacketSent |
@@ -548,7 +548,7 @@ namespace RfmUsb.Net.UnitTests
                     Rfm9xIrqFlags.PllLock |
                     Rfm9xIrqFlags.TxReady |
                     Rfm9xIrqFlags.RxReady |
-                    Rfm9xIrqFlags.ModeReady);
+                    Rfm9xIrqFlags.ModeReady, result);
         }
 
         [Fact]
@@ -626,14 +626,14 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetLoraIrqFlags}\n"));
 
-            result.Should().Be(
+            Assert.Equal(
                 LoraIrqFlags.CadDetected |
                 LoraIrqFlags.FhssChangeChannel |
                 LoraIrqFlags.CadDone |
                 LoraIrqFlags.TxDone |
                 LoraIrqFlags.ValidHeader |
                 LoraIrqFlags.RxDone |
-                LoraIrqFlags.RxTimeout);
+                LoraIrqFlags.RxTimeout, result);
         }
 
         [Fact]
@@ -676,14 +676,14 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetLoraIrqFlagsMask}\n"));
 
-            result.Should().Be(
+            Assert.Equal(
                 LoraIrqFlagsMask.CadDetectedMask |
                 LoraIrqFlagsMask.FhssChangeChannelMask |
                 LoraIrqFlagsMask.CadDoneMask |
                 LoraIrqFlagsMask.TxDoneMask |
                 LoraIrqFlagsMask.ValidHeaderMask |
                 LoraIrqFlagsMask.RxDoneMask |
-                LoraIrqFlagsMask.RxTimeoutMask);
+                LoraIrqFlagsMask.RxTimeoutMask, result);
         }
 
         [Theory]
@@ -826,12 +826,12 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetModemStatus}\n"));
 
-            result.Should().Be(
+            Assert.Equal(
                 ModemStatus.SignalDetected |
                 ModemStatus.SignalSynchronized |
                 ModemStatus.RxOnGoing |
                 ModemStatus.HeaderInfoValid |
-                ModemStatus.ModemClear);
+                ModemStatus.ModemClear, result);
         }
 
         [Theory]
@@ -976,7 +976,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.RssiOffset; },
-                (v) => v.Should().Be(-98),
+                (v) => Assert.Equal(-98, v),
                 Commands.GetRssiOffset,
                 $"0x{(sbyte)-98:X2}");
         }
@@ -1004,7 +1004,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.RssiThreshold; },
-                (v) => v.Should().Be(-114),
+                (v) => Assert.Equal(-114, v),
                 Commands.GetRssiThreshold,
                 $"0x{(sbyte)-114:X2}");
         }
@@ -1162,7 +1162,7 @@ namespace RfmUsb.Net.UnitTests
         [Fact]
         public void TestOpen()
         {
-            TestOpen("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
+            TestOpenVersion("RfmUsb-RFM9x FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [Theory]

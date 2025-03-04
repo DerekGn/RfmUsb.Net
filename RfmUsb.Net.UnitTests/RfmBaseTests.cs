@@ -1489,7 +1489,7 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{command}\n"), Times.Once);
         }
 
-        internal void TestOpen(string version)
+        internal void TestOpenVersion(string version)
         {
             // Arrange
             MockSerialPortFactory
