@@ -29,15 +29,15 @@ using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    public class Rfm69Tests : RfmTestCommon, IDisposable
+    public class Rfm69Tests : RfmTestCommon
     {
         private readonly IRfm69 _rfm69;
 
         public Rfm69Tests()
         {
             _rfm69 = _serviceProvider.GetService<IRfm69>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm69)}");
-
-            _rfm69.Open((string)TestContext.Properties["Rfm69ComPort"]!, int.Parse((string)TestContext.Properties["BaudRate"]!));
+#warning TODO
+            //_rfm69.Open((string)TestContext.Properties["Rfm69ComPort"]!, int.Parse((string)TestContext.Properties["BaudRate"]!));
 
             RfmBase = _rfm69;
         }
@@ -74,6 +74,8 @@ namespace RfmUsb.Net.IntTests
 
         public new void Dispose()
         {
+            base.Dispose();
+
             _rfm69?.Close();
             _rfm69?.Dispose();
         }

@@ -687,13 +687,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [Theory]
-        [InlineData(LoraMode.Standby)]
-        [InlineData(LoraMode.RxSingle)]
-        [InlineData(LoraMode.RxContinuous)]
-        [InlineData(LoraMode.Standby)]
-        [InlineData(LoraMode.Sleep)]
-        [InlineData(LoraMode.RxContinuous)]
         [InlineData(LoraMode.Cad)]
+        [InlineData(LoraMode.RxContinuous)]
+        [InlineData(LoraMode.RxSingle)]
+        [InlineData(LoraMode.Sleep)]
+        [InlineData(LoraMode.Standby)]
+        [InlineData(LoraMode.SynthRx)]
+        [InlineData(LoraMode.SynthTx)]
+        [InlineData(LoraMode.Tx)]
         public void TestGetLoraMode(LoraMode expected)
         {
             ExecuteGetTest(
@@ -1536,13 +1537,14 @@ namespace RfmUsb.Net.UnitTests
         }
 
         [Theory]
-        [InlineData(LoraMode.Standby)]
-        [InlineData(LoraMode.RxSingle)]
-        [InlineData(LoraMode.RxContinuous)]
-        [InlineData(LoraMode.Standby)]
-        [InlineData(LoraMode.Sleep)]
-        [InlineData(LoraMode.RxContinuous)]
         [InlineData(LoraMode.Cad)]
+        [InlineData(LoraMode.RxContinuous)]
+        [InlineData(LoraMode.RxSingle)]
+        [InlineData(LoraMode.Sleep)]
+        [InlineData(LoraMode.Standby)]
+        [InlineData(LoraMode.SynthRx)]
+        [InlineData(LoraMode.SynthTx)]
+        [InlineData(LoraMode.Tx)]
         public void TestSetLoraMode(LoraMode expected)
         {
             ExecuteSetTest(

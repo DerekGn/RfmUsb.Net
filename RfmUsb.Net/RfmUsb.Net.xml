@@ -400,13 +400,6 @@
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
         </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoNotEnabledException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
-        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException">
             <summary>
             Exception thrown if the IO buffer overflows
@@ -429,13 +422,6 @@
             </summary>
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
-        </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbBufferedIoOverflowException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
         </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbCommandExecutionException">
             <summary>
@@ -461,15 +447,6 @@
             <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbCommandExecutionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Net.Exceptions.RfmUsbCommandExecutionException"/> class with serialized data.
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds
-            the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
-            about the source or destination.</param>
-        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException">
             <summary>
             Exception thrown if the attached RfmUsb device is not correct device
@@ -492,13 +469,6 @@
             </summary>
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
-        </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbInvalidDeviceTypeException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
         </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortNotFoundException">
             <summary>
@@ -524,15 +494,6 @@
             <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortNotFoundException"/> class with serialized data.
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds
-            the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
-            about the source or destination.</param>
-        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException">
             <summary>
             Exception thrown when the serial port fails to open
@@ -556,13 +517,6 @@
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
         </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbSerialPortOpenFailedException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
-        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException">
             <summary>
             Exception thrown when the serial port receive timeout
@@ -585,13 +539,6 @@
             </summary>
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
-        </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTimeoutException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTimeoutException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
         </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbTransmitException">
             <summary>
@@ -617,15 +564,6 @@
             <param name="inner">The exception that is the cause of the current exception,
             or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitException"/> class with serialized data.
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds
-            the serialized object data about the exception being thrown.</param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information
-            about the source or destination.</param>
-        </member>
         <member name="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException">
             <summary>
             Exception thrown if the attached RfmUsb device is not in transmit mode
@@ -648,13 +586,6 @@
             </summary>
             <param name="message">The message</param>
             <param name="inner">The inner <see cref="T:System.Exception"/></param>
-        </member>
-        <member name="M:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Create an instance of <see cref="T:RfmUsb.Net.Exceptions.RfmUsbTransmitNotEnabledException"/>
-            </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/></param>
-            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/></param>
         </member>
         <member name="T:RfmUsb.Net.ExitCondition">
             <summary>

@@ -23,14 +23,12 @@
 */
 
 using System;
-using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
     /// Exception thrown if the attached RfmUsb device is not in transmit mode
     /// </summary>
-    [Serializable]
     public class RfmUsbTransmitNotEnabledException : Exception
     {
         /// <summary>
@@ -55,14 +53,5 @@ namespace RfmUsb.Net.Exceptions
         public RfmUsbTransmitNotEnabledException(string message, Exception inner) : base(message, inner)
         {
         }
-
-        /// <summary>
-        /// Create an instance of <see cref="RfmUsbTransmitNotEnabledException"/>
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/></param>
-        /// <param name="context">The <see cref="StreamingContext"/></param>
-        protected RfmUsbTransmitNotEnabledException(
-          SerializationInfo info,
-          StreamingContext context) : base(info, context) { }
     }
 }

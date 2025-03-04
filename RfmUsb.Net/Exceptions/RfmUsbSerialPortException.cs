@@ -29,7 +29,6 @@ namespace RfmUsb.Net.Exceptions
     /// <summary>
     /// Throw when the specified serial port is not found
     /// </summary>
-    [Serializable]
     public class RfmUsbSerialPortNotFoundException : Exception
     {
         /// <summary>
@@ -51,16 +50,5 @@ namespace RfmUsb.Net.Exceptions
         /// <param name="inner">The exception that is the cause of the current exception,
         /// or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public RfmUsbSerialPortNotFoundException(string message, Exception inner) : base(message, inner) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RfmUsbSerialPortNotFoundException"/> class with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="System.Runtime.Serialization.SerializationInfo"/> that holds
-        /// the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="System.Runtime.Serialization.StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        protected RfmUsbSerialPortNotFoundException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

@@ -35,9 +35,14 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
             RfmBase = _rfm9x;
+
+#warning TODO
+            //_rfm9x.Open((string)TestContext.Properties["Rfm9xComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
+
+            _rfm9x.ExecuteReset();
         }
 
-        [Fact]
+        [Theory]
         [InlineData(Timer.Timer1, TimerResolution.Reserved)]
         [InlineData(Timer.Timer2, TimerResolution.Reserved)]
         [InlineData(Timer.Timer1, TimerResolution.Resolution64us)]
@@ -50,7 +55,7 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x.SetTimerResolution(timer, expected);
 
-            _rfm9x.GetTimerResolution(timer).Should().Be(expected);
+            Assert.Equal(expected, _rfm9x.GetTimerResolution(timer));
         }
 
         [Fact]
@@ -77,14 +82,15 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.BitSyncOn, (v) => _rfm9x.BitSyncOn = v);
         }
 
-        [TestCleanup]
-        public void TestCleanup()
+        public new void Dispose()
         {
+            base.Dispose();
+
             _rfm9x?.Close();
             _rfm9x?.Dispose();
         }
 
-        [Fact]
+        [Theory]
         [InlineData(CrcWhiteningType.CrcCCITT)]
         [InlineData(CrcWhiteningType.CrcIbm)]
         public void TestCrcWhiteningType(CrcWhiteningType expected)
@@ -140,7 +146,7 @@ namespace RfmUsb.Net.IntTests
             var expected = RandomSequence().Take(64).ToList();
             _rfm9x.Fifo = expected;
 
-            _rfm9x.Fifo.Should().StartWith(expected);
+            Assert.Equal(expected, _rfm9x.Fifo);
         }
 
         [Fact]
@@ -149,8 +155,7 @@ namespace RfmUsb.Net.IntTests
             TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
         }
 
-        [Fact]
-        [Ignore("not implemented in device")]
+        [Fact(Skip = "not implemented in device")]
         public void TestFormerTemperatureValue()
         {
             TestRange(() => _rfm9x.FormerTemperature, (v) => _rfm9x.FormerTemperature = v);
@@ -162,7 +167,7 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.FromIdle, (v) => _rfm9x.FromIdle = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(FromPacketReceived.ToLowPowerSelection)]
         [InlineData(FromPacketReceived.ToReceiveState)]
         [InlineData(FromPacketReceived.ToReceiveViaFSMode)]
@@ -173,7 +178,7 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => _rfm9x.FromPacketReceived, (v) => _rfm9x.FromPacketReceived = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(FromReceive.ToLowPowerSelectionOnPayLoadReady)]
         [InlineData(FromReceive.ToPacketReceivedOnPayloadReady)]
         [InlineData(FromReceive.ToPacketReceivedStateOnCrcOk)]
@@ -187,17 +192,17 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => _rfm9x.FromReceive, (v) => _rfm9x.FromReceive = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(FromRxTimeout.ToLowPowerSelection)]
         [InlineData(FromRxTimeout.ToReceive)]
         [InlineData(FromRxTimeout.ToSequencerOff)]
         [InlineData(FromRxTimeout.ToTransmit)]
-        public void TestFromReceive(FromRxTimeout expected)
+        public void TestFromRxTimeout(FromRxTimeout expected)
         {
             TestAssignedValue(expected, () => _rfm9x.FromRxTimeout, (v) => _rfm9x.FromRxTimeout = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(FromStart.ToLowPowerSelection)]
         [InlineData(FromStart.ToReceive)]
         [InlineData(FromStart.ToTransmit)]
@@ -207,12 +212,12 @@ namespace RfmUsb.Net.IntTests
             TestAssignedValue(expected, () => _rfm9x.FromStart, (v) => _rfm9x.FromStart = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(OokAverageOffset.Offset0dB)]
         [InlineData(OokAverageOffset.Offset2dB)]
         [InlineData(OokAverageOffset.Offset4dB)]
         [InlineData(OokAverageOffset.Offset6dB)]
-        public void TestFromStart(OokAverageOffset expected)
+        public void TestOokAverageOffset(OokAverageOffset expected)
         {
             TestAssignedValue(expected, () => _rfm9x.OokAverageOffset, (v) => _rfm9x.OokAverageOffset = v);
         }
@@ -227,21 +232,13 @@ namespace RfmUsb.Net.IntTests
         public void TestGetIrq()
         {
             _rfm9x.ExecuteReset();
-            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
+            Assert.Equal(Rfm9xIrqFlags.ModeReady, _rfm9x.IrqFlags);
         }
 
         [Fact]
         public void TestIdleMode()
         {
             TestRangeBool(() => _rfm9x.IdleMode, (v) => _rfm9x.IdleMode = v);
-        }
-
-        [TestInitialize]
-        public void TestInitalise()
-        {
-            _rfm9x.Open((string)TestContext.Properties["Rfm9xComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
-
-            _rfm9x.ExecuteReset();
         }
 
         [Fact]
@@ -268,7 +265,7 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.LowBatteryOn, (v) => _rfm9x.LowBatteryOn = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(LowBatteryTrim.Volts1_695)]
         [InlineData(LowBatteryTrim.Volts1_764)]
         [InlineData(LowBatteryTrim.Volts1_835)]
@@ -311,7 +308,7 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.PreambleDetectorOn, (v) => _rfm9x.PreambleDetectorOn = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(PreambleDetectorSize.OneByte)]
         [InlineData(PreambleDetectorSize.ThreeBytes)]
         [InlineData(PreambleDetectorSize.TwoBytes)]
@@ -350,7 +347,7 @@ namespace RfmUsb.Net.IntTests
             TestRange(() => _rfm9x.RssiOffset, (v) => _rfm9x.RssiOffset = (sbyte)v, -16, 15);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(RssiSmoothing.Samples2)]
         [InlineData(RssiSmoothing.Samples4)]
         [InlineData(RssiSmoothing.Samples8)]
@@ -395,7 +392,7 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.TcxoInputOn, (v) => _rfm9x.TcxoInputOn = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(TemperatureThreshold.FiveDegrees)]
         [InlineData(TemperatureThreshold.TenDegrees)]
         [InlineData(TemperatureThreshold.FifteenDegrees)]
@@ -429,7 +426,7 @@ namespace RfmUsb.Net.IntTests
             TestRange(() => _rfm9x.TimeoutSignalSync, (v) => _rfm9x.TimeoutSignalSync = v);
         }
 
-        [Fact]
+        [Theory]
         [InlineData(Timer.Timer1, 0x00)]
         [InlineData(Timer.Timer2, 0x00)]
         [InlineData(Timer.Timer1, 0xFF)]
@@ -438,7 +435,7 @@ namespace RfmUsb.Net.IntTests
         {
             _rfm9x.SetTimerCoefficient(timer, (byte)expected);
 
-            _rfm9x.GetTimerCoefficient(timer).Should().Be((byte)expected);
+            Assert.Equal(expected, _rfm9x.GetTimerCoefficient(timer));
         }
     }
 }
