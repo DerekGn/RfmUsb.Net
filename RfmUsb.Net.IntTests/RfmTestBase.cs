@@ -32,6 +32,7 @@ using Serilog;
 using Serilog.Core;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
@@ -43,7 +44,7 @@ namespace RfmUsb.Net.IntTests
         protected IRfm RfmBase;
         private readonly IConfiguration _configuration;
 
-        public RfmTestBase()
+        protected RfmTestBase()
         {
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -69,7 +70,7 @@ namespace RfmUsb.Net.IntTests
 
         public TestContext TestContext { get; set; }
 
-        [TestMethod]
+        [Fact]
         public void TestReadStreamDisabled()
         {
             // Arrange
@@ -84,7 +85,7 @@ namespace RfmUsb.Net.IntTests
             action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadStreamEnabled()
         {
             // Arrange
@@ -96,7 +97,7 @@ namespace RfmUsb.Net.IntTests
             RfmBase.Stream.Read(bytes);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestWriteStreamDisabled()
         {
             // Arrange
@@ -114,7 +115,7 @@ namespace RfmUsb.Net.IntTests
             action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void TestWriteStreamEnabled()
         {
@@ -132,7 +133,7 @@ namespace RfmUsb.Net.IntTests
 
         internal static IEnumerable<byte> RandomSequence()
         {
-            Random r = new Random();
+            Random r = new();
             while (true)
                 yield return (byte)r.Next(0, 0xFF);
         }
@@ -154,7 +155,7 @@ namespace RfmUsb.Net.IntTests
 
             var min = read();
 
-            write((T)expectedMax);
+            write(expectedMax);
 
             var max = read();
 

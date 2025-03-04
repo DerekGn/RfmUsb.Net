@@ -97,11 +97,13 @@ namespace RfmUsbConsole
                 .Build();
         }
 
+#pragma warning disable S1144 // Unused private types or members should be removed
         private int OnExecute(CommandLineApplication app, IConsole console)
         {
             console.WriteLine("You must specify a subcommand.");
             app.ShowHelp();
             return 1;
         }
+#pragma warning restore S1144 // Unused private types or members should be removed
     }
 }
