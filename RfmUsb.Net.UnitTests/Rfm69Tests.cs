@@ -312,7 +312,7 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrqFlags}\n"));
 
-            result.Should().Be(
+            Assert.Equal(
                 Rfm69IrqFlags.CrcOK |
                 Rfm69IrqFlags.PayloadReady |
                 Rfm69IrqFlags.FifoOverrun |
@@ -326,7 +326,7 @@ namespace RfmUsb.Net.UnitTests
                 Rfm69IrqFlags.PllLock |
                 Rfm69IrqFlags.RxReady |
                 Rfm69IrqFlags.TxReady |
-                Rfm69IrqFlags.ModeReady);
+                Rfm69IrqFlags.ModeReady, result);
         }
 
         [Fact]
@@ -431,7 +431,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.OutputPower; },
-                (v) => v.Should().Be(-2),
+                (v) => Assert.Equal(-2, v),
                 Commands.GetOutputPower,
                 $"0x{(sbyte)-2:X2}");
         }
@@ -441,7 +441,7 @@ namespace RfmUsb.Net.UnitTests
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.RssiThreshold; },
-                (v) => v.Should().Be(-114),
+                (v) => Assert.Equal(-114, v),
                 Commands.GetRssiThreshold,
                 "0x8E");
         }
@@ -492,7 +492,7 @@ namespace RfmUsb.Net.UnitTests
             var result = _rfmDevice.Timeout;
 
             // Assert
-            result.Should().Be(1000);
+            Assert.Equal(1000, result);
         }
 
         [Fact]
@@ -541,7 +541,7 @@ namespace RfmUsb.Net.UnitTests
         [Fact]
         public void TestOpen()
         {
-            TestOpen("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
+            TestOpenVersion("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
         [Fact]

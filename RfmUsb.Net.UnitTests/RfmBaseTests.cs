@@ -51,8 +51,6 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort = new Mock<ISerialPort>();
 
             MockLogger = Mock.Of<ILogger<IRfm>>();
-
-            RfmBase.SetupSerialPort(MockSerialPort.Object);
         }
 
         [Fact]
