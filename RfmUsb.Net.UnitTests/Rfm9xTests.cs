@@ -27,7 +27,6 @@
 
 using Microsoft.Extensions.Logging;
 using Moq;
-using RfmUsb.Net.Threading;
 using Xunit;
 
 namespace RfmUsb.Net.UnitTests
