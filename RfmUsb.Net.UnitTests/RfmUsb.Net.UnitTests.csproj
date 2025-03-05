@@ -28,9 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Tests.runsettings">
+    <None Update="Runsettings\Tests.runsettings">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
+  <PropertyGroup>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\RunSettings\Tests.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
 </Project>
