@@ -22,7 +22,8 @@
 * SOFTWARE.
 */
 
-// Ignore Spelling: Usb Dio Ook Ocp Bw Fei Bootloader Fsk Rssi Lna
+
+// Ignore Spelling: Rx Bw Dio Fei Fsk Io Lna Ocp Ook Rc Rfm Rssi Tx
 
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -717,10 +718,6 @@ namespace RfmUsb.Net.UnitTests
         public void TestOpenNotFound()
         {
             // Arrange
-            MockSerialPortFactory
-                .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
-                .Returns(MockSerialPort.Object);
-
             MockSerialPortFactory
                 .Setup(_ => _.GetSerialPorts())
                 .Returns(new List<string>() { });
@@ -1487,13 +1484,17 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.Verify(_ => _.Write($"{command}\n"), Times.Once);
         }
 
-        internal void TestOpenVersion(string version)
+        internal void InitialiseRfmDevice()
         {
-            // Arrange
             MockSerialPortFactory
                 .Setup(_ => _.CreateSerialPortInstance(It.IsAny<string>()))
                 .Returns(MockSerialPort.Object);
 
+            RfmBase.InitializeSerialPort(string.Empty, 0);
+        }
+
+        internal void TestOpenVersion(string version)
+        {
             MockSerialPort
                 .Setup(_ => _.IsOpen)
                 .Returns(true);
@@ -1515,9 +1516,9 @@ namespace RfmUsb.Net.UnitTests
 
             // Assert
             MockSerialPortFactory
-                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.Once);
+                .Verify(_ => _.CreateSerialPortInstance(It.IsAny<string>()), Times.AtLeastOnce);
 
-            MockSerialPort.Verify(_ => _.Open(), Times.Once);
+            MockSerialPort.Verify(_ => _.Open(), Times.AtLeastOnce);
         }
     }
 }

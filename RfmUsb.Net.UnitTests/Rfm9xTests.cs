@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Agc Io Irq Lna Lora Ook Rx Pll Rfm Rssi Tcxo Tx
+
 using Moq;
 using Xunit;
 
@@ -34,7 +37,10 @@ namespace RfmUsb.Net.UnitTests
         public Rfm9xTests() : base()
         {
             _rfmDevice = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
+
             RfmBase = _rfmDevice;
+
+            InitialiseRfmDevice();
         }
 
         [Fact]
@@ -1891,7 +1897,7 @@ namespace RfmUsb.Net.UnitTests
         [Theory]
         [InlineData(Timer.Timer1)]
         [InlineData(Timer.Timer2)]
-        public void TestSetTimerCoefficent(Timer expected)
+        public void TestSetTimerCoefficient(Timer expected)
         {
             // Arrange
             MockSerialPort

@@ -429,20 +429,7 @@ namespace RfmUsb.Net
         {
             try
             {
-                if (SerialPort == null)
-                {
-                    SerialPort = SerialPortFactory.CreateSerialPortInstance(serialPort);
-
-                    SerialPort.BaudRate = baudRate;
-                    SerialPort.NewLine = "\r\n";
-                    SerialPort.DtrEnable = true;
-                    SerialPort.RtsEnable = true;
-                    SerialPort.ReadTimeout = _signalTimeout;
-                    SerialPort.WriteTimeout = _signalTimeout;
-                    SerialPort.Open();
-
-                    SerialPort.DataReceived += SerialPortDataReceived;
-                }
+                InitializeSerialPort(serialPort, baudRate);
 
                 ExecuteReset();
 
@@ -457,6 +444,24 @@ namespace RfmUsb.Net
                 throw new RfmUsbSerialPortOpenFailedException(
                     $"Unable to open serial port [{serialPort}] Reason: [{ex.Message}]. " +
                     $"Available Serial Ports: [{string.Join(", ", SerialPortFactory.GetSerialPorts())}]");
+            }
+        }
+
+        internal void InitializeSerialPort(string serialPort, int baudRate)
+        {
+            if (SerialPort == null)
+            {
+                SerialPort = SerialPortFactory.CreateSerialPortInstance(serialPort);
+
+                SerialPort.BaudRate = baudRate;
+                SerialPort.NewLine = "\r\n";
+                SerialPort.DtrEnable = true;
+                SerialPort.RtsEnable = true;
+                SerialPort.ReadTimeout = _signalTimeout;
+                SerialPort.WriteTimeout = _signalTimeout;
+                SerialPort.Open();
+
+                SerialPort.DataReceived += SerialPortDataReceived;
             }
         }
 

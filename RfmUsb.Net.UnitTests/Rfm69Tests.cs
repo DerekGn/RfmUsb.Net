@@ -22,11 +22,9 @@
 * SOFTWARE.
 */
 
-
-// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc
+// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc Rfm Rx
 
 using Moq;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Xunit;
 
@@ -36,10 +34,13 @@ namespace RfmUsb.Net.UnitTests
     {
         private readonly Rfm69 _rfmDevice;
 
-        public Rfm69Tests()
+        public Rfm69Tests() : base()
         {
             _rfmDevice = new Rfm69(MockLogger, MockSerialPortFactory.Object);
+
             RfmBase = _rfmDevice;
+
+            InitialiseRfmDevice();
         }
 
         [Fact]
