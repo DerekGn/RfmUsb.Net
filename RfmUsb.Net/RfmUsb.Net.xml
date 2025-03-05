@@ -4093,33 +4093,6 @@
             Twenty Degrees
             </summary>
         </member>
-        <member name="T:RfmUsb.Net.Threading.IMutex">
-            <summary>
-            Represents a mutex for exclusive access to a function
-            </summary>
-        </member>
-        <member name="M:RfmUsb.Net.Threading.IMutex.EnterAsync``1(System.Func{``0},System.Threading.CancellationToken)">
-            <summary>
-            Exclusively execute an operation
-            </summary>
-            <typeparam name="T">The operation response type</typeparam>
-            <param name="operation">Exclusively access the operation</param>
-            <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken"/> for this operation</param>
-            <returns>An instance of <typeparamref name="T"/></returns>
-        </member>
-        <member name="T:RfmUsb.Net.Threading.Mutex">
-            <summary>
-            The implementation of the <see cref="T:RfmUsb.Net.Threading.IMutex"/>
-            </summary>
-        </member>
-        <member name="M:RfmUsb.Net.Threading.Mutex.#ctor">
-            <summary>
-            Create an instance of a <see cref="T:RfmUsb.Net.Threading.Mutex"/>
-            </summary>
-        </member>
-        <member name="M:RfmUsb.Net.Threading.Mutex.EnterAsync``1(System.Func{``0},System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
         <member name="T:RfmUsb.Net.Timer">
             <summary>
             The timer

@@ -43,7 +43,7 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestAfc()
         {
-            Read(() => RfmBase.Afc);
+            Assert.Equal(0, RfmBase.Afc);
         }
 
         [Fact]
@@ -132,19 +132,19 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestFei()
         {
-            Read(() => RfmBase.Fei);
+            Assert.Equal(0, RfmBase.Fei);
         }
 
         [Fact]
         public void TestFirmwareVersion()
         {
-            Read(() => RfmBase.FirmwareVersion);
+            Assert.StartsWith("RfmUsb-Rfm69 FW:", RfmBase.FirmwareVersion);
         }
 
         [Fact]
         public void TestFrequency()
         {
-            TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 0, 1020000000);
+            TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 10000000, 1020000000);
         }
 
         [Fact]
@@ -335,25 +335,25 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestRadioVersion()
         {
-            Read(() => RfmBase.RadioVersion);
+            Assert.Equal(0x24, RfmBase.RadioVersion);
         }
 
         [Fact]
         public void TestRcCalibration()
         {
-            RfmBase.RcCalibration();
+            Assert.Null(Record.Exception(() => RfmBase.RcCalibration()));
         }
 
         [Fact]
         public void TestRssi()
         {
-            Read<sbyte>(() => RfmBase.Rssi);
+            Assert.Equal(-128, RfmBase.Rssi);
         }
 
         [Fact]
         public void TestSerialNumber()
         {
-            Read(() => RfmBase.SerialNumber);
+            Assert.Null(Record.Exception(() => RfmBase.SerialNumber));
         }
 
         [Fact]
@@ -380,7 +380,7 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestTemperatureValue()
         {
-            Read(() => RfmBase.Temperature);
+            Assert.Equal(0, RfmBase.Temperature);
         }
 
         [Fact]

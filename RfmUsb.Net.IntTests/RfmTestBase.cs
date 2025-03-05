@@ -24,20 +24,13 @@
 
 // Ignore Spelling: Rfm
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using RfmUsb.Net.Exceptions;
-using RfmUsb.Net.IntTests.Options;
-using RfmUsb.Net.Ports;
-using Serilog;
-using Serilog.Core;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    public abstract class RfmTestBase : BaseUnitTests, IDisposable
+    public abstract class RfmTestBase
     {
         protected IRfm RfmBase;
 
@@ -53,7 +46,7 @@ namespace RfmUsb.Net.IntTests
             Action action = () => RfmBase.Stream.Read(bytes);
 
             // Assert
-            Assert.Throws<ArgumentException>(action);
+            Assert.Throws<RfmUsbBufferedIoNotEnabledException>(action);
         }
 
         [Fact]
@@ -86,20 +79,20 @@ namespace RfmUsb.Net.IntTests
             Assert.Throws<RfmUsbBufferedIoNotEnabledException>(action);
         }
 
-        [Fact(Skip = "ignore")]
-        public void TestWriteStreamEnabled()
-        {
-            // Arrange
-            var bytes = new byte[100];
-            var rand = new Random();
+        //[Fact(Skip = "ignore")]
+        //public void TestWriteStreamEnabled()
+        //{
+        //    // Arrange
+        //    var bytes = new byte[100];
+        //    var rand = new Random();
 
-            rand.NextBytes(bytes);
+        //    rand.NextBytes(bytes);
 
-            RfmBase.BufferedIoEnable = true;
+        //    RfmBase.BufferedIoEnable = true;
 
-            // Act
-            RfmBase.Stream.Write(bytes);
-        }
+        //    // Act
+        //    RfmBase.Stream.Write(bytes);
+        //}
 
         internal static IEnumerable<byte> RandomSequence()
         {
@@ -144,37 +137,5 @@ namespace RfmUsb.Net.IntTests
 
             Assert.Equal(!current, changed);
         }
-
-        internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
-        {
-            Logger.Debug($"Function {callerName} Returned: {func()}");
-        }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    RfmBase.Close();
-                    RfmBase.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        #endregion IDisposable
     }
 }

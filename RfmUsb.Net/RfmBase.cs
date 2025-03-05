@@ -586,7 +586,7 @@ namespace RfmUsb.Net
             return SendCommandListResponse(command).FirstOrDefault(string.Empty);
         }
 
-        internal List<string> SendCommandListResponse(string command)
+        internal List<string> SendCommandListResponse(string command, int count = 1)
         {
             if (SerialPort != null && SerialPort.IsOpen)
             {
@@ -597,7 +597,7 @@ namespace RfmUsb.Net
                     do
                     {
                         WaitForSerialPortDataSignal();
-                    } while (_responses.Count == 0);
+                    } while (_responses.Count < count);
 
                     Logger.LogDebug("Command: [{Command}]", command);
                     Logger.LogDebug("Result: [{Response}]", string.Join(" ", _responses));
@@ -677,7 +677,7 @@ namespace RfmUsb.Net
         {
             DioIrq irqMask = DioIrq.None;
 
-            var responses = SendCommandListResponse(Commands.GetDioInterruptMask);
+            var responses = SendCommandListResponse(Commands.GetDioInterruptMask, 6);
 
             responses.ForEach(_ =>
             {

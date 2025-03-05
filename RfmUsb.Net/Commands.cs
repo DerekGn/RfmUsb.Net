@@ -179,7 +179,7 @@ namespace RfmUsb.Net
         public const string GetRxPayloadCrcOn = "g-rpc";
         public const string GetSensitivityBoost = "g-sb";
         public const string GetSequencer = "g-so";
-        public const string GetSerialNumber = "g-mcu";
+        public const string GetSerialNumber = "g-msn";
         public const string GetSpreadingFactor = "g-sf";
         public const string GetSymbolTimeout = "g-st";
         public const string GetSync = "g-sync";
