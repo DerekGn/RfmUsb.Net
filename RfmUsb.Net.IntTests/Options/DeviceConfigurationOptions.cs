@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Com Rfm
+
 namespace RfmUsb.Net.IntTests.Options
 {
     public class DeviceConfigurationOptions

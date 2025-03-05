@@ -25,6 +25,8 @@
 // Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise Rfm Rx
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using RfmUsb.Net.IntTests.Options;
 using Xunit;
 
 namespace RfmUsb.Net.IntTests
@@ -35,9 +37,11 @@ namespace RfmUsb.Net.IntTests
 
         public Rfm69Tests()
         {
-            _rfm69 = _serviceProvider.GetService<IRfm69>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm69)}");
-#warning TODO
-            //_rfm69.Open((string)TestContext.Properties["Rfm69ComPort"]!, int.Parse((string)TestContext.Properties["BaudRate"]!));
+            var options = ServiceProvider.GetService<IOptions<DeviceConfigurationOptions>>();
+
+            _rfm69 = ServiceProvider.GetService<IRfm69>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm69)}");
+
+            _rfm69.Open(options!.Value.Rfm9xComPort!, options.Value.BaudRate);
 
             RfmBase = _rfm69;
         }

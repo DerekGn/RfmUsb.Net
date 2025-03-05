@@ -25,6 +25,8 @@
 // Ignore Spelling: Agc Irq Lora Rfm Rssi Rx Tx
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using RfmUsb.Net.IntTests.Options;
 using Xunit;
 
 namespace RfmUsb.Net.IntTests
@@ -35,10 +37,12 @@ namespace RfmUsb.Net.IntTests
 
         public Rfm9xLoraTests()
         {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
+            var options = ServiceProvider.GetService<IOptions<DeviceConfigurationOptions>>();
+
+            _rfm9x = ServiceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
             RfmBase = _rfm9x;
 
-            _rfm9x.Open("COM3", 230400);
+            _rfm9x.Open(options!.Value.Rfm9xComPort!, options.Value.BaudRate);
 
             _rfm9x.ExecuteReset();
 

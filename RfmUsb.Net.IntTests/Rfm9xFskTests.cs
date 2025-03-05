@@ -36,7 +36,7 @@ namespace RfmUsb.Net.IntTests
 
         public Rfm9xFskTests()
         {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
+            _rfm9x = ServiceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
             RfmBase = _rfm9x;
 
 #warning TODO

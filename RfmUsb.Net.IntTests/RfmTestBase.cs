@@ -27,6 +27,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RfmUsb.Net.Exceptions;
+using RfmUsb.Net.IntTests.Options;
 using RfmUsb.Net.Ports;
 using Serilog;
 using Serilog.Core;
@@ -36,37 +37,9 @@ using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    public abstract class RfmTestBase : IDisposable
+    public abstract class RfmTestBase : BaseUnitTests, IDisposable
     {
-        internal readonly ServiceProvider _serviceProvider;
-        internal readonly Logger Logger;
-
         protected IRfm RfmBase;
-        private readonly IConfiguration _configuration;
-
-        protected RfmTestBase()
-        {
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(_configuration)
-                .CreateLogger();
-
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(builder =>
-                {
-                    builder.AddSerilog(Logger);
-                })
-                .AddSingleton(_configuration)
-                .AddSingleton<IRfm9x, Rfm9x>()
-                .AddSingleton<IRfm69, Rfm69>()
-                .AddSerialPortFactory();
-
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-        }
 
         [Fact]
         public void TestReadStreamDisabled()
