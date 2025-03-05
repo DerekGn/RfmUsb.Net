@@ -23,53 +23,16 @@
 */
 
 
-// Ignore Spelling: Dcc
+// Ignore Spelling: Com Rfm
 
-namespace RfmUsb.Net
+namespace RfmUsb.Net.IntTests.Options
 {
-    /// <summary>
-    /// Cut-off frequency of the DC offset canceller (DCC)
-    /// </summary>
-    public enum DccFreq
+    public class DeviceConfigurationOptions
     {
-        /// <summary>
-        /// Sixteen percent of the RxBw
-        /// </summary>
-        FreqPercent16,
+        public int BaudRate { get; init; }
 
-        /// <summary>
-        /// Eight percent of the RxBw
-        /// </summary>
-        FreqPercent8,
+        public string? Rfm69ComPort { get; init; }
 
-        /// <summary>
-        /// Four percent of the RxBw (Default)
-        /// </summary>
-        FreqPercent4,
-
-        /// <summary>
-        /// Two percent of the RxBw
-        /// </summary>
-        FreqPercent2,
-
-        /// <summary>
-        /// One percent of the RxBw
-        /// </summary>
-        FreqPercent1,
-
-        /// <summary>
-        /// Half percent of the RxBw
-        /// </summary>
-        FreqPercent0_5,
-
-        /// <summary>
-        /// Quarter of a percent of the RxBw
-        /// </summary>
-        FreqPercent0_25,
-
-        /// <summary>
-        /// .125 percent of the RxBw
-        /// </summary>
-        FreqPercent0_125
+        public string? Rfm9xComPort { get; init; }
     }
 }

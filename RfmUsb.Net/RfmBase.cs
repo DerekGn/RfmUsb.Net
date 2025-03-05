@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling:  Io Rc Rfm Rx Tx
+
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Exceptions;
 using RfmUsb.Net.Extensions;
@@ -43,8 +45,9 @@ namespace RfmUsb.Net
         internal const string ResponseOk = "OK";
 
         internal readonly AutoResetEvent _signal;
-        internal readonly ILogger<IRfm> Logger;
+        internal readonly ILogger<RfmBase> Logger;
         internal ISerialPort? SerialPort;
+        private readonly object _lock = new object();
         private readonly List<string> _responses;
         private readonly RfmUsbStream _stream;
         private readonly ISerialPortFactory SerialPortFactory;
@@ -56,7 +59,7 @@ namespace RfmUsb.Net
         /// <param name="logger">The <see cref="ILogger{T}"/> instance</param>
         /// <param name="serialPortFactory">The <see cref="SerialPortFactory"/> instance</param>
         /// <exception cref="ArgumentNullException">if any parameter is null</exception>
-        protected RfmBase(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory)
+        protected RfmBase(ILogger<RfmBase> logger, ISerialPortFactory serialPortFactory)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SerialPortFactory = serialPortFactory ?? throw new ArgumentNullException(nameof(serialPortFactory));
@@ -82,14 +85,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AfcAutoClear
         {
-            get => SendCommand(Commands.GetAfcAutoClear).StartsWith("1");
+            get => SendCommand(Commands.GetAfcAutoClear).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAfcAutoClear} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool AfcAutoOn
         {
-            get => SendCommand(Commands.GetAfcAutoOn).StartsWith("1");
+            get => SendCommand(Commands.GetAfcAutoOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAfcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -110,7 +113,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool BufferedIoEnable
         {
-            get => SendCommand(Commands.GetBufferEnable).StartsWith("1");
+            get => SendCommand(Commands.GetBufferEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -120,14 +123,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool CrcAutoClearOff
         {
-            get => SendCommand(Commands.GetCrcAutoClearOff).StartsWith("1");
+            get => SendCommand(Commands.GetCrcAutoClearOff).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetCrcAutoClearOff} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool CrcOn
         {
-            get => SendCommand(Commands.GetCrcOn).StartsWith("1");
+            get => SendCommand(Commands.GetCrcOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetCrcOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -227,7 +230,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool OcpEnable
         {
-            get => SendCommand(Commands.GetOcpEnable).StartsWith("1");
+            get => SendCommand(Commands.GetOcpEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetOcpEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -283,7 +286,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool PacketFormat
         {
-            get => SendCommand(Commands.GetPacketFormat).StartsWith("1");
+            get => SendCommand(Commands.GetPacketFormat).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetPacketFormat} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -344,7 +347,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool SyncEnable
         {
-            get => SendCommand(Commands.GetSyncEnable).StartsWith("1");
+            get => SendCommand(Commands.GetSyncEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetSyncEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -376,7 +379,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool TxStartCondition
         {
-            get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
+            get => SendCommand(Commands.GetTxStartCondition).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -429,20 +432,7 @@ namespace RfmUsb.Net
         {
             try
             {
-                if (SerialPort == null)
-                {
-                    SerialPort = SerialPortFactory.CreateSerialPortInstance(serialPort);
-
-                    SerialPort.BaudRate = baudRate;
-                    SerialPort.NewLine = "\r\n";
-                    SerialPort.DtrEnable = true;
-                    SerialPort.RtsEnable = true;
-                    SerialPort.ReadTimeout = _signalTimeout;
-                    SerialPort.WriteTimeout = _signalTimeout;
-                    SerialPort.Open();
-
-                    SerialPort.DataReceived += SerialPortDataReceived;
-                }
+                InitializeSerialPort(serialPort, baudRate);
 
                 ExecuteReset();
 
@@ -567,6 +557,24 @@ namespace RfmUsb.Net
             return GetType().Name;
         }
 
+        internal void InitializeSerialPort(string serialPort, int baudRate)
+        {
+            if (SerialPort == null)
+            {
+                SerialPort = SerialPortFactory.CreateSerialPortInstance(serialPort);
+
+                SerialPort.BaudRate = baudRate;
+                SerialPort.NewLine = "\r\n";
+                SerialPort.DtrEnable = true;
+                SerialPort.RtsEnable = true;
+                SerialPort.ReadTimeout = _signalTimeout;
+                SerialPort.WriteTimeout = _signalTimeout;
+                SerialPort.Open();
+
+                SerialPort.DataReceived += SerialPortDataReceived;
+            }
+        }
+
         internal void ResetSerialPort(ISerialPort serialPort)
         {
             serialPort.DataReceived -= SerialPortDataReceived;
@@ -578,21 +586,21 @@ namespace RfmUsb.Net
             return SendCommandListResponse(command).FirstOrDefault(string.Empty);
         }
 
-        internal List<string> SendCommandListResponse(string command)
+        internal List<string> SendCommandListResponse(string command, int count = 1)
         {
             if (SerialPort != null && SerialPort.IsOpen)
             {
-                lock (SerialPort)
+                lock (_lock)
                 {
                     SerialPort.Write($"{command}\n");
 
                     do
                     {
                         WaitForSerialPortDataSignal();
-                    } while (_responses.Count == 0);
+                    } while (_responses.Count < count);
 
-                    Logger.LogDebug("Command: [{command}]", command);
-                    Logger.LogDebug("Result: [{response}]", string.Join(" ", _responses));
+                    Logger.LogDebug("Command: [{Command}]", command);
+                    Logger.LogDebug("Result: [{Response}]", string.Join(" ", _responses));
 
                     var result = new List<string>();
                     result.AddRange(_responses);
@@ -669,7 +677,7 @@ namespace RfmUsb.Net
         {
             DioIrq irqMask = DioIrq.None;
 
-            var responses = SendCommandListResponse(Commands.GetDioInterruptMask);
+            var responses = SendCommandListResponse(Commands.GetDioInterruptMask, 6);
 
             responses.ForEach(_ =>
             {
@@ -755,39 +763,36 @@ namespace RfmUsb.Net
 
         private void RaiseDioInterrupt(DioIrq values)
         {
-            Logger.LogDebug("Raising Dio Irq: {values}", values);
+            Logger.LogDebug("Raising Dio Irq: [{Values}]", values);
             DioInterrupt?.Invoke(this, values);
         }
 
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (e.EventType == SerialData.Chars)
+            if (e.EventType == SerialData.Chars && SerialPort != null)
             {
-                if (SerialPort != null)
+                do
                 {
-                    do
+                    var response = SerialPort.ReadLine();
+
+                    if (response.StartsWith("DIO PIN IRQ"))
                     {
-                        var response = SerialPort.ReadLine();
+                        RaiseDioInterrupt((DioIrq)
+                            Convert.ToInt32(
+                                    response.Split(" ")
+                                    .Last()
+                                    .Replace("[", string.Empty)
+                                    .Replace("]", string.Empty), 16));
+                    }
+                    else
+                    {
+                        _responses.Add(response);
+                    }
+                } while (SerialPort.BytesToRead != 0);
 
-                        if (response.StartsWith("DIO PIN IRQ"))
-                        {
-                            RaiseDioInterrupt((DioIrq)
-                                Convert.ToInt32(
-                                        response.Split(" ")
-                                        .Last()
-                                        .Replace("[", string.Empty)
-                                        .Replace("]", string.Empty), 16));
-                        }
-                        else
-                        {
-                            _responses.Add(response);
-                        }
-                    } while (SerialPort.BytesToRead != 0);
+                Logger.LogTrace("Received Serial Port Data: [{Type}]", e.EventType);
 
-                    Logger.LogTrace("Received Serial Port Data: {type}", e.EventType);
-
-                    _signal.Set();
-                }
+                _signal.Set();
             }
         }
 

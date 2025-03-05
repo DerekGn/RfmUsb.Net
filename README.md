@@ -1,8 +1,8 @@
 # RfmUsb
 
-[![Build Status](https://dev.azure.com/DerekGn/GitHub/_apis/build/status/DerekGn.RfmUsb.Net?branchName=main)](https://dev.azure.com/DerekGn/GitHub/_build/latest?definitionId=3&branchName=main)
+![GitHub Actions](https://github.com/DerekGn/RfmUsb.Net/actions/workflows/build.yml/badge.svg)
 
-[![NuGet Badge](https://buildstats.info/nuget/RfmUsb.Net)](https://www.nuget.org/packages/RfmUsb.Net/)
+[![NuGet](https://img.shields.io/nuget/v/RfmUsb.Net.svg?style=flat-square)](https://www.nuget.org/packages/RfmUsb.Net/)
 
 Api for the USB Rfm69 and Rfm9x serial device. The api allows for all configuration parameters of the Rfm69 and Rfm9x radio module to be configured via a command line interface.
 

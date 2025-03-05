@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,11 +99,13 @@ namespace RfmUsbConsole
                 .Build();
         }
 
+#pragma warning disable S1144 // Unused private types or members should be removed
         private int OnExecute(CommandLineApplication app, IConsole console)
         {
             console.WriteLine("You must specify a subcommand.");
             app.ShowHelp();
             return 1;
         }
+#pragma warning restore S1144 // Unused private types or members should be removed
     }
 }

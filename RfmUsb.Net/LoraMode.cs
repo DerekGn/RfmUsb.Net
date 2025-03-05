@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Lora
+
 namespace RfmUsb.Net
 {
     /// <summary>

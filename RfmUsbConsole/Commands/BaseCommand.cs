@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm Irq
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
@@ -133,11 +135,11 @@ namespace RfmUsbConsole.Commands
             }
             catch (RfmUsbInvalidDeviceTypeException ex)
             {
-                Logger.LogError("Invalid Device Type: {message}", ex.Message);
+                Logger.LogError(ex, "Invalid Device Type: [{Message}]", ex.Message);
             }
             catch (Exception ex)
             {
-                Logger.LogError("An unhandled exception occurred: {ex}", ex);
+                Logger.LogError(ex, "An unhandled exception occurred");
             }
             finally
             {
@@ -182,7 +184,7 @@ namespace RfmUsbConsole.Commands
                 }
                 else if (source == SignalSource.None)
                 {
-                    Logger.LogInformation("Ping [{i}] Timeout.", i);
+                    Logger.LogInformation("Ping [{I}] Timeout.", i);
                 }
 
                 Thread.Sleep(pingInterval);
@@ -218,13 +220,13 @@ namespace RfmUsbConsole.Commands
 
                         if ((fifo[0] == 0x55) && (fifo[1] == 0xAA))
                         {
-                            Logger.LogInformation("Ping Received. Packet Rssi: {rssi}", Rfm.LastRssi);
+                            Logger.LogInformation("Ping Received. Packet Rssi: [{Rssi}]", Rfm.LastRssi);
 
                             SendPingResponse();
                         }
                         else
                         {
-                            Logger.LogWarning("Invalid Packet Received. Packet:[{packet}] Packet Rssi: {rssi}",
+                            Logger.LogWarning("Invalid Packet Received. Packet:[{Packet}] Packet Rssi: [{Rssi}]",
                                 BitConverter.ToString(fifo.Take(2).ToArray()), Rfm.LastRssi);
                         }
                     }
@@ -272,7 +274,7 @@ namespace RfmUsbConsole.Commands
 
         private void RfmDeviceDioInterrupt(object? sender, DioIrq e)
         {
-            Logger.LogDebug("Dio Irq [{e}]", e);
+            Logger.LogDebug("Dio Irq [{Irq}]", e);
 
             if ((e & DioIrq.Dio0) == DioIrq.Dio0)
             {
@@ -320,17 +322,17 @@ namespace RfmUsbConsole.Commands
                 if (CheckPacketReceived())
                 {
                     Logger.LogInformation(
-                        "Ping Response Received. Elapsed: [{elapsed}]",
+                        "Ping Response Received. Elapsed: [{Elapsed}]",
                         sw.Elapsed);
                 }
             }
             else if (source == SignalSource.Console)
             {
-                Logger.LogInformation("Ping Canceled.");
+                Logger.LogInformation("Ping Cancelled.");
             }
             else if (source == SignalSource.None)
             {
-                Logger.LogInformation("Ping [{pingNumber}] Timeout.", pingNumber);
+                Logger.LogInformation("Ping [{PingNumber}] Timeout.", pingNumber);
             }
 
             Rfm.Mode = Mode.Standby;

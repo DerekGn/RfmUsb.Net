@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm
+
 using System.Collections.Generic;
 
 namespace RfmUsb.Net
@@ -191,14 +193,14 @@ namespace RfmUsb.Net
 
         /// <summary>
         /// Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
-        /// if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+        /// if Rssi interrupt doesn't occur(i.e. RssiValue > RssiThreshold)
         /// 0x00: TimeoutRxStart is disabled
         /// </summary>
         byte TimeoutRssiThreshold { get; set; }
 
         /// <summary>
         /// Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
-        /// if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+        /// if Rssi interrupt doesn't occur(i.e. RssiValue > RssiThreshold)
         /// 0x00: TimeoutRxStart is disabled
         /// </summary>
         byte TimeoutRxStart { get; set; }

@@ -22,28 +22,31 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc Rfm Rx
 
-// Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc
-
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
+using Xunit;
 
 namespace RfmUsb.Net.UnitTests
 {
-    [TestClass]
     public class Rfm69Tests : RfmBaseTests
     {
         private readonly Rfm69 _rfmDevice;
 
-        public Rfm69Tests()
+        public Rfm69Tests() : base()
         {
-            _rfmDevice = new Rfm69(MockLogger, MockSerialPortFactory.Object);
+            _rfmDevice = new Rfm69(
+                Mock.Of<ILogger<Rfm69>>(),
+                MockSerialPortFactory.Object);
+
             RfmBase = _rfmDevice;
+
+            InitialiseRfmDevice();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteAfcClear()
         {
             ExecuteTest(
@@ -52,7 +55,7 @@ namespace RfmUsb.Net.UnitTests
                 RfmBase.ResponseOk);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteAfcStart()
         {
             ExecuteTest(
@@ -61,7 +64,7 @@ namespace RfmUsb.Net.UnitTests
                 RfmBase.ResponseOk);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteFeiStart()
         {
             ExecuteTest(
@@ -70,198 +73,198 @@ namespace RfmUsb.Net.UnitTests
                 RfmBase.ResponseOk);
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetAesOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AesOn; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetAesOn,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetAfcLowBetaOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AfcLowBetaOn; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetAfcLowBetaOn,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoLevel)]
-        [DataRow(EnterCondition.FifoNotEmpty)]
-        [DataRow(EnterCondition.Off)]
-        [DataRow(EnterCondition.PacketSent)]
-        [DataRow(EnterCondition.PayloadReady)]
-        [DataRow(EnterCondition.SyncAddressMatch)]
-        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
+        [Theory]
+        [InlineData(EnterCondition.CrcOk)]
+        [InlineData(EnterCondition.FifoLevel)]
+        [InlineData(EnterCondition.FifoNotEmpty)]
+        [InlineData(EnterCondition.Off)]
+        [InlineData(EnterCondition.PacketSent)]
+        [InlineData(EnterCondition.PayloadReady)]
+        [InlineData(EnterCondition.SyncAddressMatch)]
+        [InlineData(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestGetAutoModeEnterCondition(EnterCondition expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AutoModeEnterCondition; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetAutoModeEnterCondition,
                 $"0x{expected:X}");
         }
 
         // ExitCondition
-        [TestMethod]
-        [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoNotEmpty)]
-        [DataRow(ExitCondition.FifoLevel)]
-        [DataRow(ExitCondition.Off)]
-        [DataRow(ExitCondition.PacketSent)]
-        [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.Timeout)]
-        [DataRow(ExitCondition.SyncAddressMatch)]
+        [Theory]
+        [InlineData(ExitCondition.CrcOk)]
+        [InlineData(ExitCondition.FifoNotEmpty)]
+        [InlineData(ExitCondition.FifoLevel)]
+        [InlineData(ExitCondition.Off)]
+        [InlineData(ExitCondition.PacketSent)]
+        [InlineData(ExitCondition.PayloadReady)]
+        [InlineData(ExitCondition.Timeout)]
+        [InlineData(ExitCondition.SyncAddressMatch)]
         public void TestGetAutoModeExitCondition(ExitCondition expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AutoModeExitCondition; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetAutoModeExitCondition,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetAutoRxRestartOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.AutoRxRestartOn; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetAutoRxRestartOn,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ContinuousDagc.Normal)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta0)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta1)]
+        [Theory]
+        [InlineData(ContinuousDagc.Normal)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta0)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta1)]
         public void TestGetContinuousDagc(ContinuousDagc expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ContinuousDagc; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetContinuousDagc,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(LnaGain.Auto)]
-        [DataRow(LnaGain.Max)]
-        [DataRow(LnaGain.MaxMinus12db)]
-        [DataRow(LnaGain.MaxMinus24db)]
-        [DataRow(LnaGain.MaxMinus36db)]
-        [DataRow(LnaGain.MaxMinus48db)]
-        [DataRow(LnaGain.MaxMinus6db)]
+        [Theory]
+        [InlineData(LnaGain.Auto)]
+        [InlineData(LnaGain.Max)]
+        [InlineData(LnaGain.MaxMinus12db)]
+        [InlineData(LnaGain.MaxMinus24db)]
+        [InlineData(LnaGain.MaxMinus36db)]
+        [InlineData(LnaGain.MaxMinus48db)]
+        [InlineData(LnaGain.MaxMinus6db)]
         public void TestGetCurrentLnaGain(LnaGain expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.CurrentLnaGain; },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 Commands.GetCurrentLnaGain,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(Rfm69DataMode.Reserved)]
-        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
-        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
-        [DataRow(Rfm69DataMode.Packet)]
+        [Theory]
+        [InlineData(Rfm69DataMode.Reserved)]
+        [InlineData(Rfm69DataMode.ContinousModeWithBitSync)]
+        [InlineData(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        [InlineData(Rfm69DataMode.Packet)]
         public void TestGetDataMode(Rfm69DataMode expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.DataMode; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetDataMode,
                 expected.ToString("X"));
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent16)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent16)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
         public void TestGetDccFreq(DccFreq expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.DccFreq; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetDccFreq,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent16)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent16)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
         public void TestGetDccFreqAfc(DccFreq expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.DccFreqAfc; },
-                (v) => { v.Should().Be(expected); },
+                (v) => Assert.Equal(expected, v),
                 Commands.GetDccFreqAfc,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetFifoFill(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.FifoFill; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetFifoFill,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetImpedance(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.Impedance; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetImpedance,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(IntermediateMode.Rx)]
-        [DataRow(IntermediateMode.Sleep)]
-        [DataRow(IntermediateMode.Standby)]
-        [DataRow(IntermediateMode.Tx)]
+        [Theory]
+        [InlineData(IntermediateMode.Rx)]
+        [InlineData(IntermediateMode.Sleep)]
+        [InlineData(IntermediateMode.Standby)]
+        [InlineData(IntermediateMode.Tx)]
         public void TestGetIntermediateMode(IntermediateMode expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.IntermediateMode; },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 Commands.GetIntermediateMode,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetIrqFlags()
         {
             // Arrange
@@ -313,7 +316,7 @@ namespace RfmUsb.Net.UnitTests
             // Assert
             MockSerialPort.Verify(_ => _.Write($"{Commands.GetIrqFlags}\n"));
 
-            result.Should().Be(
+            Assert.Equal(
                 Rfm69IrqFlags.CrcOK |
                 Rfm69IrqFlags.PayloadReady |
                 Rfm69IrqFlags.FifoOverrun |
@@ -327,161 +330,161 @@ namespace RfmUsb.Net.UnitTests
                 Rfm69IrqFlags.PllLock |
                 Rfm69IrqFlags.RxReady |
                 Rfm69IrqFlags.TxReady |
-                Rfm69IrqFlags.ModeReady);
+                Rfm69IrqFlags.ModeReady, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetListenCoefficientIdle()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenCoefficientIdle; },
-                (v) => v.Should().Be(0xAA),
+                (v) => Assert.Equal(0xAA, v),
                 Commands.GetListenCoefficientIdle,
                 "0xAA");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetListenCoefficientRx()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenCoefficientRx; },
-                (v) => v.Should().Be(0xAA),
+                (v) => Assert.Equal(0xAA, v),
                 Commands.GetListenCoefficientRx,
                 "0xAA");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetListenCriteria(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenCriteria; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetListenCriteria,
                 value ? "1" : "0");
         }
 
         // ListenEnd
-        [TestMethod]
-        [DataRow(ListenEnd.Idle)]
-        [DataRow(ListenEnd.Mode)]
-        [DataRow(ListenEnd.Reserved)]
-        [DataRow(ListenEnd.Rx)]
+        [Theory]
+        [InlineData(ListenEnd.Idle)]
+        [InlineData(ListenEnd.Mode)]
+        [InlineData(ListenEnd.Reserved)]
+        [InlineData(ListenEnd.Rx)]
         public void TestGetListenEnd(ListenEnd expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenEnd; },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 Commands.GetListenEnd,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetListenerOn(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenerOn; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetListenerOn,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Idle262ms)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Reserved)]
+        [Theory]
+        [InlineData(ListenResolution.Idle262ms)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Reserved)]
         public void TestGetListenResolutionIdle(ListenResolution expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenResolutionIdle; },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 Commands.GetListenResolutionIdle,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Idle262ms)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Reserved)]
+        [Theory]
+        [InlineData(ListenResolution.Idle262ms)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Reserved)]
         public void TestGetListenResolutionRx(ListenResolution expected)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.ListenResolutionRx; },
-                (v) => v.Should().Be(expected),
+                (v) => Assert.Equal(expected, v),
                 Commands.GetListenResolutionRx,
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetLowBetaAfcOffset()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.LowBetaAfcOffset; },
-                (v) => v.Should().Be(0xAA),
+                (v) => Assert.Equal(0xAA, v),
                 Commands.GetLowBetaAfcOffset,
                 "0xAA");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetOutputPower()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.OutputPower; },
-                (v) => v.Should().Be(-2),
+                (v) => Assert.Equal(-2, v),
                 Commands.GetOutputPower,
                 $"0x{(sbyte)-2:X2}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetRssiThreshold()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.RssiThreshold; },
-                (v) => v.Should().Be(-114),
+                (v) => Assert.Equal(-114, v),
                 Commands.GetRssiThreshold,
                 "0x8E");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetSensitivityBoost(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.SensitivityBoost; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetSensitivityBoost,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestGetSequencer(bool value)
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.Sequencer; },
-                (v) => v.Should().Be(value),
+                (v) => Assert.Equal(value, v),
                 Commands.GetSequencer,
                 value ? "1" : "0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetSyncBitErrors()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.SyncBitErrors; },
-                (v) => v.Should().Be(0xA0),
+                (v) => Assert.Equal(0xA0, v),
                 Commands.GetSyncBitErrors,
                 "0xA0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetTimeout()
         {
             // Arrange
@@ -493,35 +496,35 @@ namespace RfmUsb.Net.UnitTests
             var result = _rfmDevice.Timeout;
 
             // Assert
-            result.Should().Be(1000);
+            Assert.Equal(1000, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetTimeoutRssiThreshold()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.TimeoutRssiThreshold; },
-                (v) => v.Should().Be(0xA0),
+                (v) => Assert.Equal(0xA0, v),
                 Commands.GetTimeoutRssiThreshold,
                 "0xA0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetTimeoutRxStart()
         {
             ExecuteGetTest(
                 () => { return _rfmDevice.TimeoutRxStart; },
-                (v) => v.Should().Be(0xA0),
+                (v) => Assert.Equal(0xA0, v),
                 Commands.GetTimeoutRxStart,
                 "0xA0");
         }
 
-        [TestMethod]
-        [DataRow(Mode.Rx)]
-        [DataRow(Mode.Sleep)]
-        [DataRow(Mode.Standby)]
-        [DataRow(Mode.Synth)]
-        [DataRow(Mode.Tx)]
+        [Theory]
+        [InlineData(Mode.Rx)]
+        [InlineData(Mode.Sleep)]
+        [InlineData(Mode.Standby)]
+        [InlineData(Mode.Synth)]
+        [InlineData(Mode.Tx)]
         public void TestListenModeAbort(Mode expected)
         {
             ExecuteSetTest(
@@ -530,7 +533,7 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(byte)expected:X2}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestMeasureTemperature()
         {
             ExecuteTest(
@@ -539,13 +542,13 @@ namespace RfmUsb.Net.UnitTests
                 RfmBase.ResponseOk);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOpen()
         {
-            TestOpen("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
+            TestOpenVersion("RfmUsb-RFM69 FW: v3.0.3 HW: 2.0 433Mhz");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRestartRx()
         {
             ExecuteTest(
@@ -554,7 +557,7 @@ namespace RfmUsb.Net.UnitTests
                 RfmBase.ResponseOk);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetAesKey()
         {
             ExecuteSetTest(
@@ -563,9 +566,9 @@ namespace RfmUsb.Net.UnitTests
                 "FFAABB");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetAesOn(bool value)
         {
             ExecuteSetTest(
@@ -574,9 +577,9 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetAfcLowBetaOn(bool value)
         {
             ExecuteSetTest(
@@ -585,15 +588,15 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoNotEmpty)]
-        [DataRow(ExitCondition.FifoLevel)]
-        [DataRow(ExitCondition.Off)]
-        [DataRow(ExitCondition.PacketSent)]
-        [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.Timeout)]
-        [DataRow(ExitCondition.SyncAddressMatch)]
+        [Theory]
+        [InlineData(ExitCondition.CrcOk)]
+        [InlineData(ExitCondition.FifoNotEmpty)]
+        [InlineData(ExitCondition.FifoLevel)]
+        [InlineData(ExitCondition.Off)]
+        [InlineData(ExitCondition.PacketSent)]
+        [InlineData(ExitCondition.PayloadReady)]
+        [InlineData(ExitCondition.Timeout)]
+        [InlineData(ExitCondition.SyncAddressMatch)]
         public void TestSetAutoModeExitCondition(ExitCondition expected)
         {
             ExecuteSetTest(
@@ -602,9 +605,9 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(byte)expected:X2}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetAutoRxRestartOn(bool value)
         {
             ExecuteSetTest(
@@ -613,10 +616,10 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ContinuousDagc.Normal)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta0)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta1)]
+        [Theory]
+        [InlineData(ContinuousDagc.Normal)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta0)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta1)]
         public void TestSetContinuousDagc(ContinuousDagc expected)
         {
             ExecuteSetTest(
@@ -625,11 +628,11 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(Rfm69DataMode.Packet)]
-        [DataRow(Rfm69DataMode.Reserved)]
-        [DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
-        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        [Theory]
+        [InlineData(Rfm69DataMode.Packet)]
+        [InlineData(Rfm69DataMode.Reserved)]
+        [InlineData(Rfm69DataMode.ContinousModeWithBitSync)]
+        [InlineData(Rfm69DataMode.ContinousModeWithoutBitSync)]
         public void TestSetDataMode(Rfm69DataMode expected)
         {
             ExecuteSetTest(
@@ -638,15 +641,15 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(byte)expected:X2}");
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent16)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent16)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
         public void TestSetDccFreq(DccFreq expected)
         {
             ExecuteSetTest(
@@ -655,15 +658,15 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent16)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent16)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
         public void TestSetDccFreqAfc(DccFreq expected)
         {
             ExecuteSetTest(
@@ -672,15 +675,15 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoLevel)]
-        [DataRow(EnterCondition.FifoNotEmpty)]
-        [DataRow(EnterCondition.Off)]
-        [DataRow(EnterCondition.PacketSent)]
-        [DataRow(EnterCondition.PayloadReady)]
-        [DataRow(EnterCondition.SyncAddressMatch)]
-        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
+        [Theory]
+        [InlineData(EnterCondition.CrcOk)]
+        [InlineData(EnterCondition.FifoLevel)]
+        [InlineData(EnterCondition.FifoNotEmpty)]
+        [InlineData(EnterCondition.Off)]
+        [InlineData(EnterCondition.PacketSent)]
+        [InlineData(EnterCondition.PayloadReady)]
+        [InlineData(EnterCondition.SyncAddressMatch)]
+        [InlineData(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestSetEnterCondition(EnterCondition expected)
         {
             ExecuteSetTest(
@@ -689,9 +692,9 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(byte)expected:X2}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetFifoFill(bool value)
         {
             ExecuteSetTest(
@@ -700,9 +703,9 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetImpedance(bool value)
         {
             ExecuteSetTest(
@@ -711,11 +714,11 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(IntermediateMode.Rx)]
-        [DataRow(IntermediateMode.Sleep)]
-        [DataRow(IntermediateMode.Standby)]
-        [DataRow(IntermediateMode.Tx)]
+        [Theory]
+        [InlineData(IntermediateMode.Rx)]
+        [InlineData(IntermediateMode.Sleep)]
+        [InlineData(IntermediateMode.Standby)]
+        [InlineData(IntermediateMode.Tx)]
         public void TestSetIntermediateMode(IntermediateMode expected)
         {
             ExecuteSetTest(
@@ -724,7 +727,7 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(byte)expected:X2}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetIrqFlags()
         {
             ExecuteSetTest(
@@ -733,7 +736,7 @@ namespace RfmUsb.Net.UnitTests
                 "0x0910");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetListenCoefficientIdle()
         {
             ExecuteSetTest(
@@ -742,7 +745,7 @@ namespace RfmUsb.Net.UnitTests
                 "0x60");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetListenCoefficientRx()
         {
             ExecuteSetTest(
@@ -751,9 +754,9 @@ namespace RfmUsb.Net.UnitTests
                 "0x60");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetListenCriteria(bool value)
         {
             ExecuteSetTest(
@@ -762,11 +765,11 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ListenEnd.Idle)]
-        [DataRow(ListenEnd.Mode)]
-        [DataRow(ListenEnd.Reserved)]
-        [DataRow(ListenEnd.Rx)]
+        [Theory]
+        [InlineData(ListenEnd.Idle)]
+        [InlineData(ListenEnd.Mode)]
+        [InlineData(ListenEnd.Reserved)]
+        [InlineData(ListenEnd.Rx)]
         public void TestSetListenEnd(ListenEnd expected)
         {
             ExecuteSetTest(
@@ -775,9 +778,9 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetListenerOn(bool value)
         {
             ExecuteSetTest(
@@ -786,11 +789,11 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Idle262ms)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Reserved)]
+        [Theory]
+        [InlineData(ListenResolution.Idle262ms)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Reserved)]
         public void TestSetListenResolutionIdle(ListenResolution expected)
         {
             ExecuteSetTest(
@@ -799,11 +802,11 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Idle262ms)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Reserved)]
+        [Theory]
+        [InlineData(ListenResolution.Idle262ms)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Reserved)]
         public void TestSetListenResolutionRx(ListenResolution expected)
         {
             ExecuteSetTest(
@@ -812,7 +815,7 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{expected:X}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetLowBetaAfcOffset()
         {
             ExecuteSetTest(
@@ -821,7 +824,7 @@ namespace RfmUsb.Net.UnitTests
                 "0x60");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetOutputPower()
         {
             ExecuteSetTest(
@@ -830,7 +833,7 @@ namespace RfmUsb.Net.UnitTests
                  $"0x{(sbyte)-2:X2}");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetRssiThreshold()
         {
             ExecuteSetTest(
@@ -839,9 +842,9 @@ namespace RfmUsb.Net.UnitTests
                 $"0x{(sbyte)-114:X2}");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetSensitivityBoost(bool value)
         {
             ExecuteSetTest(
@@ -850,9 +853,9 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void TestSetSequencer(bool value)
         {
             ExecuteSetTest(
@@ -861,7 +864,7 @@ namespace RfmUsb.Net.UnitTests
                 value ? "1" : "0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetSyncBitErrors()
         {
             ExecuteSetTest(
@@ -870,7 +873,7 @@ namespace RfmUsb.Net.UnitTests
                 "0xB0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetTimeout()
         {
             // Arrange
@@ -882,7 +885,7 @@ namespace RfmUsb.Net.UnitTests
             MockSerialPort.VerifySet(_ => _.ReadTimeout = 1000, Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetTimeoutRssiThreshold()
         {
             ExecuteSetTest(
@@ -891,7 +894,7 @@ namespace RfmUsb.Net.UnitTests
                 "0xB0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetTimeoutRxStart()
         {
             ExecuteSetTest(
@@ -900,7 +903,7 @@ namespace RfmUsb.Net.UnitTests
                 "0xB0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestStartRssi()
         {
             ExecuteTest(

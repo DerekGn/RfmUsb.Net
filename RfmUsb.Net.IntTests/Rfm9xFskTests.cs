@@ -22,425 +22,409 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+// Ignore Spelling: Agc Bw Fsk Io Irq Lna Ook Pll Rfm Rssi Rx Tcxo
+
+using System.Runtime.CompilerServices;
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    [TestClass]
-    public class Rfm9xFskTests : RfmTestCommon
+    public class Rfm9xFskTests : RfmTestCommon, IClassFixture<TestFixture<IRfm9x>>
     {
-        private readonly IRfm9x _rfm9x;
+        private readonly TestFixture<IRfm9x> _fixture;
 
-        public Rfm9xFskTests()
+        public Rfm9xFskTests(TestFixture<IRfm9x> fixture)
         {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
-            RfmBase = _rfm9x;
+            _fixture = fixture;
         }
 
-        [TestMethod]
-        [DataRow(Timer.Timer1, TimerResolution.Reserved)]
-        [DataRow(Timer.Timer2, TimerResolution.Reserved)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution64us)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution64us)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution4_1ms)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution4_1ms)]
-        [DataRow(Timer.Timer1, TimerResolution.Resolution256ms)]
-        [DataRow(Timer.Timer2, TimerResolution.Resolution256ms)]
+        [Theory]
+        [InlineData(Timer.Timer1, TimerResolution.Reserved)]
+        [InlineData(Timer.Timer2, TimerResolution.Reserved)]
+        [InlineData(Timer.Timer1, TimerResolution.Resolution64us)]
+        [InlineData(Timer.Timer2, TimerResolution.Resolution64us)]
+        [InlineData(Timer.Timer1, TimerResolution.Resolution4_1ms)]
+        [InlineData(Timer.Timer2, TimerResolution.Resolution4_1ms)]
+        [InlineData(Timer.Timer1, TimerResolution.Resolution256ms)]
+        [InlineData(Timer.Timer2, TimerResolution.Resolution256ms)]
         public void SetTimerResolution(Timer timer, TimerResolution expected)
         {
-            _rfm9x.SetTimerResolution(timer, expected);
+            _fixture.Device.SetTimerResolution(timer, expected);
 
-            _rfm9x.GetTimerResolution(timer).Should().Be(expected);
+            Assert.Equal(expected, _fixture.Device.GetTimerResolution(timer));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAgcAutoOn()
         {
-            TestRangeBool(() => _rfm9x.AgcAutoOn, (v) => _rfm9x.AgcAutoOn = v);
+            TestRangeBool(() => _fixture.Device.AgcAutoOn, (v) => _fixture.Device.AgcAutoOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAutoImageCalibrationOn()
         {
-            TestRangeBool(() => _rfm9x.AutoImageCalibrationOn, (v) => _rfm9x.AutoImageCalibrationOn = v);
+            TestRangeBool(() => _fixture.Device.AutoImageCalibrationOn, (v) => _fixture.Device.AutoImageCalibrationOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBitRateFractional()
         {
-            TestRange(() => _rfm9x.BitRateFractional, (v) => _rfm9x.BitRateFractional = (byte)v, 0, 0x0F);
+            TestRange(() => _fixture.Device.BitRateFractional, (v) => _fixture.Device.BitRateFractional = (byte)v, 0, 0x0F);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBitSyncOn()
         {
-            TestRangeBool(() => _rfm9x.BitSyncOn, (v) => _rfm9x.BitSyncOn = v);
+            TestRangeBool(() => _fixture.Device.BitSyncOn, (v) => _fixture.Device.BitSyncOn = v);
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _rfm9x?.Close();
-            _rfm9x?.Dispose();
-        }
-
-        [TestMethod]
-        [DataRow(CrcWhiteningType.CrcCCITT)]
-        [DataRow(CrcWhiteningType.CrcIbm)]
+        [Theory]
+        [InlineData(CrcWhiteningType.CrcCCITT)]
+        [InlineData(CrcWhiteningType.CrcIbm)]
         public void TestCrcWhiteningType(CrcWhiteningType expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.CrcWhiteningType, (v) => _rfm9x.CrcWhiteningType = v);
+            TestAssignedValue(expected, () => _fixture.Device.CrcWhiteningType, (v) => _fixture.Device.CrcWhiteningType = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteAgcStart()
         {
-            _rfm9x.ExecuteAgcStart();
+            _fixture.Device.ExecuteAgcStart();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteImageCalibration()
         {
-            _rfm9x.ExecuteImageCalibration();
+            _fixture.Device.ExecuteImageCalibration();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteRestartRxWithoutPllLock()
         {
-            _rfm9x.ExecuteRestartRxWithoutPllLock();
+            _fixture.Device.ExecuteRestartRxWithoutPllLock();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteRestartRxWithPllLock()
         {
-            _rfm9x.ExecuteRestartRxWithPllLock();
+            _fixture.Device.ExecuteRestartRxWithPllLock();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteSequencerStart()
         {
-            _rfm9x.ExecuteSequencerStart();
+            _fixture.Device.ExecuteSequencerStart();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteSequencerStop()
         {
-            _rfm9x.ExecuteSequencerStop();
+            _fixture.Device.ExecuteSequencerStop();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFastHopOn()
         {
-            TestRangeBool(() => _rfm9x.FastHopOn, (v) => _rfm9x.FastHopOn = v);
+            TestRangeBool(() => _fixture.Device.FastHopOn, (v) => _fixture.Device.FastHopOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifo()
         {
             var expected = RandomSequence().Take(64).ToList();
-            _rfm9x.Fifo = expected;
+            _fixture.Device.Fifo = expected;
 
-            _rfm9x.Fifo.Should().StartWith(expected);
+            Assert.Equal(expected, _fixture.Device.Fifo);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoThreshold()
         {
             TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
         }
 
-        [TestMethod]
-        [Ignore("not implemented in device")]
+        [Fact(Skip = "not implemented in device")]
         public void TestFormerTemperatureValue()
         {
-            TestRange(() => _rfm9x.FormerTemperature, (v) => _rfm9x.FormerTemperature = v);
+            TestRange(() => _fixture.Device.FormerTemperature, (v) => _fixture.Device.FormerTemperature = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFromIdle()
         {
-            TestRangeBool(() => _rfm9x.FromIdle, (v) => _rfm9x.FromIdle = v);
+            TestRangeBool(() => _fixture.Device.FromIdle, (v) => _fixture.Device.FromIdle = v);
         }
 
-        [TestMethod]
-        [DataRow(FromPacketReceived.ToLowPowerSelection)]
-        [DataRow(FromPacketReceived.ToReceiveState)]
-        [DataRow(FromPacketReceived.ToReceiveViaFSMode)]
-        [DataRow(FromPacketReceived.ToSequencerOff)]
-        [DataRow(FromPacketReceived.ToTransmitStateOnFifoEmpty)]
+        [Theory]
+        [InlineData(FromPacketReceived.ToLowPowerSelection)]
+        [InlineData(FromPacketReceived.ToReceiveState)]
+        [InlineData(FromPacketReceived.ToReceiveViaFSMode)]
+        [InlineData(FromPacketReceived.ToSequencerOff)]
+        [InlineData(FromPacketReceived.ToTransmitStateOnFifoEmpty)]
         public void TestFromPacketReceived(FromPacketReceived expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.FromPacketReceived, (v) => _rfm9x.FromPacketReceived = v);
+            TestAssignedValue(expected, () => _fixture.Device.FromPacketReceived, (v) => _fixture.Device.FromPacketReceived = v);
         }
 
-        [TestMethod]
-        [DataRow(FromReceive.ToLowPowerSelectionOnPayLoadReady)]
-        [DataRow(FromReceive.ToPacketReceivedOnPayloadReady)]
-        [DataRow(FromReceive.ToPacketReceivedStateOnCrcOk)]
-        [DataRow(FromReceive.ToSequencerOffOnPreambleDetect)]
-        [DataRow(FromReceive.ToSequencerOffOnRssi)]
-        [DataRow(FromReceive.ToSequencerOffOnSyncAddress)]
-        [DataRow(FromReceive.UnusedA)]
-        [DataRow(FromReceive.UnusedB)]
+        [Theory]
+        [InlineData(FromReceive.ToLowPowerSelectionOnPayLoadReady)]
+        [InlineData(FromReceive.ToPacketReceivedOnPayloadReady)]
+        [InlineData(FromReceive.ToPacketReceivedStateOnCrcOk)]
+        [InlineData(FromReceive.ToSequencerOffOnPreambleDetect)]
+        [InlineData(FromReceive.ToSequencerOffOnRssi)]
+        [InlineData(FromReceive.ToSequencerOffOnSyncAddress)]
+        [InlineData(FromReceive.UnusedA)]
+        [InlineData(FromReceive.UnusedB)]
         public void TestFromReceive(FromReceive expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.FromReceive, (v) => _rfm9x.FromReceive = v);
+            TestAssignedValue(expected, () => _fixture.Device.FromReceive, (v) => _fixture.Device.FromReceive = v);
         }
 
-        [TestMethod]
-        [DataRow(FromRxTimeout.ToLowPowerSelection)]
-        [DataRow(FromRxTimeout.ToReceive)]
-        [DataRow(FromRxTimeout.ToSequencerOff)]
-        [DataRow(FromRxTimeout.ToTransmit)]
-        public void TestFromReceive(FromRxTimeout expected)
+        [Theory]
+        [InlineData(FromRxTimeout.ToLowPowerSelection)]
+        [InlineData(FromRxTimeout.ToReceive)]
+        [InlineData(FromRxTimeout.ToSequencerOff)]
+        [InlineData(FromRxTimeout.ToTransmit)]
+        public void TestFromRxTimeout(FromRxTimeout expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.FromRxTimeout, (v) => _rfm9x.FromRxTimeout = v);
+            TestAssignedValue(expected, () => _fixture.Device.FromRxTimeout, (v) => _fixture.Device.FromRxTimeout = v);
         }
 
-        [TestMethod]
-        [DataRow(FromStart.ToLowPowerSelection)]
-        [DataRow(FromStart.ToReceive)]
-        [DataRow(FromStart.ToTransmit)]
-        [DataRow(FromStart.ToTransmitOnFifoLevel)]
+        [Theory]
+        [InlineData(FromStart.ToLowPowerSelection)]
+        [InlineData(FromStart.ToReceive)]
+        [InlineData(FromStart.ToTransmit)]
+        [InlineData(FromStart.ToTransmitOnFifoLevel)]
         public void TestFromStart(FromStart expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.FromStart, (v) => _rfm9x.FromStart = v);
+            TestAssignedValue(expected, () => _fixture.Device.FromStart, (v) => _fixture.Device.FromStart = v);
         }
 
-        [TestMethod]
-        [DataRow(OokAverageOffset.Offset0dB)]
-        [DataRow(OokAverageOffset.Offset2dB)]
-        [DataRow(OokAverageOffset.Offset4dB)]
-        [DataRow(OokAverageOffset.Offset6dB)]
-        public void TestFromStart(OokAverageOffset expected)
+        [Theory]
+        [InlineData(OokAverageOffset.Offset0dB)]
+        [InlineData(OokAverageOffset.Offset2dB)]
+        [InlineData(OokAverageOffset.Offset4dB)]
+        [InlineData(OokAverageOffset.Offset6dB)]
+        public void TestOokAverageOffset(OokAverageOffset expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.OokAverageOffset, (v) => _rfm9x.OokAverageOffset = v);
+            TestAssignedValue(expected, () => _fixture.Device.OokAverageOffset, (v) => _fixture.Device.OokAverageOffset = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFromTransmit()
         {
-            TestRangeBool(() => _rfm9x.FromTransmit, (v) => _rfm9x.FromTransmit = v);
+            TestRangeBool(() => _fixture.Device.FromTransmit, (v) => _fixture.Device.FromTransmit = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetIrq()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.IrqFlags.Should().Be(Rfm9xIrqFlags.ModeReady);
+            _fixture.Device.ExecuteReset();
+            Assert.Equal(Rfm9xIrqFlags.ModeReady, _fixture.Device.IrqFlags);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIdleMode()
         {
-            TestRangeBool(() => _rfm9x.IdleMode, (v) => _rfm9x.IdleMode = v);
+            TestRangeBool(() => _fixture.Device.IdleMode, (v) => _fixture.Device.IdleMode = v);
         }
 
-        [TestInitialize]
-        public void TestInitalise()
-        {
-            _rfm9x.Open((string)TestContext.Properties["Rfm9xComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
-
-            _rfm9x.ExecuteReset();
-        }
-
-        [TestMethod]
+        [Fact]
         public void TestIoHomeOn()
         {
-            TestRangeBool(() => _rfm9x.IoHomeOn, (v) => _rfm9x.IoHomeOn = v);
+            TestRangeBool(() => _fixture.Device.IoHomeOn, (v) => _fixture.Device.IoHomeOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIoHomePowerFrame()
         {
-            TestRangeBool(() => _rfm9x.IoHomePowerFrame, (v) => _rfm9x.IoHomePowerFrame = v);
+            TestRangeBool(() => _fixture.Device.IoHomePowerFrame, (v) => _fixture.Device.IoHomePowerFrame = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLnaBoostHf()
         {
-            TestRangeBool(() => _rfm9x.LnaBoostHf, (v) => _rfm9x.LnaBoostHf = v);
+            TestRangeBool(() => _fixture.Device.LnaBoostHf, (v) => _fixture.Device.LnaBoostHf = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLowBatteryOn()
         {
-            TestRangeBool(() => _rfm9x.LowBatteryOn, (v) => _rfm9x.LowBatteryOn = v);
+            TestRangeBool(() => _fixture.Device.LowBatteryOn, (v) => _fixture.Device.LowBatteryOn = v);
         }
 
-        [TestMethod]
-        [DataRow(LowBatteryTrim.Volts1_695)]
-        [DataRow(LowBatteryTrim.Volts1_764)]
-        [DataRow(LowBatteryTrim.Volts1_835)]
-        [DataRow(LowBatteryTrim.Volts1_905)]
-        [DataRow(LowBatteryTrim.Volts1_976)]
-        [DataRow(LowBatteryTrim.Volts2_045)]
-        [DataRow(LowBatteryTrim.Volts2_116)]
-        [DataRow(LowBatteryTrim.Volts2_185)]
+        [Theory]
+        [InlineData(LowBatteryTrim.Volts1_695)]
+        [InlineData(LowBatteryTrim.Volts1_764)]
+        [InlineData(LowBatteryTrim.Volts1_835)]
+        [InlineData(LowBatteryTrim.Volts1_905)]
+        [InlineData(LowBatteryTrim.Volts1_976)]
+        [InlineData(LowBatteryTrim.Volts2_045)]
+        [InlineData(LowBatteryTrim.Volts2_116)]
+        [InlineData(LowBatteryTrim.Volts2_185)]
         public void TestLowBatteryTrim(LowBatteryTrim expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.LowBatteryTrim, (v) => _rfm9x.LowBatteryTrim = v);
+            TestAssignedValue(expected, () => _fixture.Device.LowBatteryTrim, (v) => _fixture.Device.LowBatteryTrim = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLowFrequencyMode()
         {
-            TestRangeBool(() => _rfm9x.LowFrequencyMode, (v) => _rfm9x.LowFrequencyMode = v);
+            TestRangeBool(() => _fixture.Device.LowFrequencyMode, (v) => _fixture.Device.LowFrequencyMode = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLowPowerSelection()
         {
-            TestRangeBool(() => _rfm9x.LowPowerSelection, (v) => _rfm9x.LowPowerSelection = v);
+            TestRangeBool(() => _fixture.Device.LowPowerSelection, (v) => _fixture.Device.LowPowerSelection = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestMapPreambleDetect()
         {
-            TestRangeBool(() => _rfm9x.MapPreambleDetect, (v) => _rfm9x.MapPreambleDetect = v);
+            TestRangeBool(() => _fixture.Device.MapPreambleDetect, (v) => _fixture.Device.MapPreambleDetect = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOutputPower()
         {
-            TestRange<byte>(() => _rfm9x.OutputPower, (v) => _rfm9x.OutputPower = v, 2, 20);
+            TestRange<byte>(() => _fixture.Device.OutputPower, (v) => _fixture.Device.OutputPower = v, 2, 20);
         }
-        [TestMethod]
+        [Fact]
         public void TestPreambleDetectorOn()
         {
-            TestRangeBool(() => _rfm9x.PreambleDetectorOn, (v) => _rfm9x.PreambleDetectorOn = v);
+            TestRangeBool(() => _fixture.Device.PreambleDetectorOn, (v) => _fixture.Device.PreambleDetectorOn = v);
         }
 
-        [TestMethod]
-        [DataRow(PreambleDetectorSize.OneByte)]
-        [DataRow(PreambleDetectorSize.ThreeBytes)]
-        [DataRow(PreambleDetectorSize.TwoBytes)]
+        [Theory]
+        [InlineData(PreambleDetectorSize.OneByte)]
+        [InlineData(PreambleDetectorSize.ThreeBytes)]
+        [InlineData(PreambleDetectorSize.TwoBytes)]
         public void TestPreambleDetectorSize(PreambleDetectorSize expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.PreambleDetectorSize, (v) => _rfm9x.PreambleDetectorSize = v);
+            TestAssignedValue(expected, () => _fixture.Device.PreambleDetectorSize, (v) => _fixture.Device.PreambleDetectorSize = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPreambleDetectorTotal()
         {
-            TestRange<byte>(() => _rfm9x.PreambleDetectorTolerance, (v) => _rfm9x.PreambleDetectorTolerance = v, 0, 0x0F);
+            TestRange<byte>(() => _fixture.Device.PreambleDetectorTolerance, (v) => _fixture.Device.PreambleDetectorTolerance = v, 0, 0x0F);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPreamblePolarity()
         {
-            TestRangeBool(() => _rfm9x.PreamblePolarity, (v) => _rfm9x.PreamblePolarity = v);
+            TestRangeBool(() => _fixture.Device.PreamblePolarity, (v) => _fixture.Device.PreamblePolarity = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRestartRxOnCollision()
         {
-            TestRangeBool(() => _rfm9x.RestartRxOnCollision, (v) => _rfm9x.RestartRxOnCollision = v);
+            TestRangeBool(() => _fixture.Device.RestartRxOnCollision, (v) => _fixture.Device.RestartRxOnCollision = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssiCollisionThreshold()
         {
-            TestRange(() => _rfm9x.RssiCollisionThreshold, (v) => _rfm9x.RssiCollisionThreshold = v);
+            TestRange(() => _fixture.Device.RssiCollisionThreshold, (v) => _fixture.Device.RssiCollisionThreshold = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssiOffset()
         {
-            TestRange(() => _rfm9x.RssiOffset, (v) => _rfm9x.RssiOffset = (sbyte)v, -16, 15);
+            TestRange(() => _fixture.Device.RssiOffset, (v) => _fixture.Device.RssiOffset = (sbyte)v, -16, 15);
         }
 
-        [TestMethod]
-        [DataRow(RssiSmoothing.Samples2)]
-        [DataRow(RssiSmoothing.Samples4)]
-        [DataRow(RssiSmoothing.Samples8)]
-        [DataRow(RssiSmoothing.Samples16)]
-        [DataRow(RssiSmoothing.Samples32)]
-        [DataRow(RssiSmoothing.Samples64)]
-        [DataRow(RssiSmoothing.Samples128)]
-        [DataRow(RssiSmoothing.Samples256)]
+        [Theory]
+        [InlineData(RssiSmoothing.Samples2)]
+        [InlineData(RssiSmoothing.Samples4)]
+        [InlineData(RssiSmoothing.Samples8)]
+        [InlineData(RssiSmoothing.Samples16)]
+        [InlineData(RssiSmoothing.Samples32)]
+        [InlineData(RssiSmoothing.Samples64)]
+        [InlineData(RssiSmoothing.Samples128)]
+        [InlineData(RssiSmoothing.Samples256)]
         public void TestRssiSmoothing(RssiSmoothing expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.RssiSmoothing, (v) => _rfm9x.RssiSmoothing = v);
+            TestAssignedValue(expected, () => _fixture.Device.RssiSmoothing, (v) => _fixture.Device.RssiSmoothing = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssiThreshold()
         {
-            TestRange(() => _rfm9x.RssiThreshold, (v) => _rfm9x.RssiThreshold = (sbyte)v, 0, -127);
+            TestRange(() => _fixture.Device.RssiThreshold, (v) => _fixture.Device.RssiThreshold = (sbyte)v, 0, -127);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRxBw()
         {
             TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 20);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRxBwAfc()
         {
             TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 20);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetIrq()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.IrqFlags = Rfm9xIrqFlags.LowBattery | Rfm9xIrqFlags.FifoOverrun | Rfm9xIrqFlags.SyncAddressMatch | Rfm9xIrqFlags.PreambleDetect | Rfm9xIrqFlags.Rssi;
+            _fixture.Device.ExecuteReset();
+            _fixture.Device.IrqFlags = Rfm9xIrqFlags.LowBattery | Rfm9xIrqFlags.FifoOverrun | Rfm9xIrqFlags.SyncAddressMatch | Rfm9xIrqFlags.PreambleDetect | Rfm9xIrqFlags.Rssi;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTcxoInputOn()
         {
-            TestRangeBool(() => _rfm9x.TcxoInputOn, (v) => _rfm9x.TcxoInputOn = v);
+            TestRangeBool(() => _fixture.Device.TcxoInputOn, (v) => _fixture.Device.TcxoInputOn = v);
         }
 
-        [TestMethod]
-        [DataRow(TemperatureThreshold.FiveDegrees)]
-        [DataRow(TemperatureThreshold.TenDegrees)]
-        [DataRow(TemperatureThreshold.FifteenDegrees)]
-        [DataRow(TemperatureThreshold.TwentyDegrees)]
+        [Theory]
+        [InlineData(TemperatureThreshold.FiveDegrees)]
+        [InlineData(TemperatureThreshold.TenDegrees)]
+        [InlineData(TemperatureThreshold.FifteenDegrees)]
+        [InlineData(TemperatureThreshold.TwentyDegrees)]
         public void TestTemperatureThreshold(TemperatureThreshold expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.TemperatureThreshold, (v) => _rfm9x.TemperatureThreshold = v);
+            TestAssignedValue(expected, () => _fixture.Device.TemperatureThreshold, (v) => _fixture.Device.TemperatureThreshold = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTempMonitorOff()
         {
-            TestRangeBool(() => _rfm9x.TempMonitorOff, (v) => _rfm9x.TempMonitorOff = v);
+            TestRangeBool(() => _fixture.Device.TempMonitorOff, (v) => _fixture.Device.TempMonitorOff = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTimeoutRxPreamble()
         {
-            TestRange(() => _rfm9x.TimeoutRxPreamble, (v) => _rfm9x.TimeoutRxPreamble = v);
+            TestRange(() => _fixture.Device.TimeoutRxPreamble, (v) => _fixture.Device.TimeoutRxPreamble = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTimeoutRxRssi()
         {
-            TestRange(() => _rfm9x.TimeoutRxRssi, (v) => _rfm9x.TimeoutRxRssi = v);
+            TestRange(() => _fixture.Device.TimeoutRxRssi, (v) => _fixture.Device.TimeoutRxRssi = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTimeoutSignalSync()
         {
-            TestRange(() => _rfm9x.TimeoutSignalSync, (v) => _rfm9x.TimeoutSignalSync = v);
+            TestRange(() => _fixture.Device.TimeoutSignalSync, (v) => _fixture.Device.TimeoutSignalSync = v);
         }
 
-        [TestMethod]
-        [DataRow(Timer.Timer1, 0x00)]
-        [DataRow(Timer.Timer2, 0x00)]
-        [DataRow(Timer.Timer1, 0xFF)]
-        [DataRow(Timer.Timer2, 0xFF)]
+        [Theory]
+        [InlineData(Timer.Timer1, 0x00)]
+        [InlineData(Timer.Timer2, 0x00)]
+        [InlineData(Timer.Timer1, 0xFF)]
+        [InlineData(Timer.Timer2, 0xFF)]
         public void TestTimerCoefficient(Timer timer, int expected)
         {
-            _rfm9x.SetTimerCoefficient(timer, (byte)expected);
+            _fixture.Device.SetTimerCoefficient(timer, (byte)expected);
 
-            _rfm9x.GetTimerCoefficient(timer).Should().Be((byte)expected);
+            Assert.Equal(expected, _fixture.Device.GetTimerCoefficient(timer));
         }
     }
 }

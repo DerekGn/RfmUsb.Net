@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Dagc
+
 namespace RfmUsb.Net
 {
     /// <summary>

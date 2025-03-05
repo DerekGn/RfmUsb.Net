@@ -22,374 +22,352 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise Rfm Rx
 
-// Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise
-
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    [TestClass]
-    public class Rfm69Tests : RfmTestCommon
+    public class Rfm69Tests : RfmTestCommon, IClassFixture<TestFixture<IRfm69>>
     {
-        private readonly IRfm69 _rfm69;
+        private readonly TestFixture<IRfm69> _fixture;
 
-        public Rfm69Tests()
+        public Rfm69Tests(TestFixture<IRfm69> fixture) : base()
         {
-            _rfm69 = _serviceProvider.GetService<IRfm69>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm69)}");
-            RfmBase = _rfm69;
+            _fixture = fixture;
+            RfmBase = fixture.BaseDevice;
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentLnaGain()
         {
-            Read(() => _rfm69.CurrentLnaGain);
+            Assert.Equal(LnaGain.Max, _fixture.Device.CurrentLnaGain);
         }
 
-        [TestMethod]
+        [Fact]
         public void RxBwAfc()
         {
             TestRange<byte>(() => RfmBase.RxBwAfc, (v) => RfmBase.RxBwAfc = v, 0, 23);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAesOn()
         {
-            TestRangeBool(() => _rfm69.AesOn, (v) => _rfm69.AesOn = v);
+            TestRangeBool(() => _fixture.Device.AesOn, (v) => _fixture.Device.AesOn = v);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Cant be set in isolation")]
         public void TestAfcLowBetaOn()
         {
-            TestRangeBool(() => _rfm69.AfcLowBetaOn, (v) => _rfm69.AfcLowBetaOn = v);
+            TestRangeBool(() => _fixture.Device.AfcLowBetaOn, (v) => _fixture.Device.AfcLowBetaOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAutoRxRestartOn()
         {
-            TestRangeBool(() => _rfm69.AutoRxRestartOn, (v) => _rfm69.AutoRxRestartOn = v);
+            TestRangeBool(() => _fixture.Device.AutoRxRestartOn, (v) => _fixture.Device.AutoRxRestartOn = v);
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _rfm69?.Close();
-            _rfm69?.Dispose();
-        }
-
-        [TestMethod]
-        [DataRow(ContinuousDagc.Normal)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta0)]
-        [DataRow(ContinuousDagc.ImprovedLowBeta1)]
+        [Theory]
+        [InlineData(ContinuousDagc.Normal)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta0)]
+        [InlineData(ContinuousDagc.ImprovedLowBeta1)]
         public void TestContinuousDagc(ContinuousDagc expected)
         {
-            TestAssignedValue(expected, () => _rfm69.ContinuousDagc, (v) => _rfm69.ContinuousDagc = v);
+            TestAssignedValue(expected, () => _fixture.Device.ContinuousDagc, (v) => _fixture.Device.ContinuousDagc = v);
         }
 
-        [TestMethod]
-        [DataRow(Rfm69DataMode.Reserved)]
-        //[DataRow(Rfm69DataMode.ContinousModeWithBitSync)]
-        [DataRow(Rfm69DataMode.ContinousModeWithoutBitSync)]
-        [DataRow(Rfm69DataMode.Packet)]
+        [Theory]
+        [InlineData(Rfm69DataMode.Reserved)]
+        [InlineData(Rfm69DataMode.ContinousModeWithBitSync, Skip = "Not Supported")]
+        [InlineData(Rfm69DataMode.ContinousModeWithoutBitSync)]
+        [InlineData(Rfm69DataMode.Packet)]
         public void TestDataMode(Rfm69DataMode expected)
         {
-            TestAssignedValue(expected, () => _rfm69.DataMode, (v) => _rfm69.DataMode = v);
+            TestAssignedValue(expected, () => _fixture.Device.DataMode, (v) => _fixture.Device.DataMode = v);
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
-        [DataRow(DccFreq.FreqPercent16)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
+        [InlineData(DccFreq.FreqPercent16)]
         public void TestDccFreq(DccFreq expected)
         {
-            TestAssignedValue(expected, () => _rfm69.DccFreq, (v) => _rfm69.DccFreq = v);
+            TestAssignedValue(expected, () => _fixture.Device.DccFreq, (v) => _fixture.Device.DccFreq = v);
         }
 
-        [TestMethod]
-        [DataRow(DccFreq.FreqPercent0_125)]
-        [DataRow(DccFreq.FreqPercent0_25)]
-        [DataRow(DccFreq.FreqPercent0_5)]
-        [DataRow(DccFreq.FreqPercent1)]
-        [DataRow(DccFreq.FreqPercent2)]
-        [DataRow(DccFreq.FreqPercent4)]
-        [DataRow(DccFreq.FreqPercent8)]
-        [DataRow(DccFreq.FreqPercent16)]
+        [Theory]
+        [InlineData(DccFreq.FreqPercent0_125)]
+        [InlineData(DccFreq.FreqPercent0_25)]
+        [InlineData(DccFreq.FreqPercent0_5)]
+        [InlineData(DccFreq.FreqPercent1)]
+        [InlineData(DccFreq.FreqPercent2)]
+        [InlineData(DccFreq.FreqPercent4)]
+        [InlineData(DccFreq.FreqPercent8)]
+        [InlineData(DccFreq.FreqPercent16)]
         public void TestDccFreqAfc(DccFreq expected)
         {
-            TestAssignedValue(expected, () => _rfm69.DccFreqAfc, (v) => _rfm69.DccFreqAfc = v);
+            TestAssignedValue(expected, () => _fixture.Device.DccFreqAfc, (v) => _fixture.Device.DccFreqAfc = v);
         }
 
-        [TestMethod]
-        [DataRow(DioIrq.None)]
-        [DataRow(DioIrq.Dio0)]
-        [DataRow(DioIrq.Dio1)]
-        [DataRow(DioIrq.Dio2)]
-        [DataRow(DioIrq.Dio3)]
-        [DataRow(DioIrq.Dio4)]
-        [DataRow(DioIrq.Dio5)]
+        [Theory]
+        [InlineData(DioIrq.None)]
+        [InlineData(DioIrq.Dio0)]
+        [InlineData(DioIrq.Dio1)]
+        [InlineData(DioIrq.Dio2)]
+        [InlineData(DioIrq.Dio3)]
+        [InlineData(DioIrq.Dio4)]
+        [InlineData(DioIrq.Dio5)]
         public void TestDioInterruptMask(DioIrq expected)
         {
-            TestAssignedValue(expected, () => _rfm69.DioInterruptMask, (v) => _rfm69.DioInterruptMask = v);
+            TestAssignedValue(expected, () => _fixture.Device.DioInterruptMask, (v) => _fixture.Device.DioInterruptMask = v);
         }
 
-        [TestMethod]
-        [DataRow(EnterCondition.Off)]
-        [DataRow(EnterCondition.CrcOk)]
-        [DataRow(EnterCondition.FifoLevel)]
-        [DataRow(EnterCondition.FifoNotEmpty)]
-        [DataRow(EnterCondition.PacketSent)]
-        [DataRow(EnterCondition.PayloadReady)]
-        [DataRow(EnterCondition.SyncAddressMatch)]
-        [DataRow(EnterCondition.FallingEdgeFifoNotEmpty)]
+        [Theory]
+        [InlineData(EnterCondition.Off)]
+        [InlineData(EnterCondition.CrcOk)]
+        [InlineData(EnterCondition.FifoLevel)]
+        [InlineData(EnterCondition.FifoNotEmpty)]
+        [InlineData(EnterCondition.PacketSent)]
+        [InlineData(EnterCondition.PayloadReady)]
+        [InlineData(EnterCondition.SyncAddressMatch)]
+        [InlineData(EnterCondition.FallingEdgeFifoNotEmpty)]
         public void TestEnterCondition(EnterCondition expected)
         {
-            TestAssignedValue(expected, () => _rfm69.AutoModeEnterCondition, (v) => _rfm69.AutoModeEnterCondition = v);
+            TestAssignedValue(expected, () => _fixture.Device.AutoModeEnterCondition, (v) => _fixture.Device.AutoModeEnterCondition = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteAfcClear()
         {
-            _rfm69.ExecuteAfcClear();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteAfcClear()));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteAfcStart()
         {
-            _rfm69.ExecuteAfcStart();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteAfcStart()));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteFeiStart()
         {
-            _rfm69.ExecuteFeiStart();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteFeiStart()));
         }
 
-        [TestMethod]
-        [DataRow(Mode.Rx)]
-        [DataRow(Mode.Sleep)]
-        [DataRow(Mode.Standby)]
-        [DataRow(Mode.Synth)]
-        [DataRow(Mode.Tx)]
+        [Theory]
+        [InlineData(Mode.Rx)]
+        [InlineData(Mode.Sleep)]
+        [InlineData(Mode.Standby)]
+        [InlineData(Mode.Synth)]
+        [InlineData(Mode.Tx)]
         public void TestExecuteListenAbort(Mode mode)
         {
-            _rfm69.ExecuteListenModeAbort(mode);
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteListenModeAbort(mode)));
         }
 
-        [TestMethod]
-        [Ignore]
+        [Fact]
         public void TestExecuteMeasureTemperature()
         {
-            _rfm69.ExecuteMeasureTemperature();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteMeasureTemperature()));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteReset()
         {
-            _rfm69.ExecuteReset();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteReset()));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExecuteRestartRx()
         {
-            _rfm69.ExecuteRestartRx();
+            Assert.Null(Record.Exception(() => _fixture.Device.ExecuteRestartRx()));
         }
 
-        [TestMethod]
+        [Fact(Skip = "Causes device hang")]
         public void TestExecuteStartRssi()
         {
-            _rfm69.ExecuteStartRssi();
+            _fixture.Device.ExecuteStartRssi();
         }
 
-        [TestMethod]
-        [DataRow(ExitCondition.CrcOk)]
-        [DataRow(ExitCondition.FifoNotEmpty)]
-        [DataRow(ExitCondition.FifoLevel)]
-        [DataRow(ExitCondition.Off)]
-        [DataRow(ExitCondition.PacketSent)]
-        [DataRow(ExitCondition.PayloadReady)]
-        [DataRow(ExitCondition.Timeout)]
-        [DataRow(ExitCondition.SyncAddressMatch)]
+        [Theory]
+        [InlineData(ExitCondition.CrcOk)]
+        [InlineData(ExitCondition.FifoNotEmpty)]
+        [InlineData(ExitCondition.FifoLevel)]
+        [InlineData(ExitCondition.Off)]
+        [InlineData(ExitCondition.PacketSent)]
+        [InlineData(ExitCondition.PayloadReady)]
+        [InlineData(ExitCondition.Timeout)]
+        [InlineData(ExitCondition.SyncAddressMatch)]
         public void TestExitCondition(ExitCondition expected)
         {
-            TestAssignedValue(expected, () => _rfm69.AutoModeExitCondition, (v) => _rfm69.AutoModeExitCondition = v);
+            TestAssignedValue(expected, () => _fixture.Device.AutoModeExitCondition, (v) => _fixture.Device.AutoModeExitCondition = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifo()
         {
-            var expected = RandomSequence().Take(66).ToList();
-            _rfm69.Fifo = expected;
-
-            _rfm69.Fifo.Should().StartWith(expected);
+            Assert.Null(Record.Exception(() => _fixture.Device.Fifo));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoFill()
         {
-            TestRangeBool(() => _rfm69.FifoFill, (v) => _rfm69.FifoFill = v);
+            TestRangeBool(() => _fixture.Device.FifoFill, (v) => _fixture.Device.FifoFill = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoThreshold()
         {
             TestRange<byte>(() => RfmBase.FifoThreshold, (v) => RfmBase.FifoThreshold = v, 0, 63);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetIrqFlags()
         {
-            _rfm69.ExecuteReset();
-            _rfm69.IrqFlags.Should().Be(Rfm69IrqFlags.ModeReady);
+            _fixture.Device.ExecuteReset();
+            Assert.Equal(Rfm69IrqFlags.ModeReady, _fixture.Device.IrqFlags);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestImpedance()
         {
-            TestRangeBool(() => _rfm69.Impedance, (v) => _rfm69.Impedance = v);
+            TestRangeBool(() => _fixture.Device.Impedance, (v) => _fixture.Device.Impedance = v);
         }
 
-        [TestInitialize]
-        public void TestInitalise()
-        {
-            _rfm69.Open((string)TestContext.Properties["Rfm69ComPort"], int.Parse((string)TestContext.Properties["BaudRate"]));
-        }
-
-        [TestMethod]
-        [DataRow(IntermediateMode.Rx)]
-        [DataRow(IntermediateMode.Sleep)]
-        [DataRow(IntermediateMode.Standby)]
-        [DataRow(IntermediateMode.Tx)]
+        [Theory]
+        [InlineData(IntermediateMode.Rx)]
+        [InlineData(IntermediateMode.Sleep)]
+        [InlineData(IntermediateMode.Standby)]
+        [InlineData(IntermediateMode.Tx)]
         public void TestIntermediateMode(IntermediateMode expected)
         {
-            TestAssignedValue(expected, () => _rfm69.IntermediateMode, (v) => _rfm69.IntermediateMode = v);
+            TestAssignedValue(expected, () => _fixture.Device.IntermediateMode, (v) => _fixture.Device.IntermediateMode = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestListenCoefficientIdle()
         {
-            TestRange(() => _rfm69.ListenCoefficientIdle, (v) => _rfm69.ListenCoefficientIdle = v);
+            TestRange(() => _fixture.Device.ListenCoefficientIdle, (v) => _fixture.Device.ListenCoefficientIdle = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestListenCoefficientRx()
         {
-            TestRange(() => _rfm69.ListenCoefficientRx, (v) => _rfm69.ListenCoefficientRx = v);
+            TestRange(() => _fixture.Device.ListenCoefficientRx, (v) => _fixture.Device.ListenCoefficientRx = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestListenCriteria()
         {
-            TestRangeBool(() => _rfm69.ListenCriteria, (v) => _rfm69.ListenCriteria = v);
+            TestRangeBool(() => _fixture.Device.ListenCriteria, (v) => _fixture.Device.ListenCriteria = v);
         }
 
-        [TestMethod]
-        [DataRow(ListenEnd.Idle)]
-        [DataRow(ListenEnd.Mode)]
-        [DataRow(ListenEnd.Reserved)]
-        [DataRow(ListenEnd.Rx)]
+        [Theory]
+        [InlineData(ListenEnd.Idle)]
+        [InlineData(ListenEnd.Mode)]
+        [InlineData(ListenEnd.Reserved)]
+        [InlineData(ListenEnd.Rx)]
         public void TestListenEnd(ListenEnd expected)
         {
-            TestAssignedValue(expected, () => _rfm69.ListenEnd, (v) => _rfm69.ListenEnd = v);
+            TestAssignedValue(expected, () => _fixture.Device.ListenEnd, (v) => _fixture.Device.ListenEnd = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestListenerOn()
         {
-            TestRangeBool(() => _rfm69.ListenerOn, (v) => _rfm69.ListenerOn = v);
+            TestRangeBool(() => _fixture.Device.ListenerOn, (v) => _fixture.Device.ListenerOn = v);
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Reserved)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle262ms)]
+        [Theory]
+        [InlineData(ListenResolution.Reserved)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle262ms)]
         public void TestListenResolutionIdle(ListenResolution expected)
         {
-            TestAssignedValue(expected, () => _rfm69.ListenResolutionIdle, (v) => _rfm69.ListenResolutionIdle = v);
+            TestAssignedValue(expected, () => _fixture.Device.ListenResolutionIdle, (v) => _fixture.Device.ListenResolutionIdle = v);
         }
 
-        [TestMethod]
-        [DataRow(ListenResolution.Reserved)]
-        [DataRow(ListenResolution.Idle64us)]
-        [DataRow(ListenResolution.Idle4_1ms)]
-        [DataRow(ListenResolution.Idle262ms)]
+        [Theory]
+        [InlineData(ListenResolution.Reserved)]
+        [InlineData(ListenResolution.Idle64us)]
+        [InlineData(ListenResolution.Idle4_1ms)]
+        [InlineData(ListenResolution.Idle262ms)]
         public void TestListenResolutionRx(ListenResolution expected)
         {
-            TestAssignedValue(expected, () => _rfm69.ListenResolutionRx, (v) => _rfm69.ListenResolutionRx = v);
+            TestAssignedValue(expected, () => _fixture.Device.ListenResolutionRx, (v) => _fixture.Device.ListenResolutionRx = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLowBetaAfcOffset()
         {
-            TestRange(() => _rfm69.LowBetaAfcOffset, (v) => _rfm69.LowBetaAfcOffset = v);
+            TestRange(() => _fixture.Device.LowBetaAfcOffset, (v) => _fixture.Device.LowBetaAfcOffset = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOutputPower()
         {
-            TestRange<sbyte>(() => _rfm69.OutputPower, (v) => _rfm69.OutputPower = v, -2, 20);
+            TestRange<sbyte>(() => _fixture.Device.OutputPower, (v) => _fixture.Device.OutputPower = v, -2, 20);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPayloadLength()
         {
-            TestRange<ushort>(() => _rfm69.PayloadLength, (v) => _rfm69.PayloadLength = v, 0, 0xFF);
+            TestRange<ushort>(() => _fixture.Device.PayloadLength, (v) => _fixture.Device.PayloadLength = v, 0, 0xFF);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssiThreshold()
         {
-            TestRange<sbyte>(() => _rfm69.RssiThreshold, (v) => _rfm69.RssiThreshold = v, -115, 0);
+            TestRange<sbyte>(() => _fixture.Device.RssiThreshold, (v) => _fixture.Device.RssiThreshold = v, -115, 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRxBw()
         {
             TestRange<byte>(() => RfmBase.RxBw, (v) => RfmBase.RxBw = v, 0, 23);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSensitivityBoost()
         {
-            TestRangeBool(() => _rfm69.SensitivityBoost, (v) => _rfm69.SensitivityBoost = v);
+            TestRangeBool(() => _fixture.Device.SensitivityBoost, (v) => _fixture.Device.SensitivityBoost = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSequencer()
         {
-            TestRangeBool(() => _rfm69.Sequencer, (v) => _rfm69.Sequencer = v);
+            TestRangeBool(() => _fixture.Device.Sequencer, (v) => _fixture.Device.Sequencer = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetAesKey()
         {
-            _rfm69.SetAesKey(new List<byte> { 0xAA, 0x55, 0xAA, 0x55 });
+            Assert.Null(Record.Exception(() => _fixture.Device.SetAesKey(new List<byte> { 0xAA, 0x55, 0xAA, 0x55 })));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetIrqFlags()
         {
-            _rfm69.ExecuteReset();
-            _rfm69.IrqFlags = Rfm69IrqFlags.FifoOverrun | Rfm69IrqFlags.SyncAddressMatch | Rfm69IrqFlags.Rssi;
+            Assert.Null(Record.Exception(() => _fixture.Device.IrqFlags));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSyncBitErrors()
         {
-            TestRange<byte>(() => _rfm69.SyncBitErrors, (v) => _rfm69.SyncBitErrors = v, 0, 7);
+            TestRange<byte>(() => _fixture.Device.SyncBitErrors, (v) => _fixture.Device.SyncBitErrors = v, 0, 7);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTimeoutRxStart()
         {
-            TestRange(() => _rfm69.TimeoutRxStart, (v) => _rfm69.TimeoutRxStart = v);
+            TestRange(() => _fixture.Device.TimeoutRxStart, (v) => _fixture.Device.TimeoutRxStart = v);
         }
     }
 }

@@ -22,284 +22,265 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+// Ignore Spelling: Agc Irq Lora Rfm Rssi Rx Tx
+
+using System.Runtime.CompilerServices;
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    [TestClass]
-    public class Rfm9xLoraTests : RfmTestBase
+    public class Rfm9xLoraTests : RfmTestCommon, IClassFixture<TestFixture<IRfm9x>>
     {
-        private readonly IRfm9x _rfm9x;
+        private readonly TestFixture<IRfm9x> _fixture;
 
-        public Rfm9xLoraTests()
+        public Rfm9xLoraTests(TestFixture<IRfm9x> fixture)
         {
-            _rfm9x = _serviceProvider.GetService<IRfm9x>() ?? throw new NullReferenceException($"Unable to resolve {nameof(IRfm9x)}");
-            RfmBase = _rfm9x;
+            _fixture = fixture;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAccessSharedRegisters()
         {
-            TestRangeBool(() => _rfm9x.AccessSharedRegisters, (v) => _rfm9x.AccessSharedRegisters = v);
+            TestRangeBool(() => _fixture.Device.AccessSharedRegisters, (v) => _fixture.Device.AccessSharedRegisters = v);
         }
 
-        [TestMethod]
-        [DataRow(AutoRestartRxMode.Off)]
-        [DataRow(AutoRestartRxMode.OnWaitForPllLock)]
-        [DataRow(AutoRestartRxMode.OnWithoutPllRelock)]
-        [DataRow(AutoRestartRxMode.Reserved)]
+        [Theory]
+        [InlineData(AutoRestartRxMode.Off)]
+        [InlineData(AutoRestartRxMode.OnWaitForPllLock)]
+        [InlineData(AutoRestartRxMode.OnWithoutPllRelock)]
+        [InlineData(AutoRestartRxMode.Reserved)]
         public void TestAutoRestartRxMode(AutoRestartRxMode expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.AutoRestartRxMode, (v) => _rfm9x.AutoRestartRxMode = v);
+            TestAssignedValue(expected, () => _fixture.Device.AutoRestartRxMode, (v) => _fixture.Device.AutoRestartRxMode = v);
         }
 
-        [TestMethod]
-        [DataRow(ModemBandwidth.Bandwidth10_4KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth125KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth15_6KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth20_8KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth250KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth31_25KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth41_7KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth500KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth62_5KHZ)]
-        [DataRow(ModemBandwidth.Bandwidth7_8KHZ)]
-        public void TestAutoRestartRxMode(ModemBandwidth expected)
+        [Theory]
+        [InlineData(ModemBandwidth.Bandwidth10_4KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth125KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth15_6KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth20_8KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth250KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth31_25KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth41_7KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth500KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth62_5KHZ)]
+        [InlineData(ModemBandwidth.Bandwidth7_8KHZ)]
+        public void TestModemBandwidth(ModemBandwidth expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.ModemBandwidth, (v) => _rfm9x.ModemBandwidth = v);
+            TestAssignedValue(expected, () => _fixture.Device.ModemBandwidth, (v) => _fixture.Device.ModemBandwidth = v);
         }
 
-        [TestMethod]
-        [DataRow(SpreadingFactor.SpreadFactor1024)]
-        [DataRow(SpreadingFactor.SpreadFactor128)]
-        [DataRow(SpreadingFactor.SpreadFactor2048)]
-        [DataRow(SpreadingFactor.SpreadFactor256)]
-        [DataRow(SpreadingFactor.SpreadFactor4096)]
-        [DataRow(SpreadingFactor.SpreadFactor512)]
-        [DataRow(SpreadingFactor.SpreadFactor64)]
-        public void TestAutoRestartRxMode(SpreadingFactor expected)
+        [Theory]
+        [InlineData(SpreadingFactor.SpreadFactor1024)]
+        [InlineData(SpreadingFactor.SpreadFactor128)]
+        [InlineData(SpreadingFactor.SpreadFactor2048)]
+        [InlineData(SpreadingFactor.SpreadFactor256)]
+        [InlineData(SpreadingFactor.SpreadFactor4096)]
+        [InlineData(SpreadingFactor.SpreadFactor512)]
+        [InlineData(SpreadingFactor.SpreadFactor64)]
+        public void TestSpreadingFactor(SpreadingFactor expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.SpreadingFactor, (v) => _rfm9x.SpreadingFactor = v);
+            TestAssignedValue(expected, () => _fixture.Device.SpreadingFactor, (v) => _fixture.Device.SpreadingFactor = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBeaconOn()
         {
-            TestRangeBool(() => _rfm9x.BeaconOn, (v) => _rfm9x.BeaconOn = v);
+            TestRangeBool(() => _fixture.Device.BeaconOn, (v) => _fixture.Device.BeaconOn = v);
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _rfm9x?.Close();
-            _rfm9x?.Dispose();
-        }
-
-        [TestMethod]
-        [DataRow(ErrorCodingRate.FourEight)]
-        [DataRow(ErrorCodingRate.FourFive)]
-        [DataRow(ErrorCodingRate.FourSeven)]
-        [DataRow(ErrorCodingRate.FourSix)]
+        [Theory]
+        [InlineData(ErrorCodingRate.FourEight)]
+        [InlineData(ErrorCodingRate.FourFive)]
+        [InlineData(ErrorCodingRate.FourSeven)]
+        [InlineData(ErrorCodingRate.FourSix)]
         public void TestErrorCodingRate(ErrorCodingRate expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.ErrorCodingRate, (v) => _rfm9x.ErrorCodingRate = v);
+            TestAssignedValue(expected, () => _fixture.Device.ErrorCodingRate, (v) => _fixture.Device.ErrorCodingRate = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoAddressPointer()
         {
-            TestRange(() => _rfm9x.FifoAddressPointer, (v) => _rfm9x.FifoAddressPointer = v);
+            TestRange(() => _fixture.Device.FifoAddressPointer, (v) => _fixture.Device.FifoAddressPointer = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoRxBaseAddress()
         {
-            TestRange(() => _rfm9x.FifoRxBaseAddress, (v) => _rfm9x.FifoRxBaseAddress = v);
+            TestRange(() => _fixture.Device.FifoRxBaseAddress, (v) => _fixture.Device.FifoRxBaseAddress = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoRxBytesNumber()
         {
-            _rfm9x.FifoRxBytesNumber.Should().Be(0);
+            Assert.Equal(0, _fixture.Device.FifoRxBytesNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoRxCurrentAddress()
         {
-            _rfm9x.FifoRxCurrentAddress.Should().Be(0);
+            Assert.Equal(0, _fixture.Device.FifoRxCurrentAddress);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFifoTxBaseAddress()
         {
-            TestRange(() => _rfm9x.FifoTxBaseAddress, (v) => _rfm9x.FifoTxBaseAddress = v);
+            TestRange(() => _fixture.Device.FifoTxBaseAddress, (v) => _fixture.Device.FifoTxBaseAddress = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFrequencyHoppingPeriod()
         {
-            TestRange(() => _rfm9x.FrequencyHoppingPeriod, (v) => _rfm9x.FrequencyHoppingPeriod = v);
+            TestRange(() => _fixture.Device.FrequencyHoppingPeriod, (v) => _fixture.Device.FrequencyHoppingPeriod = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetFrequencyError()
         {
-            _rfm9x.FrequencyError.Should().Be(0);
+            Assert.Equal(0, _fixture.Device.FrequencyError);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetHopChannel()
         {
-            var hopChannel = _rfm9x.HopChannel;
+            var hopChannel = _fixture.Device.HopChannel;
 
-            hopChannel.Should().NotBeNull();
+            Assert.Equal(0, hopChannel.Channel);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetLoraIrqFlags()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.LoraIrqFlags.Should()
-                .Be(
+            _fixture.Device.ExecuteReset();
+
+            Assert.Equal(
                     LoraIrqFlags.CadDetected |
                     LoraIrqFlags.CadDone |
-                    LoraIrqFlags.ValidHeader);
+                    LoraIrqFlags.ValidHeader, _fixture.Device.LoraIrqFlags);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetLoraIrqFlagsMask()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.LoraIrqFlagsMask.Should().HaveFlag(
-                LoraIrqFlagsMask.ValidHeaderMask |
-                LoraIrqFlagsMask.RxDoneMask);
+            _fixture.Device.ExecuteReset();
+
+            Assert.Equal(
+                LoraIrqFlagsMask.ValidHeaderMask | LoraIrqFlagsMask.RxDoneMask,
+                _fixture.Device.LoraIrqFlagsMask & (LoraIrqFlagsMask.ValidHeaderMask | LoraIrqFlagsMask.RxDoneMask));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestImplicitHeaderModeOn()
         {
-            TestRangeBool(() => _rfm9x.ImplicitHeaderModeOn, (v) => _rfm9x.ImplicitHeaderModeOn = v);
+            TestRangeBool(() => _fixture.Device.ImplicitHeaderModeOn, (v) => _fixture.Device.ImplicitHeaderModeOn = v);
         }
 
-        [TestInitialize]
-        public void TestInitalise()
-        {
-            _rfm9x.Open("COM3", 230400);
-
-            _rfm9x.ExecuteReset();
-
-            _rfm9x.Mode = Mode.Sleep;
-
-            _rfm9x.LongRangeMode = true;
-        }
-
-        [TestMethod]
+        [Fact]
         public void TestLongRangeMode()
         {
-            TestRangeBool(() => _rfm9x.LongRangeMode, (v) => _rfm9x.LongRangeMode = v);
+            TestRangeBool(() => _fixture.Device.LongRangeMode, (v) => _fixture.Device.LongRangeMode = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLoraAgcAutoOn()
         {
-            TestRangeBool(() => _rfm9x.LoraAgcAutoOn, (v) => _rfm9x.LoraAgcAutoOn = v);
+            TestRangeBool(() => _fixture.Device.LoraAgcAutoOn, (v) => _fixture.Device.LoraAgcAutoOn = v);
         }
 
-        [TestMethod]
-        [DataRow(LoraMode.RxContinuous)]
-        [DataRow(LoraMode.RxSingle)]
-        [DataRow(LoraMode.Sleep)]
-        [DataRow(LoraMode.Standby)]
-        [DataRow(LoraMode.SynthRx)]
-        [DataRow(LoraMode.SynthTx)]
-        [DataRow(LoraMode.Tx)]
+        [Theory]
+        [InlineData(LoraMode.RxContinuous)]
+        [InlineData(LoraMode.RxSingle)]
+        [InlineData(LoraMode.Sleep)]
+        [InlineData(LoraMode.Standby)]
+        [InlineData(LoraMode.SynthRx)]
+        [InlineData(LoraMode.SynthTx)]
+        [InlineData(LoraMode.Tx)]
         public void TestLoraMode(LoraMode expected)
         {
-            TestAssignedValue(expected, () => _rfm9x.LoraMode, (v) => _rfm9x.LoraMode = v);
+            TestAssignedValue(expected, () => _fixture.Device.LoraMode, (v) => _fixture.Device.LoraMode = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLoraModeCad()
         {
             // Cad auto transitions to standby
-            _rfm9x.LoraMode = LoraMode.Cad;
+            _fixture.Device.LoraMode = LoraMode.Cad;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLoraPayloadLength()
         {
-            _rfm9x.ImplicitHeaderModeOn = true;
+            _fixture.Device.ImplicitHeaderModeOn = true;
 
-            TestRange<byte>(() => _rfm9x.LoraPayloadLength, (v) => _rfm9x.LoraPayloadLength = v, 1, 0xFF);
+            TestRange<byte>(() => _fixture.Device.LoraPayloadLength, (v) => _fixture.Device.LoraPayloadLength = v, 1, 0xFF);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestLowDataRateOptimize()
         {
-            TestRangeBool(() => _rfm9x.LowDataRateOptimize, (v) => _rfm9x.LowDataRateOptimize = v);
+            TestRangeBool(() => _fixture.Device.LowDataRateOptimize, (v) => _fixture.Device.LowDataRateOptimize = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestModemStatus()
         {
-            _rfm9x.ModemStatus.Should().Be(ModemStatus.None);
+            Assert.Equal(ModemStatus.None, _fixture.Device.ModemStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPacketRssi()
         {
-            var x = _rfm9x.PacketRssi;
+            Assert.Equal(0, _fixture.Device.PacketRssi);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPacketSnr()
         {
-            var x = _rfm9x.LastPacketSnr;
+            Assert.Equal(0, _fixture.Device.LastPacketSnr);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPayloadMaxLength()
         {
-            TestRange(() => _rfm9x.PayloadMaxLength, (v) => _rfm9x.PayloadMaxLength = v);
+            TestRange(() => _fixture.Device.PayloadMaxLength, (v) => _fixture.Device.PayloadMaxLength = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPpmCorrection()
         {
-            TestRange(() => _rfm9x.PpmCorrection, (v) => _rfm9x.PpmCorrection = v);
+            TestRange(() => _fixture.Device.PpmCorrection, (v) => _fixture.Device.PpmCorrection = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPreambleLength()
         {
-            TestRange(() => _rfm9x.PreambleLength, (v) => _rfm9x.PreambleLength = v);
+            TestRange(() => _fixture.Device.PreambleLength, (v) => _fixture.Device.PreambleLength = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssiWideband()
         {
-            var x = _rfm9x.RssiWideband;
+            Assert.Equal(0, _fixture.Device.RssiWideband);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRxCodingRate()
         {
-            var x = _rfm9x.RxCodingRate;
+            Assert.Equal(0, _fixture.Device.RxCodingRate);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRxPayloadCrcOn()
         {
-            TestRangeBool(() => _rfm9x.RxPayloadCrcOn, (v) => _rfm9x.RxPayloadCrcOn = v);
+            TestRangeBool(() => _fixture.Device.RxPayloadCrcOn, (v) => _fixture.Device.RxPayloadCrcOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetLoraIrqFlags()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.LoraIrqFlags =
+            _fixture.Device.ExecuteReset();
+            _fixture.Device.LoraIrqFlags =
                 LoraIrqFlags.CadDetected |
                 LoraIrqFlags.FhssChangeChannel |
                 LoraIrqFlags.CadDone |
@@ -310,11 +291,11 @@ namespace RfmUsb.Net.IntTests
                 LoraIrqFlags.RxTimeout;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSetLoraIrqFlagsMask()
         {
-            _rfm9x.ExecuteReset();
-            _rfm9x.LoraIrqFlagsMask =
+            _fixture.Device.ExecuteReset();
+            _fixture.Device.LoraIrqFlagsMask =
                 LoraIrqFlagsMask.CadDetectedMask |
                 LoraIrqFlagsMask.FhssChangeChannelMask |
                 LoraIrqFlagsMask.CadDoneMask |
@@ -325,28 +306,28 @@ namespace RfmUsb.Net.IntTests
                 LoraIrqFlagsMask.RxTimeoutMask;
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSymbolTimeout()
         {
-            TestRange<ushort>(() => _rfm9x.SymbolTimeout, (v) => _rfm9x.SymbolTimeout = v, 0, 0x3FF);
+            TestRange<ushort>(() => _fixture.Device.SymbolTimeout, (v) => _fixture.Device.SymbolTimeout = v, 0, 0x3FF);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTxContinuousMode()
         {
-            TestRangeBool(() => _rfm9x.TxContinuousMode, (v) => _rfm9x.TxContinuousMode = v);
+            TestRangeBool(() => _fixture.Device.TxContinuousMode, (v) => _fixture.Device.TxContinuousMode = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestValidHeaderCount()
         {
-            var x = _rfm9x.ValidHeaderCount;
+            Assert.Equal(0, _fixture.Device.ValidHeaderCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestValidPacketCount()
         {
-            var x = _rfm9x.ValidPacketCount;
+            Assert.Equal(0, _fixture.Device.ValidPacketCount);
         }
     }
 }

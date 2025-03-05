@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Dio Irq
+
 using System;
 
 namespace RfmUsb.Net

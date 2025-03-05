@@ -23,7 +23,7 @@
 */
 
 
-// Ignore Spelling: Rssi Bw
+// Ignore Spelling: Rssi Bw Rx
 
 namespace RfmUsbConsole.Commands
 {

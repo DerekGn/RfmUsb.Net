@@ -22,54 +22,19 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+// Ignore Spelling: Rfm
+
 using RfmUsb.Net.Exceptions;
-using RfmUsb.Net.Ports;
-using Serilog;
-using Serilog.Core;
 using System.Numerics;
-using System.Runtime.CompilerServices;
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
-    public abstract class RfmTestBase : IDisposable
+    public abstract class RfmTestBase
     {
-        internal readonly ServiceProvider _serviceProvider;
-        internal readonly Logger Logger;
-
         protected IRfm RfmBase;
-        private readonly IConfiguration _configuration;
 
-        public RfmTestBase()
-        {
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(_configuration)
-                .CreateLogger();
-
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(builder =>
-                {
-                    builder.AddSerilog(Logger);
-                })
-                .AddSingleton(_configuration)
-                .AddSingleton<IRfm9x, Rfm9x>()
-                .AddSingleton<IRfm69, Rfm69>()
-                .AddSerialPortFactory();
-
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-        }
-
-        public TestContext TestContext { get; set; }
-
-        [TestMethod]
+        [Fact]
         public void TestReadStreamDisabled()
         {
             // Arrange
@@ -81,10 +46,10 @@ namespace RfmUsb.Net.IntTests
             Action action = () => RfmBase.Stream.Read(bytes);
 
             // Assert
-            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+            Assert.Throws<RfmUsbBufferedIoNotEnabledException>(action);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReadStreamEnabled()
         {
             // Arrange
@@ -96,7 +61,7 @@ namespace RfmUsb.Net.IntTests
             RfmBase.Stream.Read(bytes);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestWriteStreamDisabled()
         {
             // Arrange
@@ -111,28 +76,27 @@ namespace RfmUsb.Net.IntTests
             Action action = () => RfmBase.Stream.Write(bytes);
 
             // Assert
-            action.Should().Throw<RfmUsbBufferedIoNotEnabledException>();
+            Assert.Throws<RfmUsbBufferedIoNotEnabledException>(action);
         }
 
-        [TestMethod]
-        [Ignore]
-        public void TestWriteStreamEnabled()
-        {
-            // Arrange
-            var bytes = new byte[100];
-            var rand = new Random();
+        //[Fact(Skip = "ignore")]
+        //public void TestWriteStreamEnabled()
+        //{
+        //    // Arrange
+        //    var bytes = new byte[100];
+        //    var rand = new Random();
 
-            rand.NextBytes(bytes);
+        //    rand.NextBytes(bytes);
 
-            RfmBase.BufferedIoEnable = true;
+        //    RfmBase.BufferedIoEnable = true;
 
-            // Act
-            RfmBase.Stream.Write(bytes);
-        }
+        //    // Act
+        //    RfmBase.Stream.Write(bytes);
+        //}
 
         internal static IEnumerable<byte> RandomSequence()
         {
-            Random r = new Random();
+            Random r = new();
             while (true)
                 yield return (byte)r.Next(0, 0xFF);
         }
@@ -140,7 +104,7 @@ namespace RfmUsb.Net.IntTests
         internal static void TestAssignedValue<T>(T value, Func<T> read, Action<T> write)
         {
             write(value);
-            read().Should().Be(value);
+            Assert.Equal(value, read());
         }
 
         internal static void TestRange<T>(Func<T> read, Action<T> write) where T : IMinMaxValue<T>
@@ -154,13 +118,13 @@ namespace RfmUsb.Net.IntTests
 
             var min = read();
 
-            write((T)expectedMax);
+            write(expectedMax);
 
             var max = read();
 
-            min.Should().Be(expectedMin);
+            Assert.Equal(expectedMin, min);
 
-            max.Should().Be(expectedMax);
+            Assert.Equal(expectedMax, max);
         }
 
         internal static void TestRangeBool(Func<bool> read, Action<bool> write)
@@ -171,39 +135,7 @@ namespace RfmUsb.Net.IntTests
 
             var changed = read();
 
-            changed.Should().Be(!current);
+            Assert.Equal(!current, changed);
         }
-
-        internal void Read<T>(Func<T> func, [CallerMemberName] string callerName = "")
-        {
-            Logger.Debug($"Function {callerName} Returned: {func()}");
-        }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    RfmBase.Close();
-                    RfmBase.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        #endregion IDisposable
     }
 }

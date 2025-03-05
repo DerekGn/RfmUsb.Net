@@ -23,14 +23,12 @@
 */
 
 using System;
-using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
     /// Exception thrown if the IO buffering is not enabled
     /// </summary>
-    [Serializable]
     public class RfmUsbBufferedIoNotEnabledException : Exception
     {
         /// <summary>
@@ -56,14 +54,5 @@ namespace RfmUsb.Net.Exceptions
         public RfmUsbBufferedIoNotEnabledException(string message, Exception inner) : base(message, inner)
         {
         }
-
-        /// <summary>
-        /// Create an instance of <see cref="RfmUsbBufferedIoNotEnabledException"/>
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/></param>
-        /// <param name="context">The <see cref="StreamingContext"/></param>
-        protected RfmUsbBufferedIoNotEnabledException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context) { }
     }
 }

@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Io
+
 namespace RfmUsb.Net
 {
     /// <summary>

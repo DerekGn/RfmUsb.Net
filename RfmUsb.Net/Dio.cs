@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Dio
+
 namespace RfmUsb.Net
 {
     /// <summary>

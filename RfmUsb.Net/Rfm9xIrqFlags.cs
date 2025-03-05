@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Irq Rfm
+
 using System;
 
 namespace RfmUsb.Net

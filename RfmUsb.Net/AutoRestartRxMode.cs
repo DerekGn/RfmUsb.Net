@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rx
+
 namespace RfmUsb.Net
 {
     /// <summary>

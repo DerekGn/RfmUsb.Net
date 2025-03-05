@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Irq Lora
+
 using System;
 
 namespace RfmUsb.Net

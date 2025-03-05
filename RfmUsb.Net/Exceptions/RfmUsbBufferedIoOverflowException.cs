@@ -23,14 +23,12 @@
 */
 
 using System;
-using System.Runtime.Serialization;
 
 namespace RfmUsb.Net.Exceptions
 {
     /// <summary>
     /// Exception thrown if the IO buffer overflows
     /// </summary>
-    [Serializable]
     public class RfmUsbBufferedIoOverflowException : Exception
     {
         /// <summary>
@@ -55,14 +53,5 @@ namespace RfmUsb.Net.Exceptions
         public RfmUsbBufferedIoOverflowException(string message, Exception inner) : base(message, inner)
         {
         }
-
-        /// <summary>
-        /// Create an instance of <see cref="RfmUsbBufferedIoOverflowException"/>
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/></param>
-        /// <param name="context">The <see cref="StreamingContext"/></param>
-		protected RfmUsbBufferedIoOverflowException(
-          SerializationInfo info,
-          StreamingContext context) : base(info, context) { }
     }
 }

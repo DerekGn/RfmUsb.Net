@@ -22,170 +22,172 @@
 * SOFTWARE.
 */
 
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+// Ignore Spelling: Bitrate Dio Fei Fsk Io Lna Ocp Ook Rc Rfm Rssi Rx Tx
+
+using Xunit;
 
 namespace RfmUsb.Net.IntTests
 {
     public abstract class RfmTestCommon : RfmTestBase
     {
-        [TestMethod]
-        [DataRow(AddressFilter.None)]
-        [DataRow(AddressFilter.NodeBroaddcast)]
-        [DataRow(AddressFilter.Reserved)]
+        [Theory]
+        [InlineData(AddressFilter.None)]
+        [InlineData(AddressFilter.NodeBroaddcast)]
+        [InlineData(AddressFilter.Reserved)]
         public void TestAddressFiltering(AddressFilter expected)
         {
             TestAssignedValue(expected, () => RfmBase.AddressFiltering, (v) => RfmBase.AddressFiltering = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAfc()
         {
-            Read(() => RfmBase.Afc);
+            Assert.Equal(0, RfmBase.Afc);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAfcAutoClear()
         {
             TestRangeBool(() => RfmBase.AfcAutoClear, (v) => RfmBase.AfcAutoClear = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAfcAutoOn()
         {
             TestRangeBool(() => RfmBase.AfcAutoOn, (v) => RfmBase.AfcAutoOn = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBitrate()
         {
             TestRange<uint>(() => RfmBase.BitRate, (v) => RfmBase.BitRate = v, 1200, 299065);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBroadcastAddress()
         {
             TestRange(() => RfmBase.BroadcastAddress, (v) => RfmBase.BroadcastAddress = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestBufferedIoEnable()
         {
             TestRangeBool(() => RfmBase.BufferedIoEnable, (v) => RfmBase.BufferedIoEnable = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCrcAutoClearOff()
         {
             TestRangeBool(() => RfmBase.CrcAutoClearOff, (v) => RfmBase.CrcAutoClearOff = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCrcOn()
         {
             TestRangeBool(() => RfmBase.CrcOn, (v) => RfmBase.CrcOn = v);
         }
 
-        [TestMethod]
-        [DataRow(DcFreeEncoding.Manchester)]
-        [DataRow(DcFreeEncoding.None)]
-        [DataRow(DcFreeEncoding.Manchester)]
-        [DataRow(DcFreeEncoding.Whitening)]
+        [Theory]
+        [InlineData(DcFreeEncoding.Manchester)]
+        [InlineData(DcFreeEncoding.None)]
+        [InlineData(DcFreeEncoding.Reserved)]
+        [InlineData(DcFreeEncoding.Whitening)]
         public void TestDcFreeEncoding(DcFreeEncoding expected)
         {
             TestAssignedValue(expected, () => RfmBase.DcFreeEncoding, (v) => RfmBase.DcFreeEncoding = v);
         }
 
-        [TestMethod]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio0, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio1, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio2, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio3, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio4, DioMapping.DioMapping3)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping0)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping1)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping2)]
-        [DataRow(Dio.Dio5, DioMapping.DioMapping3)]
+        [Theory]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio0, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio1, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio2, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio3, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio4, DioMapping.DioMapping3)]
+        [InlineData(Dio.Dio5, DioMapping.DioMapping0)]
+        [InlineData(Dio.Dio5, DioMapping.DioMapping1)]
+        [InlineData(Dio.Dio5, DioMapping.DioMapping2)]
+        [InlineData(Dio.Dio5, DioMapping.DioMapping3)]
         public void TestDioMapping(Dio dio, DioMapping expected)
         {
             RfmBase.SetDioMapping(dio, expected);
-            RfmBase.GetDioMapping(dio).Should().Be(expected);
+            Assert.Equal(expected, RfmBase.GetDioMapping(dio));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFei()
         {
-            Read(() => RfmBase.Fei);
+            Assert.Equal(0, RfmBase.Fei);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFirmwareVersion()
         {
-            Read(() => RfmBase.FirmwareVersion);
+            Assert.StartsWith("RfmUsb-Rfm69 FW:", RfmBase.FirmwareVersion);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFrequency()
         {
-            TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 0, 1020000000);
+            TestRange<uint>(() => RfmBase.Frequency, (v) => RfmBase.Frequency = v, 10000000, 1020000000);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestFrequencyDeviation()
         {
             TestRange<ushort>(() => RfmBase.FrequencyDeviation, (v) => RfmBase.FrequencyDeviation = v, 0, 0x3FFF);
         }
 
-        [TestMethod]
-        [DataRow(FskModulationShaping.GaussianBt0_3)]
-        [DataRow(FskModulationShaping.GaussianBt0_5)]
-        [DataRow(FskModulationShaping.GaussianBt1_0)]
-        [DataRow(FskModulationShaping.None)]
+        [Theory]
+        [InlineData(FskModulationShaping.GaussianBt0_3)]
+        [InlineData(FskModulationShaping.GaussianBt0_5)]
+        [InlineData(FskModulationShaping.GaussianBt1_0)]
+        [InlineData(FskModulationShaping.None)]
         public void TestFskModulationShaping(FskModulationShaping expected)
         {
             TestAssignedValue(expected, () => RfmBase.FskModulationShaping, (v) => RfmBase.FskModulationShaping = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestInterPacketRxDelay()
         {
             TestRange<byte>(() => RfmBase.InterPacketRxDelay, (v) => RfmBase.InterPacketRxDelay = v, 0, 15);
         }
 
-        [TestMethod]
-        [DataRow(LnaGain.Auto)]
-        [DataRow(LnaGain.Max)]
-        [DataRow(LnaGain.MaxMinus6db)]
-        [DataRow(LnaGain.MaxMinus12db)]
-        [DataRow(LnaGain.MaxMinus24db)]
-        [DataRow(LnaGain.MaxMinus36db)]
-        [DataRow(LnaGain.MaxMinus48db)]
+        [Theory]
+        [InlineData(LnaGain.Auto)]
+        [InlineData(LnaGain.Max)]
+        [InlineData(LnaGain.MaxMinus6db)]
+        [InlineData(LnaGain.MaxMinus12db)]
+        [InlineData(LnaGain.MaxMinus24db)]
+        [InlineData(LnaGain.MaxMinus36db)]
+        [InlineData(LnaGain.MaxMinus48db)]
         public void TestLnaGainSelect(LnaGain expected)
         {
             TestAssignedValue(expected, () => RfmBase.LnaGainSelect, (v) => RfmBase.LnaGainSelect = v);
         }
 
-        [TestMethod]
-        [DataRow(Mode.Rx)]
-        [DataRow(Mode.Sleep)]
-        [DataRow(Mode.Standby)]
-        [DataRow(Mode.Synth)]
-        [DataRow(Mode.Tx)]
+        [Theory]
+        [InlineData(Mode.Rx)]
+        [InlineData(Mode.Sleep)]
+        [InlineData(Mode.Standby)]
+        [InlineData(Mode.Synth)]
+        [InlineData(Mode.Tx)]
         public void TestMode(Mode expected)
         {
             TestAssignedValue(expected, () => RfmBase.Mode, (v) => RfmBase.Mode = v);
@@ -194,194 +196,194 @@ namespace RfmUsb.Net.IntTests
             RfmBase.Mode = Mode.Sleep;
         }
 
-        [TestMethod]
-        [DataRow(ModulationType.Fsk)]
-        [DataRow(ModulationType.Ook)]
+        [Theory]
+        [InlineData(ModulationType.Fsk)]
+        [InlineData(ModulationType.Ook)]
         public void TestModulation(ModulationType expected)
         {
             TestAssignedValue(expected, () => RfmBase.ModulationType, (v) => RfmBase.ModulationType = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestNodeAddress()
         {
             TestRange(() => RfmBase.NodeAddress, (v) => RfmBase.NodeAddress = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOcpEnable()
         {
             TestRangeBool(() => RfmBase.OcpEnable, (v) => RfmBase.OcpEnable = v);
         }
 
-        [TestMethod]
-        [DataRow(OcpTrim.OcpTrim45)]
-        [DataRow(OcpTrim.OcpTrim50)]
-        [DataRow(OcpTrim.OcpTrim55)]
-        [DataRow(OcpTrim.OcpTrim60)]
-        [DataRow(OcpTrim.OcpTrim65)]
-        [DataRow(OcpTrim.OcpTrim70)]
-        [DataRow(OcpTrim.OcpTrim75)]
-        [DataRow(OcpTrim.OcpTrim80)]
-        [DataRow(OcpTrim.OcpTrim85)]
-        [DataRow(OcpTrim.OcpTrim90)]
-        [DataRow(OcpTrim.OcpTrim95)]
-        [DataRow(OcpTrim.OcpTrim100)]
-        [DataRow(OcpTrim.OcpTrim105)]
-        [DataRow(OcpTrim.OcpTrim110)]
-        [DataRow(OcpTrim.OcpTrim115)]
-        [DataRow(OcpTrim.OcpTrim120)]
+        [Theory]
+        [InlineData(OcpTrim.OcpTrim45)]
+        [InlineData(OcpTrim.OcpTrim50)]
+        [InlineData(OcpTrim.OcpTrim55)]
+        [InlineData(OcpTrim.OcpTrim60)]
+        [InlineData(OcpTrim.OcpTrim65)]
+        [InlineData(OcpTrim.OcpTrim70)]
+        [InlineData(OcpTrim.OcpTrim75)]
+        [InlineData(OcpTrim.OcpTrim80)]
+        [InlineData(OcpTrim.OcpTrim85)]
+        [InlineData(OcpTrim.OcpTrim90)]
+        [InlineData(OcpTrim.OcpTrim95)]
+        [InlineData(OcpTrim.OcpTrim100)]
+        [InlineData(OcpTrim.OcpTrim105)]
+        [InlineData(OcpTrim.OcpTrim110)]
+        [InlineData(OcpTrim.OcpTrim115)]
+        [InlineData(OcpTrim.OcpTrim120)]
         public void TestOcpTrim(OcpTrim expected)
         {
             TestAssignedValue(expected, () => RfmBase.OcpTrim, (v) => RfmBase.OcpTrim = v);
         }
 
-        [TestMethod]
-        [DataRow(OokAverageThresholdFilter.ChipRate2)]
-        [DataRow(OokAverageThresholdFilter.ChipRate4)]
-        [DataRow(OokAverageThresholdFilter.ChipRate8)]
-        [DataRow(OokAverageThresholdFilter.ChipRate32)]
+        [Theory]
+        [InlineData(OokAverageThresholdFilter.ChipRate2)]
+        [InlineData(OokAverageThresholdFilter.ChipRate4)]
+        [InlineData(OokAverageThresholdFilter.ChipRate8)]
+        [InlineData(OokAverageThresholdFilter.ChipRate32)]
         public void TestOokAverageThresholdFilter(OokAverageThresholdFilter expected)
         {
             TestAssignedValue(expected, () => RfmBase.OokAverageThresholdFilter, (v) => RfmBase.OokAverageThresholdFilter = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOokFixedThreshold()
         {
             TestRange(() => RfmBase.OokFixedThreshold, (v) => RfmBase.OokFixedThreshold = v);
         }
 
-        [TestMethod]
-        [DataRow(OokModulationShaping.Filtering2Br)]
-        [DataRow(OokModulationShaping.FilteringBr)]
-        [DataRow(OokModulationShaping.None)]
-        [DataRow(OokModulationShaping.Reserved)]
+        [Theory]
+        [InlineData(OokModulationShaping.Filtering2Br)]
+        [InlineData(OokModulationShaping.FilteringBr)]
+        [InlineData(OokModulationShaping.None)]
+        [InlineData(OokModulationShaping.Reserved)]
         public void TestOokModulationShaping(OokModulationShaping expected)
         {
             TestAssignedValue(expected, () => RfmBase.OokModulationShaping, (v) => RfmBase.OokModulationShaping = v);
         }
 
-        [TestMethod]
-        [DataRow(OokThresholdDec.EightTimesInEachChip)]
-        [DataRow(OokThresholdDec.FourTimesInEachChip)]
-        [DataRow(OokThresholdDec.OnceEvery2Chips)]
-        [DataRow(OokThresholdDec.OnceEvery4Chips)]
-        [DataRow(OokThresholdDec.OnceEvery8Chips)]
-        [DataRow(OokThresholdDec.OncePerChip)]
-        [DataRow(OokThresholdDec.SixteeenTimesInEachChip)]
-        [DataRow(OokThresholdDec.TwiceInEachChip)]
+        [Theory]
+        [InlineData(OokThresholdDec.EightTimesInEachChip)]
+        [InlineData(OokThresholdDec.FourTimesInEachChip)]
+        [InlineData(OokThresholdDec.OnceEvery2Chips)]
+        [InlineData(OokThresholdDec.OnceEvery4Chips)]
+        [InlineData(OokThresholdDec.OnceEvery8Chips)]
+        [InlineData(OokThresholdDec.OncePerChip)]
+        [InlineData(OokThresholdDec.SixteeenTimesInEachChip)]
+        [InlineData(OokThresholdDec.TwiceInEachChip)]
         public void TestOokPeakThresholdDec(OokThresholdDec expected)
         {
             TestAssignedValue(expected, () => RfmBase.OokPeakThresholdDec, (v) => RfmBase.OokPeakThresholdDec = v);
         }
 
-        [TestMethod]
-        [DataRow(OokThresholdStep.Step0_5db)]
-        [DataRow(OokThresholdStep.Step1_5db)]
-        [DataRow(OokThresholdStep.Step1db)]
-        [DataRow(OokThresholdStep.Step3db)]
-        [DataRow(OokThresholdStep.Step4db)]
-        [DataRow(OokThresholdStep.Step5db)]
-        [DataRow(OokThresholdStep.Step6db)]
+        [Theory]
+        [InlineData(OokThresholdStep.Step0_5db)]
+        [InlineData(OokThresholdStep.Step1_5db)]
+        [InlineData(OokThresholdStep.Step1db)]
+        [InlineData(OokThresholdStep.Step3db)]
+        [InlineData(OokThresholdStep.Step4db)]
+        [InlineData(OokThresholdStep.Step5db)]
+        [InlineData(OokThresholdStep.Step6db)]
         public void TestOokPeakThresholdStep(OokThresholdStep expected)
         {
             TestAssignedValue(expected, () => RfmBase.OokPeakThresholdStep, (v) => RfmBase.OokPeakThresholdStep = v);
         }
 
-        [TestMethod]
-        [DataRow(OokThresholdType.Average)]
-        [DataRow(OokThresholdType.Fixed)]
-        [DataRow(OokThresholdType.Peak)]
-        [DataRow(OokThresholdType.Reserved)]
+        [Theory]
+        [InlineData(OokThresholdType.Average)]
+        [InlineData(OokThresholdType.Fixed)]
+        [InlineData(OokThresholdType.Peak)]
+        [InlineData(OokThresholdType.Reserved)]
         public void TestOokThresholdType(OokThresholdType expected)
         {
             TestAssignedValue(expected, () => RfmBase.OokThresholdType, (v) => RfmBase.OokThresholdType = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPacketFormat()
         {
             TestRangeBool(() => RfmBase.PacketFormat, (v) => RfmBase.PacketFormat = v);
         }
 
-        [TestMethod]
-        [DataRow(PaRamp.PowerAmpRamp10)]
-        [DataRow(PaRamp.PowerAmpRamp12)]
-        [DataRow(PaRamp.PowerAmpRamp15)]
-        [DataRow(PaRamp.PowerAmpRamp20)]
-        [DataRow(PaRamp.PowerAmpRamp25)]
-        [DataRow(PaRamp.PowerAmpRamp50)]
-        [DataRow(PaRamp.PowerAmpRamp62)]
-        [DataRow(PaRamp.PowerAmpRamp31)]
-        [DataRow(PaRamp.PowerAmpRamp40)]
-        [DataRow(PaRamp.PowerAmpRamp100)]
-        [DataRow(PaRamp.PowerAmpRamp250)]
-        [DataRow(PaRamp.PowerAmpRamp500)]
-        [DataRow(PaRamp.PowerAmpRamp1000)]
+        [Theory]
+        [InlineData(PaRamp.PowerAmpRamp10)]
+        [InlineData(PaRamp.PowerAmpRamp12)]
+        [InlineData(PaRamp.PowerAmpRamp15)]
+        [InlineData(PaRamp.PowerAmpRamp20)]
+        [InlineData(PaRamp.PowerAmpRamp25)]
+        [InlineData(PaRamp.PowerAmpRamp50)]
+        [InlineData(PaRamp.PowerAmpRamp62)]
+        [InlineData(PaRamp.PowerAmpRamp31)]
+        [InlineData(PaRamp.PowerAmpRamp40)]
+        [InlineData(PaRamp.PowerAmpRamp100)]
+        [InlineData(PaRamp.PowerAmpRamp250)]
+        [InlineData(PaRamp.PowerAmpRamp500)]
+        [InlineData(PaRamp.PowerAmpRamp1000)]
         public void TestPaRamp(PaRamp expected)
         {
             TestAssignedValue(expected, () => RfmBase.PaRamp, (v) => RfmBase.PaRamp = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPreambleSize()
         {
             TestRange(() => RfmBase.PreambleSize, (v) => RfmBase.PreambleSize = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRadioVersion()
         {
-            Read(() => RfmBase.RadioVersion);
+            Assert.Equal(0x24, RfmBase.RadioVersion);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRcCalibration()
         {
-            RfmBase.RcCalibration();
+            Assert.Null(Record.Exception(() => RfmBase.RcCalibration()));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRssi()
         {
-            Read<sbyte>(() => RfmBase.Rssi);
+            Assert.Equal(-128, RfmBase.Rssi);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSerialNumber()
         {
-            Read(() => RfmBase.SerialNumber);
+            Assert.Null(Record.Exception(() => RfmBase.SerialNumber));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSync()
         {
             var expected = new List<byte>() { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
             RfmBase.Sync = expected;
 
-            RfmBase.Sync.Should().Contain(expected);
+            Assert.Equal(expected, RfmBase.Sync);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSyncEnable()
         {
             TestRangeBool(() => RfmBase.SyncEnable, (v) => RfmBase.SyncEnable = v);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestSyncSize()
         {
             TestRange<byte>(() => RfmBase.SyncSize, (v) => RfmBase.SyncSize = v, 0, 7);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTemperatureValue()
         {
-            Read(() => RfmBase.Temperature);
+            Assert.Equal(0, RfmBase.Temperature);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTxStartCondition()
         {
             TestRangeBool(() => RfmBase.TxStartCondition, (v) => RfmBase.TxStartCondition = v);
