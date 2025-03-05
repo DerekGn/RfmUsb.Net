@@ -27,6 +27,7 @@ jobs:
         uses: softprops/action-gh-release@v2.0.8
         with:
           files: |
-            /home/runner/work/RfmUsb.Net/RfmUsb.Net/bin/Debug/RfmUsb.Net*.nupkg
+            /home/runner/work/RfmUsb.Net/RfmUsb.Net/RfmUsb.Net/bin/Release/RfmUsb.Net.*.nupkg
+            /home/runner/work/RfmUsb.Net/RfmUsb.Net/RfmUsbConsole/bin/Release/RfmUsbConsole.*.nupkg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
