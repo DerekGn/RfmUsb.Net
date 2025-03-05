@@ -25,7 +25,9 @@
 
 // Ignore Spelling: Agc Io Irq Lna Lora Ook Rx Pll Rfm Rssi Tcxo Tx
 
+using Microsoft.Extensions.Logging;
 using Moq;
+using RfmUsb.Net.Threading;
 using Xunit;
 
 namespace RfmUsb.Net.UnitTests
@@ -36,7 +38,9 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm9xTests() : base()
         {
-            _rfmDevice = new Rfm9x(MockLogger, MockSerialPortFactory.Object);
+            _rfmDevice = new Rfm9x(
+                Mock.Of<ILogger<Rfm9x>>(),
+                MockSerialPortFactory.Object);
 
             RfmBase = _rfmDevice;
 

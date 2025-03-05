@@ -24,6 +24,7 @@
 
 // Ignore Spelling: Aes Usb Rssi Lna Irq Fei Dcc Dagc Rfm Rx
 
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -36,7 +37,9 @@ namespace RfmUsb.Net.UnitTests
 
         public Rfm69Tests() : base()
         {
-            _rfmDevice = new Rfm69(MockLogger, MockSerialPortFactory.Object);
+            _rfmDevice = new Rfm69(
+                Mock.Of<ILogger<Rfm69>>(),
+                MockSerialPortFactory.Object);
 
             RfmBase = _rfmDevice;
 
