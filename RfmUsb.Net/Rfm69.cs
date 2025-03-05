@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm Rx
+
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net.Extensions;
 using RfmUsb.Net.Ports;
@@ -41,7 +43,7 @@ namespace RfmUsb.Net
         /// </summary>
         /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
         /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
-        public Rfm69(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
+        public Rfm69(ILogger<Rfm69> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
         {
         }
 

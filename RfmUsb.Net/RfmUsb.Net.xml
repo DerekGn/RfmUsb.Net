@@ -828,7 +828,7 @@
         </member>
         <member name="P:RfmUsb.Net.HopChannel.Channel">
             <summary>
-            Current value of frequency hopping channel inuse
+            Current value of frequency hopping channel in use
             </summary>
         </member>
         <member name="T:RfmUsb.Net.IntermediateMode">
@@ -1451,14 +1451,14 @@
         <member name="P:RfmUsb.Net.IRfm69.TimeoutRssiThreshold">
             <summary>
             Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
-            if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+            if Rssi interrupt doesn't occur(i.e. RssiValue > RssiThreshold)
             0x00: TimeoutRxStart is disabled
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm69.TimeoutRxStart">
             <summary>
             Timeout interrupt is generated TimeoutRxStart*16*Tbit after switching to Rx mode
-            if Rssi interrupt doesn’t occur(i.e. RssiValue > RssiThreshold)
+            if Rssi interrupt doesn't occur(i.e. RssiValue > RssiThreshold)
             0x00: TimeoutRxStart is disabled
             </summary>
         </member>
@@ -1595,7 +1595,7 @@
         </member>
         <member name="P:RfmUsb.Net.IRfm9x.FifoRxBytesNumber">
             <summary>
-            Number of payload bytes of latest packetreceived
+            Number of payload bytes of latest packet received
             </summary>
         </member>
         <member name="P:RfmUsb.Net.IRfm9x.FifoRxCurrentAddress">
@@ -3153,7 +3153,7 @@
             An implementation of the <see cref="T:RfmUsb.Net.IRfm69"/> interface
             </summary>
         </member>
-        <member name="M:RfmUsb.Net.Rfm69.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.IRfm},RfmUsb.Net.Ports.ISerialPortFactory)">
+        <member name="M:RfmUsb.Net.Rfm69.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.Rfm69},RfmUsb.Net.Ports.ISerialPortFactory)">
             <summary>
             Create an instance of a <see cref="N:RfmUsb"/>
             </summary>
@@ -3373,7 +3373,7 @@
             An implementation of the <see cref="T:RfmUsb.Net.IRfm9x"/> interface
             </summary>
         </member>
-        <member name="M:RfmUsb.Net.Rfm9x.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.IRfm},RfmUsb.Net.Ports.ISerialPortFactory)">
+        <member name="M:RfmUsb.Net.Rfm9x.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.Rfm9x},RfmUsb.Net.Ports.ISerialPortFactory)">
             <summary>
             Create an instance of a <see cref="T:RfmUsb.Net.Rfm9x"/> device
             </summary>
@@ -3745,7 +3745,7 @@
             A base Rfm class
             </summary>
         </member>
-        <member name="M:RfmUsb.Net.RfmBase.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.IRfm},RfmUsb.Net.Ports.ISerialPortFactory)">
+        <member name="M:RfmUsb.Net.RfmBase.#ctor(Microsoft.Extensions.Logging.ILogger{RfmUsb.Net.RfmBase},RfmUsb.Net.Ports.ISerialPortFactory)">
             <summary>
             Create an instance of an <see cref="T:RfmUsb.Net.RfmBase"/> derived type.
             </summary>
@@ -4092,6 +4092,33 @@
             <summary>
             Twenty Degrees
             </summary>
+        </member>
+        <member name="T:RfmUsb.Net.Threading.IMutex">
+            <summary>
+            Represents a mutex for exclusive access to a function
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Threading.IMutex.EnterAsync``1(System.Func{``0},System.Threading.CancellationToken)">
+            <summary>
+            Exclusively execute an operation
+            </summary>
+            <typeparam name="T">The operation response type</typeparam>
+            <param name="operation">Exclusively access the operation</param>
+            <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken"/> for this operation</param>
+            <returns>An instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="T:RfmUsb.Net.Threading.Mutex">
+            <summary>
+            The implementation of the <see cref="T:RfmUsb.Net.Threading.IMutex"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Threading.Mutex.#ctor">
+            <summary>
+            Create an instance of a <see cref="T:RfmUsb.Net.Threading.Mutex"/>
+            </summary>
+        </member>
+        <member name="M:RfmUsb.Net.Threading.Mutex.EnterAsync``1(System.Func{``0},System.Threading.CancellationToken)">
+            <inheritdoc/>
         </member>
         <member name="T:RfmUsb.Net.Timer">
             <summary>

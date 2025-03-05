@@ -63,7 +63,7 @@ namespace RfmUsb.Net
         public bool CrcOnPayload { get; }
 
         /// <summary>
-        /// Current value of frequency hopping channel inuse
+        /// Current value of frequency hopping channel in use
         /// </summary>
         public byte Channel { get; }
     }

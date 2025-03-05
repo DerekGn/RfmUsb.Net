@@ -41,7 +41,7 @@ namespace RfmUsb.Net
         /// </summary>
         /// <param name="logger">The <see cref="ILogger{T}"/> for logging</param>
         /// <param name="serialPortFactory">The <see cref="ISerialPortFactory"/> instance for creating and querying serial port instances</param>
-        public Rfm9x(ILogger<IRfm> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
+        public Rfm9x(ILogger<Rfm9x> logger, ISerialPortFactory serialPortFactory) : base(logger, serialPortFactory)
         {
         }
 
@@ -357,7 +357,7 @@ namespace RfmUsb.Net
         public byte OutputPower
         {
             get => (byte)SendCommand(Commands.GetOutputPower).ConvertToInt32();
-            set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{(byte)value:X2}", ResponseOk);
+            set => SendCommandWithCheck($"{Commands.SetOutputPower} 0x{value:X2}", ResponseOk);
         }
 
         ///<inheritdoc/>

@@ -116,7 +116,7 @@ namespace RfmUsb.Net
         byte FifoRxByteAddressPointer { get; }
 
         /// <summary>
-        /// Number of payload bytes of latest packetreceived
+        /// Number of payload bytes of latest packet received
         /// </summary>
         byte FifoRxBytesNumber { get; }
 
