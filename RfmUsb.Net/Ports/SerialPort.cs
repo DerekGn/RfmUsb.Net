@@ -171,15 +171,12 @@ namespace RfmUsb.Net.Ports
         {
             if (!disposedValue)
             {
-                if (disposing)
+                if (disposing && _serialPort != null)
                 {
-                    if (_serialPort != null)
-                    {
-                        _serialPort.ErrorReceived -= ErrorReceivedHandler;
-                        _serialPort.DataReceived -= DataReceivedHandler;
-                        _serialPort.PinChanged -= PinChangedHandler;
-                        _serialPort.Dispose();
-                    }
+                    _serialPort.ErrorReceived -= ErrorReceivedHandler;
+                    _serialPort.DataReceived -= DataReceivedHandler;
+                    _serialPort.PinChanged -= PinChangedHandler;
+                    _serialPort.Dispose();
                 }
 
                 disposedValue = true;

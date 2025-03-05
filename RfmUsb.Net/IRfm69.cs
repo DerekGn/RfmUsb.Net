@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm
+
 using System.Collections.Generic;
 
 namespace RfmUsb.Net

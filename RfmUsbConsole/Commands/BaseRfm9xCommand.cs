@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Bw Rfm Irq Rssi Rx
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
@@ -59,7 +61,7 @@ namespace RfmUsbConsole.Commands
 
         protected override void PrintIrqFlags()
         {
-            Logger.LogDebug("Irq Flags [{flags}]", ((IRfm9x)Rfm).IrqFlags.ToString());
+            Logger.LogDebug("Irq Flags [{Flags}]", ((IRfm9x)Rfm).IrqFlags.ToString());
         }
     }
 }

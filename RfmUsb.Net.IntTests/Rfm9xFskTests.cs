@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Agc Bw Fsk Io Irq Lna Ook Pll Rfm Rssi Rx Tcxo
+
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -80,14 +83,6 @@ namespace RfmUsb.Net.IntTests
         public void TestBitSyncOn()
         {
             TestRangeBool(() => _rfm9x.BitSyncOn, (v) => _rfm9x.BitSyncOn = v);
-        }
-
-        public new void Dispose()
-        {
-            base.Dispose();
-
-            _rfm9x?.Close();
-            _rfm9x?.Dispose();
         }
 
         [Theory]

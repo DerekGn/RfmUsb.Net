@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Openthings Rfm
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net;
@@ -68,11 +70,13 @@ namespace RfmUsbConsole.Commands
                     if (source == SignalSource.Irq)
                     {
                         Logger.LogInformation(
-                            "Ping Response Received." + Environment.NewLine +
-                            "Irq: {irq}" + Environment.NewLine +
-                            "Rssi: {rssi}", rfm.IrqFlags, rfm.Rssi);
+                            "Ping Response Received. {NewLineA} Irq: [{Irq}] {NewLineB} Rssi: [{Rssi}]",
+                            Environment.NewLine,
+                            rfm.IrqFlags,
+                            Environment.NewLine,
+                            rfm.Rssi);
 
-                        Logger.LogInformation($"Fifo: {BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty)}");
+                        Logger.LogInformation("Fifo: {Fifo}", BitConverter.ToString(rfm.Fifo.ToArray()).Replace("-", string.Empty));
                     }
                     else
                     {

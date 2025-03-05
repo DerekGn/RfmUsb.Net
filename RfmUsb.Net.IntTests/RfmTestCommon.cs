@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Bitrate Dio Fei Fsk Io Lna Ocp Ook Rc Rfm Rssi Rx Tx
+
 using Xunit;
 
 namespace RfmUsb.Net.IntTests

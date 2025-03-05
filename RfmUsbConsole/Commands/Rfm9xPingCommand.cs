@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Rfm
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using RfmUsb.Net;

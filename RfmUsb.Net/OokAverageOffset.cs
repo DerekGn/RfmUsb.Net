@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Ook
+
 namespace RfmUsb.Net
 {
     /// <summary>

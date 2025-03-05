@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Ocp
+
 namespace RfmUsb.Net
 {
     /// <summary>

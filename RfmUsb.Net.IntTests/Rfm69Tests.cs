@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-// Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise
+// Ignore Spelling: Lna Bw Aes Rssi Dagc Dcc Dio Fei Irq Initalise Rfm Rx
 
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -70,14 +70,6 @@ namespace RfmUsb.Net.IntTests
         public void TestAutoRxRestartOn()
         {
             TestRangeBool(() => _rfm69.AutoRxRestartOn, (v) => _rfm69.AutoRxRestartOn = v);
-        }
-
-        public new void Dispose()
-        {
-            base.Dispose();
-
-            _rfm69?.Close();
-            _rfm69?.Dispose();
         }
 
         [Theory]

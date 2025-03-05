@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Lna
+
 namespace RfmUsb.Net
 {
     /// <summary>

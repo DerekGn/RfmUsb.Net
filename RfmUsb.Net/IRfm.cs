@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Rfm
+
 using RfmUsb.Net.Io;
 using System;
 using System.Collections.Generic;

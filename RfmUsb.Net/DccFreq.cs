@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Dcc
+
 namespace RfmUsb.Net
 {
     /// <summary>

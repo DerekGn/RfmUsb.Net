@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: Agc Irq Lora Rfm Rssi Rx Tx
+
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -96,14 +98,6 @@ namespace RfmUsb.Net.IntTests
             TestRangeBool(() => _rfm9x.BeaconOn, (v) => _rfm9x.BeaconOn = v);
         }
 
-        public new void Dispose()
-        {
-            base.Dispose();
-
-            _rfm9x?.Close();
-            _rfm9x?.Dispose();
-        }
-
         [Theory]
         [InlineData(ErrorCodingRate.FourEight)]
         [InlineData(ErrorCodingRate.FourFive)]
@@ -160,6 +154,8 @@ namespace RfmUsb.Net.IntTests
         public void TestGetHopChannel()
         {
             var hopChannel = _rfm9x.HopChannel;
+
+            Assert.Equal(0, hopChannel.Channel);
         }
 
         [Fact]
@@ -177,10 +173,10 @@ namespace RfmUsb.Net.IntTests
         public void TestGetLoraIrqFlagsMask()
         {
             _rfm9x.ExecuteReset();
-#warning TODO
-            //_rfm9x.LoraIrqFlagsMask.Should().HaveFlag(
-            //    LoraIrqFlagsMask.ValidHeaderMask |
-            //    LoraIrqFlagsMask.RxDoneMask);
+
+            Assert.Equal(
+                LoraIrqFlagsMask.ValidHeaderMask | LoraIrqFlagsMask.RxDoneMask,
+                _rfm9x.LoraIrqFlagsMask & (LoraIrqFlagsMask.ValidHeaderMask | LoraIrqFlagsMask.RxDoneMask));
         }
 
         [Fact]
@@ -244,13 +240,13 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestPacketRssi()
         {
-            var x = _rfm9x.PacketRssi;
+            Assert.Equal(0, _rfm9x.PacketRssi);
         }
 
         [Fact]
         public void TestPacketSnr()
         {
-            var x = _rfm9x.LastPacketSnr;
+            Assert.Equal(0, _rfm9x.LastPacketSnr);
         }
 
         [Fact]
@@ -274,13 +270,13 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestRssiWideband()
         {
-            var x = _rfm9x.RssiWideband;
+            Assert.Equal(0, _rfm9x.RssiWideband);
         }
 
         [Fact]
         public void TestRxCodingRate()
         {
-            var x = _rfm9x.RxCodingRate;
+            Assert.Equal(0, _rfm9x.RxCodingRate);
         }
 
         [Fact]
@@ -334,13 +330,13 @@ namespace RfmUsb.Net.IntTests
         [Fact]
         public void TestValidHeaderCount()
         {
-            var x = _rfm9x.ValidHeaderCount;
+            Assert.Equal(0, _rfm9x.ValidHeaderCount);
         }
 
         [Fact]
         public void TestValidPacketCount()
         {
-            var x = _rfm9x.ValidPacketCount;
+            Assert.Equal(0, _rfm9x.ValidPacketCount);
         }
     }
 }

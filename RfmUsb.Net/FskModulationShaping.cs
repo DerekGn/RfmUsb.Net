@@ -22,6 +22,9 @@
 * SOFTWARE.
 */
 
+
+// Ignore Spelling: Fsk
+
 namespace RfmUsb.Net
 {
     /// <summary>

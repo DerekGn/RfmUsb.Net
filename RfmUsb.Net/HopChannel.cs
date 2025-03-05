@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+// Ignore Spelling: pll
+
 namespace RfmUsb.Net
 {
     /// <summary>

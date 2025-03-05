@@ -23,7 +23,7 @@
 */
 
 
-// Ignore Spelling: Agc Wideband Tcxo Bw Bootloader Fei Pll Aes Dio Dcc Rssi Dagc Lna Irq Ocp Ook Fsk Snr
+// Ignore Spelling: Agc Wideband Tcxo Bw Bootloader Fei Pll Aes Dio Dcc Rssi Dagc Lna Irq Ocp Ook Fsk Snr Io Lora Rc Rx Tx
 
 namespace RfmUsb.Net
 {
