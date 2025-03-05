@@ -55,7 +55,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AfcLowBetaOn
         {
-            get => SendCommand(Commands.GetAfcLowBetaOn).StartsWith("1");
+            get => SendCommand(Commands.GetAfcLowBetaOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAfcLowBetaOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -76,7 +76,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AutoRxRestartOn
         {
-            get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith("1");
+            get => SendCommand(Commands.GetAutoRxRestartOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAutoRxRestartOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -114,14 +114,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool FifoFill
         {
-            get => SendCommand(Commands.GetFifoFill).StartsWith("1");
+            get => SendCommand(Commands.GetFifoFill).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetFifoFill} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool Impedance
         {
-            get => SendCommand(Commands.GetImpedance).StartsWith("1");
+            get => SendCommand(Commands.GetImpedance).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetImpedance} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -156,7 +156,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool ListenCriteria
         {
-            get => SendCommand(Commands.GetListenCriteria).StartsWith("1");
+            get => SendCommand(Commands.GetListenCriteria).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetListenCriteria} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -170,7 +170,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool ListenerOn
         {
-            get => SendCommand(Commands.GetListenerOn).StartsWith("1");
+            get => SendCommand(Commands.GetListenerOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetListenerOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -212,14 +212,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool SensitivityBoost
         {
-            get => SendCommand(Commands.GetSensitivityBoost).StartsWith("1");
+            get => SendCommand(Commands.GetSensitivityBoost).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetSensitivityBoost} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool Sequencer
         {
-            get => SendCommand(Commands.GetSequencer).StartsWith("1");
+            get => SendCommand(Commands.GetSequencer).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetSequencer} {(value ? "1" : "0")}", ResponseOk);
         }
 

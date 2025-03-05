@@ -82,14 +82,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool AfcAutoClear
         {
-            get => SendCommand(Commands.GetAfcAutoClear).StartsWith("1");
+            get => SendCommand(Commands.GetAfcAutoClear).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAfcAutoClear} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool AfcAutoOn
         {
-            get => SendCommand(Commands.GetAfcAutoOn).StartsWith("1");
+            get => SendCommand(Commands.GetAfcAutoOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetAfcAutoOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -110,7 +110,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool BufferedIoEnable
         {
-            get => SendCommand(Commands.GetBufferEnable).StartsWith("1");
+            get => SendCommand(Commands.GetBufferEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetBufferEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -120,14 +120,14 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool CrcAutoClearOff
         {
-            get => SendCommand(Commands.GetCrcAutoClearOff).StartsWith("1");
+            get => SendCommand(Commands.GetCrcAutoClearOff).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetCrcAutoClearOff} {(value ? "1" : "0")}", ResponseOk);
         }
 
         ///<inheritdoc/>
         public bool CrcOn
         {
-            get => SendCommand(Commands.GetCrcOn).StartsWith("1");
+            get => SendCommand(Commands.GetCrcOn).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetCrcOn} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -227,7 +227,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool OcpEnable
         {
-            get => SendCommand(Commands.GetOcpEnable).StartsWith("1");
+            get => SendCommand(Commands.GetOcpEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetOcpEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -283,7 +283,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool PacketFormat
         {
-            get => SendCommand(Commands.GetPacketFormat).StartsWith("1");
+            get => SendCommand(Commands.GetPacketFormat).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetPacketFormat} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -344,7 +344,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool SyncEnable
         {
-            get => SendCommand(Commands.GetSyncEnable).StartsWith("1");
+            get => SendCommand(Commands.GetSyncEnable).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetSyncEnable} {(value ? "1" : "0")}", ResponseOk);
         }
 
@@ -376,7 +376,7 @@ namespace RfmUsb.Net
         ///<inheritdoc/>
         public bool TxStartCondition
         {
-            get => SendCommand(Commands.GetTxStartCondition).StartsWith("1");
+            get => SendCommand(Commands.GetTxStartCondition).StartsWith('1');
             set => SendCommandWithCheck($"{Commands.SetTxStartCondition} {(value ? "1" : "0")}", ResponseOk);
         }
 
